@@ -9,10 +9,9 @@ Experimental attempt at a different style of test framework.
  
 ## Wishlist
 
-- Provide a stream of tests that is lazily evaluated and can be filtered etc.
-- Each test should return an assertion that can be tested.
 - Pending assertion to allow the filling in of tests at a later point in time.
 - Functional composition of tests etc.
 - Context aware test logging.
 - Matchers
+- Dependant assertions
  
