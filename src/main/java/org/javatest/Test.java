@@ -2,9 +2,9 @@ package org.javatest;
 
 public class Test {
     public final String description;
-    public final boolean success;
-    public Test(String description, boolean success) {
+    public final Assertion assertion;
+    public Test(String description, Assertion assertion) {
         this.description = description;
-        this.success = success;
+        this.assertion = assertion;
     }
 }
