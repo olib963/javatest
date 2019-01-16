@@ -9,10 +9,10 @@ Experimental attempt at a different style of test framework.
  
 ## Wishlist
 
-- Pending assertion to allow the filling in of tests at a later point in time.
 - Functional composition of tests etc.
 - Context aware test logging.
 - Matchers
 - Dependant assertions
 - Assertion descriptions
- 
+- Composable exception matchers, `willThrowException(ofType(X.class, withMessage("blah), withCause(ofType(Y.class), withMessageThat(containsString("Foo")))))`
+- Eventually assertion, give timeout, retry time and assertion to test. 

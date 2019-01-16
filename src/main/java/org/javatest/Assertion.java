@@ -6,6 +6,14 @@ public interface Assertion {
 
     boolean holds();
 
+    // TODO should not fail test suite, but should be logged as separate things.
+    class PendingAssertion implements Assertion {
+        @Override
+        public boolean holds() {
+            return true;
+        }
+    }
+
     class SimpleAssertion implements Assertion {
         private final boolean holds;
 
@@ -34,6 +42,10 @@ public interface Assertion {
 
     static <A> Assertion that(A value, Matcher<A> matcher) {
         return new MatcherAssertion<>(value, matcher);
+    }
+
+    static Assertion pending() {
+        return new PendingAssertion();
     }
 
 }
