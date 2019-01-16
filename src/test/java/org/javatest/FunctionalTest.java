@@ -13,7 +13,7 @@ public class FunctionalTest {
 
         failingTests.forEach(test -> {
             if(JavaTest.run(Stream.of(test))) {
-                throw new RuntimeException("Tests expected to fail passed!");
+                throw new RuntimeException("Test expected to fail passed!");
             }
         });
 
@@ -21,8 +21,13 @@ public class FunctionalTest {
     }
 
     private static Stream<Test> passingTests = Stream.of(
-            new Test("test", new Assertion.SimpleAssertion(true)),
-            new Test("One add One is Two!", that(1 + 1, isEqualTo(2)))
+            new Test("Simple test", new Assertion.SimpleAssertion(true)),
+            new Test("One add One is Two!", that(1 + 1, isEqualTo(2))),
+            new Test("Exception of correct type is thrown", that(() -> { throw new RuntimeException("whoopsie"); }, willThrow(RuntimeException.class)))
     );
-    private static Stream<Test> failingTests = Stream.of(new Test("failing-test", new Assertion.SimpleAssertion(false)));
+    private static Stream<Test> failingTests = Stream.of(
+            new Test("Simple test (FAIL)", new Assertion.SimpleAssertion(false)),
+            new Test("One add One is Three! (FAIL)", that(1 + 1, isEqualTo(3))),
+            new Test("Exception of wrong type is thrown (FAIL)", that(() -> { throw new RuntimeException("whoopsie"); }, willThrow(IllegalStateException.class)))
+    );
 }

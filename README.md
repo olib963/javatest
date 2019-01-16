@@ -14,4 +14,5 @@ Experimental attempt at a different style of test framework.
 - Context aware test logging.
 - Matchers
 - Dependant assertions
+- Assertion descriptions
  
