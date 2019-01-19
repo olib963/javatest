@@ -1,7 +1,8 @@
 package org.javatest;
 
-import static org.javatest.Assertion.*;
+import static org.javatest.assertions.Assertion.*;
 import static org.javatest.matchers.Matcher.*;
+import static org.javatest.Test.*;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -22,14 +23,14 @@ public class FunctionalTest {
     }
 
     private static Stream<Test> passingTests = Stream.of(
-            new Test("Simple test", () -> new Assertion.SimpleAssertion(true)),
-            new Test("One add One is Two!", () -> that(1 + 1, isEqualTo(2))),
-            new Test("Exception of correct type is thrown", () ->  that(() -> { throw new RuntimeException("whoopsie"); }, willThrow(RuntimeException.class))),
-            new Test("Pending test that has yet to be written", () ->  pending())
+            test("Simple test", () -> that(true)),
+            test("One add One is Two!", () -> that(1 + 1, isEqualTo(2))),
+            test("Exception of correct type is thrown", () ->  that(() -> { throw new RuntimeException("whoopsie"); }, willThrow(RuntimeException.class))),
+            test("Pending test that has yet to be written", () ->  pending())
     );
     private static Collection<Test> failingTests = List.of(
-            new Test("Simple test (FAIL)", () ->  new Assertion.SimpleAssertion(false)),
-            new Test("One add One is Three! (FAIL)", () ->  that(1 + 1, isEqualTo(3))),
-            new Test("Exception of wrong type is thrown (FAIL)", () -> that(() -> { throw new RuntimeException("whoopsie"); }, willThrow(IllegalStateException.class)))
+            test("Simple test (FAIL)", () ->  that(false)),
+            test("One add One is Three! (FAIL)", () ->  that(1 + 1, isEqualTo(3))),
+            test("Exception of wrong type is thrown (FAIL)", () -> that(() -> { throw new RuntimeException("whoopsie"); }, willThrow(IllegalStateException.class)))
     );
 }
