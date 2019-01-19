@@ -6,6 +6,18 @@ public interface Assertion {
 
     boolean holds();
 
+    default Assertion and(Assertion other){
+       return that(this.holds() && other.holds());
+    }
+
+    default Assertion or(Assertion other){
+        return that(this.holds() || other.holds());
+    }
+
+    default Assertion xor(Assertion other){
+        return that(this.holds() ^ other.holds());
+    }
+
     static <A> Assertion that(A value, Matcher<A> matcher) {
         return new MatcherAssertion<>(value, matcher);
     }
