@@ -1,10 +1,19 @@
 package org.javatest;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.function.Supplier;
+
 public class Test {
     public final String description;
-    public final Assertion assertion;
-    public Test(String description, Assertion assertion) {
+    public final Supplier<Assertion> test;
+    public final Collection<String> tags;
+    public Test(String description, Supplier<Assertion> test) {
+        this(description, test, Collections.emptyList());
+    }
+    public Test(String description, Supplier<Assertion> test, Collection<String> tags) {
         this.description = description;
-        this.assertion = assertion;
+        this.test = test;
+        this.tags = tags;
     }
 }

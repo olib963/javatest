@@ -5,6 +5,6 @@ import java.util.stream.Stream;
 public class JavaTest {
 
     public static boolean run(Stream<Test> tests) {
-        return tests.allMatch(s -> s.assertion.holds());
+        return tests.allMatch(s -> s.test.get().holds());
     }
 }
