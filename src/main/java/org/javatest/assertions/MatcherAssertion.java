@@ -10,7 +10,7 @@ public class MatcherAssertion<A> implements Assertion {
         this.matcher = matcher;
     }
     @Override
-    public boolean holds() {
-        return matcher.matches(value);
+    public AssertionResult run() {
+        return new AssertionResult(matcher.matches(value));
     }
 }

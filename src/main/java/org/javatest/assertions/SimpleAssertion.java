@@ -8,7 +8,7 @@ public class SimpleAssertion implements Assertion {
     }
 
     @Override
-    public boolean holds() {
-        return holds;
+    public AssertionResult run() {
+        return new AssertionResult(holds);
     }
 }

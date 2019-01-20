@@ -4,18 +4,18 @@ import org.javatest.matchers.Matcher;
 
 public interface Assertion {
 
-    boolean holds();
+    AssertionResult run();
 
     default Assertion and(Assertion other){
-       return that(this.holds() && other.holds());
+       return that(this.run().holds && other.run().holds);
     }
 
     default Assertion or(Assertion other){
-        return that(this.holds() || other.holds());
+        return that(this.run().holds || other.run().holds);
     }
 
     default Assertion xor(Assertion other){
-        return that(this.holds() ^ other.holds());
+        return that(this.run().holds ^ other.run().holds);
     }
 
     static <A> Assertion that(A value, Matcher<A> matcher) {

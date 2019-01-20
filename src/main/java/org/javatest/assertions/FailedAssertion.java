@@ -2,7 +2,7 @@ package org.javatest.assertions;
 
 public class FailedAssertion implements Assertion {
     @Override
-    public boolean holds() {
-        return false;
+    public AssertionResult run() {
+        return new AssertionResult(false);
     }
 }
