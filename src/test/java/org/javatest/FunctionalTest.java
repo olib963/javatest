@@ -9,12 +9,12 @@ import java.util.stream.Stream;
 
 public class FunctionalTest {
     public static void main(String... args) {
-        if(!JavaTest.run(passingTests)) {
+        if(!JavaTest.run(passingTests).succeeded) {
             throw new RuntimeException("Tests expected to pass failed!");
         };
 
         failingTests.forEach(test -> {
-            if(JavaTest.run(Stream.of(test))) {
+            if(JavaTest.run(Stream.of(test)).succeeded) {
                 throw new RuntimeException("Test expected to fail passed!");
             }
         });

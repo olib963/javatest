@@ -49,7 +49,7 @@ class MyTests {
         boolean passed = JavaTest.run(Stream.of(
                 test("Addition", () -> that(1 + 1 == 2)),
                 test("String lower case", () -> that("HELLO".toLowerCase().equals("hello")))
-        ));
+        )).succeeded;
     }
     
 }
