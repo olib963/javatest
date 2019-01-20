@@ -33,4 +33,12 @@ public class TestLog {
     String createLogString(int indent) {
         return log.stream().map(e -> e.createLog(indent)).collect(Collectors.joining(SEP));
     }
+
+
+    @Override
+    public String toString() {
+        return "TestLog{" +
+                "log=" + log +
+                '}';
+    }
 }

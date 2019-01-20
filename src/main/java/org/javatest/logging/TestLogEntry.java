@@ -26,4 +26,12 @@ public class TestLogEntry {
         return nextLog + Colour.resetCode();
     }
 
+    @Override
+    public String toString() {
+        return "TestLogEntry{" +
+                "entry='" + entry + '\'' +
+                ", logColour=" + logColour +
+                ", next=" + next +
+                '}';
+    }
 }
