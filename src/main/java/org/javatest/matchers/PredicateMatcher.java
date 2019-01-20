@@ -10,7 +10,7 @@ public class PredicateMatcher<A> implements Matcher<A> {
     }
 
     @Override
-    public boolean matches(A value) {
-        return predicate.test(value);
+    public MatchResult matches(A value) {
+        return predicate.test(value) ? MatchResult.match() : MatchResult.mismatch();
     }
 }

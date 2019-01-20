@@ -11,6 +11,7 @@ public class MatcherAssertion<A> implements Assertion {
     }
     @Override
     public AssertionResult run() {
-        return new AssertionResult(matcher.matches(value));
+        var matchResult = matcher.matches(value);
+        return new AssertionResult(matchResult.matches);
     }
 }
