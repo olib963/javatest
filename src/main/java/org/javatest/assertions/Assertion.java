@@ -28,13 +28,5 @@ public interface Assertion {
         return new PendingAssertion();
     }
 
-    static Assertion failed(Exception error) {
-        return new FailedAssertion();
-    }
-
-    static Assertion failed(Error error) {
-        return new FailedAssertion();
-    }
-
 }
 

@@ -4,7 +4,7 @@ public class PendingAssertion implements Assertion {
     PendingAssertion() {}
     @Override
     public AssertionResult run() {
-        return new AssertionResult(true);
+        return new AssertionResult(true, true);
     }
 
 }

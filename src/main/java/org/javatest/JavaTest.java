@@ -2,7 +2,6 @@ package org.javatest;
 
 import org.javatest.assertions.Assertion;
 import org.javatest.assertions.AssertionResult;
-import org.javatest.assertions.PendingAssertion;
 import org.javatest.logging.Colour;
 import org.javatest.logging.TestLog;
 import org.javatest.logging.TestLogEntry;
@@ -28,24 +27,24 @@ public class JavaTest {
     }
 
     private static TestResult runTest(Test test) {
-        var assertion = safefRunSupplier(test.test);
-        var result = assertion.run(); // Caching here rather than calling directly in 'getColour' to avoid any mutability etc.
-        var colour = getColour(assertion, result);
+        var result = safefRunTest(test.test);
+        var colour = getColour(result);
         return new TestResult(result.holds, new TestLogEntry(test.description, colour));
     }
 
-    private static Assertion safefRunSupplier(Supplier<Assertion> test) {
+    private static AssertionResult safefRunTest(Supplier<Assertion> test) {
         try {
-            return test.get();
+            return test.get().run();
         } catch (Exception e) {
-            return Assertion.failed(e);
+            return AssertionResult.failed(e);
         } catch (AssertionError e) {
-            return Assertion.failed(e);
+            // TODO treat this differently, this should be invalid.
+            return AssertionResult.failed(e);
         }
     }
 
-    private static Colour getColour(Assertion assertion, AssertionResult result) {
-        if (assertion instanceof PendingAssertion) {
+    private static Colour getColour(AssertionResult result) {
+        if (result.pending) {
             return Colour.YELLOW;
         } else if (result.holds) {
             return Colour.GREEN;
