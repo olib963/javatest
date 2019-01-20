@@ -27,6 +27,8 @@ public interface TestProvider {
 
     default Assertion that(boolean asserted) { return Assertion.that(asserted); }
 
+    default Assertion that(boolean asserted, String description) { return Assertion.that(asserted, description); }
+
     default Assertion pending() {
         return Assertion.pending();
     }

@@ -10,6 +10,7 @@ import org.javatest.tests.TestResult;
 import org.javatest.tests.TestResults;
 
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class JavaTest {
@@ -17,6 +18,7 @@ public class JavaTest {
         var result = tests
                 .map(JavaTest::runTest)
                 .reduce(
+                        // TODO extract functions
                         new TestResults(true, TestLog.init()),
                         (results, testResult) ->  new TestResults(
                                 results.succeeded && testResult.succeeded,
@@ -27,12 +29,13 @@ public class JavaTest {
     }
 
     private static TestResult runTest(Test test) {
-        var result = safefRunTest(test.test);
+        var result = safeRunTest(test.test);
         var colour = getColour(result);
-        return new TestResult(result.holds, new TestLogEntry(test.description, colour));
+        var extraLogs = result.extraLogs.stream().map(s -> new TestLogEntry(s, Colour.WHITE)).collect(Collectors.toList());
+        return new TestResult(result.holds, new TestLogEntry(test.description, colour, extraLogs));
     }
 
-    private static AssertionResult safefRunTest(Supplier<Assertion> test) {
+    private static AssertionResult safeRunTest(Supplier<Assertion> test) {
         try {
             return test.get().run();
         } catch (Exception e) {

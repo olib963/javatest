@@ -20,6 +20,7 @@ public class SimpleTests {
         public Stream<Test> testStream() {
             return Stream.of(
                     test("Simple test", () -> that(true)),
+                    test("Simple test with description", () -> that(true, "Expected true to be true")),
                     test("One add One is Two!", () -> that(1 + 1, isEqualTo(2))),
                     test("Exception of correct type is thrown", () -> that(() -> {
                         throw new RuntimeException("whoopsie");
@@ -39,6 +40,7 @@ public class SimpleTests {
         public Stream<Test> testStream() {
             return Stream.of(
                     test("Simple test (FAIL)", () ->  that(false)),
+                    test("Simple test with description (FAIL)", () ->  that(false, "Expected true to be true")),
                     test("One add One is Three! (FAIL)", () ->  that(1 + 1, isEqualTo(3))),
                     test("Exception of wrong type is thrown (FAIL)", () -> that(() -> { throw new RuntimeException("whoopsie"); }, willThrow(IllegalStateException.class))),
                     test("And test 1 (FAIL)", () -> that(false).and(that(false))),
