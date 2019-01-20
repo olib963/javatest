@@ -5,6 +5,9 @@ import org.javatest.assertions.PendingAssertion;
 import org.javatest.logging.Colour;
 import org.javatest.logging.TestLog;
 import org.javatest.logging.TestLogEntry;
+import org.javatest.tests.Test;
+import org.javatest.tests.TestResult;
+import org.javatest.tests.TestResults;
 
 import java.util.function.Supplier;
 import java.util.stream.Stream;

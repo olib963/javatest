@@ -1,6 +1,8 @@
 package org.javatest;
 
 import org.javatest.matchers.StringMatcherTests;
+import org.javatest.tests.Test;
+import org.javatest.tests.TestProvider;
 
 
 import java.util.*;

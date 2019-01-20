@@ -40,7 +40,7 @@ Assertions can also be created using `Matcher`s e.g. `that(7, isEqualTo(7))`.
 To run javatest simply pass your stream of tests to the `JavaTest.run()` function: 
 
 ```java
-import static org.javatest.Test.*;
+import static org.javatest.tests.Test.*;
 import static org.javatest.assertions.Assertion.*;
 
 class MyTests {

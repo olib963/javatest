@@ -1,8 +1,11 @@
 package org.javatest;
 
+import org.javatest.tests.Test;
+import org.javatest.tests.TestProvider;
+
 import java.util.stream.Stream;
 
-public class SimpleTests implements TestProvider  {
+public class SimpleTests implements TestProvider {
 
     public Stream<Test> passingTests = Stream.of(
             test("Simple test", () -> that(true)),

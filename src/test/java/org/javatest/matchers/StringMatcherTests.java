@@ -1,7 +1,7 @@
 package org.javatest.matchers;
 
-import org.javatest.Test;
-import org.javatest.TestProvider;
+import org.javatest.tests.Test;
+import org.javatest.tests.TestProvider;
 
 import java.util.List;
 import java.util.stream.Stream;

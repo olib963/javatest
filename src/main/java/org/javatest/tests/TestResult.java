@@ -1,4 +1,4 @@
-package org.javatest;
+package org.javatest.tests;
 
 import org.javatest.logging.TestLogEntry;
 
