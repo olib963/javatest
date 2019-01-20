@@ -11,18 +11,22 @@ public interface StringMatchers {
     }
 
     default Matcher<String> containsString(final String subString) {
-        return null;
+        return new PredicateMatcher<>(s -> s.contains(subString));
     }
 
     default Matcher<String> isEmptyString() {
-        return null;
+        return new PredicateMatcher<>(String::isEmpty);
+    }
+
+    default Matcher<String> isBlankString() {
+        return new PredicateMatcher<>(String::isBlank);
     }
 
     default Matcher<String> isEqualToIgnoringCase(String expected) {
-        return null;
+        return new PredicateMatcher<>(s -> s.equalsIgnoreCase(expected));
     }
 
     default Matcher<String> hasLength(int length) {
-        return null;
+        return new PredicateMatcher<>(s -> s.length() == length);
     }
 }

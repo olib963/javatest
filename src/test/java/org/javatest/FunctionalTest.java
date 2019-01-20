@@ -26,12 +26,10 @@ public class FunctionalTest implements TestProvider {
     private static Stream<Test> passingTests = Stream.concat(
             new SimpleTests().passingTests,
             new StringMatcherTests().passingTests
-    ).filter(t -> t.tags.contains("string-matchers"));
+    );
 
     private static Collection<Test> failingTests = Stream.concat(
             new SimpleTests().failingTests,
             new StringMatcherTests().failingTests
-    )
-            .filter(t -> t.tags.contains("string-matchers"))
-            .collect(Collectors.toList());
+    ).collect(Collectors.toList());
 }
