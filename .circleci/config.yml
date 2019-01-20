@@ -1,0 +1,23 @@
+aliases:
+  - &dependency-cache v1-dependencies-{{ checksum "pom.xml" }}
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/openjdk:11-jdk
+    working_directory: ~/javatest
+    steps:
+      - checkout
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - *dependency-cache
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+      - run: mvn dependency:go-offline
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: *dependency-cache
+      # run tests!
+      - run: mvn test
