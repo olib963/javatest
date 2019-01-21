@@ -7,19 +7,6 @@ public interface Matcher<A> {
         return new PredicateMatcher<>(expected::equals, "be equal to {" + expected + "}");
     }
 
-    // TODO break this to accept multiple exception matchers
-    // TODO describe mismatch
-    static Matcher<Runnable> willThrow(Class<? extends Exception> exceptionClass) {
-        return new PredicateMatcher<>(runnable -> {
-            try {
-                runnable.run();
-                return false;
-            } catch (Exception e) {
-                return exceptionClass.isInstance(e);
-            }
-        }, "throw an instance of " + exceptionClass.getName());
-    }
-
     class MatchResult {
         public final boolean matches;
         public final String expected;

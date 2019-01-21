@@ -37,10 +37,6 @@ public interface TestProvider {
         return Matcher.isEqualTo(expected);
     }
 
-    default Matcher<Runnable> willThrow(Class<? extends Exception> exceptionClass) {
-        return Matcher.willThrow(exceptionClass);
-    }
-
     default Stream<Test> allTestsFrom(TestProvider... providers) {
         return Arrays.stream(providers).flatMap(TestProvider::testStream);
     }

@@ -9,13 +9,13 @@ import java.util.stream.Stream;
 public class StringMatcherTests {
     private static final List<String> tags = List.of("string-matchers");
     public static TestProvider passing() {
-        return new StringMatcherPasingTests();
+        return new PasingTests();
     }
     public static TestProvider failing() {
-        return new StringMatcherFailingTests();
+        return new FailingTests();
     }
 
-    static class StringMatcherPasingTests implements TestProvider, StringMatchers {
+    static class PasingTests implements TestProvider, StringMatchers {
         @Override
         public Stream<Test> testStream() {
             return Stream.of(
@@ -30,7 +30,7 @@ public class StringMatcherTests {
         }
     }
 
-    static  class StringMatcherFailingTests implements TestProvider, StringMatchers {
+    static class FailingTests implements TestProvider, StringMatchers {
         @Override
         public Stream<Test> testStream() {
             return Stream.of(

@@ -8,13 +8,13 @@ import java.util.stream.Stream;
 public class SimpleTests {
 
     public static TestProvider passing() {
-        return new SimplePassingTests();
+        return new PassingTests();
     }
     public static TestProvider failing() {
-        return new SimpleFailingTests();
+        return new FailingTests();
     }
 
-    static class SimplePassingTests implements TestProvider {
+    static class PassingTests implements TestProvider {
 
         @Override
         public Stream<Test> testStream() {
@@ -22,9 +22,6 @@ public class SimpleTests {
                     test("Simple test", () -> that(true)),
                     test("Simple test with description", () -> that(true, "Expected true to be true")),
                     test("One add One is Two!", () -> that(1 + 1, isEqualTo(2))),
-                    test("Exception of correct type is thrown", () -> that(() -> {
-                        throw new RuntimeException("whoopsie");
-                    }, willThrow(RuntimeException.class))),
                     test("Pending test that has yet to be written", this::pending),
                     test("And test", () -> that(true).and(that(true))),
                     test("Or test 1", () -> that(true).or(that(true))),
@@ -35,14 +32,13 @@ public class SimpleTests {
             );
         }
     }
-    static class SimpleFailingTests implements TestProvider {
+    static class FailingTests implements TestProvider {
         @Override
         public Stream<Test> testStream() {
             return Stream.of(
                     test("Simple test (FAIL)", () ->  that(false)),
                     test("Simple test with description (FAIL)", () ->  that(false, "Expected true to be true")),
                     test("One add One is Three! (FAIL)", () ->  that(1 + 1, isEqualTo(3))),
-                    test("Exception of wrong type is thrown (FAIL)", () -> that(() -> { throw new RuntimeException("whoopsie"); }, willThrow(IllegalStateException.class))),
                     test("And test 1 (FAIL)", () -> that(false).and(that(false))),
                     test("And test 2 (FAIL)", () -> that(true).and(that(false))),
                     test("And test 3 (FAIL)", () -> that(false).and(that(true))),
