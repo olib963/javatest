@@ -2,6 +2,8 @@ package org.javatest.assertions;
 
 import org.javatest.matchers.Matcher;
 
+import java.util.List;
+
 public class MatcherAssertion<A> implements Assertion {
     private final A value;
     private final Matcher<A> matcher;
@@ -12,6 +14,16 @@ public class MatcherAssertion<A> implements Assertion {
     @Override
     public AssertionResult run() {
         var matchResult = matcher.matches(value);
-        return new AssertionResult(matchResult.matches);
+        var expectedPrefix = "Expected {" + toString(value) + "} to "; // TODO is this the best way to create descriptions??
+        return new AssertionResult(matchResult.matches, List.of(expectedPrefix + matchResult.expected));
+    }
+
+    private String toString(Object value) {
+        if (value == null) {
+            return "null";
+        } else if(value instanceof Runnable) {
+            return "runnable";
+        }
+        return value.toString();
     }
 }
