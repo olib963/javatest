@@ -8,7 +8,6 @@ jobs:
     working_directory: ~/javatest
     steps:
       - checkout
-      # Download and cache dependencies
       - restore_cache:
           keys:
           - *dependency-cache
@@ -19,5 +18,4 @@ jobs:
           paths:
             - ~/.m2
           key: *dependency-cache
-      # run tests!
       - run: mvn test

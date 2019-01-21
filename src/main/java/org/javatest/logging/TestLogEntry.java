@@ -1,6 +1,7 @@
 package org.javatest.logging;
 
-import java.util.Optional;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -8,22 +9,33 @@ import java.util.stream.IntStream;
 public class TestLogEntry {
     private final String entry;
     private final Colour logColour;
-    private final Optional<TestLog> next;
+    private final Collection<TestLogEntry> otherLogs;
 
     public TestLogEntry(String entry, Colour logColour) {
-        this(entry, logColour, Optional.empty());
+        this(entry, logColour, Collections.emptyList());
     }
 
-    public TestLogEntry(String entry, Colour logColour, Optional<TestLog> next) {
+    public TestLogEntry(String entry, Colour logColour, Collection<TestLogEntry> otherLogs) {
         this.entry = entry;
         this.logColour = logColour;
-        this.next = next;
+        this.otherLogs = otherLogs;
     }
 
     public String createLog(int indentLevel) {
         var thisLog = logColour.getCode() + IntStream.range(0, indentLevel).mapToObj(i -> "\t").collect(Collectors.joining()) + entry;
-        var nextLog = next.map(t -> thisLog + t.createLogString(indentLevel + 1)).orElse(thisLog);
-        return nextLog + Colour.resetCode();
+        if(otherLogs.isEmpty()) {
+            return thisLog + Colour.resetCode();
+        }
+        var nestedLogs = otherLogs.stream().map(t -> t.createLog(indentLevel + 1)).collect(Collectors.joining(TestLog.SEP));
+        return thisLog + TestLog.SEP + nestedLogs + Colour.resetCode();
     }
 
+    @Override
+    public String toString() {
+        return "TestLogEntry{" +
+                "entry='" + entry + '\'' +
+                ", logColour=" + logColour +
+                ", otherLogs=" + otherLogs +
+                '}';
+    }
 }

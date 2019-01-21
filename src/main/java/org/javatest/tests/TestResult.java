@@ -9,4 +9,12 @@ public class TestResult {
         this.succeeded = succeeded;
         this.testLog = testLog;
     }
+
+    @Override
+    public String toString() {
+        return "TestResult{" +
+                "succeeded=" + succeeded +
+                ", testLog=" + testLog +
+                '}';
+    }
 }
