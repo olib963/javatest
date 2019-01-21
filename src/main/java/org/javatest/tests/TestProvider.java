@@ -37,6 +37,11 @@ public interface TestProvider {
         return Matcher.isEqualTo(expected);
     }
 
+    default <A, T> Matcher<A> hasType(Class<T> expectedClass) {
+        return Matcher.hasType(expectedClass);
+    }
+
+
     default Stream<Test> allTestsFrom(TestProvider... providers) {
         return Arrays.stream(providers).flatMap(TestProvider::testStream);
     }

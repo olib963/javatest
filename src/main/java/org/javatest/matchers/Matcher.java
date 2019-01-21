@@ -7,6 +7,10 @@ public interface Matcher<A> {
         return new PredicateMatcher<>(expected::equals, "be equal to {" + expected + "}");
     }
 
+    static <A, T> Matcher<A> hasType(Class<T> expectedClass) {
+        return new PredicateMatcher<>(expectedClass::isInstance, "be an instance of {" + expectedClass.getName() + "}");
+    }
+
     class MatchResult {
         public final boolean matches;
         public final String expected;
