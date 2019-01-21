@@ -9,6 +9,7 @@ public interface Assertion {
     AssertionResult run();
 
     default Assertion and(Assertion other){
+        // TODO split out description from other logs, need the assertions to have descriptions so that we can compose them.
        return that(this.run().holds && other.run().holds);
     }
 
@@ -33,4 +34,3 @@ public interface Assertion {
     }
 
 }
-
