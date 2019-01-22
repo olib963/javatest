@@ -1,10 +1,10 @@
 package org.javatest.matchers;
 
 public class ThrowsExceptionMatcher implements Matcher<Runnable> {
-    private final Matcher<Exception> thrownMatcher;
+    private final Matcher<Throwable> thrownMatcher;
     private final String expectedPrefix = "throw an exception that was expected to ";
 
-    ThrowsExceptionMatcher(Matcher<Exception> thrownMatcher) {
+    ThrowsExceptionMatcher(Matcher<Throwable> thrownMatcher) {
         this.thrownMatcher = thrownMatcher;
     }
 
