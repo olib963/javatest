@@ -15,7 +15,7 @@ public class ExceptionMatcherTests {
         return new FailingTests();
     }
 
-    static class PassingTests implements TestProvider, ExceptionMatchers {
+    static class PassingTests implements TestProvider, ExceptionMatchers, StringMatchers {
         @Override
         public Stream<Test> testStream() {
             return Stream.of(
@@ -24,12 +24,16 @@ public class ExceptionMatcherTests {
                     test("Exception has correct message", () ->
                             that(new RuntimeException("whoopsie"), hasMessage("whoopsie")), tags),
                     test("Exception with correct message is thrown", () ->
-                            that(() -> { throw new RuntimeException("whoopsie"); }, willThrowExceptionThat(hasMessage("whoopsie"))), tags)
+                            that(() -> { throw new RuntimeException("whoopsie"); }, willThrowExceptionThat(hasMessage("whoopsie"))), tags),
+                    test("Exception has message containing substring", () ->
+                            that(new RuntimeException("oh no!"), hasMessageThat(containsString("no"))), tags),
+                    test("Exception is thrown with message containing substring", () ->
+                            that(() -> { throw new RuntimeException("oh no!"); }, willThrowExceptionThat(hasMessageThat(containsString("no")))), tags)
             );
         }
     }
 
-    static class FailingTests implements TestProvider, ExceptionMatchers {
+    static class FailingTests implements TestProvider, ExceptionMatchers, StringMatchers {
         @Override
         public Stream<Test> testStream() {
             return Stream.of(
@@ -38,7 +42,11 @@ public class ExceptionMatcherTests {
                     test("Exception has incorrect message (FAIL)", () ->
                             that(new RuntimeException("whoopsie"), hasMessage("BOOM")), tags),
                     test("Exception with incorrect message is thrown (FAIL)", () ->
-                            that(() -> { throw new RuntimeException("whoopsie"); }, willThrowExceptionThat(hasMessage("BOOM"))), tags)
+                            that(() -> { throw new RuntimeException("whoopsie"); }, willThrowExceptionThat(hasMessage("BOOM"))), tags),
+                    test("Exception message not containing substring (FAIL)", () ->
+                            that(new RuntimeException("whoopsie"), hasMessageThat(containsString("no"))), tags),
+                    test("Exception with message is thrown with message not containing substring (FAIL)", () ->
+                            that(() -> { throw new RuntimeException("whoopsie"); }, willThrowExceptionThat(hasMessageThat(containsString("no")))), tags)
             );
         }
     }
