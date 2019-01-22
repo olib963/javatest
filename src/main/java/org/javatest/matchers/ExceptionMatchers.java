@@ -6,9 +6,10 @@ public interface ExceptionMatchers {
         return new ThrowsExceptionMatcher(exceptionMatcher);
     }
 
-//    that(x, hasMessage(y))
-//    that(x, willThrowExceptionThat(hasMessage(y)))
-//
+    default  Matcher<Exception> hasMessage(String message) {
+        return new PredicateMatcher<>(e -> e.getMessage().equals(message), "have message {" + message + "}");
+    }
+
 //    that(x, hasMessageThat(contains(y)))
 //    that(x, willThrowExceptionThat(hasMessageThat(contains(y))))
 //

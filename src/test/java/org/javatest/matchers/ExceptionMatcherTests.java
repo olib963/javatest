@@ -20,7 +20,11 @@ public class ExceptionMatcherTests {
         public Stream<Test> testStream() {
             return Stream.of(
                     test("Exception of correct type is thrown", () ->
-                            that(() -> { throw new RuntimeException("whoopsie"); }, willThrowExceptionThat(hasType(RuntimeException.class))), tags)
+                            that(() -> { throw new RuntimeException("whoopsie"); }, willThrowExceptionThat(hasType(RuntimeException.class))), tags),
+                    test("Exception has correct message", () ->
+                            that(new RuntimeException("whoopsie"), hasMessage("whoopsie")), tags),
+                    test("Exception with correct message is thrown", () ->
+                            that(() -> { throw new RuntimeException("whoopsie"); }, willThrowExceptionThat(hasMessage("whoopsie"))), tags)
             );
         }
     }
@@ -30,7 +34,11 @@ public class ExceptionMatcherTests {
         public Stream<Test> testStream() {
             return Stream.of(
                     test("Exception of wrong type is thrown (FAIL)", () ->
-                            that(() -> { throw new RuntimeException("whoopsie"); }, willThrowExceptionThat(hasType(IllegalStateException.class))), tags)
+                            that(() -> { throw new RuntimeException("whoopsie"); }, willThrowExceptionThat(hasType(IllegalStateException.class))), tags),
+                    test("Exception has incorrect message (FAIL)", () ->
+                            that(new RuntimeException("whoopsie"), hasMessage("BOOM")), tags),
+                    test("Exception with incorrect message is thrown (FAIL)", () ->
+                            that(() -> { throw new RuntimeException("whoopsie"); }, willThrowExceptionThat(hasMessage("BOOM"))), tags)
             );
         }
     }
