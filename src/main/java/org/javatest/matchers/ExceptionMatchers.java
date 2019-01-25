@@ -36,7 +36,9 @@ class MessageMatcher implements Matcher<Throwable> {
 
     @Override
     public MatchResult matches(Throwable value) {
-        return messageMatcher.matches(value.getMessage());
+        var message = value.getMessage();
+        return messageMatcher.matches(message)
+                .mapMismatch(mismatch -> "message {" + message + "} " + mismatch);
     }
 
     @Override
@@ -54,7 +56,9 @@ class CauseMatcher implements Matcher<Throwable> {
 
     @Override
     public MatchResult matches(Throwable value) {
-        return causeMatcher.matches(value.getCause());
+        var cause = value.getCause();
+        return causeMatcher.matches(cause)
+                .mapMismatch(mismatch -> "cause {" + cause + "} " + mismatch);
     }
 
     @Override

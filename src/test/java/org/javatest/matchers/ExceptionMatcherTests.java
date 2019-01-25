@@ -45,6 +45,7 @@ public class ExceptionMatcherTests {
         }
     }
 
+    // TODO the latter tests errors don't compose nicely!
     static class FailingTests implements TestProvider, ExceptionMatchers, StringMatchers {
         @Override
         public Stream<Test> testStream() {
@@ -68,7 +69,13 @@ public class ExceptionMatcherTests {
                     test("Exception has cause with incorrect message (FAIL)", () ->
                             that(new RuntimeException("oh no!", new RuntimeException("foo")), hasCauseThat(hasMessage("bar"))), tags),
                     test("Exception is thrown with cause that has incorrect message (FAIL)", () ->
-                            that(() -> { throw new RuntimeException("oh no!", new RuntimeException("foo")); }, willThrowExceptionThat(hasCauseThat(hasMessage("bar")))), tags)
+                            that(() -> { throw new RuntimeException("oh no!", new RuntimeException("foo")); }, willThrowExceptionThat(hasCauseThat(hasMessage("bar")))), tags),
+                    test("Exception is thrown with cause that has incorrect type (FAIL)", () ->
+                            that(() -> { throw new RuntimeException("oh no!", new RuntimeException("foo")); }, willThrowExceptionThat(hasCauseThat(hasType(IllegalStateException.class)))), tags),
+                    test("Exception is thrown that has incorrect length of message (FAIL)", () ->
+                            that(() -> { throw new RuntimeException("oh no!"); }, willThrowExceptionThat(hasMessageThat(hasLength(10)))), tags),
+                    test("Exception is thrown with cause that has incorrect length of message (FAIL)", () ->
+                            that(() -> { throw new RuntimeException("oh no!", new RuntimeException("foo")); }, willThrowExceptionThat(hasCauseThat(hasMessageThat(hasLength(10))))), tags)
             );
         }
     }

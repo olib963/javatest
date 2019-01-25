@@ -11,7 +11,7 @@ public class ThrowsExceptionMatcher implements Matcher<Runnable> {
     public MatchResult matches(Runnable value) {
         try {
             value.run();
-            return MatchResult.mismatch("but no exception was thrown");
+            return MatchResult.mismatch("no exception was thrown");
         } catch (Exception e) {
             return thrownMatcher.matches(e);
         }

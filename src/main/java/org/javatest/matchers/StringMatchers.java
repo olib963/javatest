@@ -27,6 +27,6 @@ public interface StringMatchers {
     }
 
     default Matcher<String> hasLength(int length) {
-        return new PredicateMatcher<>(s -> s.length() == length, "have length {" + length + "}");
+        return new PredicateMatcher<>(s -> s.length() == length, "have length {" + length + "}", s -> "had length {" + s.length() + "}");
     }
 }
