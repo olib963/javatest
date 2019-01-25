@@ -30,7 +30,11 @@ public interface Assertion {
     static Assertion that(boolean asserted, String description) { return new SimpleAssertion(asserted, Optional.of(description)); }
 
     static Assertion pending() {
-        return new PendingAssertion();
+        return new PendingAssertion(Optional.empty());
+    }
+
+    static Assertion pending(String reason) {
+        return new PendingAssertion(Optional.of(reason));
     }
 
 }

@@ -22,6 +22,7 @@ public class SimpleTests {
                     test("Simple test", () -> that(true)),
                     test("Simple test with description", () -> that(true, "Expected true to be true")),
                     test("Pending test that has yet to be written", this::pending),
+                    test("Pending test that has yet to be written", () -> pending("That has a description")),
                     test("And test", () -> that(true).and(that(true))),
                     test("Or test 1", () -> that(true).or(that(true))),
                     test("Or test 2", () -> that(false).or(that(true))),

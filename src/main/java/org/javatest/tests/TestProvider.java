@@ -33,6 +33,10 @@ public interface TestProvider {
         return Assertion.pending();
     }
 
+    default Assertion pending(String reason) {
+        return Assertion.pending(reason);
+    }
+
     default <A> Matcher<A> isEqualTo(A expected) {
         return Matcher.isEqualTo(expected);
     }
