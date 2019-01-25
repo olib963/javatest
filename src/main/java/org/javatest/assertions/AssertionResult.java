@@ -1,34 +1,32 @@
 package org.javatest.assertions;
 
-import java.util.Collection;
-import java.util.Collections;
+import java.util.Optional;
 
 public class AssertionResult {
 
     public final boolean holds;
     public final boolean pending;
-    public final Collection<String> extraLogs; // TODO likely need to be TestLog or TestLogEntry.
+    public final Optional<String> description;
 
-    public AssertionResult(boolean holds) {
-        this(holds, Collections.emptyList());
-    }
-
-    public AssertionResult(boolean holds, Collection<String> extraLogs) {
-        this(holds, extraLogs, false);
+    public AssertionResult(boolean holds, String description) {
+        this(holds, Optional.of(description), false);
     }
 
     // Internal only
-    AssertionResult(boolean holds, Collection<String> extraLogs, boolean pending) {
+    AssertionResult(boolean holds, Optional<String> description, boolean pending) {
         this.holds = holds;
-        this.extraLogs = extraLogs;
+        this.description = description;
         this.pending = pending;
     }
 
+    // TODO add description
     public static AssertionResult failed(Exception error) {
-        return new AssertionResult(false);
+        return new AssertionResult(false, Optional.empty(), false);
     }
 
-    public static AssertionResult failed(Error error) {
-        return new AssertionResult(false);
+    // TODO add description
+    // TODO treat this differently, this should be invalid.
+    public static AssertionResult failed(AssertionError error) {
+        return new AssertionResult(false, Optional.empty(), false);
     }
 }

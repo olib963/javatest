@@ -9,6 +9,7 @@ import org.javatest.tests.Test;
 import org.javatest.tests.TestResult;
 import org.javatest.tests.TestResults;
 
+import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -31,7 +32,8 @@ public class JavaTest {
     private static TestResult runTest(Test test) {
         var result = safeRunTest(test.test);
         var colour = getColour(result);
-        var extraLogs = result.extraLogs.stream().map(s -> new TestLogEntry(s, Colour.WHITE)).collect(Collectors.toList());
+        // TODO how to get extra logs from test
+        var extraLogs = result.description.stream().map(description -> new TestLogEntry(description, Colour.WHITE)).collect(Collectors.toList());
         return new TestResult(result.holds, new TestLogEntry(test.description, colour, extraLogs));
     }
 
@@ -41,7 +43,6 @@ public class JavaTest {
         } catch (Exception e) {
             return AssertionResult.failed(e);
         } catch (AssertionError e) {
-            // TODO treat this differently, this should be invalid.
             return AssertionResult.failed(e);
         }
     }
