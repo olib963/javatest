@@ -3,7 +3,6 @@ package org.javatest.matchers;
 import java.util.Optional;
 import java.util.function.Function;
 
-// TODO extract matchers to new module.
 public interface Matcher<A> {
     MatchResult matches(A value);
     String describeExpected();

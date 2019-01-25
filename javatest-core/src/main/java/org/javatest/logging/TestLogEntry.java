@@ -26,8 +26,8 @@ public class TestLogEntry {
         if(otherLogs.isEmpty()) {
             return thisLog + Colour.resetCode();
         }
-        var nestedLogs = otherLogs.stream().map(t -> t.createLog(indentLevel + 1)).collect(Collectors.joining(TestLog.SEP));
-        return thisLog + TestLog.SEP + nestedLogs + Colour.resetCode();
+        var nestedLogs = otherLogs.stream().map(t -> t.createLog(indentLevel + 1)).collect(Collectors.joining(TestLog.SEPARATOR));
+        return thisLog + TestLog.SEPARATOR + nestedLogs + Colour.resetCode();
     }
 
     @Override

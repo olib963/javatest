@@ -1,9 +1,9 @@
-package org.javatest;
+package org.javatest.matchers;
 
-import org.javatest.matchers.ExceptionMatcherTests;
-import org.javatest.matchers.StringMatcherTests;
+import org.javatest.JavaTest;
 import org.javatest.tests.Test;
 import org.javatest.tests.TestProvider;
+
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -13,7 +13,7 @@ public class Tests implements TestProvider {
         return Stream.of(
                 test("All tests expected to pass should pass", () -> {
                     var tests = allTestsFrom(
-                            SimpleTests.passing(),
+                            SimpleMatcherTests.passing(),
                             StringMatcherTests.passing(),
                             ExceptionMatcherTests.passing());
                     var result = JavaTest.run(tests);
@@ -21,7 +21,7 @@ public class Tests implements TestProvider {
                 }),
                 test("All tests expected to fail should fail", () -> {
                     var tests = allTestsFrom(
-                            SimpleTests.failing(),
+                            SimpleMatcherTests.failing(),
                             StringMatcherTests.failing(),
                             ExceptionMatcherTests.failing());
                     var results = tests.map(t -> JavaTest.run(Stream.of(t)));

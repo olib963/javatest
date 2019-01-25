@@ -1,8 +1,7 @@
-package org.javatest.assertions;
+package org.javatest.matchers;
 
-import org.javatest.matchers.Matcher;
-
-import java.util.List;
+import org.javatest.assertions.Assertion;
+import org.javatest.assertions.AssertionResult;
 
 public class MatcherAssertion<A> implements Assertion {
     private final A value;
@@ -11,6 +10,7 @@ public class MatcherAssertion<A> implements Assertion {
         this.value = value;
         this.matcher = matcher;
     }
+
     @Override
     public AssertionResult run() {
         var matchResult = matcher.matches(value);

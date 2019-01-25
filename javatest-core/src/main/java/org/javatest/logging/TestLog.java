@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 // TODO review logging structure
 public class TestLog {
-    public static final String SEP = System.lineSeparator();
+    public static final String SEPARATOR = System.lineSeparator();
     private final Collection<TestLogEntry> log;
     public TestLog(Collection<TestLogEntry> log) {
         this.log = log;
@@ -31,7 +31,7 @@ public class TestLog {
     }
 
     String createLogString(int indent) {
-        return log.stream().map(e -> e.createLog(indent)).collect(Collectors.joining(SEP));
+        return log.stream().map(e -> e.createLog(indent)).collect(Collectors.joining(SEPARATOR));
     }
 
 

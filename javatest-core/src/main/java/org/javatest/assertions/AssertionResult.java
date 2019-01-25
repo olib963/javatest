@@ -26,10 +26,10 @@ public class AssertionResult {
     public static AssertionResult failed(Exception error) {
         var stringWriter = new StringWriter();
         stringWriter.append("An exception was thrown during your test.");
-        stringWriter.append(TestLog.SEP);
+        stringWriter.append(TestLog.SEPARATOR);
         stringWriter.append("Message: ");
         stringWriter.append(error.getMessage());
-        stringWriter.append(TestLog.SEP);
+        stringWriter.append(TestLog.SEPARATOR);
         error.printStackTrace(new PrintWriter(stringWriter));
         return new AssertionResult(false, stringWriter.toString());
     }

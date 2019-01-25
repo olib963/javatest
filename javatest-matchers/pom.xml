@@ -9,10 +9,19 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>javatest-core</artifactId>
+    <artifactId>javatest-matchers</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>javatest-core</artifactId>
+        </dependency>
+    </dependencies>
+
     <build>
         <plugins>
             <!-- Exec the tests -->
+            <!-- TODO create a maven plugin to run tests. Can be part of this repo -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -27,10 +36,11 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>org.javatest.FunctionalTest</mainClass>
+                    <mainClass>org.javatest.matchers.FunctionalTest</mainClass>
                     <classpathScope>test</classpathScope>
                 </configuration>
             </plugin>
         </plugins>
     </build>
+
 </project>
