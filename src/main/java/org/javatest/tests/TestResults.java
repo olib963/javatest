@@ -9,6 +9,17 @@ public class TestResults {
         this.succeeded = succeeded;
         this.testLog = testLog;
     }
+    public static TestResults init() {
+        return new TestResults(true, TestLog.init());
+    }
+
+    public TestResults addResult(TestResult result) {
+        return new TestResults(succeeded && result.succeeded, testLog.add(result.testLog));
+    }
+
+    public TestResults combine(TestResults results) {
+        return new TestResults(succeeded && results.succeeded, testLog.addAll(results.testLog));
+    }
 
     @Override
     public String toString() {

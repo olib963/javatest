@@ -18,13 +18,7 @@ public class JavaTest {
     public static TestResults run(Stream<Test> tests) {
         var result = tests
                 .map(JavaTest::runTest)
-                .reduce(
-                        // TODO extract functions
-                        new TestResults(true, TestLog.init()),
-                        (results, testResult) ->  new TestResults(
-                                results.succeeded && testResult.succeeded,
-                                results.testLog.add(testResult.testLog)),
-                        (a, b) -> new TestResults(a.succeeded && b.succeeded, a.testLog.addAll(b.testLog)));
+                .reduce(TestResults.init(), TestResults::addResult, TestResults::combine);
         System.out.println(result.testLog.createLogString());
         return result;
     }
