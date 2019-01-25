@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 // TODO review logging structure
 public class TestLog {
-    static final String SEP = System.lineSeparator();
+    public static final String SEP = System.lineSeparator();
     private final Collection<TestLogEntry> log;
     public TestLog(Collection<TestLogEntry> log) {
         this.log = log;
