@@ -14,8 +14,9 @@ public class MatcherAssertion<A> implements Assertion {
     @Override
     public AssertionResult run() {
         var matchResult = matcher.matches(value);
-        var expectedPrefix = "Expected {" + toString(value) + "} to "; // TODO is this the best way to create descriptions??
-        return new AssertionResult(matchResult.matches, List.of(expectedPrefix + matchResult.expected));
+        var expectedPrefix = "Expected {" + toString(value) + "} to " + matcher.describeExpected();
+        var description = matchResult.mismatch.map(mismatch -> expectedPrefix + " but " + mismatch).orElse(expectedPrefix);
+        return new AssertionResult(matchResult.matches, description);
     }
 
     private String toString(Object value) {

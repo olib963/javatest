@@ -1,34 +1,41 @@
 package org.javatest.matchers;
 
+import java.util.Optional;
+
 public interface Matcher<A> {
     MatchResult matches(A value);
+    String describeExpected();
 
     static <A> Matcher<A> isEqualTo(A expected) {
         return new PredicateMatcher<>(expected::equals, "be equal to {" + expected + "}");
     }
 
     static <A, T> Matcher<A> hasType(Class<T> expectedClass) {
-        return new PredicateMatcher<>(expectedClass::isInstance, "be an instance of {" + expectedClass.getName() + "}");
+        return new PredicateMatcher<>(
+                expectedClass::isInstance,
+                "be an instance of {" + expectedClass.getName() + "}",
+                value -> "was instead of type {" + value.getClass().getName() + "}"
+        );
     }
 
     class MatchResult {
         public final boolean matches;
-        public final String expected;
-        public MatchResult(boolean matches, String expected) {
+        public final Optional<String> mismatch;
+        public MatchResult(boolean matches, Optional<String> mismatch) {
             this.matches = matches;
-            this.expected = expected;
+            this.mismatch = mismatch;
         }
 
-        public static MatchResult match(String expected) {
-            return new MatchResult(true, expected);
+        public static MatchResult match() {
+            return new MatchResult(true, Optional.empty());
         }
 
-        public static MatchResult mismatch(String expected){
-            return new MatchResult(false, expected);
+        public static MatchResult mismatch(){
+            return new MatchResult(false, Optional.empty());
         }
 
-        public static MatchResult mismatch(String expected, String mismatch){
-            return new MatchResult(false, expected);
+        public static MatchResult mismatch(String mismatch){
+            return new MatchResult(false, Optional.of(mismatch));
         }
 
     }

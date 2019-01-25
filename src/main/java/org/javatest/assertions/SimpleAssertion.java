@@ -1,7 +1,6 @@
 package org.javatest.assertions;
 
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class SimpleAssertion implements Assertion {
     private final boolean holds;
@@ -14,6 +13,6 @@ public class SimpleAssertion implements Assertion {
 
     @Override
     public AssertionResult run() {
-        return new AssertionResult(holds, description.stream().collect(Collectors.toList()));
+        return new AssertionResult(holds, description, false);
     }
 }

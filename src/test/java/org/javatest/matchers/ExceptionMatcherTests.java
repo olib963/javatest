@@ -49,6 +49,8 @@ public class ExceptionMatcherTests {
         @Override
         public Stream<Test> testStream() {
             return Stream.of(
+                    test("Exception is thrown (FAIL)", () ->
+                            that(() -> {}, willThrowExceptionThat(hasType(IllegalStateException.class))), tags),
                     test("Exception of wrong type is thrown (FAIL)", () ->
                             that(() -> { throw new RuntimeException("whoopsie"); }, willThrowExceptionThat(hasType(IllegalStateException.class))), tags),
                     test("Exception has incorrect message (FAIL)", () ->
