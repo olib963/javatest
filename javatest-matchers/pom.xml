@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <properties>
-        <javatest.testClass>org.javatest.matchers.FunctionalTest</javatest.testClass>
+        <javatest.testClass>org.javatest.matchers.Tests</javatest.testClass>
     </properties>
 
     <artifactId>javatest-matchers</artifactId>

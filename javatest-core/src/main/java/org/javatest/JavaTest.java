@@ -6,7 +6,6 @@ import org.javatest.logging.Colour;
 import org.javatest.logging.TestLogEntry;
 import org.javatest.tests.*;
 
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 

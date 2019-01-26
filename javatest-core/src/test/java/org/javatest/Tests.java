@@ -7,6 +7,14 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Tests implements TestProvider {
+
+    public static void main(String... args) {
+        if(!JavaTest.run(new Tests()).succeeded) {
+            throw new RuntimeException("Tests failed!");
+        }
+        System.out.println("Tests passed");
+    }
+
     @Override
     public Stream<Test> testStream() {
         return Stream.of(
