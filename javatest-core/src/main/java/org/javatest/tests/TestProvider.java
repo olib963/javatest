@@ -12,11 +12,11 @@ public interface TestProvider {
 
     Stream<Test> testStream();
 
-    default Test test(String description, Supplier<Assertion> test) {
+    default Test test(String description, CheckedSupplier<Assertion> test) {
         return Test.test(description, test, Collections.emptyList());
     }
 
-    default Test test(String description, Supplier<Assertion> test, Collection<String> tags) {
+    default Test test(String description, CheckedSupplier<Assertion> test, Collection<String> tags) {
         return Test.test(description, test, tags);
     }
 
