@@ -15,7 +15,7 @@ public class StringMatcherTests {
         return new FailingTests();
     }
 
-    static class PasingTests implements MatcherTest, StringMatchers {
+    static class PasingTests implements MatcherTestProvider, StringMatchers {
         @Override
         public Stream<Test> testStream() {
             return Stream.of(
@@ -30,7 +30,7 @@ public class StringMatcherTests {
         }
     }
 
-    static class FailingTests implements MatcherTest, StringMatchers {
+    static class FailingTests implements MatcherTestProvider, StringMatchers {
         @Override
         public Stream<Test> testStream() {
             return Stream.of(

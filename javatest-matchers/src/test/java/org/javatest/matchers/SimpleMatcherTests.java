@@ -13,7 +13,7 @@ public class SimpleMatcherTests {
         return new FailingTests();
     }
 
-    static class PassingTests implements MatcherTest {
+    static class PassingTests implements MatcherTestProvider {
 
         @Override
         public Stream<Test> testStream() {
@@ -23,7 +23,7 @@ public class SimpleMatcherTests {
             );
         }
     }
-    static class FailingTests implements MatcherTest {
+    static class FailingTests implements MatcherTestProvider {
         @Override
         public Stream<Test> testStream() {
             return Stream.of(

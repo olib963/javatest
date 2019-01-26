@@ -3,7 +3,7 @@ package org.javatest.matchers;
 import org.javatest.assertions.Assertion;
 import org.javatest.tests.TestProvider;
 
-public interface MatcherTest extends TestProvider {
+public interface MatcherTestProvider extends TestProvider {
     default <A> Assertion that(A value, Matcher<A> matcher) {
         return new MatcherAssertion<>(value, matcher);
     }

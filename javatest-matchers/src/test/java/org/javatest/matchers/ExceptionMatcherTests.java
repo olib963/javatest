@@ -1,7 +1,5 @@
 package org.javatest.matchers;
 
-import org.javatest.matchers.ExceptionMatchers;
-import org.javatest.matchers.StringMatchers;
 import org.javatest.tests.Test;
 import org.javatest.tests.TestProvider;
 
@@ -17,7 +15,7 @@ public class ExceptionMatcherTests {
         return new FailingTests();
     }
 
-    static class PassingTests implements MatcherTest, ExceptionMatchers, StringMatchers {
+    static class PassingTests implements MatcherTestProvider, ExceptionMatchers, StringMatchers {
         @Override
         public Stream<Test> testStream() {
             return Stream.of(
@@ -48,7 +46,7 @@ public class ExceptionMatcherTests {
     }
 
     // TODO the latter tests errors don't compose nicely!
-    static class FailingTests implements MatcherTest, ExceptionMatchers, StringMatchers {
+    static class FailingTests implements MatcherTestProvider, ExceptionMatchers, StringMatchers {
         @Override
         public Stream<Test> testStream() {
             return Stream.of(
