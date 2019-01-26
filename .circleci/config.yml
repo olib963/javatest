@@ -13,8 +13,8 @@ jobs:
           - *dependency-cache
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
-      # TODO Find out how to get dependency:go-offline to work with multi-module. It's fine for now since it only depends on the JDK.
-      - run: mvn dependency:resolve-plugins
+      # compile is required to get dependencies due to inter module dependencies (mvn dependency:go-offline alone will fail)
+      - run: mvn compile dependency:go-offline
       - save_cache:
           paths:
             - ~/.m2

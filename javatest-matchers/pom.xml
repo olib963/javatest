@@ -28,7 +28,6 @@
                 <configuration>
                     <testProvider>org.javatest.matchers.Tests</testProvider>
                 </configuration>
-                <!-- TODO how do I attach this to test by default -->
                 <executions>
                     <execution>
                         <id>test</id>
