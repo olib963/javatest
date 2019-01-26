@@ -20,25 +20,23 @@
 
     <build>
         <plugins>
-            <!-- Exec the tests -->
-            <!-- TODO create a maven plugin to run tests. Can be part of this repo -->
+            <!-- JavaFire configuration for testing -->
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.6.0</version>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>javafire-maven-plugin</artifactId>
+                <version>${project.version}</version>
+                <configuration>
+                    <testProvider>org.javatest.matchers.Tests</testProvider>
+                </configuration>
+                <!-- TODO how do I attach this to test by default -->
                 <executions>
                     <execution>
-                        <id>Javatest</id>
-                        <phase>test</phase>
+                        <id>test</id>
                         <goals>
-                            <goal>java</goal>
+                            <goal>test</goal>
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <mainClass>org.javatest.matchers.FunctionalTest</mainClass>
-                    <classpathScope>test</classpathScope>
-                </configuration>
             </plugin>
         </plugins>
     </build>
