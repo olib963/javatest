@@ -4,16 +4,18 @@ import org.javatest.assertions.Assertion;
 import org.javatest.assertions.AssertionResult;
 import org.javatest.logging.Colour;
 import org.javatest.logging.TestLogEntry;
-import org.javatest.tests.CheckedSupplier;
-import org.javatest.tests.Test;
-import org.javatest.tests.TestResult;
-import org.javatest.tests.TestResults;
+import org.javatest.tests.*;
 
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class JavaTest {
+
+    public static TestResults run(TestProvider testProvider) {
+        return run(testProvider.testStream());
+    }
+
     public static TestResults run(Stream<Test> tests) {
         var result = tests
                 .map(JavaTest::runTest)
