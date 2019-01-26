@@ -9,6 +9,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <properties>
+        <javatest.testClass>org.javatest.matchers.FunctionalTest</javatest.testClass>
+    </properties>
+
     <artifactId>javatest-matchers</artifactId>
 
     <dependencies>
@@ -20,22 +24,13 @@
 
     <build>
         <plugins>
-            <!-- JavaFire configuration for testing -->
             <plugin>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>javafire-maven-plugin</artifactId>
-                <version>${project.version}</version>
-                <configuration>
-                    <testProvider>org.javatest.matchers.Tests</testProvider>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>test</id>
-                        <goals>
-                            <goal>test</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>
