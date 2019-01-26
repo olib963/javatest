@@ -14,10 +14,11 @@ public class FunctionalTest {
         System.out.println("Functional Tests passed");
     }
 
+    static class TestFailedException extends RuntimeException {
+        TestFailedException(String message) {
+            super(message, null, true, false);
+        }
+    }
+
 }
 
-class TestFailedException extends RuntimeException {
-    TestFailedException(String message) {
-        super(message, null, true, false);
-    }
-}
