@@ -4,6 +4,7 @@ import org.javatest.assertions.Assertion;
 import org.javatest.assertions.AssertionResult;
 import org.javatest.logging.Colour;
 import org.javatest.logging.TestLogEntry;
+import org.javatest.tests.CheckedSupplier;
 import org.javatest.tests.Test;
 import org.javatest.tests.TestResult;
 import org.javatest.tests.TestResults;
@@ -29,12 +30,12 @@ public class JavaTest {
         return new TestResult(result.holds, new TestLogEntry(test.description, colour, extraLogs));
     }
 
-    private static AssertionResult safeRunTest(Supplier<Assertion> test) {
+    private static AssertionResult safeRunTest(CheckedSupplier<Assertion> test) {
         try {
             return test.get().run();
-        } catch (Exception e) {
-            return AssertionResult.failed(e);
         } catch (AssertionError e) {
+            return AssertionResult.failed(e);
+        } catch (Throwable e) {
             return AssertionResult.failed(e);
         }
     }

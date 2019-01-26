@@ -45,6 +45,7 @@ public class SimpleTests {
                     test("Xor test 1 (FAIL)", () -> that(true).xor(that(true))),
                     test("Xor test 2 (FAIL)", () -> that(false).xor(that(false))),
                     test("Test throwing exception (FAIL)", () -> { throw new RuntimeException("This is an error"); }),
+                    test("Test throwing checked exception (FAIL)", () -> { throw new Exception("This is an error"); }),
                     test("Test throwing assertion error (FAIL)", () -> { throw new AssertionError("This is an 'assertion'"); })
             );
         }

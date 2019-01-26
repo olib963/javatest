@@ -23,7 +23,7 @@ public class AssertionResult {
         this.pending = pending;
     }
 
-    public static AssertionResult failed(Exception error) {
+    public static AssertionResult failed(Throwable error) {
         var stringWriter = new StringWriter();
         stringWriter.append("An exception was thrown during your test.");
         stringWriter.append(TestLog.SEPARATOR);

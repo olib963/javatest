@@ -54,3 +54,24 @@ class MyTests {
     
 }
 ```
+
+### With JavaFire Maven plugin
+
+```xml
+<plugin>
+    <groupId>org.javatest</groupId>
+    <artifactId>javafire-maven-plugin</artifactId>
+    <version>${javatest.version}</version>
+    <configuration>
+        <testProvider>your.class.Here</testProvider>
+    </configuration>
+    <executions>
+        <execution>
+            <id>test</id>
+            <goals>
+                <goal>test</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin>
+```

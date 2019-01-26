@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
+    <!-- TODO sort out all POMS -->
     <groupId>org.javatest</groupId>
     <artifactId>javatest</artifactId>
     <packaging>pom</packaging>
@@ -11,12 +11,17 @@
     <modules>
         <module>javatest-core</module>
         <module>javatest-matchers</module>
+        <module>javafire</module>
     </modules>
     <properties>
         <java.version>1.11</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- Dont run surefire -->
         <skipTests>true</skipTests>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <!-- Define property for which main class to run tests from -->
+        <javatest.testClass>foo.Bar</javatest.testClass>
     </properties>
 
     <dependencyManagement>
@@ -47,6 +52,50 @@
                     <version>3.8.0</version>
                     <configuration>
                         <release>11</release>
+                    </configuration>
+                </plugin>
+                <!-- Enforce a maven and java version -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-enforcer-plugin</artifactId>
+                    <version>3.0.0-M2</version>
+                    <configuration>
+                        <rules>
+                            <requireMavenVersion>
+                                <version>3.0</version>
+                            </requireMavenVersion>
+                            <requireJavaVersion>
+                                <version>1.11</version>
+                            </requireJavaVersion>
+                        </rules>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>enforce</id>
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>enforce</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <!-- Exec the JavaTest tests -->
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>1.6.0</version>
+                    <executions>
+                        <execution>
+                            <id>javatest</id>
+                            <phase>test</phase>
+                            <goals>
+                                <goal>java</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <mainClass>${javatest.testClass}</mainClass>
+                        <classpathScope>test</classpathScope>
                     </configuration>
                 </plugin>
             </plugins>
