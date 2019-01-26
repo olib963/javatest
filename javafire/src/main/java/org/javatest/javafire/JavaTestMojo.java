@@ -32,11 +32,14 @@ public class JavaTestMojo extends AbstractMojo {
         }
         var result = new JavaTestRunner(testProvider, new ThreadLocalClassLoaderProvider(), project).run();
         if (result.status == JavaTestRunner.Status.EXECUTION_FAILURE) {
-            throw new MojoExecutionException(result.description);
+            throw result.cause
+                    .map(cause -> new MojoExecutionException(result.description, cause))
+                    .orElseGet(() -> new MojoExecutionException(result.description));
         } else if (result.status == JavaTestRunner.Status.FAILURE) {
-            throw new MojoFailureException(result.description);
+            throw result.cause
+                    .map(cause -> new MojoFailureException(result.description, cause))
+                    .orElseGet(() -> new MojoFailureException(result.description));
         }
     }
-
 
 }
