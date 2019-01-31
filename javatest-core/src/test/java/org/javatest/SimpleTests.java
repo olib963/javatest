@@ -37,7 +37,7 @@ public class SimpleTests {
         public Stream<Test> testStream() {
             return Stream.of(
                     test("Simple test (FAIL)", () ->  that(false)),
-                    test("Simple test with description (FAIL)", () ->  that(false, "Expected true to be true")),
+                    test("Simple test with description (FAIL)", () ->  that(false, "Expected false to be true")),
                     test("And test 1 (FAIL)", () -> that(false).and(that(false))),
                     test("And test 2 (FAIL)", () -> that(true).and(that(false))),
                     test("And test 3 (FAIL)", () -> that(false).and(that(true))),

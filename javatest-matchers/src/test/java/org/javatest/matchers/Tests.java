@@ -23,7 +23,8 @@ public class Tests implements TestProvider {
                     var tests = allTestsFrom(
                             SimpleMatcherTests.passing(),
                             StringMatcherTests.passing(),
-                            ExceptionMatcherTests.passing());
+                            ExceptionMatcherTests.passing(),
+                            OptionalMatcherTests.passing());
                     var result = JavaTest.run(tests);
                     return that(result.succeeded);
                 }),
@@ -31,7 +32,8 @@ public class Tests implements TestProvider {
                     var tests = allTestsFrom(
                             SimpleMatcherTests.failing(),
                             StringMatcherTests.failing(),
-                            ExceptionMatcherTests.failing());
+                            ExceptionMatcherTests.failing(),
+                            OptionalMatcherTests.failing());
                     var results = tests.map(t -> JavaTest.run(Stream.of(t)));
                     var passingTests = results.filter(r -> r.succeeded).collect(Collectors.toList());
                     return that(passingTests.isEmpty());

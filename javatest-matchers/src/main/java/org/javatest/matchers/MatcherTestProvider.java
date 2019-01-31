@@ -4,6 +4,7 @@ import org.javatest.assertions.Assertion;
 import org.javatest.tests.TestProvider;
 
 public interface MatcherTestProvider extends TestProvider {
+    // TODO allow additional String information to be passed
     default <A> Assertion that(A value, Matcher<A> matcher) {
         return new MatcherAssertion<>(value, matcher);
     }
