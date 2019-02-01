@@ -208,7 +208,8 @@ public class MyTests implements MatcherTestProvider, StringMatchers {
 
 My plan for the first released version is to:
 
-- [ ] Write a few more common matchers e.g. for `Collection`s, `Map`s, `Optional`s and `Comparable`s.
+- [x] Write a few more common matchers e.g. for `Collection`s, `Map`s, `Optional`s and `Comparable`s.
+- [ ] Create an abstraction for composite matchers.
 - [ ] Figure out how I would like to handle fixtures in the API e.g. creating a database connection and passing that to tests
 - [ ] Decide how to handle null. At the moment many `that(null, $matcher)` expressions fail tets with NPEs, maybe this is good enough?
 Maybe I should explicitly fail if null is passed?

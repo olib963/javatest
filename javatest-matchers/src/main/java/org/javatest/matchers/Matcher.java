@@ -19,6 +19,10 @@ public interface Matcher<A> {
         );
     }
 
+    static <A> Matcher<A> isTheSameInstanceAs(A instance) {
+        return new PredicateMatcher<>(o -> instance == o, "be the same in memory reference as {" + instance + "}");
+    }
+
     class MatchResult {
         public final boolean matches;
         public final Optional<String> mismatch;
