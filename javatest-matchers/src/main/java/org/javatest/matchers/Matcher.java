@@ -34,6 +34,7 @@ public interface Matcher<A> {
         public static MatchResult match() {
             return new MatchResult(true, Optional.empty());
         }
+        // TODO create a boolean based result from(boolean matches)
 
         public static MatchResult mismatch(){
             return new MatchResult(false, Optional.empty());
