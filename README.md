@@ -210,6 +210,8 @@ My plan for the first released version is to:
 
 - [ ] Write a few more common matchers e.g. for `Collection`s, `Map`s, `Optional`s and `Comparable`s.
 - [ ] Figure out how I would like to handle fixtures in the API e.g. creating a database connection and passing that to tests
+- [ ] Decide how to handle null. At the moment many `that(null, $matcher)` expressions fail tets with NPEs, maybe this is good enough?
+Maybe I should explicitly fail if null is passed?
 - [ ] Figure out if I would rather use the java module system rather than a multi-module maven project (I have no java module
 experience yet so haven't looked into it hence starting with maven modules).
 - [ ] Ensure I am happy with the log output of `Assertion`s e.g. composing with `and`.

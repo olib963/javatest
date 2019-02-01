@@ -11,14 +11,14 @@ public class OptionalMatcherTests {
     private static final List<String> tags = List.of("optional-matchers");
 
     public static TestProvider passing() {
-        return new PasingTests();
+        return new PassingTests();
     }
 
     public static TestProvider failing() {
         return new FailingTests();
     }
 
-    static class PasingTests implements MatcherTestProvider, OptionalMatchers, StringMatchers {
+    static class PassingTests implements MatcherTestProvider, OptionalMatchers, StringMatchers {
         @Override
         public Stream<Test> testStream() {
             return Stream.of(

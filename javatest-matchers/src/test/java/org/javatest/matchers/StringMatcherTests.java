@@ -9,13 +9,13 @@ import java.util.stream.Stream;
 public class StringMatcherTests {
     private static final List<String> tags = List.of("string-matchers");
     public static TestProvider passing() {
-        return new PasingTests();
+        return new PassingTests();
     }
     public static TestProvider failing() {
         return new FailingTests();
     }
 
-    static class PasingTests implements MatcherTestProvider, StringMatchers {
+    static class PassingTests implements MatcherTestProvider, StringMatchers {
         @Override
         public Stream<Test> testStream() {
             return Stream.of(
