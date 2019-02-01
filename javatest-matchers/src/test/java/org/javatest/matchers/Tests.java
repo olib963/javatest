@@ -19,22 +19,30 @@ public class Tests implements TestProvider {
     @Override
     public Stream<Test> testStream() {
         return Stream.of(
-                test("All tests expected to pass should pass", () -> {
+                test("Passing Tests", () -> {
                     var tests = allTestsFrom(
                             SimpleMatcherTests.passing(),
                             StringMatcherTests.passing(),
-                            ExceptionMatcherTests.passing());
+                            ExceptionMatcherTests.passing(),
+                            OptionalMatcherTests.passing(),
+                            ComparableMatcherTests.passing(),
+                            CollectionMatcherTests.passing(),
+                            MapMatcherTests.passing());
                     var result = JavaTest.run(tests);
-                    return that(result.succeeded);
+                    return that(result.succeeded, "Expected all 'passing' tests to pass");
                 }),
-                test("All tests expected to fail should fail", () -> {
+                test("Failing Tests", () -> {
                     var tests = allTestsFrom(
                             SimpleMatcherTests.failing(),
                             StringMatcherTests.failing(),
-                            ExceptionMatcherTests.failing());
+                            ExceptionMatcherTests.failing(),
+                            OptionalMatcherTests.failing(),
+                            ComparableMatcherTests.failing(),
+                            CollectionMatcherTests.failing(),
+                            MapMatcherTests.failing());
                     var results = tests.map(t -> JavaTest.run(Stream.of(t)));
                     var passingTests = results.filter(r -> r.succeeded).collect(Collectors.toList());
-                    return that(passingTests.isEmpty());
+                    return that(passingTests.isEmpty(), "Expected all 'failing' tests to fail");
                 })
         );
     }

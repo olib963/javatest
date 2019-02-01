@@ -4,6 +4,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+// TODO possibly provide a simple function matcher A -> MatchResult
 public class PredicateMatcher<A> implements Matcher<A> {
     private final Predicate<A> predicate;
     private final String expected;
