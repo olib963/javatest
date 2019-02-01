@@ -25,7 +25,8 @@ public class Tests implements TestProvider {
                             StringMatcherTests.passing(),
                             ExceptionMatcherTests.passing(),
                             OptionalMatcherTests.passing(),
-                            ComparableMatcherTests.passing());
+                            ComparableMatcherTests.passing(),
+                            CollectionMatcherTests.passing());
                     var result = JavaTest.run(tests);
                     return that(result.succeeded, "Expected all 'passing' tests to pass");
                 }),
@@ -35,7 +36,8 @@ public class Tests implements TestProvider {
                             StringMatcherTests.failing(),
                             ExceptionMatcherTests.failing(),
                             OptionalMatcherTests.failing(),
-                            ComparableMatcherTests.failing());
+                            ComparableMatcherTests.failing(),
+                            CollectionMatcherTests.failing());
                     var results = tests.map(t -> JavaTest.run(Stream.of(t)));
                     var passingTests = results.filter(r -> r.succeeded).collect(Collectors.toList());
                     return that(passingTests.isEmpty(), "Expected all 'failing' tests to fail");
