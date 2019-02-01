@@ -1,6 +1,6 @@
 package org.javatest.matchers;
 
-public class ThrowsExceptionMatcher implements Matcher<Runnable> {
+public class ThrowsExceptionMatcher implements Matcher<CheckedRunnable> {
     private final Matcher<Throwable> thrownMatcher;
 
     ThrowsExceptionMatcher(Matcher<Throwable> thrownMatcher) {
@@ -8,7 +8,7 @@ public class ThrowsExceptionMatcher implements Matcher<Runnable> {
     }
 
     @Override
-    public MatchResult matches(Runnable value) {
+    public MatchResult matches(CheckedRunnable value) {
         try {
             value.run();
             return MatchResult.mismatch("no exception was thrown");

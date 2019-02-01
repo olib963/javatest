@@ -2,7 +2,7 @@ package org.javatest.matchers;
 
 public interface ExceptionMatchers {
 
-    default Matcher<Runnable> willThrowExceptionThat(Matcher<Throwable> exceptionMatcher) {
+    default Matcher<CheckedRunnable> willThrowExceptionThat(Matcher<Throwable> exceptionMatcher) {
         return new ThrowsExceptionMatcher(exceptionMatcher);
     }
 
