@@ -124,13 +124,13 @@ public class JavaTestRunnerTest implements TestProvider {
     public static class ProviderWithFailingTest implements  TestProvider {
         @Override
         public Stream<Test> testStream() {
-            return Stream.of(test("Failure", () -> that(false)));
+            return Stream.of(test("Failure", () -> that(false, "Expected false")));
         }
     }
     public static class ProviderWithPassingTests implements  TestProvider {
         @Override
         public Stream<Test> testStream() {
-            return Stream.of(test("Success", () -> that(true)));
+            return Stream.of(test("Success", () -> that(true, "Expected true")));
         }
     }
 

@@ -27,29 +27,29 @@ Add this dependency to your project:
 ### Simple Test Definitions
 
 The most basic `Test` can be defined by:
-- A description
-- A `Supplier` of an `Assertion`
+- A name
+- A `Supplier` of an `Assertion` - a check with a description 
 
 Functions to help you define your tests are available from the `TestProvider` interface e.g.
 ```java
 public class MyTests implements TestProvider {
     @Override
     public Stream<Test> testStream() {
-        return Stream.of(test("One add one is two", () -> that(1 + 1 == 2)));
+        return Stream.of(test("Addition", () -> that(1 + 1 == 2, "One add one is two")));
     }
 }
 ```
 
 ### Creating And Composing Assertions
 
-Assertions are created simply from boolean expressions with the option to add a description to what it is you are testing.
+Assertions are created simply from boolean expressions and a string description.
 
 ```java
 public class MyTests implements TestProvider {
     @Override
     public Stream<Test> testStream() {
         return Stream.of(
-                test("Addition", () -> that(1 + 1 == 2)),
+                test("Addition", () -> that(1 + 1 == 2, "One add one is two")),
                 test("Multiplication", () -> {
                     var two = 2;
                     var ten = 10;

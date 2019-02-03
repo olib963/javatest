@@ -4,20 +4,19 @@ import org.javatest.JavaTest;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Optional;
 
 public class AssertionResult {
 
     public final boolean holds;
     public final boolean pending;
-    public final Optional<String> description;
+    public final String description;
 
     public AssertionResult(boolean holds, String description) {
-        this(holds, Optional.of(description), false);
+        this(holds, description, false);
     }
 
     // Internal only
-    AssertionResult(boolean holds, Optional<String> description, boolean pending) {
+    AssertionResult(boolean holds, String description, boolean pending) {
         this.holds = holds;
         this.description = description;
         this.pending = pending;

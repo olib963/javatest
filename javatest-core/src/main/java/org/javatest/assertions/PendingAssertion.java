@@ -1,10 +1,8 @@
 package org.javatest.assertions;
 
-import java.util.Optional;
-
 public class PendingAssertion implements Assertion {
-    private final Optional<String> description;
-    PendingAssertion(Optional<String> description) {
+    private final String description;
+    PendingAssertion(String description) {
         this.description = description;
     }
     @Override

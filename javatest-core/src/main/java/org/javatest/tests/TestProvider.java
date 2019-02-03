@@ -20,8 +20,6 @@ public interface TestProvider {
         return Test.test(description, test, tags);
     }
 
-    default Assertion that(boolean asserted) { return Assertion.that(asserted); }
-
     default Assertion that(boolean asserted, String description) { return Assertion.that(asserted, description); }
 
     default Assertion pending() {
