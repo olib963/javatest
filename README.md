@@ -3,7 +3,6 @@
 Experimental attempt at a different style of test framework. Very much a work in progress. Any feedback/constructive criticism
 is appreciated. I am sure I have not got the API or library right on the first try so there may be breaking changes in the future.
 
-
 ## Basic Principles
 
 - Tests should be written in plain, simple functional Java with no magic.
@@ -221,3 +220,5 @@ Future Versions could include:
 - A module to test eventual consistency for example something like: `thatEventually(() -> that(map.containsKey(1)), 1, Minutes, 10, Seconds)`
 would retry `map.containsKey(1)` every 10 seconds until 1 minute has passed.
 - A module that allows for generative property testing & parameterised testing more generally.
+- A way to add arbitrary logs to your test cases.
+- The ability to select how different parts of your test stream is run e.g. some in sequence the rest in parallel.

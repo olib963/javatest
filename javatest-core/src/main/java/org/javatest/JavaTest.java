@@ -26,6 +26,7 @@ public class JavaTest {
     }
 
     private static TestResult runTest(Test test) {
+        // TODO allow a test to add to the log. Ideally immutable :/ probably have to be some kind of builder per test case.
         var result = safeRunTest(test.test);
         var colour = getColour(result);
         var log = colour.getCode() + result.description

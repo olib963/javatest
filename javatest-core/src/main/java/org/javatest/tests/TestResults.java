@@ -1,7 +1,6 @@
 package org.javatest.tests;
 
 import org.javatest.JavaTest;
-import org.javatest.assertions.AssertionResult;
 
 import java.util.ArrayList;
 import java.util.List;
