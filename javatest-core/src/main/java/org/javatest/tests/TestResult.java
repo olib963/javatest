@@ -1,11 +1,9 @@
 package org.javatest.tests;
 
-import org.javatest.logging.TestLogEntry;
-
 public class TestResult {
     public final boolean succeeded;
-    public final TestLogEntry testLog;
-    public TestResult(boolean succeeded, TestLogEntry testLog) {
+    public final String testLog;
+    public TestResult(boolean succeeded, String testLog) {
         this.succeeded = succeeded;
         this.testLog = testLog;
     }

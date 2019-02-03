@@ -2,14 +2,13 @@ package org.javatest;
 
 import org.javatest.assertions.Assertion;
 import org.javatest.assertions.AssertionResult;
-import org.javatest.logging.Colour;
-import org.javatest.logging.TestLogEntry;
 import org.javatest.tests.*;
 
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class JavaTest {
+
+    public static final String SEPARATOR = System.lineSeparator();
 
     public static TestResults run(TestProvider testProvider) {
         return run(testProvider.testStream());
@@ -19,16 +18,17 @@ public class JavaTest {
         var result = tests
                 .map(JavaTest::runTest)
                 .reduce(TestResults.init(), TestResults::addResult, TestResults::combine);
-        System.out.println(result.testLog.createLogString());
+        result.testLogs.forEach(System.out::println);
         return result;
     }
 
     private static TestResult runTest(Test test) {
         var result = safeRunTest(test.test);
         var colour = getColour(result);
-        // TODO how to get extra logs from test
-        var extraLogs = result.description.stream().map(description -> new TestLogEntry(description, Colour.WHITE)).collect(Collectors.toList());
-        return new TestResult(result.holds, new TestLogEntry(test.description, colour, extraLogs));
+        var log = colour.getCode() + result.description
+                .map(d -> test.description + Colour.resetCode() + SEPARATOR + "\t" + d)
+                .orElse(test.description);
+        return new TestResult(result.holds, log);
     }
 
     private static AssertionResult safeRunTest(CheckedSupplier<Assertion> test) {
@@ -50,4 +50,24 @@ public class JavaTest {
             return Colour.RED;
         }
     }
+    enum Colour {
+
+        RED("\u001B[31m"), YELLOW("\u001B[33m"), GREEN("\u001B[32m"), INVISIBLE("\033[37m"), WHITE(resetCode());
+
+        private final String colourCode;
+
+        Colour(final String colourCode) {
+            this.colourCode = colourCode;
+        }
+
+        public String getCode() {
+            return colourCode;
+        }
+
+        public static String resetCode() {
+            return "\u001B[0m";
+        }
+
+    }
 }
+

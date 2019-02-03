@@ -22,7 +22,7 @@ public class MatcherAssertion<A> implements Assertion {
     private String toString(Object value) {
         if (value == null) {
             return "null";
-        } else if(value instanceof Runnable) {
+        } else if(value instanceof CheckedRunnable) {
             return "runnable";
         }
         return value.toString();

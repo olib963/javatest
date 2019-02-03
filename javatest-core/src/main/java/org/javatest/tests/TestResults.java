@@ -1,31 +1,34 @@
 package org.javatest.tests;
 
-import org.javatest.logging.TestLog;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TestResults {
     public final boolean succeeded;
-    public final TestLog testLog;
-    public TestResults(boolean succeeded, TestLog testLog) {
+    public final List<String> testLogs;
+    private TestResults(boolean succeeded, List<String> testLogs) {
         this.succeeded = succeeded;
-        this.testLog = testLog;
+        this.testLogs = testLogs;
     }
     public static TestResults init() {
-        return new TestResults(true, TestLog.init());
+        return new TestResults(true, new ArrayList<>());
     }
 
     public TestResults addResult(TestResult result) {
-        return new TestResults(succeeded && result.succeeded, testLog.add(result.testLog));
+        testLogs.add(result.testLog); // TODO enforce immutability
+        return new TestResults(succeeded && result.succeeded, testLogs);
     }
 
     public TestResults combine(TestResults results) {
-        return new TestResults(succeeded && results.succeeded, testLog.addAll(results.testLog));
+        testLogs.addAll(results.testLogs);
+        return new TestResults(succeeded && results.succeeded, testLogs);
     }
 
     @Override
     public String toString() {
         return "TestResults{" +
                 "succeeded=" + succeeded +
-                ", testLog=" + testLog +
+                ", testLogs=" + testLogs +
                 '}';
     }
 }
