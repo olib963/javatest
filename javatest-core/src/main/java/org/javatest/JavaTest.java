@@ -18,7 +18,10 @@ public class JavaTest {
         var result = tests
                 .map(JavaTest::runTest)
                 .reduce(TestResults.init(), TestResults::addResult, TestResults::combine);
+        // TODO allow by test logging, perhaps with some kind of observer.
         result.testLogs.forEach(System.out::println);
+        System.out.println(Colour.WHITE.getCode());
+        System.out.println(result.totalsLog());
         return result;
     }
 
@@ -28,7 +31,7 @@ public class JavaTest {
         var log = colour.getCode() + result.description
                 .map(d -> test.description + Colour.resetCode() + SEPARATOR + "\t" + d)
                 .orElse(test.description);
-        return new TestResult(result.holds, log);
+        return new TestResult(result, log);
     }
 
     private static AssertionResult safeRunTest(CheckedSupplier<Assertion> test) {

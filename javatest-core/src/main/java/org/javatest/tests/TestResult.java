@@ -1,17 +1,19 @@
 package org.javatest.tests;
 
+import org.javatest.assertions.AssertionResult;
+
 public class TestResult {
-    public final boolean succeeded;
+    public final AssertionResult result;
     public final String testLog;
-    public TestResult(boolean succeeded, String testLog) {
-        this.succeeded = succeeded;
+    public TestResult(AssertionResult result, String testLog) {
+        this.result = result;
         this.testLog = testLog;
     }
 
     @Override
     public String toString() {
         return "TestResult{" +
-                "succeeded=" + succeeded +
+                "result=" + result +
                 ", testLog=" + testLog +
                 '}';
     }
