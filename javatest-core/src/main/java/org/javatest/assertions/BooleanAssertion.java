@@ -2,11 +2,12 @@ package org.javatest.assertions;
 
 import java.util.Optional;
 
-public class SimpleAssertion implements Assertion {
+public class BooleanAssertion implements Assertion {
     private final boolean holds;
     private final Optional<String> description;
 
-    SimpleAssertion(boolean holds, Optional<String> description) {
+    // TODO enforce the setting of a description
+    BooleanAssertion(boolean holds, Optional<String> description) {
         this.holds = holds;
         this.description = description;
     }
