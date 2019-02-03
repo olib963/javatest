@@ -16,7 +16,7 @@ public class MatcherAssertion<A> implements Assertion {
         var matchResult = matcher.matches(value);
         var expectedPrefix = "Expected {" + toString(value) + "} to " + matcher.describeExpected();
         var description = matchResult.mismatch.map(mismatch -> expectedPrefix + " but " + mismatch).orElse(expectedPrefix);
-        return new AssertionResult(matchResult.matches, description);
+        return AssertionResult.of(matchResult.matches, description);
     }
 
     private String toString(Object value) {

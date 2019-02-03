@@ -4,19 +4,16 @@ public interface Assertion {
 
     AssertionResult run();
 
-    // TODO composite assertion descriptions
-    // TODO colour and split the ones that are an issue
     default Assertion and(Assertion other){
-        // TODO split out description from other logs, need the assertions to have descriptions so that we can compose them.
-       return that(this.run().holds && other.run().holds, "");
+       return CompositeAssertions.and(this, other);
     }
 
     default Assertion or(Assertion other){
-        return that(this.run().holds || other.run().holds, "");
+        return CompositeAssertions.or(this, other);
     }
 
     default Assertion xor(Assertion other){
-        return that(this.run().holds ^ other.run().holds, "");
+        return CompositeAssertions.xor(this, other);
     }
 
     static Assertion that(boolean asserted, String description) { return new BooleanAssertion(asserted, description); }

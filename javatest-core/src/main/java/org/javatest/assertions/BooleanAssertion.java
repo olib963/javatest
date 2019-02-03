@@ -11,6 +11,6 @@ public class BooleanAssertion implements Assertion {
 
     @Override
     public AssertionResult run() {
-        return new AssertionResult(holds, description);
+        return AssertionResult.of(holds, description);
     }
 }

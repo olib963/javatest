@@ -7,7 +7,7 @@ public class PendingAssertion implements Assertion {
     }
     @Override
     public AssertionResult run() {
-        return new AssertionResult(true,  description, true);
+        return AssertionResult.pending(description);
     }
 
 }

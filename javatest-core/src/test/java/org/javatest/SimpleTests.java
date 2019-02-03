@@ -23,11 +23,19 @@ public class SimpleTests {
                     test("Pending test that has yet to be written", this::pending),
                     test("Pending test that has yet to be written", () -> pending("That has a description")),
                     test("And test", () -> that(true, "Expected true").and(that(true, "Expected true"))),
+                    test("Pending test and 1", () -> that(true, "Expected true").and(pending())),
+                    test("Pending test and 2", () -> pending().and(that(true, "Expected true"))),
+                    test("Pending test and with failing", () -> pending().and(that(false, "Expected false"))),
                     test("Or test 1", () -> that(true, "Expected true").or(that(true, "Expected true"))),
                     test("Or test 2", () -> that(false, "Expected false").or(that(true, "Expected true"))),
                     test("Or test 3", () -> that(true, "Expected true").or(that(false, "Expected false"))),
+                    test("Pending test or 1", () -> that(true, "Expected true").or(pending())),
+                    test("Pending test or 2", () -> pending().or(that(true, "Expected true"))),
+                    test("Pending test or with failing", () -> pending().or(that(false, "Expected false"))),
                     test("Xor test 1", () -> that(false, "Expected false").xor(that(true, "Expected true"))),
-                    test("Xor test 2", () -> that(true, "Expected true").xor(that(false, "Expected false")))
+                    test("Xor test 2", () -> that(true, "Expected true").xor(that(false, "Expected false"))),
+                    test("Pending test xor 1", () -> that(true, "Expected true").xor(pending())),
+                    test("Pending test xor 2", () -> pending().xor(that(true, "Expected true")))
             );
         }
     }
