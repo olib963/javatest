@@ -212,7 +212,6 @@ My plan for the first released version is to:
 - [ ] Figure out how I would like to handle fixtures in the API e.g. creating a database connection and passing that to tests
 - [ ] Decide how to handle null. At the moment many `that(null, $matcher)` expressions fail tets with NPEs, maybe this is good enough?
 Maybe I should explicitly fail if null is passed?
-- [ ] Ensure I am happy with the log output of `Assertion`s e.g. composing with `and`.
 - [ ] Ensure I am happy with the level of simplicity in the core library.
 
 Future Versions could include:
