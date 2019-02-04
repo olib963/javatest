@@ -27,29 +27,29 @@ Add this dependency to your project:
 ### Simple Test Definitions
 
 The most basic `Test` can be defined by:
-- A description
-- A `Supplier` of an `Assertion`
+- A name
+- A `Supplier` of an `Assertion` - a check with a description 
 
 Functions to help you define your tests are available from the `TestProvider` interface e.g.
 ```java
 public class MyTests implements TestProvider {
     @Override
     public Stream<Test> testStream() {
-        return Stream.of(test("One add one is two", () -> that(1 + 1 == 2)));
+        return Stream.of(test("Simple Test", () -> that(true, "Expected test to pass")));
     }
 }
 ```
 
 ### Creating And Composing Assertions
 
-Assertions are created simply from boolean expressions with the option to add a description to what it is you are testing.
+Assertions are created simply from boolean expressions and a string description.
 
 ```java
 public class MyTests implements TestProvider {
     @Override
     public Stream<Test> testStream() {
         return Stream.of(
-                test("Addition", () -> that(1 + 1 == 2)),
+                test("Addition", () -> that(1 + 1 == 2, "Expected one add one to be two")),
                 test("Multiplication", () -> {
                     var two = 2;
                     var ten = 10;
@@ -66,13 +66,15 @@ public class MyTests implements TestProvider {
 }
 ```
 
-Assertions can be composed using the `and`, `or` and `xor` default methods. e.g.
+Assertions can be composed using the `and`, `or` and `xor` default methods. These are all examples of composed assertions
+that hold (i.e. will pass tests):
 
-```
-that(1 + 1 == 2).and(
-  that(1 + 1 == 3).or(that(2 + 2 == 4)))
+```java
+var orAssertion = that(1 + 1 == 3, "Expected one add one to be three")
+    .or(that(2 + 2 == 4, "Expected two add two to be four")) 
+var andAssertion = that(1 + 1 == 2, "Expected one add one to be two").and(orAssertion)
   
-that(true).xor(that(false))
+that(true, "Expected to hold").xor(that(false, "Expected not to hold"))
 ````
 
 ### Composing Test Providers
@@ -99,9 +101,9 @@ public class MyTests implements TestProvider {
     @Override
     public Stream<Test> testStream() {
         return Stream.of(
-            test("One add one is two", () -> that(1 + 1 == 2)),
-            test("Two times ten is twenty", () -> pending()),
-            test("One divided by zero throws exception",
+            test("Addition", () -> that(1 + 1 == 2, "Expected one add one to be two")),
+            test("Multiplication", () -> pending()),
+            test("Division by Zero",
                 () -> pending("I am not yet sure if this should throw an exception or return a failure value"))
         );
     }
@@ -110,12 +112,15 @@ public class MyTests implements TestProvider {
 
 ### Tagging Tests
 
-Tagging tests is quite common to define subsets of tests, you can pass a `Collection` of `String` tags to any test:
-`test("My special test", () -> that(true), List.of("special"))`
-
+Tagging tests is quite common to define subsets of tests, you can pass a `Collection` of `String` tags to any test. 
 Running all tests with a certain tag is then as simple as:
 
 ```java
+
+// In a provider
+test("My special test", () -> that(true, "Expected to pass"), List.of("special"))
+
+
 public class MySpecialTests implements TestProvider {
     @Override
     public Stream<Test> testStream() {
@@ -135,13 +140,14 @@ class MyTests {
     public static void main(String... args) {
         var resultsFromProvider =  JavaTest.run(new AllMyTests());
         var directResults = JavaTest.run(Stream.of(
-                test("Addition", () -> that(1 + 1 == 2)),
-                test("String lower case", () -> that("HELLO".toLowerCase().equals("hello")))
+                test("Addition", () -> that(1 + 1 == 2, "Expected one add one to be two")),
+                test("String lower case", () -> 
+                    that("HELLO".toLowerCase().equals("hello"), "Expected lowercase 'HELLO' to be 'hello'"))
         ));
         if(resultsFromProvider.succeeded && directResults.succeeded) {
-            System.out.println("Yay tests passed!");
+            System.out.println("Yay tests passed! :)");
         } else {
-            throw new RuntimeException("Tests failed!");
+            throw new RuntimeException("Boo tests failed! :(");
         }
     }
 }
@@ -185,7 +191,7 @@ The core of JavaTest is deliberately very simple, there is a separate module tha
 ```
 
 You will now have the ability to use a `MatcherTestProvider` that comes with a few default matchers, other matchers will
-be able to be mixed into your test class by implementing a different interface e.g. `StringMatchers` which contains `String` specific
+be able to be mixed into your test class by adding different interfaces e.g. `StringMatchers` which contains `String` specific
 `Matcher`s.
 
 ```java
@@ -194,13 +200,39 @@ public class MyTests implements MatcherTestProvider, StringMatchers {
     @Override
     public Stream<Test> testStream() {
         return Stream.of(
-                test("One add One is Two", () -> that(1 + 1, isEqualTo(2))),
-                test("Object is the correct type", () -> that("Hello", hasType(String.class))),
-                test("String has prefix", () -> that(TEST_STRING, startsWith("Hello"))),
-                test("String contains substring", () -> that(TEST_STRING, containsString("llo")))
+                test("Addition", () -> that(1 + 1, isEqualTo(2))),
+                test("Types", () -> that("Hello", hasType(String.class))),
+                test("String Prefix", () -> that(TEST_STRING, startsWith("Hello"))),
+                test("Substring", () -> that(TEST_STRING, containsString("Wor")))
         );
     }
 }
+```
+
+### Exception Matching
+
+While in general I prefer error values to exceptions, I understand there are those that disagree or just have to work with
+exception driven Java APIs so I have added matcher syntax for exceptions. These should still be returned as an assertion and will
+ensure that the test will only pass if the matched exception is thrown from the expected code block.
+
+```java
+public class MyExceptionTests implements MatcherTestProvider, ExceptionMatchers, StringMatchers {
+    @Override
+        public Stream<Test> testStream() {
+            return Stream.of(
+                    test("Simple Exception", () -> {
+                        var validator = new MyValidator();
+                        return that(() -> validator.validate(1), willThrowExceptionThat(hasType(IllegalArgumentException.class)));
+                    }),
+                    test("Check Message on cause", () -> {
+                        var myObject = new MyThrowingObject;
+                        var hasCauseWithMessageContainingFoo = hasCauseThat(hasMessageThat(contains("Foo")));
+                        return that(() -> myObject.throwingFunction(10), willThrowExceptionThat(hasCauseWithMessageContainingFoo));
+                    })
+            );
+        }
+}
+
 ```
 
 ## RoadMap
@@ -212,7 +244,6 @@ My plan for the first released version is to:
 - [ ] Figure out how I would like to handle fixtures in the API e.g. creating a database connection and passing that to tests
 - [ ] Decide how to handle null. At the moment many `that(null, $matcher)` expressions fail tets with NPEs, maybe this is good enough?
 Maybe I should explicitly fail if null is passed?
-- [ ] Ensure I am happy with the log output of `Assertion`s e.g. composing with `and`.
 - [ ] Ensure I am happy with the level of simplicity in the core library.
 
 Future Versions could include:

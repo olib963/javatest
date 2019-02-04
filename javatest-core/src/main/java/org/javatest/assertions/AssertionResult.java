@@ -4,20 +4,14 @@ import org.javatest.JavaTest;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Optional;
 
 public class AssertionResult {
 
     public final boolean holds;
     public final boolean pending;
-    public final Optional<String> description;
+    public final String description;
 
-    public AssertionResult(boolean holds, String description) {
-        this(holds, Optional.of(description), false);
-    }
-
-    // Internal only
-    AssertionResult(boolean holds, Optional<String> description, boolean pending) {
+    private AssertionResult(boolean holds, String description, boolean pending) {
         this.holds = holds;
         this.description = description;
         this.pending = pending;
@@ -31,10 +25,18 @@ public class AssertionResult {
         stringWriter.append(error.getMessage());
         stringWriter.append(JavaTest.SEPARATOR);
         error.printStackTrace(new PrintWriter(stringWriter));
-        return new AssertionResult(false, stringWriter.toString());
+        return new AssertionResult(false, stringWriter.toString(), false);
     }
 
     public static AssertionResult failed(AssertionError error) {
-        return new AssertionResult(false,"An assertion error was thrown. This would imply an assertion was made and not returned, please return an assertion instead.");
+        return new AssertionResult(false, "An assertion error was thrown. This would imply an assertion was made and not returned, please return an assertion instead.", false);
+    }
+
+    static AssertionResult pending(String description) {
+        return new AssertionResult(true, description, true);
+    }
+
+    public static AssertionResult of(boolean holds, String description) {
+        return new AssertionResult(holds, description, false);
     }
 }

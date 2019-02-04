@@ -29,9 +29,7 @@ public class JavaTest {
         // TODO allow a test to add to the log. Ideally immutable :/ probably have to be some kind of builder per test case.
         var result = safeRunTest(test.test);
         var colour = getColour(result);
-        var log = colour.getCode() + result.description
-                .map(d -> test.description + Colour.resetCode() + SEPARATOR + "\t" + d)
-                .orElse(test.description);
+        var log = colour.getCode() + test.name + Colour.resetCode() + SEPARATOR + "\t" + result.description;
         return new TestResult(result, log);
     }
 
@@ -45,7 +43,7 @@ public class JavaTest {
         }
     }
 
-    private static Colour getColour(AssertionResult result) {
+    public static Colour getColour(AssertionResult result) {
         if (result.pending) {
             return Colour.YELLOW;
         } else if (result.holds) {
@@ -54,7 +52,7 @@ public class JavaTest {
             return Colour.RED;
         }
     }
-    enum Colour {
+    public enum Colour {
 
         RED("\u001B[31m"), YELLOW("\u001B[33m"), GREEN("\u001B[32m"), INVISIBLE("\033[37m"), WHITE(resetCode());
 
