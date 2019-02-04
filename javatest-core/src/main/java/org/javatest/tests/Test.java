@@ -4,23 +4,22 @@ import org.javatest.assertions.Assertion;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.function.Supplier;
 
 public class Test {
-    public final String description;
+    public final String name;
     public final CheckedSupplier<Assertion> test;
     public final Collection<String> tags;
-    Test(String description, CheckedSupplier<Assertion> test, Collection<String> tags) {
-        this.description = description;
+    Test(String name, CheckedSupplier<Assertion> test, Collection<String> tags) {
+        this.name = name;
         this.test = test;
         this.tags = tags;
     }
 
-    public static Test test(String description, CheckedSupplier<Assertion> test) {
-        return test(description, test, Collections.emptyList());
+    public static Test test(String name, CheckedSupplier<Assertion> test) {
+        return test(name, test, Collections.emptyList());
     }
 
-    public static Test test(String description, CheckedSupplier<Assertion> test, Collection<String> tags) {
-        return new Test(description, test, tags);
+    public static Test test(String name, CheckedSupplier<Assertion> test, Collection<String> tags) {
+        return new Test(name, test, tags);
     }
 }

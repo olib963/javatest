@@ -5,15 +5,15 @@ public interface Assertion {
     AssertionResult run();
 
     default Assertion and(Assertion other){
-       return CompositeAssertions.and(this, other);
+       return CompositeAssertion.and(this, other);
     }
 
     default Assertion or(Assertion other){
-        return CompositeAssertions.or(this, other);
+        return CompositeAssertion.or(this, other);
     }
 
     default Assertion xor(Assertion other){
-        return CompositeAssertions.xor(this, other);
+        return CompositeAssertion.xor(this, other);
     }
 
     static Assertion that(boolean asserted, String description) { return new BooleanAssertion(asserted, description); }

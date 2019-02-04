@@ -89,7 +89,7 @@ public class JavaTestRunner {
         public String toString() {
             return "Result{" +
                     "status=" + status +
-                    ", description='" + description + '\'' +
+                    ", name='" + description + '\'' +
                     ", cause=" + cause +
                     '}';
         }

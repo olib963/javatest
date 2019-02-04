@@ -21,7 +21,7 @@ public class SimpleTests {
             return Stream.of(
                     test("Simple test", () -> that(true, "Expected true to be true")),
                     test("Pending test that has yet to be written", this::pending),
-                    test("Pending test that has yet to be written", () -> pending("That has a description")),
+                    test("Pending test that has yet to be written", () -> pending("That has a name")),
                     test("And test", () -> that(true, "Expected true").and(that(true, "Expected true"))),
                     test("Pending test and 1", () -> that(true, "Expected true").and(pending())),
                     test("Pending test and 2", () -> pending().and(that(true, "Expected true"))),

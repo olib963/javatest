@@ -12,12 +12,12 @@ public interface TestProvider {
 
     Stream<Test> testStream();
 
-    default Test test(String description, CheckedSupplier<Assertion> test) {
-        return Test.test(description, test, Collections.emptyList());
+    default Test test(String name, CheckedSupplier<Assertion> test) {
+        return Test.test(name, test, Collections.emptyList());
     }
 
-    default Test test(String description, CheckedSupplier<Assertion> test, Collection<String> tags) {
-        return Test.test(description, test, tags);
+    default Test test(String name, CheckedSupplier<Assertion> test, Collection<String> tags) {
+        return Test.test(name, test, tags);
     }
 
     default Assertion that(boolean asserted, String description) { return Assertion.that(asserted, description); }
