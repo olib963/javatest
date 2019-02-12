@@ -1,36 +1,33 @@
 package org.javatest.tests;
 
 import org.javatest.assertions.Assertion;
+import org.javatest.JavaTest;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public interface TestProvider {
-
     Stream<Test> testStream();
 
     default Test test(String name, CheckedSupplier<Assertion> test) {
-        return Test.test(name, test, Collections.emptyList());
+        return JavaTest.test(name, test);
     }
 
     default Test test(String name, CheckedSupplier<Assertion> test, Collection<String> tags) {
-        return Test.test(name, test, tags);
+        return JavaTest.test(name, test, tags);
     }
 
-    default Assertion that(boolean asserted, String description) { return Assertion.that(asserted, description); }
+    default Assertion that(boolean asserted, String description) { return JavaTest.that(asserted, description); }
 
     default Assertion pending() {
-        return Assertion.pending();
+        return JavaTest.pending();
     }
 
     default Assertion pending(String reason) {
-        return Assertion.pending(reason);
+        return JavaTest.pending(reason);
     }
 
     default Stream<Test> allTestsFrom(TestProvider... providers) {
-        return Arrays.stream(providers).flatMap(TestProvider::testStream);
+        return JavaTest.allTestsFrom(providers);
     }
 }

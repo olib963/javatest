@@ -30,15 +30,15 @@ public class CompositeAssertion implements Assertion {
         return AssertionResult.of(combiner.apply(leftResult.holds, rightResult.holds), description);
     }
 
-    static Assertion and(Assertion left, Assertion right) {
+    public static Assertion and(Assertion left, Assertion right) {
         return new CompositeAssertion(left, right, (a, b) -> a && b, "and");
     }
 
-    static Assertion or(Assertion left, Assertion right) {
+    public static Assertion or(Assertion left, Assertion right) {
         return new CompositeAssertion(left, right, (a, b) -> a || b, "or");
     }
 
-    static Assertion xor(Assertion left, Assertion right) {
+    public static Assertion xor(Assertion left, Assertion right) {
         return new CompositeAssertion(left, right, (a, b) -> a ^ b, "xor");
     }
 

@@ -2,7 +2,7 @@ package org.javatest.assertions;
 
 public class PendingAssertion implements Assertion {
     private final String description;
-    PendingAssertion(String description) {
+    public PendingAssertion(String description) {
         this.description = description;
     }
     @Override

@@ -1,11 +1,10 @@
 package org.javatest.assertions;
 
 public interface Assertion {
-
     AssertionResult run();
 
     default Assertion and(Assertion other){
-       return CompositeAssertion.and(this, other);
+        return CompositeAssertion.and(this, other);
     }
 
     default Assertion or(Assertion other){
@@ -25,5 +24,4 @@ public interface Assertion {
     static Assertion pending(String reason) {
         return new PendingAssertion(reason);
     }
-
 }

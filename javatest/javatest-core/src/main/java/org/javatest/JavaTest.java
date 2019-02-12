@@ -3,7 +3,12 @@ package org.javatest;
 import org.javatest.assertions.Assertion;
 import org.javatest.assertions.AssertionResult;
 import org.javatest.tests.*;
+import org.javatest.tests.TestResult;
+import org.javatest.tests.TestResults;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.stream.Stream;
 
 public class JavaTest {
@@ -70,6 +75,28 @@ public class JavaTest {
             return "\u001B[0m";
         }
 
+    }
+
+    public static Test test(String name, CheckedSupplier<Assertion> test) {
+        return Test.test(name, test, Collections.emptyList());
+    }
+
+    public static Test test(String name, CheckedSupplier<Assertion> test, Collection<String> tags) {
+        return Test.test(name, test, tags);
+    }
+
+    public static Assertion that(boolean asserted, String description) { return Assertion.that(asserted, description); }
+
+    public static Assertion pending() {
+        return Assertion.pending();
+    }
+
+    public static Assertion pending(String reason) {
+        return Assertion.pending(reason);
+    }
+
+    public static Stream<Test> allTestsFrom(TestProvider... providers) {
+        return Arrays.stream(providers).flatMap(TestProvider::testStream);
     }
 }
 

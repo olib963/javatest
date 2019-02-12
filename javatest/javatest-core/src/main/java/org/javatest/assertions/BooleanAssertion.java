@@ -4,7 +4,7 @@ public class BooleanAssertion implements Assertion {
     private final boolean holds;
     private final String description;
 
-    BooleanAssertion(boolean holds, String description) {
+    public BooleanAssertion(boolean holds, String description) {
         this.holds = holds;
         this.description = description;
     }
