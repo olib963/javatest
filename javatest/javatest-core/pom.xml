@@ -13,7 +13,6 @@
     </properties>
 
     <artifactId>javatest-core</artifactId>
-
     <build>
         <plugins>
             <plugin>
