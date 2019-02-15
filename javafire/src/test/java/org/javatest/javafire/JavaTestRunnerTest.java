@@ -4,7 +4,6 @@ import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.project.MavenProject;
 import org.javatest.JavaTest;
 import org.javatest.Test;
-import org.javatest.tests.SimpleTest;
 import org.javatest.TestProvider;
 
 import java.util.*;
@@ -117,20 +116,20 @@ public class JavaTestRunnerTest implements TestProvider {
         private ProviderWithNoDefaultConstructor() {}
 
         @Override
-        public Stream<SimpleTest> testStream() {
+        public Stream<Test> testStream() {
             return Stream.empty();
         }
     }
     // TODO make these tests run silently by turning off logging
     public static class ProviderWithFailingTest implements TestProvider {
         @Override
-        public Stream<SimpleTest> testStream() {
+        public Stream<Test> testStream() {
             return Stream.of(test("Failure", () -> that(false, "Expected false")));
         }
     }
     public static class ProviderWithPassingTests implements TestProvider {
         @Override
-        public Stream<SimpleTest> testStream() {
+        public Stream<Test> testStream() {
             return Stream.of(test("Success", () -> that(true, "Expected true")));
         }
     }
