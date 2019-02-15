@@ -40,6 +40,18 @@ public class MyTests implements TestProvider {
 }
 ```
 
+They are also directly available as static imports from the main `JavaTest` class:
+
+```java
+import static org.javatest.JavaTest.*;
+
+public class MyClass {
+    private Stream<Test> tests = Stream.of(
+            test("Simple Test", () -> that(true, "Expected test to pass"))
+          );
+}
+```
+
 ### Creating And Composing Assertions
 
 Assertions are created simply from boolean expressions and a string description.
@@ -136,10 +148,12 @@ To run javatest simply pass your `Stream` of `Test`s or a `TestProvider` to the 
 result how you see fit: 
 
 ```java
+import static org.javatest.JavaTest.*;
+
 class MyTests {
     public static void main(String... args) {
         var resultsFromProvider =  JavaTest.run(new AllMyTests());
-        var directResults = JavaTest.run(Stream.of(
+        var directResults = run(Stream.of(
                 test("Addition", () -> that(1 + 1 == 2, "Expected one add one to be two")),
                 test("String lower case", () -> 
                     that("HELLO".toLowerCase().equals("hello"), "Expected lowercase 'HELLO' to be 'hello'"))
@@ -253,3 +267,30 @@ would retry `map.containsKey(1)` every 10 seconds until 1 minute has passed.
 - A module that allows for generative property testing & parameterised testing more generally.
 - A way to add arbitrary logs to your test cases.
 - The ability to select how different parts of your test stream is run e.g. some in sequence the rest in parallel.
+
+
+## Rationale
+
+(A.K.A. Why even bother?)
+
+While there is nothing wrong with existing test frameworks, I think the language and engineering practices
+have come a long way since their conception, my hope is this framework will help to leverage these changes in a few ways.
+
+1.  Current frameworks tend to be **Annotation** and **Exception** driven, this framework aims to be
+**Function** and **Value** driven. The idea is that these tests will be more composable and easier to reason about.
+
+2. _If you know how to write a Java application, I think you should automatically know
+how to write the tests_.A lot of test frameworks require you to learn a new syntax and require your test code to be written
+in a completely different style from your production code, `JavaTest` tests are written in pure functional java. 
+ 
+3. A test should ideally only test one thing and should certainly test _at least_ one thing. Since
+all tests must return an assertion value the compiler will enforce both of these for you. This also has the benefit 
+that you will always know where the test is failing (the last line) and don't need to create and wrangle stack traces
+in order to locate your failures.
+
+4. Constructing your test functions no longer requires magic invocations of test classes (at the minor loss of having
+to declare where your tests are). This means injecting parameters into your tests becomes easier and can be checked 
+at compile time instead of runtime. For example the parameterised tests in JUnit requiring runtime type checks on 
+arguments and sometimes a CSV parser to take statically defined values and assign types to them, this can just be 
+replaces with typed parameter generation for your test functions. It will also be easier to reason about the flow of
+tests and parameters.

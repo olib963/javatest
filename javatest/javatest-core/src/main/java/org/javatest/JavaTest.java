@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 
 public class JavaTest {
 
-    public static final String SEPARATOR = System.lineSeparator();
+    static final String SEPARATOR = System.lineSeparator();
 
     public static TestResults run(TestProvider testProvider) {
         return run(testProvider.testStream());
