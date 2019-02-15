@@ -1,7 +1,6 @@
 package org.javatest;
 
-import org.javatest.tests.Test;
-import org.javatest.tests.TestProvider;
+import org.javatest.tests.SimpleTest;
 
 import java.util.stream.Stream;
 
@@ -50,9 +49,9 @@ public class SimpleTests {
                     test("Or test (FAIL)", () -> that(false, "Expected false").or(that(false, "Expected false"))),
                     test("Xor test 1 (FAIL)", () -> that(true, "Expected true").xor(that(true, "Expected true"))),
                     test("Xor test 2 (FAIL)", () -> that(false, "Expected false").xor(that(false, "Expected false"))),
-                    test("Test throwing exception (FAIL)", () -> { throw new RuntimeException("This is an error"); }),
-                    test("Test throwing checked exception (FAIL)", () -> { throw new Exception("This is an error"); }),
-                    test("Test throwing assertion error (FAIL)", () -> { throw new AssertionError("This is an 'assertion'"); })
+                    test("SimpleTest throwing exception (FAIL)", () -> { throw new RuntimeException("This is an error"); }),
+                    test("SimpleTest throwing checked exception (FAIL)", () -> { throw new Exception("This is an error"); }),
+                    test("SimpleTest throwing assertion error (FAIL)", () -> { throw new AssertionError("This is an 'assertion'"); })
             );
         }
     }

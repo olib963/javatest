@@ -1,7 +1,7 @@
 package org.javatest.matchers;
 
-import org.javatest.assertions.Assertion;
-import org.javatest.tests.TestProvider;
+import org.javatest.Assertion;
+import org.javatest.TestProvider;
 
 public interface MatcherTestProvider extends TestProvider {
     // TODO allow additional String information to be passed as a 3rd parameter

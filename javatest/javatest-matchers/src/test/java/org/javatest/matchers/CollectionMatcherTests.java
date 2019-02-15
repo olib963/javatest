@@ -1,7 +1,7 @@
 package org.javatest.matchers;
 
-import org.javatest.tests.Test;
-import org.javatest.tests.TestProvider;
+import org.javatest.tests.SimpleTest;
+import org.javatest.TestProvider;
 
 import java.util.Collection;
 import java.util.List;
@@ -20,7 +20,7 @@ public class CollectionMatcherTests {
 
     static class PassingTests implements MatcherTestProvider, CollectionMatchers {
         @Override
-        public Stream<Test> testStream() {
+        public Stream<SimpleTest> testStream() {
             return Stream.of(
                     test("Size", () -> that(List.of(1, 2), hasSize(2)), tags),
                     test("Empty", () -> that(List.of(), isEmpty()), tags),
@@ -33,7 +33,7 @@ public class CollectionMatcherTests {
 
     static class FailingTests implements MatcherTestProvider, CollectionMatchers {
         @Override
-        public Stream<Test> testStream() {
+        public Stream<SimpleTest> testStream() {
             return Stream.of(
                     test("Size (FAIL - bigger)", () -> that(List.of(1, 2), hasSize(1)), tags),
                     test("Size (FAIL - smaller)", () -> that(List.of(1, 2), hasSize(3)), tags),

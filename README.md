@@ -125,7 +125,7 @@ public class MySpecialTests implements TestProvider {
     @Override
     public Stream<Test> testStream() {
         return allTestsFrom(new AllMyTests())
-            .filter(test -> test.tags.contains("special")); 
+            .filter(test -> test.tags().contains("special")); 
     }
 }
 ```

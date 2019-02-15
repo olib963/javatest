@@ -1,6 +1,4 @@
-package org.javatest.assertions;
-
-import org.javatest.JavaTest;
+package org.javatest;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -17,7 +15,7 @@ public class AssertionResult {
         this.pending = pending;
     }
 
-    public static AssertionResult failed(Throwable error) {
+    static AssertionResult failed(Throwable error) {
         var stringWriter = new StringWriter();
         stringWriter.append("An exception was thrown during your test.");
         stringWriter.append(JavaTest.SEPARATOR);
@@ -28,11 +26,11 @@ public class AssertionResult {
         return new AssertionResult(false, stringWriter.toString(), false);
     }
 
-    public static AssertionResult failed(AssertionError error) {
+    static AssertionResult failed(AssertionError error) {
         return new AssertionResult(false, "An assertion error was thrown. This would imply an assertion was made and not returned, please return an assertion instead.", false);
     }
 
-    static AssertionResult pending(String description) {
+    public static AssertionResult pending(String description) {
         return new AssertionResult(true, description, true);
     }
 

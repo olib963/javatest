@@ -1,7 +1,7 @@
 package org.javatest.matchers;
 
-import org.javatest.tests.Test;
-import org.javatest.tests.TestProvider;
+import org.javatest.tests.SimpleTest;
+import org.javatest.TestProvider;
 
 import java.util.List;
 import java.util.Map;
@@ -21,7 +21,7 @@ public class MapMatcherTests {
 
     static class PassingTests implements MatcherTestProvider, MapMatchers, ComparableMatchers, StringMatchers {
         @Override
-        public Stream<Test> testStream() {
+        public Stream<SimpleTest> testStream() {
             return Stream.of(
                     test("Empty", () -> that(Map.of(), isEmptyMap()), tags),
                     test("Size", () -> that(SIMPLE_MAP, hasMapSize(1)), tags),
@@ -37,7 +37,7 @@ public class MapMatcherTests {
 
     static class FailingTests implements MatcherTestProvider, MapMatchers, ComparableMatchers, StringMatchers {
         @Override
-        public Stream<Test> testStream() {
+        public Stream<SimpleTest> testStream() {
             return Stream.of(
                     test("Empty (FAIL)", () -> that(SIMPLE_MAP, isEmptyMap()), tags),
                     test("Size (FAIL)", () -> that(SIMPLE_MAP, hasMapSize(2)), tags),

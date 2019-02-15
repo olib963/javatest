@@ -1,7 +1,7 @@
 package org.javatest.matchers;
 
-import org.javatest.assertions.Assertion;
-import org.javatest.assertions.AssertionResult;
+import org.javatest.Assertion;
+import org.javatest.AssertionResult;
 
 public class MatcherAssertion<A> implements Assertion {
     private final A value;

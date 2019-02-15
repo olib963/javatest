@@ -1,4 +1,4 @@
-package org.javatest.tests;
+package org.javatest;
 
 @FunctionalInterface
 public interface CheckedSupplier<T> {

@@ -1,4 +1,8 @@
-package org.javatest.assertions;
+package org.javatest;
+
+import org.javatest.assertions.BooleanAssertion;
+import org.javatest.assertions.CompositeAssertion;
+import org.javatest.assertions.PendingAssertion;
 
 public interface Assertion {
     AssertionResult run();

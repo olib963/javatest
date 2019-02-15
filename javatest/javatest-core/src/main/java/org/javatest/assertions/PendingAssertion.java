@@ -1,5 +1,8 @@
 package org.javatest.assertions;
 
+import org.javatest.Assertion;
+import org.javatest.AssertionResult;
+
 public class PendingAssertion implements Assertion {
     private final String description;
     public PendingAssertion(String description) {

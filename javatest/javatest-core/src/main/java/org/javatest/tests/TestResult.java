@@ -1,6 +1,6 @@
 package org.javatest.tests;
 
-import org.javatest.assertions.AssertionResult;
+import org.javatest.AssertionResult;
 
 public class TestResult {
     public final AssertionResult result;
@@ -10,11 +10,4 @@ public class TestResult {
         this.testLog = testLog;
     }
 
-    @Override
-    public String toString() {
-        return "TestResult{" +
-                "result=" + result +
-                ", testLog=" + testLog +
-                '}';
-    }
 }

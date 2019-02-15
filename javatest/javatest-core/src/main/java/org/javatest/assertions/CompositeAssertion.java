@@ -1,6 +1,9 @@
 package org.javatest.assertions;
 
+import org.javatest.Assertion;
+import org.javatest.AssertionResult;
 import org.javatest.JavaTest;
+import org.javatest.logging.Colour;
 
 import java.util.function.BinaryOperator;
 
@@ -21,9 +24,9 @@ public class CompositeAssertion implements Assertion {
     public AssertionResult run() {
         var leftResult = left.run();
         var rightResult = right.run();
-        var description = "(" + JavaTest.getColour(leftResult).getCode() + leftResult.description +
-                JavaTest.Colour.WHITE.getCode() + ") " + type +" (" +
-                JavaTest.getColour(rightResult).getCode() + rightResult.description + JavaTest.Colour.WHITE.getCode() + ")";
+        var description = "(" + Colour.forResult(leftResult).getCode() + leftResult.description +
+                Colour.WHITE.getCode() + ") " + type +" (" +
+                Colour.forResult( rightResult).getCode() + rightResult.description + Colour.WHITE.getCode() + ")";
         if (leftResult.pending || rightResult.pending) {
             return AssertionResult.pending(description);
         }

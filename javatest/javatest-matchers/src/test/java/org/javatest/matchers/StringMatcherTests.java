@@ -1,7 +1,7 @@
 package org.javatest.matchers;
 
-import org.javatest.tests.Test;
-import org.javatest.tests.TestProvider;
+import org.javatest.tests.SimpleTest;
+import org.javatest.TestProvider;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -17,7 +17,7 @@ public class StringMatcherTests {
 
     static class PassingTests implements MatcherTestProvider, StringMatchers {
         @Override
-        public Stream<Test> testStream() {
+        public Stream<SimpleTest> testStream() {
             return Stream.of(
                     test("String Prefix", () -> that("Hello World", startsWith("Hello")), tags),
                     test("String Suffix", () -> that("Hello World", endsWith("World")), tags),
@@ -32,7 +32,7 @@ public class StringMatcherTests {
 
     static class FailingTests implements MatcherTestProvider, StringMatchers {
         @Override
-        public Stream<Test> testStream() {
+        public Stream<SimpleTest> testStream() {
             return Stream.of(
                     test("String Prefix (FAIL)", () -> that("Hello World", startsWith("World")), tags),
                     test("String Suffix (FAIL)", () -> that("Hello World", endsWith("Hello")), tags),
