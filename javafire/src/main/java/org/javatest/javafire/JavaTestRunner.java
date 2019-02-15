@@ -3,7 +3,7 @@ package org.javatest.javafire;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.project.MavenProject;
 import org.javatest.JavaTest;
-import org.javatest.tests.TestProvider;
+import org.javatest.TestProvider;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
@@ -11,18 +11,18 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class JavaTestRunner {
+class JavaTestRunner {
     private final String testProvider;
     private final ClassLoaderProvider classLoaderProvider;
     private final MavenProject project;
 
-    public JavaTestRunner(String testProvider, ClassLoaderProvider classLoaderProvider, MavenProject project) {
+    JavaTestRunner(String testProvider, ClassLoaderProvider classLoaderProvider, MavenProject project) {
         this.testProvider = testProvider;
         this.classLoaderProvider = classLoaderProvider;
         this.project = project;
     }
 
-    public Result run() {
+    Result run() {
         Set<String> classPathElements;
         try {
             classPathElements = resolveAllClassPathElements(project);
@@ -67,15 +67,15 @@ public class JavaTestRunner {
     }
 
     static class Result {
-        public final Status status;
-        public final String description;
-        public final Optional<Throwable> cause;
+        final Status status;
+        final String description;
+        final Optional<Throwable> cause;
 
-        public Result(Status status, String description) {
+        Result(Status status, String description) {
             this(status, description, Optional.empty());
         }
 
-        public Result(Status status, String description, Throwable cause) {
+        Result(Status status, String description, Throwable cause) {
             this(status, description, Optional.of(cause));
         }
 

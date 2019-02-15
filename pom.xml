@@ -6,12 +6,11 @@
     <!-- TODO sort out all POMS -->
     <!-- TODO should I deploy javafire separately? And make it dependant on a specific version of javatest? Then run the tests here using it? -->
     <groupId>org.javatest</groupId>
-    <artifactId>javatest</artifactId>
+    <artifactId>javatest-parent</artifactId>
     <packaging>pom</packaging>
     <version>0.0.1-SNAPSHOT</version>
     <modules>
-        <module>javatest-core</module>
-        <module>javatest-matchers</module>
+        <module>javatest</module>
         <module>javafire</module>
     </modules>
     <properties>
