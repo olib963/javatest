@@ -1,5 +1,7 @@
 package org.javatest.matchers;
 
+import org.javatest.matchers.internal.PredicateMatcher;
+
 public interface ComparableMatchers {
     // TODO we might need to allow providing a Comparator<T>
 

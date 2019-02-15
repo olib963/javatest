@@ -1,5 +1,7 @@
 package org.javatest.matchers;
 
+import org.javatest.matchers.internal.PredicateMatcher;
+
 public interface StringMatchers {
 
     default Matcher<String> startsWith(final String prefix) {

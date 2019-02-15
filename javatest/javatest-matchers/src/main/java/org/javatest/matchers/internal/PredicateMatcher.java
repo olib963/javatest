@@ -1,4 +1,7 @@
-package org.javatest.matchers;
+package org.javatest.matchers.internal;
+
+import org.javatest.matchers.MatchResult;
+import org.javatest.matchers.Matcher;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -42,5 +45,22 @@ public class PredicateMatcher<A> implements Matcher<A> {
     @Override
     public String describeExpected() {
         return expected;
+    }
+
+
+    public static <A> Matcher<A> isEqualTo(A expected) {
+        return new PredicateMatcher<>(expected::equals, "be equal to {" + expected + "}");
+    }
+
+    public static <A, T> Matcher<A> hasType(Class<T> expectedClass) {
+        return new PredicateMatcher<>(
+                expectedClass::isInstance,
+                "be an instance of {" + expectedClass.getName() + "}",
+                value -> "was instead of type {" + value.getClass().getName() + "}"
+        );
+    }
+
+    public static <A> Matcher<A> isTheSameInstanceAs(A instance) {
+        return new PredicateMatcher<>(o -> instance == o, "be the same in memory reference as {" + instance + "}");
     }
 }

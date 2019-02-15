@@ -1,6 +1,6 @@
 package org.javatest.matchers;
 
-import org.javatest.tests.SimpleTest;
+import org.javatest.Test;
 import org.javatest.TestProvider;
 
 import java.util.List;
@@ -20,7 +20,7 @@ public class OptionalMatcherTests {
 
     static class PassingTests implements MatcherTestProvider, OptionalMatchers, StringMatchers {
         @Override
-        public Stream<SimpleTest> testStream() {
+        public Stream<Test> testStream() {
             return Stream.of(
                     test("Empty Optional", () -> that(Optional.empty(), isEmptyOptional()), tags),
                     test("Optional Of", () -> that(Optional.of(10), isOptionalOf(10)), tags),
@@ -31,7 +31,7 @@ public class OptionalMatcherTests {
 
     static class FailingTests implements MatcherTestProvider, OptionalMatchers, StringMatchers {
         @Override
-        public Stream<SimpleTest> testStream() {
+        public Stream<Test> testStream() {
             return Stream.of(
                     test("Empty Optional (FAIL)", () -> that(Optional.of("Hello"), isEmptyOptional()), tags),
                     test("Optional Of (FAIL)", () -> that(Optional.of(10), isOptionalOf(20)), tags),

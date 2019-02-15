@@ -1,6 +1,6 @@
 package org.javatest.matchers;
 
-import org.javatest.tests.SimpleTest;
+import org.javatest.Test;
 import org.javatest.TestProvider;
 
 import java.util.List;
@@ -17,7 +17,7 @@ public class ExceptionMatcherTests {
 
     static class PassingTests implements MatcherTestProvider, ExceptionMatchers, StringMatchers {
         @Override
-        public Stream<SimpleTest> testStream() {
+        public Stream<Test> testStream() {
             return Stream.of(
                     test("Exception of correct type is thrown", () ->
                             that(() -> { throw new RuntimeException("whoopsie"); }, willThrowExceptionThat(hasType(RuntimeException.class))), tags),
@@ -48,7 +48,7 @@ public class ExceptionMatcherTests {
     // TODO the latter tests errors don't compose nicely!
     static class FailingTests implements MatcherTestProvider, ExceptionMatchers, StringMatchers {
         @Override
-        public Stream<SimpleTest> testStream() {
+        public Stream<Test> testStream() {
             return Stream.of(
                     test("Exception is thrown (FAIL)", () ->
                             that(() -> {}, willThrowExceptionThat(hasType(IllegalStateException.class))), tags),

@@ -1,7 +1,5 @@
 package org.javatest;
 
-import org.javatest.tests.SimpleTest;
-
 import java.util.stream.Stream;
 
 public class SimpleTests {

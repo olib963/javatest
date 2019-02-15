@@ -1,5 +1,8 @@
 package org.javatest.matchers;
 
+import org.javatest.matchers.internal.ElementThatMatcher;
+import org.javatest.matchers.internal.PredicateMatcher;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -32,24 +35,3 @@ public interface CollectionMatchers {
     }
 }
 
-// TODO another candidate for extraction
-class ElementThatMatcher<T> implements Matcher<Collection<T>> {
-
-    private final Matcher<T> elementMatcher;
-
-    public ElementThatMatcher(Matcher<T> elementMatcher) {
-        this.elementMatcher = elementMatcher;
-    }
-
-    @Override
-    public MatchResult matches(Collection<T> value) {
-        // TODO do we need any mismatch descriptions for each element?
-        return value.stream().map(elementMatcher::matches).anyMatch(r -> r.matches)?
-                MatchResult.match(): MatchResult.mismatch();
-    }
-
-    @Override
-    public String describeExpected() {
-        return "contain an element that was expected to " + elementMatcher.describeExpected();
-    }
-}

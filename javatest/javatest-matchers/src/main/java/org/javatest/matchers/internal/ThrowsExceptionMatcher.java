@@ -1,9 +1,13 @@
-package org.javatest.matchers;
+package org.javatest.matchers.internal;
+
+import org.javatest.matchers.CheckedRunnable;
+import org.javatest.matchers.MatchResult;
+import org.javatest.matchers.Matcher;
 
 public class ThrowsExceptionMatcher implements Matcher<CheckedRunnable> {
     private final Matcher<Throwable> thrownMatcher;
 
-    ThrowsExceptionMatcher(Matcher<Throwable> thrownMatcher) {
+    public ThrowsExceptionMatcher(Matcher<Throwable> thrownMatcher) {
         this.thrownMatcher = thrownMatcher;
     }
 

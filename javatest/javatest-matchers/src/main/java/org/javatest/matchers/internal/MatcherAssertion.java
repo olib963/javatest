@@ -1,12 +1,14 @@
-package org.javatest.matchers;
+package org.javatest.matchers.internal;
 
 import org.javatest.Assertion;
 import org.javatest.AssertionResult;
+import org.javatest.matchers.CheckedRunnable;
+import org.javatest.matchers.Matcher;
 
 public class MatcherAssertion<A> implements Assertion {
     private final A value;
     private final Matcher<A> matcher;
-    MatcherAssertion(A value, Matcher<A> matcher) {
+    public MatcherAssertion(A value, Matcher<A> matcher) {
         this.value = value;
         this.matcher = matcher;
     }
