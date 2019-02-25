@@ -4,7 +4,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import static org.javatest.JavaTest.*;
 
-public class Tests {
+public class AllTests {
 
     public static void main(String... args) {
         var result = JavaTest.run(Stream.of(
