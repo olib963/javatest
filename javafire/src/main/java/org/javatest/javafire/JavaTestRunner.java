@@ -133,8 +133,14 @@ class JavaTestRunner {
 		}
 
 		Result toResult() {
-			return new Result(status, getMessage(), getCause()); // TODO Check safe to return potential null or
-																	// unexpected cause
+			Throwable cause = getCause();
+			
+			if (cause == null) {
+				return new Result(status, getMessage());
+			}
+			else {
+				return new Result(status, getMessage(), cause);		// TODO Bit cumbersome - use Optional here too?
+			}
 		}
 	}
 
