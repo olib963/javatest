@@ -5,7 +5,7 @@ is appreciated. I am sure I have not got the API or library right on the first t
 
 ## Basic Principles
 
-- Tests should be written in plain, simple functional Java with no magic.
+- org.javatest.eventually.Tests should be written in plain, simple functional Java with no magic.
 - Each test should return one assertion.
 - JavaTest will run a stream of tests, how you create this stream is up to you.
 
@@ -102,7 +102,7 @@ public class AllMyTests implements TestProvider {
 }
 ```
 
-### Pending Tests
+### Pending org.javatest.eventually.Tests
 
 Sometimes it will be useful to define a bunch of test cases ahead of implementing them, this is where
 pending tests come in. They will not fail your build but will logged in a different colour than passing/failing tests.
@@ -122,7 +122,7 @@ public class MyTests implements TestProvider {
 }
 ```
 
-### Tagging Tests
+### Tagging org.javatest.eventually.Tests
 
 Tagging tests is quite common to define subsets of tests, you can pass a `Collection` of `String` tags to any test. 
 Running all tests with a certain tag is then as simple as:
@@ -249,11 +249,16 @@ public class MyExceptionTests implements MatcherTestProvider, ExceptionMatchers,
 
 ```
 
+## Eventual Consistency
+
+TODO: docs
+
 ## RoadMap
 
 My plan for the first released version is to:
 
 - [x] Write a few more common matchers e.g. for `Collection`s, `Map`s, `Optional`s and `Comparable`s.
+- [ ] Eventual Consistency Module
 - [ ] Create an abstraction for composite matchers.
 - [ ] Figure out how I would like to handle fixtures in the API e.g. creating a database connection and passing that to tests
 - [ ] Decide how to handle null. At the moment many `that(null, $matcher)` expressions fail tests with NPEs, maybe this is good enough?
@@ -262,8 +267,6 @@ Maybe I should explicitly fail if null is passed?
 
 Future Versions could include:
 
-- A module to test eventual consistency for example something like: `thatEventually(() -> that(map.containsKey(1)), 1, Minutes, 10, Seconds)`
-would retry `map.containsKey(1)` every 10 seconds until 1 minute has passed.
 - A module that allows for generative property testing & parameterised testing more generally.
 - A way to add arbitrary logs to your test cases.
 - The ability to select how different parts of your test stream is run e.g. some in sequence the rest in parallel.
