@@ -23,24 +23,26 @@ public class TestResults {
     }
 
     TestResults addResult(TestResult result) {
-        testLogs.add(result.testLog); // TODO enforce immutability
+        var logs = new ArrayList<>(testLogs);
+        logs.add(result.testLog); // TODO enforce immutability
         var assertionResult = result.result;
         if(assertionResult.pending){
-            return new TestResults(succeeded, successCount, failureCount, pendingCount + 1, testLogs);
+            return new TestResults(succeeded, successCount, failureCount, pendingCount + 1, logs);
         } else if(assertionResult.holds) {
-            return new TestResults(succeeded, successCount + 1, failureCount, pendingCount, testLogs);
+            return new TestResults(succeeded, successCount + 1, failureCount, pendingCount, logs);
         }
-        return new TestResults(false, successCount, failureCount + 1, pendingCount, testLogs);
+        return new TestResults(false, successCount, failureCount + 1, pendingCount, logs);
     }
 
     TestResults combine(TestResults results) {
-        testLogs.addAll(results.testLogs);
+        var logs = new ArrayList<>(testLogs);
+        logs.addAll(results.testLogs);
         return new TestResults(
                 succeeded && results.succeeded,
                 successCount + results.successCount,
                 failureCount + results.failureCount,
                 pendingCount + results.pendingCount,
-                testLogs);
+                logs);
     }
 
     String totalsLog() {
