@@ -21,6 +21,7 @@ Add this dependency to your project:
     <groupId>org.javatest</groupId>
     <artifactId>javatest-core</artifactId>
     <version>${javatest.version}</version>
+    <scope>test</scope>
 </dependency>
 ```
 
@@ -201,6 +202,7 @@ The core of JavaTest is deliberately very simple, there is a separate module tha
     <groupId>org.javatest</groupId>
     <artifactId>javatest-matchers</artifactId>
     <version>${javatest.version}</version>
+    <scope>test</scope>
 </dependency>
 ```
 
@@ -251,7 +253,73 @@ public class MyExceptionTests implements MatcherTestProvider, ExceptionMatchers,
 
 ## Eventual Consistency
 
-TODO: docs
+Sometimes you will need to write an assertion that you cannot guarantee will hold straight away. You can use the `Eventually`
+interface to write tests that will eventually hold.
+
+```java
+public class MyEventualTest implements TestProvider, Eventually {
+    
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    
+    @Override
+    public Stream<Test> testStream() {
+        return Stream.of(
+          test("Map is populated", () -> {
+              // Very simple example to show how eventually works
+              var map = new HashMap<String, String>();
+              executor.submit(() -> map.put("foo", "bar"));
+              return eventually(() -> 
+                that("bar".equals(map.get("foo")), "Map contains entry foo:bar"));
+          })      
+        );
+    }
+}
+```
+
+The `eventually` function will by default wait 5 seconds between each attempt and will attempt to run your assertion 13 times
+which covers one minute. There are multiple ways to configure the timeout and wait duration:
+
+```java
+public class MyCustomEventualTest implements TestProvider, Eventually {
+    
+    // You can override the default number of attempts made
+    @Override
+    public int deafultAttempts() {
+        return 5;
+    }
+    
+    // You can override the default duration to wait between attempts
+    @Override
+    public int deafultAttempts() {
+        return Duration.ofSeconds(1);
+    }
+    
+    @Override
+    public Stream<Test> testStream() {
+        return Stream.of(
+          // Attempts 5 times, waiting 1 second between each attempt      
+          test("A", () -> eventually(() -> pending())),
+          // Attempts 10 times, waiting 1 second between each attempt      
+          test("B", () -> eventually(() -> pending(), 10)),
+          // Attempts 5 times, waiting 3 seconds between each attempt      
+          test("C", () -> eventually(() -> pending(), Duration.ofSeconds(3))),
+          // Attempts 10 times, waiting 3 seconds between each attempt      
+          test("D", () -> eventually(() -> pending(), Duration.ofSeconds(3), 10))
+        );
+    }
+}
+```
+
+You will need the dependency: 
+
+```xml
+<dependency>
+    <groupId>org.javatest</groupId>
+    <artifactId>javatest-eventually</artifactId>
+    <version>${javatest.version}</version>
+    <scope>test</scope>
+</dependency>
+```
 
 ## RoadMap
 

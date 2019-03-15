@@ -17,8 +17,6 @@ public class EventuallyTests {
     public static TestProvider failing() {
         return new FailingTests();
     }
-    // TODO check counts
-    // TODO fail test if attempts is < 1
 
     static class PassingTests implements TestProvider, Eventually {
         @Override
@@ -53,6 +51,7 @@ public class EventuallyTests {
                     test("Exception fail", () -> eventually(() -> { throw new Exception("Test failure"); }, 1)),
                     test("Fails if 0 attempts", () -> eventually(() -> that(true, "should pass"), 0)),
                     test("Fails if negative attempts", () -> eventually(() -> that(true, "should pass"), -1)),
+                    test("Fails if empty duration", () -> eventually(() -> that(true, "should pass"), Duration.ZERO)),
                     atomicIntegerTest()
             );
         }
