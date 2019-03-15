@@ -284,13 +284,13 @@ public class MyCustomEventualTest implements TestProvider, Eventually {
     
     // You can override the default number of attempts made
     @Override
-    public int deafultAttempts() {
+    public int defaultAttempts() {
         return 5;
     }
     
     // You can override the default duration to wait between attempts
     @Override
-    public int deafultAttempts() {
+    public Duration defaultDuration() {
         return Duration.ofSeconds(1);
     }
     

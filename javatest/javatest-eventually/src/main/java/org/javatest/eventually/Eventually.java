@@ -13,16 +13,16 @@ public interface Eventually {
         return Duration.ofSeconds(5);
     }
 
-    default int deafultAttempts() {
+    default int defaultAttempts() {
         return 13;
     }
 
     default Assertion eventually(CheckedSupplier<Assertion> test) {
-        return eventually(test, defaultDuration(), deafultAttempts());
+        return eventually(test, defaultDuration(), defaultAttempts());
     }
 
     default Assertion eventually(CheckedSupplier<Assertion> test, Duration duration) {
-        return eventually(test, duration, deafultAttempts());
+        return eventually(test, duration, defaultAttempts());
     }
 
     default Assertion eventually(CheckedSupplier<Assertion> test, int attempts) {
