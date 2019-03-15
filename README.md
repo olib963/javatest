@@ -5,7 +5,7 @@ is appreciated. I am sure I have not got the API or library right on the first t
 
 ## Basic Principles
 
-- org.javatest.eventually.Tests should be written in plain, simple functional Java with no magic.
+- Tests should be written in plain, simple functional Java with no magic.
 - Each test should return one assertion.
 - JavaTest will run a stream of tests, how you create this stream is up to you.
 
@@ -103,7 +103,7 @@ public class AllMyTests implements TestProvider {
 }
 ```
 
-### Pending org.javatest.eventually.Tests
+### Pending Tests
 
 Sometimes it will be useful to define a bunch of test cases ahead of implementing them, this is where
 pending tests come in. They will not fail your build but will logged in a different colour than passing/failing tests.
@@ -123,7 +123,7 @@ public class MyTests implements TestProvider {
 }
 ```
 
-### Tagging org.javatest.eventually.Tests
+### Tagging Tests
 
 Tagging tests is quite common to define subsets of tests, you can pass a `Collection` of `String` tags to any test. 
 Running all tests with a certain tag is then as simple as:
