@@ -42,7 +42,7 @@ public class JavaTest {
         } catch (AssertionError e) {
             return AssertionResult.failed(e);
         } catch (Throwable e) {
-            return AssertionResult.failed(e);
+            return AssertionResult.exception(e);
         }
     }
 
