@@ -5,11 +5,16 @@ import org.javatest.AssertionResult;
 
 import java.time.Duration;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 public class EventualAssertion implements Assertion {
+    // TODO can the supplier throw an exception?
     private final Supplier<Assertion> test;
     private final Duration duration;
     private final int attempts;
+
+    // TODO move this somehow to the stream. Can we zip with index?
+    private int currentAttempt = 1;
 
     public EventualAssertion(Supplier<Assertion> test, Duration duration, int attempts) {
         this.test = test;
@@ -23,24 +28,32 @@ public class EventualAssertion implements Assertion {
             return AssertionResult.of(false, "You must make at least one attempt in your test. Attempts given: " + attempts);
         }
         var sleepTime = duration.abs().toMillis();
-        AssertionResult result = null;
-        // TODO how to fold in java instead of set null
-        for (int attempt = 1; attempt <= attempts; attempt++) {
-            // TODO can the supplier throw an exception?
-            result = test.get().run();
-            if (result.holds) {
-                var suffix = " (Passed on attempt " + attempt + " of " + attempts + ")";
-                return AssertionResult.of(true, result.description + suffix);
-            }
-            try {
-                Thread.sleep(sleepTime);
-            } catch (InterruptedException e) {
-                return AssertionResult.exception(e);
-            }
+        var result = Stream.generate(test).limit(attempts - 1)
+                .reduce(runTest(test.get()),
+                        (previousResult, test) -> {
+                            if (previousResult.holds) {
+                                return previousResult;
+                            }
+                            try {
+                                Thread.sleep(sleepTime);
+                            } catch (InterruptedException e) {
+                                return AssertionResult.exception(e);
+                            }
+                            return runTest(test);
+                        }, (r1, r2) -> r1.holds ? r1 : r2);
+        if (!result.holds) {
+            return AssertionResult.of(false, result.description + " (Failed after " + attempts + " attempts)");
         }
+        return result;
+    }
+
+    private AssertionResult runTest(Assertion assertion) {
+        var result = assertion.run();
         if (result.holds) {
-            return result;
+            var suffix = " (Passed on attempt " + currentAttempt + " of " + attempts + ")";
+            return AssertionResult.of(true, result.description + suffix);
         }
-        return AssertionResult.of(false, result.description + " (Failed after " + attempts + " attempts)");
+        currentAttempt++;
+        return result;
     }
 }
