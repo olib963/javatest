@@ -1,10 +1,10 @@
 package org.javatest.eventually;
 
 import org.javatest.Assertion;
+import org.javatest.CheckedSupplier;
 import org.javatest.eventually.internal.EventualAssertion;
 
 import java.time.Duration;
-import java.util.function.Supplier;
 
 public interface Eventually {
 
@@ -17,20 +17,20 @@ public interface Eventually {
         return 13;
     }
 
-    default Assertion eventually(Supplier<Assertion> test) {
+    default Assertion eventually(CheckedSupplier<Assertion> test) {
         return eventually(test, defaultDuration(), deafultAttempts());
     }
 
-    default Assertion eventually(Supplier<Assertion> test, Duration duration) {
+    default Assertion eventually(CheckedSupplier<Assertion> test, Duration duration) {
         return eventually(test, duration, deafultAttempts());
     }
 
-    default Assertion eventually(Supplier<Assertion> test, int attempts) {
+    default Assertion eventually(CheckedSupplier<Assertion> test, int attempts) {
         return eventually(test, defaultDuration(), attempts);
     }
 
-    default Assertion eventually(Supplier<Assertion> test, Duration duration, int attempts) {
-        return new EventualAssertion(test, duration, attempts);
+    default Assertion eventually(CheckedSupplier<Assertion> test, Duration duration, int attempts) {
+        return new EventualAssertion(test, duration.abs().toMillis(), attempts);
     }
 
 }

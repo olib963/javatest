@@ -1,12 +1,12 @@
 package org.javatest.eventually;
 
 import org.javatest.Assertion;
+import org.javatest.CheckedSupplier;
 import org.javatest.Test;
 import org.javatest.TestProvider;
 
 import java.time.Duration;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public class EventuallyTests {
@@ -35,7 +35,7 @@ public class EventuallyTests {
         private Test atomicIntegerTest() {
             return test("Atomic integer increment", () -> {
                 var integer = new AtomicInteger(1);
-                Supplier<Assertion> valueBecomes6 = () -> {
+                CheckedSupplier<Assertion> valueBecomes6 = () -> {
                     int value = integer.getAndIncrement();
                     return that(value == 6, "Atomic integer (" + value + ") is 6");
                 };
@@ -50,6 +50,7 @@ public class EventuallyTests {
         public Stream<Test> testStream() {
             return Stream.of(
                     test("Simple fail", () -> eventually(() -> that(false, "should fail"), 1)),
+                    test("Exception fail", () -> eventually(() -> { throw new Exception("Test failure"); }, 1)),
                     test("Fails if 0 attempts", () -> eventually(() -> that(true, "should pass"), 0)),
                     test("Fails if negative attempts", () -> eventually(() -> that(true, "should pass"), -1)),
                     atomicIntegerTest()
@@ -59,7 +60,7 @@ public class EventuallyTests {
         private Test atomicIntegerTest() {
             return test("Atomic integer increment", () -> {
                 var integer = new AtomicInteger(1);
-                Supplier<Assertion> valueBecomes6 = () -> {
+                CheckedSupplier<Assertion> valueBecomes6 = () -> {
                     int value = integer.getAndIncrement();
                     return that(value == 6, "Atomic integer (" + value + ") is 6");
                 };
