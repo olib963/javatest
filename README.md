@@ -326,7 +326,7 @@ You will need the dependency:
 My plan for the first released version is to:
 
 - [x] Write a few more common matchers e.g. for `Collection`s, `Map`s, `Optional`s and `Comparable`s.
-- [ ] Eventual Consistency Module
+- [x] Eventual Consistency Module
 - [ ] Create an abstraction for composite matchers.
 - [ ] Figure out how I would like to handle fixtures in the API e.g. creating a database connection and passing that to tests
 - [ ] Decide how to handle null. At the moment many `that(null, $matcher)` expressions fail tests with NPEs, maybe this is good enough?
