@@ -11,9 +11,6 @@ public class EventualAssertion implements Assertion {
     private final int attempts;
     private final long sleepTime;
 
-    // TODO move this somehow to the stream. Can we zip with index?
-    private int currentAttempt = 1;
-
     public EventualAssertion(CheckedSupplier<Assertion> test, long sleepTime, int attempts) {
         this.test = test;
         this.attempts = attempts;
@@ -26,10 +23,18 @@ public class EventualAssertion implements Assertion {
             return AssertionResult.of(false, "You must make at least one attempt in your test. Attempts given: " + attempts);
         }
 
-        var result = Stream
-                .generate(() -> test)
-                .limit(attempts - 1)
-                .reduce(runTest(test),
+        if (sleepTime <= 0) {
+            return AssertionResult.of(false, "Millisecond sleep time given must be greater than 0. (Sleep time was " + sleepTime + ")");
+        }
+
+        var firstAttempt = runTest(test, 1);
+
+        var remainingAttempts = Stream
+                .iterate(new Attempt(test, 2), Attempt::increment)
+                .limit(attempts - 1);
+
+        var result = remainingAttempts
+                .reduce(firstAttempt,
                         this::nextAttempt,
                         (r1, r2) -> r1.holds ? r1 : r2);
         if (!result.holds) {
@@ -38,7 +43,7 @@ public class EventualAssertion implements Assertion {
         return result;
     }
 
-    private AssertionResult nextAttempt(AssertionResult previousResult, CheckedSupplier<Assertion> test) {
+    private AssertionResult nextAttempt(AssertionResult previousResult, Attempt attempt) {
         if (previousResult.holds) {
             return previousResult;
         }
@@ -47,20 +52,31 @@ public class EventualAssertion implements Assertion {
         } catch (InterruptedException e) {
             return AssertionResult.exception(e);
         }
-        return runTest(test);
+        return runTest(attempt.test, attempt.attempt);
     }
 
-    private AssertionResult runTest(CheckedSupplier<Assertion> test) {
+    private AssertionResult runTest(CheckedSupplier<Assertion> test, int currentAttempt) {
         try {
             var result = test.get().run();
             if (result.holds) {
                 var suffix = " (Passed on attempt " + currentAttempt + " of " + attempts + ")";
                 return AssertionResult.of(true, result.description + suffix);
             }
-            currentAttempt++;
             return result;
         } catch (Throwable e) {
             return AssertionResult.exception(e);
+        }
+    }
+
+    private class Attempt {
+        final CheckedSupplier<Assertion> test;
+        final int attempt;
+        public Attempt(CheckedSupplier<Assertion> test, int attempt) {
+            this.test = test;
+            this.attempt = attempt;
+        }
+        public Attempt increment() {
+            return new Attempt(test, attempt + 1);
         }
     }
 }
