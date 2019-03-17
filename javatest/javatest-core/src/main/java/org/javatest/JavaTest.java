@@ -8,27 +8,25 @@ import org.javatest.tests.*;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public class JavaTest {
 
     static final String SEPARATOR = System.lineSeparator();
 
-    public static <F> TestRunner fixtureRunner(String resourceName,
-                                               Supplier<F> creator,
-                                               Consumer<F> destroyer,
+    public static <F> TestRunner fixtureRunner(String fixtureName,
+                                               CheckedSupplier<F> creator,
+                                               CheckedConsumer<F> destroyer,
                                                Function<F, Stream<Test>> testFunction) {
-        return fixtureRunnerWrapper(resourceName, creator, destroyer, f -> testStreamRunner(testFunction.apply(f)));
+        return fixtureRunnerWrapper(fixtureName, creator, destroyer, f -> testStreamRunner(testFunction.apply(f)));
     }
 
-    public static <F> TestRunner fixtureRunnerWrapper(String resourceName,
-                                               Supplier<F> creator,
-                                               Consumer<F> destroyer,
-                                               Function<F, TestRunner> testFunction) {
-        return new FixtureRunner<>(resourceName, creator, destroyer, testFunction);
+    public static <F> TestRunner fixtureRunnerWrapper(String fixtureName,
+                                                      CheckedSupplier<F> creator,
+                                                      CheckedConsumer<F> destroyer,
+                                                      Function<F, TestRunner> testFunction) {
+        return new FixtureRunner<>(fixtureName, creator, destroyer, testFunction);
     }
 
     public static TestRunner testStreamRunner(Stream<Test> tests) {

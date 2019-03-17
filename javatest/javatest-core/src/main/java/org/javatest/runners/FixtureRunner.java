@@ -1,21 +1,18 @@
 package org.javatest.runners;
 
-import org.javatest.TestResults;
-import org.javatest.TestRunner;
+import org.javatest.*;
 
-import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class FixtureRunner<F> implements TestRunner {
 
-    private final String resourceName;
-    private final Supplier<F> creator;
-    private final Consumer<F> destroyer;
+    private final String fixtureName;
+    private final CheckedSupplier<F> creator;
+    private final CheckedConsumer<F> destroyer;
     private final Function<F, TestRunner> testFunction;
 
-    public FixtureRunner(String resourceName, Supplier<F> creator, Consumer<F> destroyer, Function<F, TestRunner> testFunction) {
-        this.resourceName = resourceName;
+    public FixtureRunner(String fixtureName, CheckedSupplier<F> creator, CheckedConsumer<F> destroyer, Function<F, TestRunner> testFunction) {
+        this.fixtureName = fixtureName;
         this.creator = creator;
         this.destroyer = destroyer;
         this.testFunction = testFunction;
@@ -23,6 +20,25 @@ public class FixtureRunner<F> implements TestRunner {
 
     @Override
     public TestResults run() {
-        return TestResults.init();
+        try {
+            var fixture = creator.get();
+            return runWithFixture(fixture);
+        } catch (Throwable throwable) {
+            var failed = AssertionResult.failed(throwable);
+            var result = new TestResult(failed, "Could not create fixture \"" + fixtureName + "\"\n" + failed.description);
+            return TestResults.init().addResult(result);
+        }
+    }
+
+    private TestResults runWithFixture(F fixture) {
+        var results = testFunction.apply(fixture).run();
+        try {
+            destroyer.accept(fixture);
+            return results;
+        } catch (Throwable throwable) {
+            var failed = AssertionResult.failed(throwable);
+            var result = new TestResult(failed, "Could not destroy fixture \"" + fixtureName + "\"\n" + failed.description);
+            return results.addResult(result);
+        }
     }
 }
