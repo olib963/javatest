@@ -27,7 +27,7 @@ public class AssertionResult {
         return new AssertionResult(false, stringWriter.toString(), false);
     }
 
-    static AssertionResult failed(AssertionError error) {
+    public static AssertionResult assertionThrown(AssertionError error) {
         return new AssertionResult(false, "An assertion error was thrown. This would imply an assertion was made and not returned, please return an assertion instead.", false);
     }
 

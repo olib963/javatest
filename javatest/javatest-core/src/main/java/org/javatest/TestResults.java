@@ -18,11 +18,11 @@ public class TestResults {
         this.pendingCount = pendingCount;
         this.testLogs = testLogs;
     }
-    static TestResults init() {
+    public static TestResults init() {
         return new TestResults(true, 0,0,0, new ArrayList<>());
     }
 
-    TestResults addResult(TestResult result) {
+    public TestResults addResult(TestResult result) {
         var logs = new ArrayList<>(testLogs);
         logs.add(result.testLog); // TODO enforce immutability
         var assertionResult = result.result;
@@ -34,7 +34,7 @@ public class TestResults {
         return new TestResults(false, successCount, failureCount + 1, pendingCount, logs);
     }
 
-    TestResults combine(TestResults results) {
+    public TestResults combine(TestResults results) {
         var logs = new ArrayList<>(testLogs);
         logs.addAll(results.testLogs);
         return new TestResults(

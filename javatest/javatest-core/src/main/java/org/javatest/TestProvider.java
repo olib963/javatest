@@ -3,6 +3,9 @@ package org.javatest;
 import org.javatest.tests.SimpleTest;
 
 import java.util.Collection;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public interface TestProvider {
@@ -16,7 +19,9 @@ public interface TestProvider {
         return SimpleTest.test(name, test, tags);
     }
 
-    default Assertion that(boolean asserted, String description) { return Assertion.that(asserted, description); }
+    default Assertion that(boolean asserted, String description) {
+        return Assertion.that(asserted, description);
+    }
 
     default Assertion pending() {
         return Assertion.pending();

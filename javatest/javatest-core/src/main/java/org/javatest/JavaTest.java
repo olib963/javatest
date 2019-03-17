@@ -1,6 +1,7 @@
 package org.javatest;
 
 import org.javatest.logging.Colour;
+import org.javatest.runners.StreamRunner;
 import org.javatest.tests.*;
 import org.javatest.tests.TestResult;
 
@@ -13,39 +14,36 @@ public class JavaTest {
 
     static final String SEPARATOR = System.lineSeparator();
 
-    public static TestResults run(TestProvider testProvider) {
-        return run(testProvider.testStream());
+    public static TestRunner testStreamRunner(Stream<Test> tests) {
+        return new StreamRunner(tests);
+    }
+
+    public static TestRunner testStreamRunner(TestProvider testProvider) {
+        return testStreamRunner(testProvider.testStream());
     }
 
     public static TestResults run(Stream<Test> tests) {
-        var result = tests
-                .map(JavaTest::runTest)
-                .reduce(TestResults.init(), TestResults::addResult, TestResults::combine);
-        // TODO allow by test logging, perhaps with some kind of observer.
+        return run(testStreamRunner(tests));
+    }
+
+    public static TestResults run(TestProvider testProvider) {
+        return run(testStreamRunner(testProvider));
+    }
+
+    public static TestResults run(TestRunner firstRunner, TestRunner... moreRunners) {
+        return run(firstRunner);
+    }
+
+    private static TestResults run(TestRunner firstRunner) {
+        var result = firstRunner.run();
+        // TODO allow by test logging, perhaps with some kind of observer. i.e. don't wait to log until they are all finished.
         result.testLogs.forEach(System.out::println);
         System.out.println(Colour.WHITE.getCode());
         System.out.println(result.totalsLog());
         return result;
     }
 
-    private static TestResult runTest(Test test) {
-        // TODO allow a test to add to the log. Ideally immutable :/ probably have to be some kind of builder per test case.
-        var result = safeRunTest(test.test());
-        var colour = Colour.forResult(result);
-        var log = colour.getCode() + test.name() + Colour.resetCode() + SEPARATOR + "\t" + result.description;
-        return new TestResult(result, log);
-    }
-
-    private static AssertionResult safeRunTest(CheckedSupplier<Assertion> test) {
-        try {
-            return test.get().run();
-        } catch (AssertionError e) {
-            return AssertionResult.failed(e);
-        } catch (Throwable e) {
-            return AssertionResult.exception(e);
-        }
-    }
-
+    // TODO decide how to structure static import if they are to be used.
     public static Test test(String name, CheckedSupplier<Assertion> test) {
         return SimpleTest.test(name, test, Collections.emptyList());
     }
