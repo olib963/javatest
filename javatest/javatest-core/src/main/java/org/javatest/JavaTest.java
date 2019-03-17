@@ -22,6 +22,13 @@ public class JavaTest {
         return fixtureRunnerWrapper(fixtureName, creator, destroyer, f -> testStreamRunner(testFunction.apply(f)));
     }
 
+    public static <F> TestRunner fixtureRunnerFromProvider(String fixtureName,
+                                               CheckedSupplier<F> creator,
+                                               CheckedConsumer<F> destroyer,
+                                               Function<F, TestProvider> testFunction) {
+        return fixtureRunnerWrapper(fixtureName, creator, destroyer, f -> testStreamRunner(testFunction.apply(f)));
+    }
+
     public static <F> TestRunner fixtureRunnerWrapper(String fixtureName,
                                                       CheckedSupplier<F> creator,
                                                       CheckedConsumer<F> destroyer,

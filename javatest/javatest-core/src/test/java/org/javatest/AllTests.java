@@ -1,5 +1,7 @@
 package org.javatest;
 
+import java.io.File;
+import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -21,9 +23,41 @@ public class AllTests {
                     return that(passingTests.isEmpty(), "Expected all 'failing' tests to fail");
                 })));
         if (!result.succeeded) {
-            throw new RuntimeException("Tests failed!");
+            throw new RuntimeException("Unit tests failed!");
+        }
+
+        var integrationResult = JavaTest.run(
+                JavaTest.fixtureRunnerFromProvider(
+                        "test directory",
+                        AllTests::createTestDirectory,
+                        AllTests::recursiveDelete,
+                        IntegrationTests::new
+                )
+        );
+        if (!integrationResult.succeeded) {
+            throw new RuntimeException("Integration tests failed!");
         }
         System.out.println("Tests passed");
+    }
+
+    private static File createTestDirectory() {
+        var dir = new File("integraton-test");
+        if (dir.mkdirs()) {
+            return dir;
+        }
+        throw new IllegalStateException("Could not create integration test directory " + dir.getAbsolutePath());
+    }
+
+    private static void recursiveDelete(File file) {
+        if(file.isDirectory()){
+            var files = file.listFiles();
+            if(files != null) {
+                Arrays.stream(files).forEach(AllTests::recursiveDelete);
+            }
+        }
+        if (!file.delete()) {
+            throw new IllegalStateException("Could not delete file " + file.getAbsolutePath());
+        }
     }
 
 }

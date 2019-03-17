@@ -4,8 +4,6 @@ import java.util.stream.Stream;
 
 public class FixtureTests implements TestProvider {
 
-    // TODO acceptance tests using actual side effect fixture e.g. File system.
-
     @Override
     public Stream<Test> testStream() {
         return Stream.of(
