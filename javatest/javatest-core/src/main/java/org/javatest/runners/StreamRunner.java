@@ -2,7 +2,7 @@ package org.javatest.runners;
 
 import org.javatest.*;
 import org.javatest.logging.Colour;
-import org.javatest.tests.TestResult;
+import org.javatest.TestResult;
 
 import java.util.stream.Stream;
 

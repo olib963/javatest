@@ -1,6 +1,4 @@
-package org.javatest.tests;
-
-import org.javatest.AssertionResult;
+package org.javatest;
 
 public class TestResult {
     public final AssertionResult result;
