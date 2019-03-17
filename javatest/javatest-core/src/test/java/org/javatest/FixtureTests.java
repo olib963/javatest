@@ -9,7 +9,7 @@ public class FixtureTests implements TestProvider {
         return Stream.of(
                 test("Tests using fixture", () -> {
                     var result = JavaTest.run(JavaTest.fixtureRunner(
-                            "fail to destroy",
+                            "string fixture",
                             () -> "fixture",
                             s -> {},
                             s -> Stream.of(
@@ -38,7 +38,7 @@ public class FixtureTests implements TestProvider {
                 }),
                 test("Fixture is fine but tests fail", () -> {
                     var result = JavaTest.run(JavaTest.fixtureRunner(
-                            "fail to destroy",
+                            "test failures",
                             () -> "fixture",
                             s -> {},
                             s -> Stream.of(

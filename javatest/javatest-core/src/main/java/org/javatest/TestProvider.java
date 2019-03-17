@@ -3,9 +3,6 @@ package org.javatest;
 import org.javatest.tests.SimpleTest;
 
 import java.util.Collection;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public interface TestProvider {
