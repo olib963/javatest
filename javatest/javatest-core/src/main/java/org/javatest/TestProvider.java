@@ -16,7 +16,9 @@ public interface TestProvider {
         return SimpleTest.test(name, test, tags);
     }
 
-    default Assertion that(boolean asserted, String description) { return Assertion.that(asserted, description); }
+    default Assertion that(boolean asserted, String description) {
+        return Assertion.that(asserted, description);
+    }
 
     default Assertion pending() {
         return Assertion.pending();
