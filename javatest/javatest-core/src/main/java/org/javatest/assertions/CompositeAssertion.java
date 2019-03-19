@@ -1,11 +1,10 @@
 package org.javatest.assertions;
 
+import java.util.function.BinaryOperator;
+
 import org.javatest.Assertion;
 import org.javatest.AssertionResult;
-import org.javatest.JavaTest;
 import org.javatest.logging.Colour;
-
-import java.util.function.BinaryOperator;
 
 public class CompositeAssertion implements Assertion {
     private final Assertion left;

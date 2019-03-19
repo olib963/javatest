@@ -11,7 +11,6 @@
     </parent>
     <artifactId>javatest</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.1-SNAPSHOT</version>
     <modules>
         <module>javatest-core</module>
         <module>javatest-matchers</module>
