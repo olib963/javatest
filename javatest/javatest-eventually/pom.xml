@@ -9,11 +9,18 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>javatest-core</artifactId>
+    <artifactId>javatest-eventually</artifactId>
 
     <properties>
-        <javatest.testClass>org.javatest.AllTests</javatest.testClass>
+        <javatest.testClass>org.javatest.eventually.Tests</javatest.testClass>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>javatest-core</artifactId>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>
@@ -27,4 +34,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>

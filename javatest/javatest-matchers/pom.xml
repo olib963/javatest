@@ -9,11 +9,11 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <artifactId>javatest-matchers</artifactId>
+
     <properties>
         <javatest.testClass>org.javatest.matchers.Tests</javatest.testClass>
     </properties>
-
-    <artifactId>javatest-matchers</artifactId>
 
     <dependencies>
         <dependency>

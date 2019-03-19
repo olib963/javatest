@@ -21,6 +21,7 @@ Add this dependency to your project:
     <groupId>org.javatest</groupId>
     <artifactId>javatest-core</artifactId>
     <version>${javatest.version}</version>
+    <scope>test</scope>
 </dependency>
 ```
 
@@ -201,6 +202,7 @@ The core of JavaTest is deliberately very simple, there is a separate module tha
     <groupId>org.javatest</groupId>
     <artifactId>javatest-matchers</artifactId>
     <version>${javatest.version}</version>
+    <scope>test</scope>
 </dependency>
 ```
 
@@ -249,11 +251,82 @@ public class MyExceptionTests implements MatcherTestProvider, ExceptionMatchers,
 
 ```
 
+## Eventual Consistency
+
+Sometimes you will need to write an assertion that you cannot guarantee will hold straight away. You can use the `Eventually`
+interface to write tests that will eventually hold.
+
+```java
+public class MyEventualTest implements TestProvider, Eventually {
+    
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    
+    @Override
+    public Stream<Test> testStream() {
+        return Stream.of(
+          test("Map is populated", () -> {
+              // Very simple example to show how eventually works
+              var map = new HashMap<String, String>();
+              executor.submit(() -> map.put("foo", "bar"));
+              return eventually(() -> 
+                that("bar".equals(map.get("foo")), "Map contains entry foo:bar"));
+          })      
+        );
+    }
+}
+```
+
+The `eventually` function will by default wait 5 seconds between each attempt and will attempt to run your assertion 13 times
+which covers one minute. There are multiple ways to configure the timeout and wait duration:
+
+```java
+public class MyCustomEventualTest implements TestProvider, Eventually {
+    
+    // You can override the default number of attempts made
+    @Override
+    public int defaultAttempts() {
+        return 5;
+    }
+    
+    // You can override the default duration to wait between attempts
+    @Override
+    public Duration defaultDuration() {
+        return Duration.ofSeconds(1);
+    }
+    
+    @Override
+    public Stream<Test> testStream() {
+        return Stream.of(
+          // Attempts 5 times, waiting 1 second between each attempt      
+          test("A", () -> eventually(() -> pending())),
+          // Attempts 10 times, waiting 1 second between each attempt      
+          test("B", () -> eventually(() -> pending(), 10)),
+          // Attempts 5 times, waiting 3 seconds between each attempt      
+          test("C", () -> eventually(() -> pending(), Duration.ofSeconds(3))),
+          // Attempts 10 times, waiting 3 seconds between each attempt      
+          test("D", () -> eventually(() -> pending(), Duration.ofSeconds(3), 10))
+        );
+    }
+}
+```
+
+You will need the dependency: 
+
+```xml
+<dependency>
+    <groupId>org.javatest</groupId>
+    <artifactId>javatest-eventually</artifactId>
+    <version>${javatest.version}</version>
+    <scope>test</scope>
+</dependency>
+```
+
 ## RoadMap
 
 My plan for the first released version is to:
 
 - [x] Write a few more common matchers e.g. for `Collection`s, `Map`s, `Optional`s and `Comparable`s.
+- [x] Eventual Consistency Module
 - [ ] Create an abstraction for composite matchers.
 - [ ] Figure out how I would like to handle fixtures in the API e.g. creating a database connection and passing that to tests
 - [ ] Decide how to handle null. At the moment many `that(null, $matcher)` expressions fail tests with NPEs, maybe this is good enough?
@@ -262,8 +335,6 @@ Maybe I should explicitly fail if null is passed?
 
 Future Versions could include:
 
-- A module to test eventual consistency for example something like: `thatEventually(() -> that(map.containsKey(1)), 1, Minutes, 10, Seconds)`
-would retry `map.containsKey(1)` every 10 seconds until 1 minute has passed.
 - A module that allows for generative property testing & parameterised testing more generally.
 - A way to add arbitrary logs to your test cases.
 - The ability to select how different parts of your test stream is run e.g. some in sequence the rest in parallel.

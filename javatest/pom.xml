@@ -15,5 +15,6 @@
     <modules>
         <module>javatest-core</module>
         <module>javatest-matchers</module>
+        <module>javatest-eventually</module>
     </modules>
 </project>
