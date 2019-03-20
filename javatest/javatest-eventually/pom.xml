@@ -11,6 +11,8 @@
 
     <artifactId>javatest-eventually</artifactId>
 
+	<description>Support for Assertions that are eventually-consistent and require retries to validate.</description>
+
     <properties>
         <javatest.testClass>org.javatest.eventually.Tests</javatest.testClass>
     </properties>

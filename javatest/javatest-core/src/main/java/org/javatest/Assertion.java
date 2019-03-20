@@ -4,8 +4,20 @@ import org.javatest.assertions.BooleanAssertion;
 import org.javatest.assertions.CompositeAssertion;
 import org.javatest.assertions.PendingAssertion;
 
+/**
+ * Assertions are responsible for validating that expected conditions hold true after tests have run.  
+ * <p>
+ * For example, a {@link BooleanAssertion} will take the boolean output from a test that has executed and ensure it is true.  
+ * More complex Assertions can also be defined, e.g. to compare objects returned from tests against expectations.  
+ *
+ */
 public interface Assertion {
-    AssertionResult run();
+    
+	/**
+	 * Runs the check to validate whether this Assertion holds.  
+	 * @return
+	 */
+	AssertionResult run();
 
     default Assertion and(Assertion other){
         return CompositeAssertion.and(this, other);

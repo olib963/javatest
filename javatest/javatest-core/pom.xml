@@ -11,6 +11,8 @@
 
     <artifactId>javatest-core</artifactId>
 
+	<description>Minimal set of functionality needed to run tool and API definitions.</description>
+
     <properties>
         <javatest.testClass>org.javatest.AllTests</javatest.testClass>
     </properties>
