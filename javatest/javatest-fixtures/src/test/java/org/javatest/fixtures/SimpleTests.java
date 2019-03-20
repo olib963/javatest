@@ -1,14 +1,18 @@
-package org.javatest;
+package org.javatest.fixtures;
+
+import org.javatest.JavaTest;
+import org.javatest.Test;
+import org.javatest.TestProvider;
 
 import java.util.stream.Stream;
 
-public class FixtureTests implements TestProvider {
+public class SimpleTests implements TestProvider, Fixtures {
 
     @Override
     public Stream<Test> testStream() {
         return Stream.of(
                 test("Tests using fixture", () -> {
-                    var result = JavaTest.run(JavaTest.fixtureRunner(
+                    var result = JavaTest.run(fixtureRunner(
                             "string fixture",
                             () -> "fixture",
                             s -> {},
@@ -19,7 +23,7 @@ public class FixtureTests implements TestProvider {
                     return that(result.succeeded, "Expected tests to pass using fixture");
                 }),
                 test("Failure to create fixture", () -> {
-                    var result = JavaTest.run(JavaTest.fixtureRunner(
+                    var result = JavaTest.run(fixtureRunner(
                             "fail to create",
                             () -> { throw new RuntimeException("Could not create fixture"); },
                             s -> {},
@@ -28,7 +32,7 @@ public class FixtureTests implements TestProvider {
                     return that(!result.succeeded, "Expected tests to fail if the fixture cannot be created");
                 }),
                 test("Failure to destory fixture", () -> {
-                    var result = JavaTest.run(JavaTest.fixtureRunner(
+                    var result = JavaTest.run(fixtureRunner(
                             "fail to destroy",
                             () -> "fixture",
                             s -> { throw new RuntimeException("Could not destroy fixture"); },
@@ -37,7 +41,7 @@ public class FixtureTests implements TestProvider {
                     return that(!result.succeeded, "Expected tests to fail if the fixture cannot be destroyed");
                 }),
                 test("Fixture is fine but tests fail", () -> {
-                    var result = JavaTest.run(JavaTest.fixtureRunner(
+                    var result = JavaTest.run(fixtureRunner(
                             "test failures",
                             () -> "fixture",
                             s -> {},
@@ -51,4 +55,3 @@ public class FixtureTests implements TestProvider {
         );
     }
 }
-

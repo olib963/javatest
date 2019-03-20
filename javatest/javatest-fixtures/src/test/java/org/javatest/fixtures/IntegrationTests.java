@@ -1,4 +1,7 @@
-package org.javatest;
+package org.javatest.fixtures;
+
+import org.javatest.Test;
+import org.javatest.TestProvider;
 
 import java.io.File;
 import java.nio.file.Files;
