@@ -1,10 +1,9 @@
-package org.javatest.runners;
+package org.javatest.fixtures.internal;
 
 import org.javatest.*;
 
 import java.util.function.Function;
 
-// TODO part of core? Or separate module and keep core just being the API?
 // TODO are there valid use cases for the before each and after each fixtures?
 public class FixtureRunner<F> implements TestRunner {
 

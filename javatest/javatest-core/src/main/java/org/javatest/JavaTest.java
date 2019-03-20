@@ -1,7 +1,6 @@
 package org.javatest;
 
 import org.javatest.logging.Colour;
-import org.javatest.runners.FixtureRunner;
 import org.javatest.runners.StreamRunner;
 import org.javatest.tests.*;
 
@@ -14,27 +13,6 @@ import java.util.stream.Stream;
 public class JavaTest {
 
     static final String SEPARATOR = System.lineSeparator();
-
-    public static <F> TestRunner fixtureRunner(String fixtureName,
-                                               CheckedSupplier<F> creator,
-                                               CheckedConsumer<F> destroyer,
-                                               Function<F, Stream<Test>> testFunction) {
-        return fixtureRunnerWrapper(fixtureName, creator, destroyer, f -> testStreamRunner(testFunction.apply(f)));
-    }
-
-    public static <F> TestRunner fixtureRunnerFromProvider(String fixtureName,
-                                               CheckedSupplier<F> creator,
-                                               CheckedConsumer<F> destroyer,
-                                               Function<F, TestProvider> testFunction) {
-        return fixtureRunnerWrapper(fixtureName, creator, destroyer, f -> testStreamRunner(testFunction.apply(f)));
-    }
-
-    public static <F> TestRunner fixtureRunnerWrapper(String fixtureName,
-                                                      CheckedSupplier<F> creator,
-                                                      CheckedConsumer<F> destroyer,
-                                                      Function<F, TestRunner> testFunction) {
-        return new FixtureRunner<>(fixtureName, creator, destroyer, testFunction);
-    }
 
     public static TestRunner testStreamRunner(Stream<Test> tests) {
         return new StreamRunner(tests);
