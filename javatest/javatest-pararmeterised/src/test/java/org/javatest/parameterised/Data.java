@@ -1,0 +1,66 @@
+package org.javatest.parameterised;
+
+import java.util.stream.Stream;
+
+import static org.javatest.parameterised.Helpers.t;
+
+public class Data implements Parameterised {
+    private Data() {}
+
+    public static Stream<String> palindromes() {
+        return Stream.of(
+                "Anna",
+                "Aibohphobia",
+                "Civic",
+                "Deified",
+                "Kayak",
+                "Level",
+                "Madam",
+                "Mom",
+                "Noon",
+                "Racecar",
+                "Radar",
+                "Redder",
+                "Refer",
+                "Repaper",
+                "Rotator",
+                "Rotor",
+                "Sagas",
+                "Solos",
+                "Stats",
+                "Tacocat",
+                "Tenet",
+                "Wow"
+        );
+    }
+
+    public static Stream<Helpers.Tuple2<Integer, Long>> fibonacci() {
+        return Stream.of(
+                t(0, 1L),
+                t(1, 1L),
+                t(2, 1L),
+                t(3, 2L),
+                t(4, 3L),
+                t(5, 5L),
+                t(6, 8L),
+                t(8, 21L),
+                t(10, 55L),
+                t(60, 1548008755920L),
+                t(90, 2880067194370816120L)
+        );
+    }
+
+
+    public static Stream<Helpers.Tuple3<Integer, Integer, Integer>> multiplication() {
+        return Stream.of(
+                t(1, 1, 1),
+                t(2, 4, 8),
+                t(3, 9, 27),
+                t(4, 16, 64),
+                t(5, 25, 125),
+                t(10, 100, 1000)
+        );
+    }
+
+
+}
