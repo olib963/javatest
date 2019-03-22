@@ -37,7 +37,7 @@ public class Data implements Parameterised {
 
     public static Stream<Helpers.Tuple2<Integer, Long>> fibonacci() {
         return Stream.of(
-                t(0, 1L),
+                t(0, 0L),
                 t(1, 1L),
                 t(2, 1L),
                 t(3, 2L),

@@ -37,10 +37,13 @@ public class ParameterisedTests implements TestProvider, Parameterised {
     }
 
     private long fibonacci(int n) {
-        return Stream.iterate(t(1L, 1L), // Start with (1, 1) which is F_1 and F_2
+        if(n == 0) {
+            return 0L;
+        }
+        return Stream.iterate(t(0L, 1L), // Start with (0, 1) which is F_0 and F_1
                 tup -> t(tup._2, tup._1 + tup._2)) // F_n-1 and F_n
-                .limit(Integer.max(n - 1, 0))
-                .skip(Integer.max(n - 2, 0))
+                .limit(n)
+                .skip(n - 1)
                 .findFirst()
                 .map(t -> t._2)
                 .orElse(1L);
