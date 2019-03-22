@@ -13,18 +13,24 @@ public class ParameterisedTests implements TestProvider, Parameterised {
     public Stream<Test> testStream() {
         // TODO create joinStreams function
         return Stream.of(
-                parameterised(Data.palindromes(), word -> test(word + " is a palindrome", () -> {
-                    var lowercase = word.toLowerCase();
-                    var backwards = new StringBuilder(lowercase).reverse().toString();
-                    return that(lowercase.equals(backwards), word + " is the same backwards");
-                })),
-                parameterised(Data.multiplication(), (m1, m2, eq) ->
-                        test("Multiplication", () -> that(m1 * m2 == eq,
-                                m1 + " multiplied by " + m2 + " equals " + eq))),
+                parameterised(Data.palindromes(), this::palindromeTest),
+                parameterised(Data.multiplication(), this::multiplicationTest),
                 parameterised(Data.fibonacci(), (n, fib) ->
                         test(n + "th fibonacci number", () ->
                                 that(fibonacci(n) == fib, "The " + n + "th fibonacci number is " + fib)))
         ).flatMap(Function.identity());
+    }
+
+    private Test palindromeTest(String word) {
+        return test(word + " is a palindrome", () -> {
+            var lowercase = word.toLowerCase();
+            var backwards = new StringBuilder(lowercase).reverse().toString();
+            return that(lowercase.equals(backwards), word + " is the same backwards");
+        });
+    }
+
+    private Test multiplicationTest(int m1, int m2, int eq) {
+        return test("Multiplication", () -> that(m1 * m2 == eq, m1 + " multiplied by " + m2 + " equals " + eq));
     }
 
     private long fibonacci(int n) {
