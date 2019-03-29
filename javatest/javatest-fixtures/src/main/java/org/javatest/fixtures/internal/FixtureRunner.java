@@ -1,6 +1,7 @@
 package org.javatest.fixtures.internal;
 
 import org.javatest.*;
+import org.javatest.fixtures.Fixture;
 
 import java.util.function.Function;
 
@@ -8,14 +9,12 @@ import java.util.function.Function;
 public class FixtureRunner<F> implements TestRunner {
 
     private final String fixtureName;
-    private final CheckedSupplier<F> creator;
-    private final CheckedConsumer<F> destroyer;
+    private final Fixture<F> fixture;
     private final Function<F, TestRunner> testFunction;
 
-    public FixtureRunner(String fixtureName, CheckedSupplier<F> creator, CheckedConsumer<F> destroyer, Function<F, TestRunner> testFunction) {
+    public FixtureRunner(String fixtureName, Fixture<F> fixture, Function<F, TestRunner> testFunction) {
         this.fixtureName = fixtureName;
-        this.creator = creator;
-        this.destroyer = destroyer;
+        this.fixture = fixture;
         this.testFunction = testFunction;
     }
 
@@ -24,8 +23,8 @@ public class FixtureRunner<F> implements TestRunner {
     @Override
     public TestResults run() {
         try {
-            var fixture = creator.get();
-            return runWithFixture(fixture);
+            var f = fixture.create();
+            return runWithFixture(f);
         } catch (Throwable throwable) {
             var failed = AssertionResult.exception(throwable);
             var result = new TestResult(failed, "Could not create fixture \"" + fixtureName + "\"\n" + failed.description);
@@ -33,10 +32,10 @@ public class FixtureRunner<F> implements TestRunner {
         }
     }
 
-    private TestResults runWithFixture(F fixture) {
-        var results = testFunction.apply(fixture).run();
+    private TestResults runWithFixture(F f) {
+        var results = testFunction.apply(f).run();
         try {
-            destroyer.accept(fixture);
+            fixture.destroy(f);
             return results;
         } catch (Throwable throwable) {
             var failed = AssertionResult.exception(throwable);
