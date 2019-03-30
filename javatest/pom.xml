@@ -14,9 +14,10 @@
     <version>0.0.1-SNAPSHOT</version>
     <modules>
         <module>javatest-core</module>
-        <module>javatest-matchers</module>
         <module>javatest-eventually</module>
         <module>javatest-fixtures</module>
+        <module>javatest-junit</module>
+        <module>javatest-matchers</module>
         <module>javatest-pararmeterised</module>
     </modules>
 </project>
