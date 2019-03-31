@@ -5,11 +5,11 @@ import java.util.List;
 
 public class TestResults {
     public final boolean succeeded;
-    private final int successCount;
-    private final int failureCount;
-    private final int pendingCount;
+    private final long successCount;
+    private final long failureCount;
+    private final long pendingCount;
     final List<String> testLogs;
-    private TestResults(boolean succeeded, int successCount, int failureCount, int pendingCount, List<String> testLogs) {
+    private TestResults(boolean succeeded, long successCount, long failureCount, long pendingCount, List<String> testLogs) {
         this.succeeded = succeeded;
         this.successCount = successCount;
         this.failureCount = failureCount;
@@ -18,6 +18,10 @@ public class TestResults {
     }
     public static TestResults init() {
         return new TestResults(true, 0,0,0, new ArrayList<>());
+    }
+
+    public static TestResults from(long failures, long successes) {
+        return new TestResults(failures == 0, successes,failures,0, new ArrayList<>());
     }
 
     public TestResults addResult(TestResult result) {

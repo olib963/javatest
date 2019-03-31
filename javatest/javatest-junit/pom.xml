@@ -14,6 +14,7 @@
     <properties>
         <javatest.testClass>org.javatest.junit.Tests</javatest.testClass>
         <junit.version>1.4.1</junit.version>
+        <junit.jupiter.version>5.4.1</junit.jupiter.version>
     </properties>
 
     <dependencies>
@@ -25,6 +26,12 @@
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-console</artifactId>
             <version>${junit.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit.jupiter.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
