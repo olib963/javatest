@@ -44,7 +44,7 @@ public class Helpers {
         K apply(A a, B b, C c, D d, E e, F f, G g, H h, I i, J j);
     }
 
-    static <A, B> Helpers.Tuple2<A, B> t(A _1, B _2) {
+    public static <A, B> Helpers.Tuple2<A, B> t(A _1, B _2) {
         return new Helpers.Tuple2<>(_1, _2);
     }
 
@@ -57,7 +57,7 @@ public class Helpers {
         }
     }
 
-    static <A, B, C> Helpers.Tuple3<A, B, C> t(A _1, B _2, C _3) {
+    public static <A, B, C> Helpers.Tuple3<A, B, C> t(A _1, B _2, C _3) {
         return new Helpers.Tuple3<>(_1, _2, _3);
     }
 
@@ -72,7 +72,7 @@ public class Helpers {
         }
     }
 
-    static <A, B, C, D> Helpers.Tuple4<A, B, C, D> t(A _1, B _2, C _3, D _4) {
+    public static <A, B, C, D> Helpers.Tuple4<A, B, C, D> t(A _1, B _2, C _3, D _4) {
         return new Helpers.Tuple4<>(_1, _2, _3, _4);
     }
 
@@ -89,7 +89,7 @@ public class Helpers {
         }
     }
 
-    static <A, B, C, D, E> Helpers.Tuple5<A, B, C, D, E> t(A _1, B _2, C _3, D _4, E _5) {
+    public static <A, B, C, D, E> Helpers.Tuple5<A, B, C, D, E> t(A _1, B _2, C _3, D _4, E _5) {
         return new Helpers.Tuple5<>(_1, _2, _3, _4, _5);
     }
 
@@ -108,7 +108,7 @@ public class Helpers {
         }
     }
 
-    static <A, B, C, D, E, F> Helpers.Tuple6<A, B, C, D, E, F> t(A _1, B _2, C _3, D _4, E _5, F _6) {
+    public static <A, B, C, D, E, F> Helpers.Tuple6<A, B, C, D, E, F> t(A _1, B _2, C _3, D _4, E _5, F _6) {
         return new Helpers.Tuple6<>(_1, _2, _3, _4, _5, _6);
     }
 
@@ -129,7 +129,7 @@ public class Helpers {
         }
     }
 
-    static <A, B, C, D, E, F, G> Helpers.Tuple7<A, B, C, D, E, F, G> t(A _1, B _2, C _3, D _4, E _5, F _6, G _7) {
+    public static <A, B, C, D, E, F, G> Helpers.Tuple7<A, B, C, D, E, F, G> t(A _1, B _2, C _3, D _4, E _5, F _6, G _7) {
         return new Helpers.Tuple7<>(_1, _2, _3, _4, _5, _6, _7);
     }
 
@@ -152,7 +152,7 @@ public class Helpers {
         }
     }
 
-    static <A, B, C, D, E, F, G, H> Helpers.Tuple8<A, B, C, D, E, F, G, H> t(A _1, B _2, C _3, D _4, E _5, F _6, G _7, H _8) {
+    public static <A, B, C, D, E, F, G, H> Helpers.Tuple8<A, B, C, D, E, F, G, H> t(A _1, B _2, C _3, D _4, E _5, F _6, G _7, H _8) {
         return new Helpers.Tuple8<>(_1, _2, _3, _4, _5, _6, _7, _8);
     }
 
@@ -177,7 +177,7 @@ public class Helpers {
         }
     }
 
-    static <A, B, C, D, E, F, G, H, I> Helpers.Tuple9<A, B, C, D, E, F, G, H, I> t(A _1, B _2, C _3, D _4, E _5, F _6, G _7, H _8, I _9) {
+    public static <A, B, C, D, E, F, G, H, I> Helpers.Tuple9<A, B, C, D, E, F, G, H, I> t(A _1, B _2, C _3, D _4, E _5, F _6, G _7, H _8, I _9) {
         return new Helpers.Tuple9<>(_1, _2, _3, _4, _5, _6, _7, _8, _9);
     }
 
@@ -204,7 +204,7 @@ public class Helpers {
         }
     }
 
-    static <A, B, C, D, E, F, G, H, I, J> Helpers.Tuple10<A, B, C, D, E, F, G, H, I, J> t(A _1, B _2, C _3, D _4, E _5, F _6, G _7, H _8, I _9, J _10) {
+    public static <A, B, C, D, E, F, G, H, I, J> Helpers.Tuple10<A, B, C, D, E, F, G, H, I, J> t(A _1, B _2, C _3, D _4, E _5, F _6, G _7, H _8, I _9, J _10) {
         return new Helpers.Tuple10<>(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10);
     }
 
