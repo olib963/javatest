@@ -55,6 +55,43 @@ public class Helpers {
             this._1 = _1;
             this._2 = _2;
         }
+
+        public <C> Tuple3<A, B, C> add(C _3) {
+            return new Tuple3<>(_1, _2, _3);
+        }
+
+        public <C, D> Tuple4<A, B, C, D> add(Tuple2<C, D> t) {
+            return new Tuple4<>(_1, _2, t._1, t._2);
+        }
+
+        public <C, D, E> Tuple5<A, B, C, D, E> add(Tuple3<C, D, E> t) {
+            return new Tuple5<>(_1, _2, t._1, t._2, t._3);
+        }
+
+        public <C, D, E, F> Tuple6<A, B, C, D, E, F> add(Tuple4<C, D, E, F> t) {
+            return new Tuple6<>(_1, _2, t._1, t._2, t._3, t._4);
+        }
+
+        public <C, D, E, F, G> Tuple7<A, B, C, D, E, F, G> add(Tuple5<C, D, E, F, G> t) {
+            return new Tuple7<>(_1, _2, t._1, t._2, t._3, t._4, t._5);
+        }
+
+        public <C, D, E, F, G, H> Tuple8<A, B, C, D, E, F, G, H> add(Tuple6<C, D, E, F, G, H> t) {
+            return new Tuple8<>(_1, _2, t._1, t._2, t._3, t._4, t._5, t._6);
+        }
+
+        public <C, D, E, F, G, H, I> Tuple9<A, B, C, D, E, F, G, H, I> add(Tuple7<C, D, E, F, G, H, I> t) {
+            return new Tuple9<>(_1, _2, t._1, t._2, t._3, t._4, t._5, t._6, t._7);
+        }
+
+        public <C, D, E, F, G, H, I, J> Tuple10<A, B, C, D, E, F, G, H, I, J> add(Tuple8<C, D, E, F, G, H, I, J> t) {
+            return new Tuple10<>(_1, _2, t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8);
+        }
+
+        @Override
+        public String toString() {
+            return '(' +_1.toString() + ',' + _2 + ')';
+        }
     }
 
     public static <A, B, C> Helpers.Tuple3<A, B, C> t(A _1, B _2, C _3) {
@@ -69,6 +106,39 @@ public class Helpers {
             this._1 = _1;
             this._2 = _2;
             this._3 = _3;
+        }
+
+        public <D> Tuple4<A, B, C, D> add(D _4) {
+            return new Tuple4<>(_1, _2, _3, _4);
+        }
+
+        public <D, E> Tuple5<A, B, C, D, E> add(Tuple2<D, E> t) {
+            return new Tuple5<>(_1, _2, _3, t._1, t._2);
+        }
+
+        public <D, E, F> Tuple6<A, B, C, D, E, F> add(Tuple3<D, E, F> t) {
+            return new Tuple6<>(_1, _2, _3, t._1, t._2, t._3);
+        }
+
+        public <D, E, F, G> Tuple7<A, B, C, D, E, F, G> add(Tuple4<D, E, F, G> t) {
+            return new Tuple7<>(_1, _2, _3, t._1, t._2, t._3, t._4);
+        }
+
+        public <D, E, F, G, H> Tuple8<A, B, C, D, E, F, G, H> add(Tuple5<D, E, F, G, H> t) {
+            return new Tuple8<>(_1, _2, _3, t._1, t._2, t._3, t._4, t._5);
+        }
+
+        public <D, E, F, G, H, I> Tuple9<A, B, C, D, E, F, G, H, I> add(Tuple6<D, E, F, G, H, I> t) {
+            return new Tuple9<>(_1, _2, _3, t._1, t._2, t._3, t._4, t._5, t._6);
+        }
+
+        public <D, E, F, G, H, I, J> Tuple10<A, B, C, D, E, F, G, H, I, J> add(Tuple7<D, E, F, G, H, I, J> t) {
+            return new Tuple10<>(_1, _2, _3, t._1, t._2, t._3, t._4, t._5, t._6, t._7);
+        }
+
+        @Override
+        public String toString() {
+            return '(' +_1.toString() + ',' + _2 + ',' + _3 + ')';
         }
     }
 
@@ -86,6 +156,35 @@ public class Helpers {
             this._2 = _2;
             this._3 = _3;
             this._4 = _4;
+        }
+
+        public <E> Tuple5<A, B, C, D, E> add(E _5) {
+            return new Tuple5<>(_1, _2, _3, _4, _5);
+        }
+
+        public <E, F> Tuple6<A, B, C, D, E, F> add(Tuple2<E, F> t) {
+            return new Tuple6<>(_1, _2, _3, _4, t._1, t._2);
+        }
+
+        public <E, F, G> Tuple7<A, B, C, D, E, F, G> add(Tuple3<E, F, G> t) {
+            return new Tuple7<>(_1, _2, _3, _4, t._1, t._2, t._3);
+        }
+
+        public <E, F, G, H> Tuple8<A, B, C, D, E, F, G, H> add(Tuple4<E, F, G, H> t) {
+            return new Tuple8<>(_1, _2, _3, _4, t._1, t._2, t._3, t._4);
+        }
+
+        public <E, F, G, H, I> Tuple9<A, B, C, D, E, F, G, H, I> add(Tuple5<E, F, G, H, I> t) {
+            return new Tuple9<>(_1, _2, _3, _4, t._1, t._2, t._3, t._4, t._5);
+        }
+
+        public <E, F, G, H, I, J> Tuple10<A, B, C, D, E, F, G, H, I, J> add(Tuple6<E, F, G, H, I, J> t) {
+            return new Tuple10<>(_1, _2, _3, _4, t._1, t._2, t._3, t._4, t._5, t._6);
+        }
+
+        @Override
+        public String toString() {
+            return '(' +_1.toString() + ',' + _2 + ',' + _3 + ',' + _4 + ')';
         }
     }
 
@@ -105,6 +204,31 @@ public class Helpers {
             this._3 = _3;
             this._4 = _4;
             this._5 = _5;
+        }
+
+        public <F> Tuple6<A, B, C, D, E, F> add(F _6) {
+            return new Tuple6<>(_1, _2, _3, _4, _5, _6);
+        }
+
+        public <F, G> Tuple7<A, B, C, D, E, F, G> add(Tuple2<F, G> t) {
+            return new Tuple7<>(_1, _2, _3, _4, _5, t._1, t._2);
+        }
+
+        public <F, G, H> Tuple8<A, B, C, D, E, F, G, H> add(Tuple3<F, G, H> t) {
+            return new Tuple8<>(_1, _2, _3, _4, _5, t._1, t._2, t._3);
+        }
+
+        public <F, G, H, I> Tuple9<A, B, C, D, E, F, G, H, I> add(Tuple4<F, G, H, I> t) {
+            return new Tuple9<>(_1, _2, _3, _4, _5, t._1, t._2, t._3, t._4);
+        }
+
+        public <F, G, H, I, J> Tuple10<A, B, C, D, E, F, G, H, I, J> add(Tuple5<F, G, H, I, J> t) {
+            return new Tuple10<>(_1, _2, _3, _4, _5, t._1, t._2, t._3, t._4, t._5);
+        }
+
+        @Override
+        public String toString() {
+            return '(' +_1.toString() + ',' + _2 + ',' + _3 + ',' + _4 + ',' + _5 + ')';
         }
     }
 
@@ -126,6 +250,27 @@ public class Helpers {
             this._4 = _4;
             this._5 = _5;
             this._6 = _6;
+        }
+
+        public <G> Tuple7<A, B, C, D, E, F, G> add(G _7) {
+            return new Tuple7<>(_1, _2, _3, _4, _5, _6, _7);
+        }
+
+        public <G, H> Tuple8<A, B, C, D, E, F, G, H> add(Tuple2<G, H> t) {
+            return new Tuple8<>(_1, _2, _3, _4, _5, _6, t._1, t._2);
+        }
+
+        public <G, H, I> Tuple9<A, B, C, D, E, F, G, H, I> add(Tuple3<G, H, I> t) {
+            return new Tuple9<>(_1, _2, _3, _4, _5, _6, t._1, t._2, t._3);
+        }
+
+        public <G, H, I, J> Tuple10<A, B, C, D, E, F, G, H, I, J> add(Tuple4<G, H, I, J> t) {
+            return new Tuple10<>(_1, _2, _3, _4, _5, _6, t._1, t._2, t._3, t._4);
+        }
+
+        @Override
+        public String toString() {
+            return '(' +_1.toString() + ',' + _2 + ',' + _3 + ',' + _4 + ',' + _5 + ',' + _6 + ')';
         }
     }
 
@@ -149,6 +294,23 @@ public class Helpers {
             this._5 = _5;
             this._6 = _6;
             this._7 = _7;
+        }
+
+        public <H> Tuple8<A, B, C, D, E, F, G, H> add(H _8) {
+            return new Tuple8<>(_1, _2, _3, _4, _5, _6, _7, _8);
+        }
+
+        public <H, I> Tuple9<A, B, C, D, E, F, G, H, I> add(Tuple2<H, I> t) {
+            return new Tuple9<>(_1, _2, _3, _4, _5, _6, _7, t._1, t._2);
+        }
+
+        public <H, I, J> Tuple10<A, B, C, D, E, F, G, H, I, J> add(Tuple3<H, I, J> t) {
+            return new Tuple10<>(_1, _2, _3, _4, _5, _6, _7, t._1, t._2, t._3);
+        }
+
+        @Override
+        public String toString() {
+            return '(' +_1.toString() + ',' + _2 + ',' + _3 + ',' + _4 + ',' + _5 + ',' + _6 + ',' + _7 + ')';
         }
     }
 
@@ -174,6 +336,19 @@ public class Helpers {
             this._6 = _6;
             this._7 = _7;
             this._8 = _8;
+        }
+
+        public <I> Tuple9<A, B, C, D, E, F, G, H, I> add(I _9) {
+            return new Tuple9<>(_1, _2, _3, _4, _5, _6, _7, _8, _9);
+        }
+
+        public <I, J> Tuple10<A, B, C, D, E, F, G, H, I, J> add(Tuple2<I, J> t) {
+            return new Tuple10<>(_1, _2, _3, _4, _5, _6, _7, _8, t._1, t._2);
+        }
+
+        @Override
+        public String toString() {
+            return '(' +_1.toString() + ',' + _2 + ',' + _3 + ',' + _4 + ',' + _5 + ',' + _6 + ',' + _7 + ',' + _8 + ')';
         }
     }
 
@@ -201,6 +376,15 @@ public class Helpers {
             this._7 = _7;
             this._8 = _8;
             this._9 = _9;
+        }
+
+        public <J> Tuple10<A, B, C, D, E, F, G, H, I, J> add(J _10) {
+            return new Tuple10<>(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10);
+        }
+
+        @Override
+        public String toString() {
+            return '(' +_1.toString() + ',' + _2 + ',' + _3 + ',' + _4 + ',' + _5 + ',' + _6 + ',' + _7 + ',' + _8 + ',' + _9 + ')';
         }
     }
 
@@ -230,6 +414,11 @@ public class Helpers {
             this._8 = _8;
             this._9 = _9;
             this._10 = _10;
+        }
+
+        @Override
+        public String toString() {
+            return '(' +_1.toString() + ',' + _2 + ',' + _3 + ',' + _4 + ',' + _5 + ',' + _6 + ',' + _7 + ',' + _8 + ',' + _9 + ',' + _10 + ')';
         }
     }
 }
