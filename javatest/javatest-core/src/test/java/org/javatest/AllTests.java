@@ -1,7 +1,5 @@
 package org.javatest;
 
-import java.io.File;
-import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 

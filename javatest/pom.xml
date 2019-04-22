@@ -17,5 +17,6 @@
         <module>javatest-matchers</module>
         <module>javatest-eventually</module>
         <module>javatest-fixtures</module>
+        <module>javatest-pararmeterised</module>
     </modules>
 </project>
