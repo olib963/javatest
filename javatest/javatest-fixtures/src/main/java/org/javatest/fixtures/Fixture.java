@@ -1,9 +1,10 @@
 package org.javatest.fixtures;
 
-public interface Fixture<F> {
+// TODO come up with intuitive name for this interface
+public interface Fixture<FixtureType> {
 
     // TODO is there a way to return a failure without recreating Try? Maybe we should just do that.
-    F create() throws Throwable;
+    FixtureType create() throws Throwable;
 
-    void destroy(F fixture) throws Throwable;
+    void destroy(FixtureType fixture) throws Throwable;
 }

@@ -6,13 +6,13 @@ import org.javatest.fixtures.Fixture;
 import java.util.function.Function;
 
 // TODO are there valid use cases for the before each and after each fixtures?
-public class FixtureRunner<F> implements TestRunner {
+public class FixtureRunner<FixtureType> implements TestRunner {
 
     private final String fixtureName;
-    private final Fixture<F> fixture;
-    private final Function<F, TestRunner> testFunction;
+    private final Fixture<FixtureType> fixture;
+    private final Function<FixtureType, TestRunner> testFunction;
 
-    public FixtureRunner(String fixtureName, Fixture<F> fixture, Function<F, TestRunner> testFunction) {
+    public FixtureRunner(String fixtureName, Fixture<FixtureType> fixture, Function<FixtureType, TestRunner> testFunction) {
         this.fixtureName = fixtureName;
         this.fixture = fixture;
         this.testFunction = testFunction;
@@ -32,7 +32,7 @@ public class FixtureRunner<F> implements TestRunner {
         }
     }
 
-    private TestResults runWithFixture(F f) {
+    private TestResults runWithFixture(FixtureType f) {
         var results = testFunction.apply(f).run();
         try {
             fixture.destroy(f);

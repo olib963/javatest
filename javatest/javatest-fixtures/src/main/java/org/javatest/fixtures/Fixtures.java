@@ -31,6 +31,10 @@ public class Fixtures {
         return new FixtureRunner<>(fixtureName, fixture, testFunction);
     }
 
+    static <F> Fixture<F> fromFunction(CheckedSupplier<F> creator) {
+        return fromFunctions(creator, x -> {});
+    }
+
     static <F> Fixture<F> fromFunctions(CheckedSupplier<F> creator, CheckedConsumer<F> destroyer) {
         return new FunctionFixture<>(creator, destroyer);
     }

@@ -17,7 +17,7 @@ public class TemporaryDirectory implements Fixture<File> {
         if (dir.mkdirs()) {
             return dir;
         }
-        throw new IllegalStateException("Could not create integration test directory " + dir.getAbsolutePath());
+        throw new IllegalStateException("Could not create temporary directory " + dir.getAbsolutePath());
     }
 
     @Override

@@ -15,7 +15,7 @@ public class SimpleTests implements TestProvider {
                 test("Tests using fixture", () -> {
                     var result = JavaTest.run(fixtureRunner(
                             "string fixture",
-                            fromFunctions(() -> "fixture", s -> {}),
+                            fromFunction(() -> "fixture"),
                             s -> Stream.of(
                                     test("Testing with " + s, () -> that(true, "this test should pass"))
                             )
@@ -25,7 +25,7 @@ public class SimpleTests implements TestProvider {
                 test("Failure to create fixture", () -> {
                     var result = JavaTest.run(fixtureRunner(
                             "fail to create",
-                            fromFunctions(() -> { throw new RuntimeException("Could not create fixture"); }, s -> {}),
+                            fromFunction(() -> { throw new RuntimeException("Could not create fixture"); }),
                             s -> Stream.of(
                                     test("Testing with " + s, () -> that(true, "this test should pass"))
                             )
@@ -45,7 +45,7 @@ public class SimpleTests implements TestProvider {
                 test("Fixture is fine but tests fail", () -> {
                     var result = JavaTest.run(fixtureRunner(
                             "test failures",
-                            fromFunctions(() -> "fixture", s -> {}),
+                            fromFunction(() -> "fixture"),
                             s -> Stream.of(
                                     test("Testing with " + s, () -> that(false, "this test should fail"))
                             )
