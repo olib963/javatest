@@ -61,7 +61,9 @@ public class MyCustomEventualTest implements TestProvider, Eventually {
 }
 ```
 
-You will need the dependency: 
+_______
+
+You can include this module with this dependency: 
 
 ```xml
 <dependency>
@@ -71,3 +73,7 @@ You will need the dependency:
     <scope>test</scope>
 </dependency>
 ```
+
+## TODO
+
+- [ ] Provide a configurable initial delay instead of attempting straight away
