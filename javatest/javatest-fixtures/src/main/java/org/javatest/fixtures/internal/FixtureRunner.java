@@ -1,20 +1,20 @@
 package org.javatest.fixtures.internal;
 
 import org.javatest.*;
-import org.javatest.fixtures.Fixture;
+import org.javatest.fixtures.FixtureDefinition;
 
 import java.util.function.Function;
 
 // TODO are there valid use cases for the before each and after each fixtures?
-public class FixtureRunner<FixtureType> implements TestRunner {
+public class FixtureRunner<Fixture> implements TestRunner {
 
     private final String fixtureName;
-    private final Fixture<FixtureType> fixture;
-    private final Function<FixtureType, TestRunner> testFunction;
+    private final FixtureDefinition<Fixture> fixtureDefinition;
+    private final Function<Fixture, TestRunner> testFunction;
 
-    public FixtureRunner(String fixtureName, Fixture<FixtureType> fixture, Function<FixtureType, TestRunner> testFunction) {
+    public FixtureRunner(String fixtureName, FixtureDefinition<Fixture> fixtureDefinition, Function<Fixture, TestRunner> testFunction) {
         this.fixtureName = fixtureName;
-        this.fixture = fixture;
+        this.fixtureDefinition = fixtureDefinition;
         this.testFunction = testFunction;
     }
 
@@ -23,8 +23,8 @@ public class FixtureRunner<FixtureType> implements TestRunner {
     @Override
     public TestResults run() {
         try {
-            var f = fixture.create();
-            return runWithFixture(f);
+            var fixture = fixtureDefinition.create();
+            return runWithFixture(fixture);
         } catch (Throwable throwable) {
             var failed = AssertionResult.exception(throwable);
             var result = new TestResult(failed, "Could not create fixture \"" + fixtureName + "\"\n" + failed.description);
@@ -32,10 +32,10 @@ public class FixtureRunner<FixtureType> implements TestRunner {
         }
     }
 
-    private TestResults runWithFixture(FixtureType f) {
-        var results = testFunction.apply(f).run();
+    private TestResults runWithFixture(Fixture fixture) {
+        var results = testFunction.apply(fixture).run();
         try {
-            fixture.destroy(f);
+            fixtureDefinition.destroy(fixture);
             return results;
         } catch (Throwable throwable) {
             var failed = AssertionResult.exception(throwable);

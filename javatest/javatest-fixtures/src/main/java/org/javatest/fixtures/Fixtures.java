@@ -2,7 +2,7 @@ package org.javatest.fixtures;
 
 import org.javatest.*;
 import org.javatest.fixtures.internal.FixtureRunner;
-import org.javatest.fixtures.internal.FunctionFixture;
+import org.javatest.fixtures.internal.FunctionFixtureDefinition;
 import org.javatest.fixtures.internal.TemporaryDirectory;
 
 import java.io.File;
@@ -13,33 +13,33 @@ public class Fixtures {
     private Fixtures() {
     }
 
-    static <F> TestRunner fixtureRunner(String fixtureName,
-                                        Fixture<F> fixture,
-                                        Function<F, Stream<Test>> testFunction) {
-        return fixtureRunnerWrapper(fixtureName, fixture, f -> JavaTest.testStreamRunner(testFunction.apply(f)));
+    static <Fixture> TestRunner fixtureRunner(String fixtureName,
+                                              FixtureDefinition<Fixture> fixtureDefinition,
+                                              Function<Fixture, Stream<Test>> testFunction) {
+        return fixtureRunnerWrapper(fixtureName, fixtureDefinition, f -> JavaTest.testStreamRunner(testFunction.apply(f)));
     }
 
-    static <F> TestRunner fixtureRunnerFromProvider(String fixtureName,
-                                                    Fixture<F> fixture,
-                                                    Function<F, TestProvider> testFunction) {
-        return fixtureRunnerWrapper(fixtureName, fixture, f -> JavaTest.testStreamRunner(testFunction.apply(f)));
+    static <Fixture> TestRunner fixtureRunnerFromProvider(String fixtureName,
+                                                    FixtureDefinition<Fixture> fixtureDefinition,
+                                                    Function<Fixture, TestProvider> testFunction) {
+        return fixtureRunnerWrapper(fixtureName, fixtureDefinition, f -> JavaTest.testStreamRunner(testFunction.apply(f)));
     }
 
-    static <F> TestRunner fixtureRunnerWrapper(String fixtureName,
-                                               Fixture<F> fixture,
-                                               Function<F, TestRunner> testFunction) {
-        return new FixtureRunner<>(fixtureName, fixture, testFunction);
+    static <Fixture> TestRunner fixtureRunnerWrapper(String fixtureName,
+                                               FixtureDefinition<Fixture> fixtureDefinition,
+                                               Function<Fixture, TestRunner> testFunction) {
+        return new FixtureRunner<>(fixtureName, fixtureDefinition, testFunction);
     }
 
-    static <F> Fixture<F> fromFunction(CheckedSupplier<F> creator) {
-        return fromFunctions(creator, x -> {});
+    static <Fixture> FixtureDefinition<Fixture> definitionFromFunction(CheckedSupplier<Fixture> creator) {
+        return definitionFromFunctions(creator, x -> {});
     }
 
-    static <F> Fixture<F> fromFunctions(CheckedSupplier<F> creator, CheckedConsumer<F> destroyer) {
-        return new FunctionFixture<>(creator, destroyer);
+    static <Fixture> FixtureDefinition<Fixture> definitionFromFunctions(CheckedSupplier<Fixture> creator, CheckedConsumer<Fixture> destroyer) {
+        return new FunctionFixtureDefinition<>(creator, destroyer);
     }
 
-    static Fixture<File> temporaryDirectory(String path) {
+    static FixtureDefinition<File> temporaryDirectory(String path) {
         return new TemporaryDirectory(path);
     }
 

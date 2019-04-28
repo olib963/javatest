@@ -1,14 +1,13 @@
 package org.javatest.fixtures.internal;
 
-import org.javatest.fixtures.Fixture;
+import org.javatest.fixtures.FixtureDefinition;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class TemporaryDirectory implements Fixture<File> {
+public class TemporaryDirectory implements FixtureDefinition<File> {
     private final String filePath;
 
     public TemporaryDirectory(String filePath) {
@@ -27,28 +26,27 @@ public class TemporaryDirectory implements Fixture<File> {
     @Override
     public void destroy(File fixture) {
         var failedToDelete = deleteAll(fixture);
-        if (!failedToDelete.isEmpty()) {
-            throw new IllegalStateException("Could not delete files: " +
-                    failedToDelete.stream().collect(Collectors.joining(", ")));
+        var allFailedFiles = failedToDelete.collect(Collectors.joining(", "));
+        if (!allFailedFiles.isEmpty()) {
+            throw new IllegalStateException("Could not delete files: " + allFailedFiles);
         }
     }
 
-    private List<String> deleteAll(File file) {
-        allFilesToDeleteIn(file).forEach(System.out::println);
-        return allFilesToDeleteIn(file).flatMap(f -> {
+    private Stream<String> deleteAll(File file) {
+        return allFilesIn(file).flatMap(f -> {
             if (f.delete()) {
                 return Stream.empty();
             }
             return Stream.of(f.getAbsolutePath());
-        }).collect(Collectors.toList());
+        });
     }
 
-    private Stream<File> allFilesToDeleteIn(File topLevel) {
-        var thisFile = Stream.of(topLevel);
-        var files = topLevel.listFiles();
-        if (topLevel.isDirectory() && files != null) {
+    private Stream<File> allFilesIn(File file) {
+        var thisFile = Stream.of(file);
+        var files = file.listFiles();
+        if (file.isDirectory() && files != null) {
             return Stream.concat(
-                    Arrays.stream(files).flatMap(this::allFilesToDeleteIn),
+                    Arrays.stream(files).flatMap(this::allFilesIn),
                     thisFile);
         }
         return thisFile;

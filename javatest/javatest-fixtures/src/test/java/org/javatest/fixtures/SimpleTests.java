@@ -15,7 +15,7 @@ public class SimpleTests implements TestProvider {
                 test("Tests using fixture", () -> {
                     var result = JavaTest.run(fixtureRunner(
                             "string fixture",
-                            fromFunction(() -> "fixture"),
+                            definitionFromFunction(() -> "fixture"),
                             s -> Stream.of(
                                     test("Testing with " + s, () -> that(true, "this test should pass"))
                             )
@@ -25,7 +25,7 @@ public class SimpleTests implements TestProvider {
                 test("Failure to create fixture", () -> {
                     var result = JavaTest.run(fixtureRunner(
                             "fail to create",
-                            fromFunction(() -> { throw new RuntimeException("Could not create fixture"); }),
+                            definitionFromFunction(() -> { throw new RuntimeException("Could not create fixture"); }),
                             s -> Stream.of(
                                     test("Testing with " + s, () -> that(true, "this test should pass"))
                             )
@@ -35,17 +35,17 @@ public class SimpleTests implements TestProvider {
                 test("Failure to destroy fixture", () -> {
                     var result = JavaTest.run(fixtureRunner(
                             "fail to destroy",
-                            fromFunctions(() -> "fixture", s -> { throw new RuntimeException("Could not destroy fixture"); }),
+                            definitionFromFunctions(() -> "fixture", s -> { throw new RuntimeException("Could not destroy fixture"); }),
                             s -> Stream.of(
                                     test("Testing with " + s, () -> that(true, "this test should pass"))
                             )
                     ));
                     return that(!result.succeeded, "Expected tests to fail if the fixture cannot be destroyed");
                 }),
-                test("Fixture is fine but tests fail", () -> {
+                test("FixtureDefinition is fine but tests fail", () -> {
                     var result = JavaTest.run(fixtureRunner(
                             "test failures",
-                            fromFunction(() -> "fixture"),
+                            definitionFromFunction(() -> "fixture"),
                             s -> Stream.of(
                                     test("Testing with " + s, () -> that(false, "this test should fail"))
                             )
