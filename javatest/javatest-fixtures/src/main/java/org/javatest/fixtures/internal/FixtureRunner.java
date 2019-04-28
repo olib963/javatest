@@ -1,21 +1,20 @@
 package org.javatest.fixtures.internal;
 
 import org.javatest.*;
+import org.javatest.fixtures.FixtureDefinition;
 
 import java.util.function.Function;
 
 // TODO are there valid use cases for the before each and after each fixtures?
-public class FixtureRunner<F> implements TestRunner {
+public class FixtureRunner<Fixture> implements TestRunner {
 
     private final String fixtureName;
-    private final CheckedSupplier<F> creator;
-    private final CheckedConsumer<F> destroyer;
-    private final Function<F, TestRunner> testFunction;
+    private final FixtureDefinition<Fixture> fixtureDefinition;
+    private final Function<Fixture, TestRunner> testFunction;
 
-    public FixtureRunner(String fixtureName, CheckedSupplier<F> creator, CheckedConsumer<F> destroyer, Function<F, TestRunner> testFunction) {
+    public FixtureRunner(String fixtureName, FixtureDefinition<Fixture> fixtureDefinition, Function<Fixture, TestRunner> testFunction) {
         this.fixtureName = fixtureName;
-        this.creator = creator;
-        this.destroyer = destroyer;
+        this.fixtureDefinition = fixtureDefinition;
         this.testFunction = testFunction;
     }
 
@@ -24,7 +23,7 @@ public class FixtureRunner<F> implements TestRunner {
     @Override
     public TestResults run() {
         try {
-            var fixture = creator.get();
+            var fixture = fixtureDefinition.create();
             return runWithFixture(fixture);
         } catch (Throwable throwable) {
             var failed = AssertionResult.exception(throwable);
@@ -33,10 +32,10 @@ public class FixtureRunner<F> implements TestRunner {
         }
     }
 
-    private TestResults runWithFixture(F fixture) {
+    private TestResults runWithFixture(Fixture fixture) {
         var results = testFunction.apply(fixture).run();
         try {
-            destroyer.accept(fixture);
+            fixtureDefinition.destroy(fixture);
             return results;
         } catch (Throwable throwable) {
             var failed = AssertionResult.exception(throwable);

@@ -14,10 +14,9 @@ public class Tests {
         }
 
         var integrationResult = JavaTest.run(
-                Fixtures.Runners.fixtureRunnerFromProvider(
+                Fixtures.fixtureRunnerFromProvider(
                         "test directory",
-                        Tests::createTestDirectory,
-                        Tests::recursiveDelete,
+                        Fixtures.temporaryDirectory("integraton-test"),
                         IntegrationTests::new
                 )
         );
@@ -27,23 +26,4 @@ public class Tests {
         System.out.println("Tests passed");
     }
 
-    private static File createTestDirectory() {
-        var dir = new File("integraton-test");
-        if (dir.mkdirs()) {
-            return dir;
-        }
-        throw new IllegalStateException("Could not create integration test directory " + dir.getAbsolutePath());
-    }
-
-    private static void recursiveDelete(File file) {
-        if (file.isDirectory()) {
-            var files = file.listFiles();
-            if (files != null) {
-                Arrays.stream(files).forEach(Tests::recursiveDelete);
-            }
-        }
-        if (!file.delete()) {
-            throw new IllegalStateException("Could not delete file " + file.getAbsolutePath());
-        }
-    }
 }
