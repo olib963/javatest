@@ -359,7 +359,7 @@ My plan for the first released version is to:
 - [x] Create a module to allow parameterised testing. 
 - [x] Decide how (or even if) to handle null values. E.g. someone returning `Stream.of(null)` or `() -> null` for an assertion. 
 I decided to not handle `null` values at all for now.
-- [ ] Separate the side effects into test observers that can be excluded. Initially this is just a logger to print
+- [x] Separate the side effects into test observers that can be excluded. Initially this is just a logger to print
 each result.
 - [ ] Decide on which approach to take for the API: Mixins or static imports.
 - [ ] Ensure I am happy with the level of simplicity in each module, especially the core.

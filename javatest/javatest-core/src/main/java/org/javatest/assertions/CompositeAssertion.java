@@ -2,8 +2,6 @@ package org.javatest.assertions;
 
 import org.javatest.Assertion;
 import org.javatest.AssertionResult;
-import org.javatest.JavaTest;
-import org.javatest.logging.Colour;
 
 import java.util.function.BinaryOperator;
 
@@ -24,13 +22,22 @@ public class CompositeAssertion implements Assertion {
     public AssertionResult run() {
         var leftResult = left.run();
         var rightResult = right.run();
-        var description = "(" + Colour.forResult(leftResult).getCode() + leftResult.description +
-                Colour.WHITE.getCode() + ") " + type +" (" +
-                Colour.forResult( rightResult).getCode() + rightResult.description + Colour.WHITE.getCode() + ")";
+        var description = "(" + leftResult.description + ' ' + holdString(leftResult) + ") " + type +
+                " (" + rightResult.description + ' ' + holdString(rightResult) + ")";
         if (leftResult.pending || rightResult.pending) {
             return AssertionResult.pending(description);
         }
         return AssertionResult.of(combiner.apply(leftResult.holds, rightResult.holds), description);
+    }
+
+    private String holdString(AssertionResult result) {
+        if(result.pending) {
+            return "[pending]";
+        }
+        if(result.holds) {
+            return "[holding]";
+        }
+        return "[not holding]";
     }
 
     public static Assertion and(Assertion left, Assertion right) {

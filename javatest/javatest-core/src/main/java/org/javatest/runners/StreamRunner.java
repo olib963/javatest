@@ -1,14 +1,12 @@
 package org.javatest.runners;
 
 import org.javatest.*;
-import org.javatest.logging.Colour;
-import org.javatest.TestResult;
+import org.javatest.logging.LoggingObserver;
 
 import java.util.Collection;
 import java.util.stream.Stream;
 
 public class StreamRunner implements TestRunner {
-    private static final String SEPARATOR = System.lineSeparator();
     private final Stream<Test> tests;
     private final Collection<TestCompletionObserver> observers;
 
@@ -29,9 +27,9 @@ public class StreamRunner implements TestRunner {
 
     private TestResult runTest(Test test) {
         // TODO allow a test to add to the log. Ideally immutable :/ probably have to be some kind of builder per test case.
+        // TODO create a structured log
         var result = safeRunTest(test.test());
-        var colour = Colour.forResult(result);
-        var log = colour.getCode() + test.name() + Colour.resetCode() + SEPARATOR + "\t" + result.description;
+        var log = test.name() + LoggingObserver.SEPARATOR + "\t" + result.description;
         var testResult = new TestResult(result, log);
         observers.forEach(o -> o.onTestCompletion(testResult));
         return testResult;
