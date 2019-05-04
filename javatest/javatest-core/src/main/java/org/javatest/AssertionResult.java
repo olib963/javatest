@@ -1,5 +1,7 @@
 package org.javatest;
 
+import org.javatest.logging.LoggingObserver;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
@@ -18,10 +20,10 @@ public class AssertionResult {
     public static AssertionResult exception(Throwable error) {
         var stringWriter = new StringWriter();
         stringWriter.append("An exception was thrown during your test.");
-        stringWriter.append(JavaTest.SEPARATOR);
+        stringWriter.append(LoggingObserver.SEPARATOR);
         stringWriter.append("Message: ");
         stringWriter.append(error.getMessage());
-        stringWriter.append(JavaTest.SEPARATOR);
+        stringWriter.append(LoggingObserver.SEPARATOR);
         // TODO stack trace trim to the entry point of the test if possible
         error.printStackTrace(new PrintWriter(stringWriter));
         return new AssertionResult(false, stringWriter.toString(), false);

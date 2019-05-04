@@ -5,9 +5,9 @@ import java.util.List;
 
 public class TestResults {
     public final boolean succeeded;
-    private final long successCount;
-    private final long failureCount;
-    private final long pendingCount;
+    public final long successCount;
+    public final long failureCount;
+    public final long pendingCount;
     final List<String> testLogs;
     private TestResults(boolean succeeded, long successCount, long failureCount, long pendingCount, List<String> testLogs) {
         this.succeeded = succeeded;
@@ -47,12 +47,8 @@ public class TestResults {
                 logs);
     }
 
-    String totalsLog() {
-        var total = successCount + failureCount + pendingCount;
-        return "Ran a total of " + total + " tests." + JavaTest.SEPARATOR
-                + successCount + " succeeded" + JavaTest.SEPARATOR
-                + failureCount + " failed" + JavaTest.SEPARATOR
-                + pendingCount + " were pending" + JavaTest.SEPARATOR;
+    public long testCount() {
+        return successCount + failureCount + pendingCount;
     }
 
 }

@@ -1,21 +1,20 @@
 package org.javatest;
 
-import org.javatest.logging.Colour;
 import org.javatest.runners.StreamRunner;
-import org.javatest.tests.*;
+import org.javatest.tests.SimpleTest;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class JavaTest {
 
-    static final String SEPARATOR = System.lineSeparator();
+    private static final Collection<TestCompletionObserver> DEFAULT_OBSERVER =
+            Collections.singletonList(TestCompletionObserver.colourLogger());
 
     public static TestRunner testStreamRunner(Stream<Test> tests) {
-        return new StreamRunner(tests);
+        return new StreamRunner(tests, DEFAULT_OBSERVER);
     }
 
     public static TestRunner testStreamRunner(TestProvider testProvider) {
@@ -36,12 +35,7 @@ public class JavaTest {
 
     // TODO how do we get around javas stupid type erasure??? I still don't understand why the compiler can't just do that for you.
     public static TestResults runWithRunners(Stream<TestRunner> runners) {
-        var result = runners.map(TestRunner::run).reduce(TestResults.init(), TestResults::combine);
-        // TODO allow by test logging, perhaps with some kind of observer. i.e. don't wait to log until they are all finished.
-        result.testLogs.forEach(System.out::println);
-        System.out.println(Colour.WHITE.getCode());
-        System.out.println(result.totalsLog());
-        return result;
+        return runners.map(TestRunner::run).reduce(TestResults.init(), TestResults::combine);
     }
 
     // TODO decide how to structure static imports if they are to be used.
@@ -53,7 +47,9 @@ public class JavaTest {
         return SimpleTest.test(name, test, tags);
     }
 
-    public static Assertion that(boolean asserted, String description) { return Assertion.that(asserted, description); }
+    public static Assertion that(boolean asserted, String description) {
+        return Assertion.that(asserted, description);
+    }
 
     public static Assertion pending() {
         return Assertion.pending();

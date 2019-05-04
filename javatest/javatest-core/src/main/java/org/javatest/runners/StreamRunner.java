@@ -4,21 +4,27 @@ import org.javatest.*;
 import org.javatest.logging.Colour;
 import org.javatest.TestResult;
 
+import java.util.Collection;
 import java.util.stream.Stream;
 
 public class StreamRunner implements TestRunner {
     private static final String SEPARATOR = System.lineSeparator();
     private final Stream<Test> tests;
+    private final Collection<TestCompletionObserver> observers;
 
-    public StreamRunner(Stream<Test> tests) {
+    public StreamRunner(Stream<Test> tests, Collection<TestCompletionObserver> observers) {
         this.tests = tests;
+        this.observers = observers;
     }
 
     @Override
     public TestResults run() {
-        return tests
+        var results = tests
                 .map(this::runTest)
                 .reduce(TestResults.init(), TestResults::addResult, TestResults::combine);
+
+        observers.forEach(o -> o.onRunCompletion(results));
+        return results;
     }
 
     private TestResult runTest(Test test) {
@@ -26,7 +32,9 @@ public class StreamRunner implements TestRunner {
         var result = safeRunTest(test.test());
         var colour = Colour.forResult(result);
         var log = colour.getCode() + test.name() + Colour.resetCode() + SEPARATOR + "\t" + result.description;
-        return new TestResult(result, log);
+        var testResult = new TestResult(result, log);
+        observers.forEach(o -> o.onTestCompletion(testResult));
+        return testResult;
     }
 
     private AssertionResult safeRunTest(CheckedSupplier<Assertion> test) {
