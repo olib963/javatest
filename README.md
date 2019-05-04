@@ -1,5 +1,7 @@
 # JavaTest
 
+[![CircleCI](https://circleci.com/gh/olib963/javatest.svg?style=svg)](https://circleci.com/gh/olib963/javatest)
+
 | Fair Warning: The entirety of this project should currently be considered alpha and subject to change. I am sure I have not got the API or library right on the first try so there may be breaking changes in the future. |
 | --- |
 
@@ -355,10 +357,11 @@ My plan for the first released version is to:
 - [x] Create a module to allow the creation of test fixtures e.g. temp directories and DB connections.
 - [x] Create a module to allow you to run JUnit tests within JavaTest.
 - [x] Create a module to allow parameterised testing. 
-- [ ] Decide how (or even if) to handle null values. E.g. someone returning `Stream.of(null)` or `() -> null` for an assertion.
-- [ ] Decide on which approach to take for the API: Mixins or static imports.
-- [ ] Separate the side effects into test observers that can be excluded. Initially this is just a logger to print
+- [x] Decide how (or even if) to handle null values. E.g. someone returning `Stream.of(null)` or `() -> null` for an assertion. 
+I decided to not handle `null` values at all for now.
+- [x] Separate the side effects into test observers that can be excluded. Initially this is just a logger to print
 each result.
+- [ ] Decide on which approach to take for the API: Mixins or static imports.
 - [ ] Ensure I am happy with the level of simplicity in each module, especially the core.
 - [ ] Review Documentation with people new to and familiar with Java.
 - [ ] Release and get much feedbacks.
