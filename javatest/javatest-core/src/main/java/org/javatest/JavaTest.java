@@ -8,7 +8,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.stream.Stream;
 
-public class JavaTest {
+// TODO remove most of the functions and only leave the simplest ones
+final public class JavaTest {
+    private JavaTest() {}
 
     private static final Collection<TestCompletionObserver> DEFAULT_OBSERVER =
             Collections.singletonList(TestCompletionObserver.colourLogger());

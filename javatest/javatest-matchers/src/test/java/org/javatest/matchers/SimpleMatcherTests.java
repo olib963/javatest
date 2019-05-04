@@ -5,6 +5,8 @@ import org.javatest.TestProvider;
 
 import java.util.stream.Stream;
 
+import static org.javatest.JavaTest.*;
+
 public class SimpleMatcherTests {
     public static TestProvider passing() {
         return new PassingTests();

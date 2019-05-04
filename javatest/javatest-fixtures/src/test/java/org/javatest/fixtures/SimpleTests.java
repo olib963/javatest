@@ -6,6 +6,7 @@ import org.javatest.TestProvider;
 
 import java.util.stream.Stream;
 import static org.javatest.fixtures.Fixtures.*;
+import static org.javatest.JavaTest.*;
 
 public class SimpleTests implements TestProvider {
 

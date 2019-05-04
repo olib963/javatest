@@ -8,6 +8,7 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static org.javatest.parameterised.Helpers.t;
+import static org.javatest.JavaTest.*;
 
 public class ParameterisedTests implements TestProvider, Parameterised {
     @Override

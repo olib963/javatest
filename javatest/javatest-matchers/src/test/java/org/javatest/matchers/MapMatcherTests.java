@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import static org.javatest.JavaTest.*;
+
 public class MapMatcherTests {
     private static final List<String> tags = List.of("map-matchers");
     private static final Map<Integer, String> SIMPLE_MAP = Map.of(1, "hello");

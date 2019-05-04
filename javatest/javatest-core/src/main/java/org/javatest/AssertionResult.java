@@ -5,7 +5,7 @@ import org.javatest.logging.LoggingObserver;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-public class AssertionResult {
+final public class AssertionResult {
 
     public final boolean holds;
     public final boolean pending;

@@ -6,6 +6,8 @@ import org.javatest.TestProvider;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static org.javatest.JavaTest.*;
+
 public class StringMatcherTests {
     private static final List<String> tags = List.of("string-matchers");
     public static TestProvider passing() {

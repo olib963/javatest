@@ -6,6 +6,8 @@ import org.javatest.TestProvider;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static org.javatest.JavaTest.*;
+
 import static org.javatest.matchers.ComparableMatcherTests.ComparableInt.wrap;
 
 public class ComparableMatcherTests {

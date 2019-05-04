@@ -7,6 +7,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static org.javatest.JavaTest.*;
+
 public class CollectionMatcherTests {
     private static final List<String> tags = List.of("collection-matchers");
 

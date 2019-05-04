@@ -6,6 +6,8 @@ import org.javatest.TestProvider;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static org.javatest.JavaTest.*;
+
 public class ExceptionMatcherTests {
     private static final List<String> tags = List.of("exception-matchers");
     public static TestProvider passing() {

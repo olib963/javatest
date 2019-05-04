@@ -20,7 +20,6 @@ public class StreamRunner implements TestRunner {
         var results = tests
                 .map(this::runTest)
                 .reduce(TestResults.init(), TestResults::addResult, TestResults::combine);
-
         observers.forEach(o -> o.onRunCompletion(results));
         return results;
     }

@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import static org.javatest.JavaTest.*;
+
 public class OptionalMatcherTests {
     private static final List<String> tags = List.of("optional-matchers");
 
