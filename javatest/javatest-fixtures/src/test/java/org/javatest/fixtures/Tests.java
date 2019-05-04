@@ -2,9 +2,6 @@ package org.javatest.fixtures;
 
 import org.javatest.JavaTest;
 
-import java.io.File;
-import java.util.Arrays;
-
 public class Tests {
 
     public static void main(String... args) {

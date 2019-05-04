@@ -43,17 +43,17 @@ to create definitions from functions:
 ```java
 
 public class CustomDefinitions {
-
-    FixtureDefinition<Map<String, String>> hashmapDefinition =
-        Fixtures.fromFunctions(() -> new HashMap<>(), m -> m.clear());
     
+    FixtureDefinition<ExecutorService> singleThreadExecutorDefinition =
+                Fixtures.definitionFromFunctions(Executors::newSingleThreadExecutor, ExecutorService::shutdown);
+
     // If you only need to create the fixture and no clean up is needed:
-    FixtureDefinition<String> stringDefinition = 
-        Fixtures.fromFunction(() -> "test string");
+    FixtureDefinition<Map<String, String>> hashmapDefinition =
+        Fixtures.definitionFromFunction(() -> new HashMap<>());
     
     // Throw exceptions (for now) if the create/tear down fail
     FixtureDefinition<Integer> stringDefinition = 
-            Fixtures.fromFunction(() -> { throw new IllegalStateException("Oh dear something went wrong!"); });
+            Fixtures.definitionFromFunction(() -> { throw new IllegalStateException("Oh dear something went wrong!"); });
 
 }
 

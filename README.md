@@ -1,40 +1,119 @@
 # JavaTest
 
-Experimental attempt at a different style of test framework. Very much a work in progress. Any feedback/constructive criticism
-is appreciated.
-
 | Fair Warning: The entirety of this project should currently be considered alpha and subject to change. I am sure I have not got the API or library right on the first try so there may be breaking changes in the future. |
 | --- |
 
+## Overview
+
+An opinionated, functional test framework written in pure Java aiming to leverage newer features of the Java language and give
+power back to the test writer.
+
+* If you know how to write a Java application, I think you should automatically know how to write the tests, 
+therefore JavaTest only introduces a few new functions and types to the language.
+
+* Instead of being **Annotation** and **Exception** driven, JavaTest is **Function** and **Value** driven,
+ lending itself to composability of tests and assertions.
+ 
+* JavaTests contains no Magic. A more declarative approach to testing is taken where setting up and customising tests is left
+to the writer. 
+ 
+* A test should ideally only test one thing and should certainly test _at least_ one thing. Since
+all tests must return an assertion value the compiler will enforce that all tests only test one result.
+
+Tests should be easy to understand and enjoyable to write, after all we all spend a lot of our time working on them :D
+
 ## Quick Start
 
-### Java Level: Noob
+### I'm new to Java
+<details>
+<summary>Expand</summary>
 
-### Java Level: Literally anyone else
+Download the latest jar artifact of JavaTest Core. Then create and compile these files:
+
+foo/Calculator.java
+```java
+package foo;
+
+public class Calculator {
+    public static int add(int a, int b) {
+        return a + b; 
+    }
+}
+```
+
+foo/Tests.java
+```java
+package foo;
+
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static org.javatest.JavaTest.*;
+
+public class Tests {
+
+    public static void main(String... args) {
+        var result = run(Stream.of(
+                test("Addition", () -> that(1 + 1 == 2, "Math still works, one add one is still two")),
+                test("Calculator Addition", () -> that(Calculator.add(1, 1) == 2, "My math is correct, one add one is still two"))));
+        if (!result.succeeded) {
+            throw new RuntimeException("Tests failed!");
+        }
+        System.out.println("Tests passed");
+    }
+}
+```
+
+You can then run from the commandline:
+
+```bash
+# Compile both Java classes ensuring JavaTest and the current directory are both on the class path
+javac -cp "/absolute/path/to/javatest/jar:." foo/Calculator.java foo/Tests.java
+
+# Run the "Tests" executable ensuring JavaTest and the current directory are both on the class path
+java -cp "/absolute/path/to/javatest/jar:." foo.Tests
+```
+
+Notes:
+* You will need to use `;` to separate classpath entries instead of `:` on windows machines
+* You will need to include at least the Javatest jar and the current directory (`.`) on the classpath in order for this to work,
+if you are using java classes from any other jars/directories you will need to also ensure they are on the classpath.
+
+You should be able to explore the core library and get familiar with testing your code very quickly by running them from 
+an executable.
+
+</details>
+
+### I know Java pretty well
+
+<details>
+<summary>Expand</summary>
+
+</details>
 
 ## Contents
 
-* [Basic Principles](#basic-principles)
+* [Overview](#overview)
+* [Quick Start](#quick-start)
 * [The Core](#core-library)
-* [How else can I run it?](#running-javatest)
-* [But Why?](#rationale)
+* [Running JavaTest](#running-javatest)
 * [Roadmap](#roadmap)
-* [Module List](#modules)
 
-## Basic Principles
+### Module List
 
-- Tests should be written in plain, simple functional Java with no magic.
-- Each test should return one assertion.
-- The core library will provide a way to run a `Stream` of `Test`s, however you create this `Stream` is up to you.
+JavaTest is built on a simple functional core and functionality is expanded on by several modules found here:
 
-The aim is to give control and power back to the writer of the tests without need to learn a new syntax and conventions,
-only a few functions and types with the core of the library being simple and lightweight.
+* [Matchers](./javatest/javatest-matchers)
+* [Fixtures](./javatest/javatest-fixtures)
+* [Parameterised Testing](./javatest/javatest-pararmeterised)
+* [Eventual Consistency](./javatest/javatest-eventually)
+* [JUnit](./javatest/javatest-junit)
 
 ## Core Library
 
 - `JavaTest`: the entrypoint class. It contains the main `run` function aswell as factory functions
 - `TestRunner`: returns `TestResults`, the only core implementation being `StreamRunner`
-- `TestProvider`: provides a stream of `Test`s
+- `TestProvider`: provides a stream of `Test`s <!-- TODO rename to `TestSuite`. Probably more intuitive -->
 - `Test`: a named instance of a test, each test must return an `Assertion`
 - `Assertion`: represents the expected state at the end of a test.
 
@@ -220,48 +299,50 @@ during mavens `test` phase:
 
 **TODO:** change this to use `TestRunner`s instead of `TestProvider`s.
 
+### JShell
 
-## Rationale
+Since JavaTest is built on pure Java it plays quite nicely with the REPL. A startup script you may find useful:
+```jshelllanguage
+/env -class-path /absolute/path/to/javatest/jar
+import static org.javatest.JavaTest.*;
 
-(A.K.A. Why even bother?)
+org.javatest.TestResults runTest(org.javatest.CheckedSupplier<org.javatest.Assertion> testFn) {
+    return run(Stream.of(test("JShell test", testFn)));
+}
+```
 
-While there is nothing wrong with existing test frameworks, I think the language (Java) and engineering practices
-have come a long way since their conception, my hope is this framework will help to leverage these changes in a few ways.
+Then you can run:
 
-1.  Current frameworks tend to be **Annotation** and **Exception** driven, this framework aims to be
-**Function** and **Value** driven. The idea is that these tests will be more composable and easier to reason about, taking a more
-declarative approach to testing.
+```bash
+~$ jshell --startup DEFAULT --startup /path/to/startup/script
+|  Welcome to JShell -- Version 11.0.1
+|  For an introduction type: /help intro
 
-2. _If you know how to write a Java application, I think you should automatically know
-how to write the tests_.A lot of test frameworks require you to learn a new syntax and require your test code to be written
-in a completely different style from your production code, JavaTest tests are written in pure functional java.
+jshell> var results = runTest(() -> that(true, "JavaTest works in the shell!"))
+JShell test
+	JavaTest works in the shell!
 
-3. Modularity. My hope is that the core library will be very small and simple, it will provide you enough to get started 
-and expose extension points to allow more complex, advanced testing in the future with each module being able to evolve
-independently.
- 
-4. A test should ideally only test one thing and should certainly test _at least_ one thing. Since
-all tests must return an assertion value the compiler will enforce both of these for you. This also has the benefit 
-that you will always know where the test is failing (the last line) and don't need to create and wrangle stack traces
-in order to locate your failures.
+Ran a total of 1 tests.
+1 succeeded
+0 failed
+0 were pending
 
-5. No Magic. Constructing your test functions no longer requires magic invocations of test classes (at the minor loss of having
-to declare where your tests are). This means injecting parameters into your tests becomes easier and can be checked 
-at compile time instead of runtime. For example the parameterised tests in JUnit requiring runtime type checks on 
-arguments and sometimes a CSV parser to take statically defined values and assign types to them, this can just be 
-replaces with typed parameter generation for your test functions. It will also be easier to reason about the flow of
-tests and parameters.
+results ==> org.javatest.TestResults@4b553d26
 
-6. Extensible. While this framework intends to be very opinionated on how you should write your tests, it should also allow
-you to stray from its standards when appropriate e.g. running JUnit tests.
+jshell> var results2 = runTest(() -> that(1 + 1 == 2, "Addition is working"))
+JShell test
+	Addition is working
 
-## Modules
+Ran a total of 1 tests.
+1 succeeded
+0 failed
+0 were pending
 
-* [Matchers](./javatest/javatest-matchers)
-* [Fixtures](./javatest/javatest-fixtures)
-* [But what about mah JUnits?](./javatest/javatest-junit)
-* [Parameterised Testing](./javatest/javatest-pararmeterised)
-* [Eventual Consistency](./javatest/javatest-eventually)
+results2 ==> org.javatest.TestResults@4b553d26
+
+jshell> results.succeeded && results2.succeeded
+$3 ==> true
+```
 
 ## Roadmap
 
@@ -296,3 +377,7 @@ more intuitive and better due to their functional nature.
 * TestNG Runner?
 * IntelliJ Plugin if possible?
 * Parallelism Options - currently achievable by using `.parallel()` on the streams but that uses the default fork join pool.
+
+## Feedback
+
+Any feedback/constructive criticism is appreciated. Please open an issue if you have any suggestions
