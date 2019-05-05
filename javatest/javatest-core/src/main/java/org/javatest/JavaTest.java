@@ -19,16 +19,16 @@ public class JavaTest {
         return new StreamRunner(tests, DEFAULT_OBSERVER);
     }
 
-    public static TestRunner testStreamRunner(TestProvider testProvider) {
-        return testStreamRunner(testProvider.testStream());
+    public static TestRunner testStreamRunner(TestSuite testSuite) {
+        return testStreamRunner(testSuite.testStream());
     }
 
     public static TestResults run(Stream<Test> tests) {
         return run(testStreamRunner(tests));
     }
 
-    public static TestResults run(TestProvider testProvider) {
-        return run(testStreamRunner(testProvider));
+    public static TestResults run(TestSuite testSuite) {
+        return run(testStreamRunner(testSuite));
     }
 
     public static TestResults run(TestRunner firstRunner, TestRunner... moreRunners) {
@@ -61,8 +61,8 @@ public class JavaTest {
         return Assertion.pending(reason);
     }
 
-    public static Stream<Test> allTestsFrom(TestProvider... providers) {
-        return Arrays.stream(providers).flatMap(TestProvider::testStream);
+    public static Stream<Test> allTestsFrom(TestSuite... suites) {
+        return Arrays.stream(suites).flatMap(TestSuite::testStream);
     }
 }
 

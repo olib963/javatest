@@ -1,14 +1,14 @@
 package org.javatest.fixtures;
 
 import org.javatest.Test;
-import org.javatest.TestProvider;
+import org.javatest.TestSuite;
 
 import java.util.stream.Stream;
 
 import static org.javatest.JavaTest.*;
 import static org.javatest.fixtures.Fixtures.*;
 
-public class SimpleTests implements TestProvider {
+public class SimpleTests implements TestSuite {
 
     @Override
     public Stream<Test> testStream() {

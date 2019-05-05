@@ -126,7 +126,7 @@ JavaTest is built on a simple functional core and functionality is expanded on b
 
 - `JavaTest`: the entrypoint class. It contains the main `run` function aswell as factory functions
 - `TestRunner`: returns `TestResults`, the only core implementation being `StreamRunner`
-- `TestProvider`: provides a stream of `Test`s <!-- TODO rename to `TestSuite`. Probably more intuitive -->
+- `TestSuite`: logical collection of a stream of `Test`s
 - `Test`: a named instance of a test, each test must return an `Assertion`
 - `Assertion`: represents the expected state at the end of a test.
 
@@ -152,7 +152,7 @@ Assertions are created simply from boolean expressions and a string description.
 ```java
 import static org.javatest.JavaTest.*;
 
-public class MyTests implements TestProvider {
+public class MyTests implements TestSuite {
     @Override
     public Stream<Test> testStream() {
         return Stream.of(
@@ -184,12 +184,12 @@ var andAssertion = that(1 + 1 == 2, "Expected one add one to be two").and(orAsse
 that(true, "Expected to hold").xor(that(false, "Expected not to hold"))
 ````
 
-### Composing Test Providers
+### Composing Test Suites
 
-If you split your tests across multiple `TestProvider`s you can easily combine them as such:
+If you split your tests across multiple `TestSuite`s you can easily combine them as such:
 
 ```java
-public class AllMyTests implements TestProvider {
+public class AllMyTests implements TestSuite {
     @Override
     public Stream<Test> testStream() {
         return allTestsFrom(new MyFirstTests(), new MySecondTests()); 
@@ -204,7 +204,7 @@ pending tests come in. They will not fail your build but will logged in a differ
 You can optionally provide a reason this test has not yet been written.
 
 ```java
-public class MyTests implements TestProvider {
+public class MyTests implements TestSuite {
     @Override
     public Stream<Test> testStream() {
         return Stream.of(
@@ -224,11 +224,11 @@ Running all tests with a certain tag is then as simple as:
 
 ```java
 
-// In a provider
+// In a suite
 test("My special test", () -> that(true, "Expected to pass"), List.of("special"))
 
 
-public class MySpecialTests implements TestProvider {
+public class MySpecialTests implements TestSuite {
     @Override
     public Stream<Test> testStream() {
         return allTestsFrom(new AllMyTests())
@@ -277,7 +277,7 @@ class MyTests {
 
 ### With JavaFire Maven plugin
 
-If you are using maven you can add the `JavaFire` maven plugin to your pom to run tests defined by a `TestProvider` for you
+If you are using maven you can add the `JavaFire` maven plugin to your pom to run tests defined by a `TestSuite` for you
 during mavens `test` phase:
 
 ```xml
@@ -286,7 +286,7 @@ during mavens `test` phase:
     <artifactId>javafire-maven-plugin</artifactId>
     <version>${javatest.version}</version>
     <configuration>
-        <testProvider>your.class.Here</testProvider>
+        <testSuite>your.class.Here</testSuite>
     </configuration>
     <executions>
         <execution>
@@ -299,7 +299,7 @@ during mavens `test` phase:
 </plugin>
 ```
 
-**TODO:** change this to use `TestRunner`s instead of `TestProvider`s.
+**TODO:** change this to use `TestRunner`s instead of `TestSuite`s.
 
 ### JShell
 

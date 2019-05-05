@@ -4,7 +4,7 @@ import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.project.MavenProject;
 import org.javatest.JavaTest;
 import org.javatest.Test;
-import org.javatest.TestProvider;
+import org.javatest.TestSuite;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 import static org.mockito.Mockito.*;
 import static org.javatest.JavaTest.*;
 
-public class JavaTestRunnerTest implements TestProvider {
+public class JavaTestRunnerTest implements TestSuite {
 
     // Running tests
     public static void main(String... args) {
@@ -53,14 +53,13 @@ public class JavaTestRunnerTest implements TestProvider {
         return provider;
     }
 
-    private JavaTestRunner.Result runWithTestProvider(Class<?> testClass) throws ClassNotFoundException, ClassLoaderProvider.ClassLoadingException, DependencyResolutionRequiredException {
+    private JavaTestRunner.Result runWithTestSuite(Class<?> testClass) throws ClassNotFoundException, ClassLoaderProvider.ClassLoadingException, DependencyResolutionRequiredException {
         var mavenProject = projectWithExpectedClasspathDependencies();
-        var testProvider = testClass.getName();
+        var testSuite = testClass.getName();
         var classLoaderProvider = providerFor(testClass);
-        return new JavaTestRunner(testProvider, classLoaderProvider, mavenProject).run();
+        return new JavaTestRunner(testSuite, classLoaderProvider, mavenProject).run();
     }
 
-    // TODO how do we want to handle setups and tear downs.
     @Override
     public Stream<Test> testStream() {
         return Stream.of(
@@ -83,29 +82,29 @@ public class JavaTestRunnerTest implements TestProvider {
                     var result = new JavaTestRunner(null, classLoaderProvider, mavenProject).run();
                     return that(result.status == JavaTestRunner.Status.EXECUTION_FAILURE, "Should return an execution failure");
                 }),
-                test("SimpleTest when test provider class cannot be loaded", () -> {
+                test("SimpleTest when test suite class cannot be loaded", () -> {
                     var mavenProject = projectWithExpectedClasspathDependencies();
-                    var testProvider = "org.foo.Bar";
+                    var testSuite = "org.foo.Bar";
                     var classLoader = mock(ClassLoader.class);
-                    doThrow(ClassNotFoundException.class).when(classLoader).loadClass(testProvider);
+                    doThrow(ClassNotFoundException.class).when(classLoader).loadClass(testSuite);
                     var classLoaderProvider = providerFor(classLoader);
-                    var result = new JavaTestRunner(testProvider, classLoaderProvider, mavenProject).run();
+                    var result = new JavaTestRunner(testSuite, classLoaderProvider, mavenProject).run();
                     return that(result.status == JavaTestRunner.Status.EXECUTION_FAILURE, "Should return an execution failure");
                 }),
-                test("SimpleTest when test provider class does not extend TestProvider", () -> {
-                    var result = runWithTestProvider(IncorrectTypeClass.class);
+                test("SimpleTest when test suite class does not extend TestSuite", () -> {
+                    var result = runWithTestSuite(IncorrectTypeClass.class);
                     return that(result.status == JavaTestRunner.Status.FAILURE, "Should return a failure");
                 }),
-                test("SimpleTest when test provider class cannot be instantiated", () -> {
-                    var result = runWithTestProvider(ProviderWithNoDefaultConstructor.class);
+                test("SimpleTest when test suite class cannot be instantiated", () -> {
+                    var result = runWithTestSuite(SuiteWithNoDefaultConstructor.class);
                     return that(result.status == JavaTestRunner.Status.FAILURE, "Should return a failure");
                 }),
-                test("SimpleTest when test provider contains a failing test", () -> {
-                    var result = runWithTestProvider(ProviderWithFailingTest.class);
+                test("SimpleTest when test suite contains a failing test", () -> {
+                    var result = runWithTestSuite(ProviderWithFailingTest.class);
                     return that(result.status == JavaTestRunner.Status.FAILURE, "Should return a failure");
                 }),
-                test("SimpleTest when all tests from a provider pass", () -> {
-                    var result = runWithTestProvider(ProviderWithPassingTests.class);
+                test("SimpleTest when all tests from a suite pass", () -> {
+                    var result = runWithTestSuite(SuiteWithPassingTests.class);
                     return that(result.status == JavaTestRunner.Status.SUCCESS, "Should return a success");
                 })
         );
@@ -113,8 +112,8 @@ public class JavaTestRunnerTest implements TestProvider {
 
     public static class IncorrectTypeClass {}
 
-    public static class ProviderWithNoDefaultConstructor implements TestProvider {
-        private ProviderWithNoDefaultConstructor() {}
+    public static class SuiteWithNoDefaultConstructor implements TestSuite {
+        private SuiteWithNoDefaultConstructor() {}
 
         @Override
         public Stream<Test> testStream() {
@@ -122,13 +121,13 @@ public class JavaTestRunnerTest implements TestProvider {
         }
     }
     // TODO make these tests run silently by turning off logging
-    public static class ProviderWithFailingTest implements TestProvider {
+    public static class ProviderWithFailingTest implements TestSuite {
         @Override
         public Stream<Test> testStream() {
             return Stream.of(test("Failure", () -> that(false, "Expected false")));
         }
     }
-    public static class ProviderWithPassingTests implements TestProvider {
+    public static class SuiteWithPassingTests implements TestSuite {
         @Override
         public Stream<Test> testStream() {
             return Stream.of(test("Success", () -> that(true, "Expected true")));

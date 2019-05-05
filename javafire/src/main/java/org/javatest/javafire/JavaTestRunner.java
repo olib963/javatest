@@ -1,24 +1,24 @@
 package org.javatest.javafire;
 
+import org.apache.maven.artifact.DependencyResolutionRequiredException;
+import org.apache.maven.project.MavenProject;
+import org.javatest.JavaTest;
+import org.javatest.TestSuite;
+import org.javatest.javafire.ClassLoaderProvider.ClassLoadingException;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.maven.artifact.DependencyResolutionRequiredException;
-import org.apache.maven.project.MavenProject;
-import org.javatest.JavaTest;
-import org.javatest.TestProvider;
-import org.javatest.javafire.ClassLoaderProvider.ClassLoadingException;
-
 class JavaTestRunner {
-	private final String testProvider;
+	private final String testSuite;
 	private final ClassLoaderProvider classLoaderProvider;
 	private final MavenProject project;
 
-	JavaTestRunner(String testProvider, ClassLoaderProvider classLoaderProvider, MavenProject project) {
-		this.testProvider = testProvider;
+	JavaTestRunner(String testSuite, ClassLoaderProvider classLoaderProvider, MavenProject project) {
+		this.testSuite = testSuite;
 		this.classLoaderProvider = classLoaderProvider;
 		this.project = project;
 	}
@@ -27,11 +27,11 @@ class JavaTestRunner {
 
 		try {
 			Set<String> classPathElements = resolveAllClassPathElements(project);
-			Class<?> providerClass = loadProviderClass(lookupClassLoader(classPathElements));
+			Class<?> suiteClass = loadSuiteClass(lookupClassLoader(classPathElements));
 
-			TestProvider provider = getTestProvider(providerClass);
+			TestSuite suite = instantiateSuite(suiteClass);
 
-			var results = JavaTest.run(provider.testStream());
+			var results = JavaTest.run(suite.testStream());
 
 			if (results.succeeded) {
 				return new Result(Status.SUCCESS, "All tests passed");
@@ -64,26 +64,26 @@ class JavaTestRunner {
 		}
 	}
 
-	private Class<?> loadProviderClass(ClassLoader loader) throws InternalTestException {
+	private Class<?> loadSuiteClass(ClassLoader loader) throws InternalTestException {
 		try {
-			Class<?> providerClass = loader.loadClass(testProvider);
+			Class<?> suiteClass = loader.loadClass(testSuite);
 
-			if (!TestProvider.class.isAssignableFrom(providerClass)) {
+			if (!TestSuite.class.isAssignableFrom(suiteClass)) {
 				throw new InternalTestException(Status.FAILURE,
-						"Given class (" + providerClass.getName() + ") does not implement TestProvider");
+						"Given class (" + suiteClass.getName() + ") does not implement TestSuite");
 			}
 
-			return providerClass;
+			return suiteClass;
 
 		} catch (ClassNotFoundException e) {
 			throw new InternalTestException(Status.EXECUTION_FAILURE,
-					"Could not load the  given class (" + testProvider + ")", e);
+					"Could not load the  given class (" + testSuite + ")", e);
 		}
 	}
 
-	private TestProvider getTestProvider(Class<?> providerClass) throws InternalTestException {
+	private TestSuite instantiateSuite(Class<?> providerClass) throws InternalTestException {
 		try {
-			return (TestProvider) providerClass.getConstructor(null).newInstance();
+			return (TestSuite) providerClass.getConstructor(null).newInstance();
 		} catch (InstantiationException | IllegalAccessException | InvocationTargetException
 				| NoSuchMethodException e) {
 			throw new InternalTestException(Status.FAILURE,
@@ -118,7 +118,7 @@ class JavaTestRunner {
 
 	// TODO Consider splitting this whole class, as needed this exception class to control the flow (a lot going on!)
 	@SuppressWarnings("serial")
-	static private class InternalTestException extends Exception {
+	private static class InternalTestException extends Exception {
 
 		private Status status;
 

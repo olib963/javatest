@@ -17,15 +17,15 @@ import org.javatest.javafire.JavaTestRunner.Result;
 public class JavaTestMojo extends AbstractMojo {
 
 	/**
-	 * The name of the class that implements TestProvider to run
+	 * The name of the class that implements TestSuite to run
 	 */
 	@Parameter(required = true)
-	private String testProvider;
+	private String testSuite;
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
 
-		var testRunner = new JavaTestRunner(testProvider, new ThreadLocalClassLoaderProvider(), lookupProject());
+		var testRunner = new JavaTestRunner(testSuite, new ThreadLocalClassLoaderProvider(), lookupProject());
 		
 		validateResult(testRunner.run());
 	}

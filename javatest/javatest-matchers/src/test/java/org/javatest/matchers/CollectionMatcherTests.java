@@ -1,7 +1,7 @@
 package org.javatest.matchers;
 
 import org.javatest.Test;
-import org.javatest.TestProvider;
+import org.javatest.TestSuite;
 
 import java.util.Collection;
 import java.util.List;
@@ -14,15 +14,15 @@ import static org.javatest.matchers.CollectionMatchers.*;
 public class CollectionMatcherTests {
     private static final List<String> tags = List.of("collection-matchers");
 
-    public static TestProvider passing() {
+    public static TestSuite passing() {
         return new PassingTests();
     }
 
-    public static TestProvider failing() {
+    public static TestSuite failing() {
         return new FailingTests();
     }
 
-    static class PassingTests implements TestProvider {
+    static class PassingTests implements TestSuite {
         @Override
         public Stream<Test> testStream() {
             return Stream.of(
@@ -35,7 +35,7 @@ public class CollectionMatcherTests {
         }
     }
 
-    static class FailingTests implements TestProvider {
+    static class FailingTests implements TestSuite {
         @Override
         public Stream<Test> testStream() {
             return Stream.of(

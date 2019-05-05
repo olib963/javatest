@@ -5,14 +5,14 @@ import static org.javatest.JavaTest.*;
 
 public class SimpleTests {
 
-    public static TestProvider passing() {
+    public static TestSuite passing() {
         return new PassingTests();
     }
-    public static TestProvider failing() {
+    public static TestSuite failing() {
         return new FailingTests();
     }
 
-    static class PassingTests implements TestProvider {
+    static class PassingTests implements TestSuite {
 
         @Override
         public Stream<Test> testStream() {
@@ -37,7 +37,7 @@ public class SimpleTests {
             );
         }
     }
-    static class FailingTests implements TestProvider {
+    static class FailingTests implements TestSuite {
         @Override
         public Stream<Test> testStream() {
             return Stream.of(

@@ -1,7 +1,7 @@
 package org.javatest.matchers;
 
 import org.javatest.Test;
-import org.javatest.TestProvider;
+import org.javatest.TestSuite;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -13,14 +13,14 @@ import static org.javatest.matchers.StringMatchers.*;
 
 public class ExceptionMatcherTests {
     private static final List<String> tags = List.of("exception-matchers");
-    public static TestProvider passing() {
+    public static TestSuite passing() {
         return new PassingTests();
     }
-    public static TestProvider failing() {
+    public static TestSuite failing() {
         return new FailingTests();
     }
 
-    static class PassingTests implements TestProvider {
+    static class PassingTests implements TestSuite {
         @Override
         public Stream<Test> testStream() {
             return Stream.of(
@@ -51,7 +51,7 @@ public class ExceptionMatcherTests {
     }
 
     // TODO the latter tests errors don't compose nicely!
-    static class FailingTests implements TestProvider {
+    static class FailingTests implements TestSuite {
         @Override
         public Stream<Test> testStream() {
             return Stream.of(
