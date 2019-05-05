@@ -1,6 +1,5 @@
 package org.javatest.fixtures;
 
-import org.javatest.CheckedConsumer;
 import org.javatest.CheckedSupplier;
 import org.javatest.TestRunner;
 import org.javatest.fixtures.internal.FixtureRunner;
