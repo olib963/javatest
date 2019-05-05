@@ -262,6 +262,28 @@ public class MySpecialTests implements TestSuite {
 }
 ```
 
+### Test Stream Runners
+
+You can create a test stream runner from any `Stream<Test>`. You can optionally add a collection of `TestCompletionObserver`s to 
+the runner, by default a logging observer is passed that logs each test result with a colour corresponding to the state of the test 
+(green for passing, red for failing and yellow for pending). If you want to turn off logging just pass an empty collection.
+
+```java
+import static org.javatest.JavaTest.*;
+
+public class MyRunners {
+    
+    TestRunner singleTestRunner = testStreamRunner(Stream.of(
+            test("Simple test", () -> pending())));
+    
+    TestRunner suiteTestsNoLogging = testStreamRunner(
+            allTestsFrom(new MyFirstSuite(), new MySecondSuite()),
+            Collections.emptyList()
+    );
+    
+}
+```
+
 ### Core library maven dependency
 
 ```xml
