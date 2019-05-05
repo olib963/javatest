@@ -8,7 +8,7 @@ able to be imported into your tests from various classes e.g. `StringMatchers` w
 import static org.javatest.matchers.Matcher.*;
 import static org.javatest.matchers.StringMatchers.*;
 
-public class MyTests implements TestProvider {
+public class MyTests implements TestSuite {
     private static final String TEST_STRING = "Hello World";
     @Override
     public Stream<Test> testStream() {
@@ -42,7 +42,7 @@ import static org.javatest.matchers.Matcher.*;
 import static org.javatest.matchers.StringMatchers.*;
 import static org.javatest.matchers.ExceptionMatchers.*;
 
-public class MyExceptionTests implements TestProvider {
+public class MyExceptionTests implements TestSuite {
     @Override
     public Stream<Test> testStream() { 
         return Stream.of(
@@ -77,7 +77,7 @@ to create simple `Matcher`s from functions, for example:
 ```java
 import static org.javatest.matchers.Matcher.*;
 
-public class TestTheUniverse implements TestProvider {
+public class TestTheUniverse implements TestSuite {
     
     private final Matcher<Integer> isFortyTwo =
         Matcher.fromFunctions((Integer i) -> i == 42, "be 42");

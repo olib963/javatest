@@ -6,7 +6,7 @@ done by providing a stream of inputs and a function from the type of that input 
 ```java
 import static org.javatest.parameterised.Parameterised.*;
 
-public class MyPalindromeTests implements TestProvider {
+public class MyPalindromeTests implements TestSuite {
     
     @Override
     public Stream<Test> testStream() {
@@ -18,11 +18,11 @@ public class MyPalindromeTests implements TestProvider {
 }
 
 // Or if you need larger data sets/longer test methods and want to clean up the code:
-public class MyLargeTest implements TestProvider {
-    Stream<String> palindromes = Files.lines(Path.of("/my-palindromes.txt"));
+public class MyLargeTest implements TestSuite {
     
     @Override
     public Stream<Test> testStream() {
+        Stream<String> palindromes = Files.lines(Path.of("/data/my-palindromes.txt"));
         return parameterised(palindromes, this::palindromeTest);
     }
     
@@ -41,7 +41,7 @@ and provide a function with the correct arity and typed arguments to create your
 ```java
 import static org.javatest.parameterised.Parameterised.*;
 
-public class FibonacciTests implements TestProvider, Parameterised {
+public class FibonacciTests implements TestSuite {
     
     @Override
     public Stream<Test> testStream() {
