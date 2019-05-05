@@ -15,20 +15,20 @@ public class TemporaryDirectory implements FixtureDefinition<File> {
     }
 
     @Override
-    public File create() {
+    public File create() throws Exception {
         var dir = new File(filePath);
         if (dir.mkdirs()) {
             return dir;
         }
-        throw new IllegalStateException("Could not create temporary directory " + dir.getAbsolutePath());
+        throw new Exception("Could not create temporary directory " + dir.getAbsolutePath());
     }
 
     @Override
-    public void destroy(File fixture) {
+    public void destroy(File fixture) throws Exception {
         var failedToDelete = deleteAll(fixture);
         var allFailedFiles = failedToDelete.collect(Collectors.joining(", "));
         if (!allFailedFiles.isEmpty()) {
-            throw new IllegalStateException("Could not delete files: " + allFailedFiles);
+            throw new Exception("Could not delete files: " + allFailedFiles);
         }
     }
 
