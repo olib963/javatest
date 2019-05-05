@@ -40,4 +40,12 @@ public final class AssertionResult {
     public static AssertionResult of(boolean holds, String description) {
         return new AssertionResult(holds, description, false);
     }
+
+    public static AssertionResult failure(String description) {
+        return of(false, description);
+    }
+
+    public static AssertionResult success(String description) {
+        return of(true, description);
+    }
 }

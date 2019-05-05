@@ -17,7 +17,7 @@ public class ElementThatMatcher<T> implements Matcher<Collection<T>> {
     @Override
     public MatchResult matches(Collection<T> value) {
         // TODO do we need any mismatch descriptions for each element?
-        return MatchResult.from(
+        return MatchResult.of(
                 value.stream()
                         .map(elementMatcher::matches)
                         .anyMatch(r -> r.matches));

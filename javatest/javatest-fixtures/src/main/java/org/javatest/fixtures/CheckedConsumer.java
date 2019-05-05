@@ -1,4 +1,4 @@
-package org.javatest;
+package org.javatest.fixtures;
 
 @FunctionalInterface
 public interface CheckedConsumer<T> {

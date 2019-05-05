@@ -11,20 +11,16 @@ public final class MatchResult {
         this.mismatch = mismatch;
     }
 
+    public static MatchResult of(boolean matches) {
+        return of(matches, Optional.empty());
+    }
+
     public static MatchResult of(boolean matches, Optional<String> mismatch) {
         return new MatchResult(matches, mismatch);
     }
 
     public static MatchResult match() {
         return new MatchResult(true, Optional.empty());
-    }
-
-    public static MatchResult from(boolean condition) {
-        if(condition) {
-            return match();
-        } else {
-            return mismatch();
-        }
     }
 
     public static MatchResult mismatch(){

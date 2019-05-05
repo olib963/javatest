@@ -8,7 +8,7 @@ public final class TestResults {
     public final long successCount;
     public final long failureCount;
     public final long pendingCount;
-    final List<String> testLogs;
+    private final List<String> testLogs;
 
     private TestResults(boolean succeeded, long successCount, long failureCount, long pendingCount, List<String> testLogs) {
         this.succeeded = succeeded;

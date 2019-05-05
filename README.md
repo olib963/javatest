@@ -427,7 +427,7 @@ My plan for the first released version is to:
 each result.
 - [x] Decide on which approach to take for the API: Mixins or static imports. **I have decided for most cases static imports
 are the most flexible with optional mixins where it is beneficial e.g. `Eventually`.**
-- [ ] Ensure I am happy with the level of simplicity in each module, especially the core.
+- [x] Ensure I am happy with the level of simplicity in each module, especially the core.
 - [ ] Review Documentation with people new to and familiar with Java.
 - [ ] Release and get much feedbacks.
 
@@ -440,7 +440,7 @@ Features I would like to look at implementing in the future:
 * Wrappers for Scala (ScavaTest), Clojure (ClavaTest) and Kotlin (KavaTest). I feel the APIs in those languages may feel even 
 more intuitive and better due to their functional nature.
 * Dependant tests and/or assertions.
-* Support for mocks as assertions. Pseudo example with mockito: something like 
+* Support for mocks as assertions. Pseudo-code example with mockito: something like 
 `verifyThat(myMock).calledFunction().foo(eq("hello))`.
 * TestNG Runner?
 * IntelliJ Plugin if possible?

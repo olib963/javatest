@@ -40,16 +40,4 @@ public class CompositeAssertion implements Assertion {
         return "[not holding]";
     }
 
-    public static Assertion and(Assertion left, Assertion right) {
-        return new CompositeAssertion(left, right, (a, b) -> a && b, "and");
-    }
-
-    public static Assertion or(Assertion left, Assertion right) {
-        return new CompositeAssertion(left, right, (a, b) -> a || b, "or");
-    }
-
-    public static Assertion xor(Assertion left, Assertion right) {
-        return new CompositeAssertion(left, right, (a, b) -> a ^ b, "xor");
-    }
-
 }
