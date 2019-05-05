@@ -25,8 +25,8 @@ public class FixtureRunner<Fixture> implements TestRunner {
         try {
             var fixture = fixtureDefinition.create();
             return runWithFixture(fixture);
-        } catch (Throwable throwable) {
-            var failed = AssertionResult.exception(throwable);
+        } catch (Exception error) {
+            var failed = AssertionResult.exception(error);
             var result = new TestResult(failed, "Could not create fixture \"" + fixtureName + "\"\n" + failed.description);
             return TestResults.init().addResult(result);
         }
@@ -37,8 +37,8 @@ public class FixtureRunner<Fixture> implements TestRunner {
         try {
             fixtureDefinition.destroy(fixture);
             return results;
-        } catch (Throwable throwable) {
-            var failed = AssertionResult.exception(throwable);
+        } catch (Exception error) {
+            var failed = AssertionResult.exception(error);
             var result = new TestResult(failed, "Could not destroy fixture \"" + fixtureName + "\"\n" + failed.description);
             return results.addResult(result);
         }

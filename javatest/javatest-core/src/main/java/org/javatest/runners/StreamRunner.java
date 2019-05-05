@@ -39,7 +39,7 @@ public class StreamRunner implements TestRunner {
             return test.get().run();
         } catch (AssertionError e) {
             return AssertionResult.assertionThrown(e);
-        } catch (Throwable e) {
+        } catch (Exception e) {
             return AssertionResult.exception(e);
         }
     }

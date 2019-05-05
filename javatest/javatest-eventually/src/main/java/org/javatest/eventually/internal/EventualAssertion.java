@@ -63,7 +63,7 @@ public class EventualAssertion implements Assertion {
                 return AssertionResult.of(true, result.description + suffix);
             }
             return result;
-        } catch (Throwable e) {
+        } catch (Exception e) {
             return AssertionResult.exception(e);
         }
     }
