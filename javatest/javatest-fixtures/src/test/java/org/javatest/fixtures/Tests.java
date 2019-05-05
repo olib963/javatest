@@ -13,7 +13,7 @@ public class Tests {
         var integrationResult = run(
                 Fixtures.fixtureRunner(
                         "test directory",
-                        Fixtures.temporaryDirectory("integraton-test"),
+                        Fixtures.temporaryDirectory("integration-test"),
                         d -> testStreamRunner(new IntegrationTests(d).testStream())
                 )
         );

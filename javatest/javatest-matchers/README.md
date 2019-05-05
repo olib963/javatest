@@ -22,7 +22,7 @@ public class MyTests implements TestProvider {
 }
 ```
 
-Existing `Matcher` mixins:
+Existing `Matcher` collections:
 
 * `CollectionMatchers`
 * `ComparableMatchers`
@@ -71,7 +71,7 @@ public class MyExceptionTests implements TestProvider {
 
 ## Custom Matchers
 
-You can obiously provide your own `Matcher`s by implementing the interface, but there is a convenience function to allow you 
+You can obviously provide your own `Matcher`s by implementing the interface, but there is a convenience function to allow you 
 to create simple `Matcher`s from functions, for example:
 
 ```java
@@ -79,13 +79,13 @@ import static org.javatest.matchers.Matcher.*;
 
 public class TestTheUniverse implements TestProvider {
     
-    private final Matcher<Integer> isFourtyTwo =
+    private final Matcher<Integer> isFortyTwo =
         Matcher.fromFunctions((Integer i) -> i == 42, "be 42");
     
     @Override
     public Stream<Test> testStream() {
         return Stream.of(
-                test("Meaning", () -> that(new Universe().meaning(), isFourtyTwo))
+                test("Meaning", () -> that(new Universe().meaning(), isFortyTwo))
         );
     }
     

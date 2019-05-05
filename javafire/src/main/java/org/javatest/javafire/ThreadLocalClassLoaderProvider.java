@@ -14,7 +14,7 @@ public class ThreadLocalClassLoaderProvider implements ClassLoaderProvider {
 	public ClassLoader classLoaderFor(Set<String> classPathElements) throws ClassLoadingException {
 		var runtimeUrls = toURLs(classPathElements);
 
-		return new URLClassLoader(runtimeUrls.toArray(new URL[runtimeUrls.size()]),
+		return new URLClassLoader(runtimeUrls.toArray(new URL[0]),
 								  Thread.currentThread().getContextClassLoader());
 	}
 

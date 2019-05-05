@@ -17,7 +17,7 @@ public class MyPalindromeTests implements TestProvider {
     }
 }
 
-// Or if you need larger datasets/longer test methods and want to clean up the code:
+// Or if you need larger data sets/longer test methods and want to clean up the code:
 public class MyLargeTest implements TestProvider {
     Stream<String> palindromes = Files.lines(Path.of("/my-palindromes.txt"));
     
@@ -74,7 +74,7 @@ You can include this module with this dependency:
 ```xml
 <dependency>
     <groupId>org.javatest</groupId>
-    <artifactId>javatest-pararmeterised</artifactId>
+    <artifactId>javatest-parameterised</artifactId>
     <version>${javatest.version}</version>
     <scope>test</scope>
 </dependency>
