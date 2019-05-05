@@ -22,6 +22,7 @@ public class CollectionMatchers {
         return new PredicateMatcher<>(c -> c.contains(element), "contain {" + element + "}");
     }
 
+    @SafeVarargs
     public static <T> Matcher<Collection<T>> containsAll(final T first, T... remaining) {
         // TODO it would be good to collect missing and not missing elements
         // TODO better way to construct this list???

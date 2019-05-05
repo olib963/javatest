@@ -53,7 +53,7 @@ This file contains tests for our SUT, it exists in the same package so there is 
 
 This example defines two simple tests, one is testing that `1 + 1 = 2` by
 simply using the java `+` function and the other test checks our calculator gets the same result. We then
-invoke the `run` function to run our tests and check if they passed.
+invoke the `runTests` function to run our tests and check if they passed.
 
 
 ```java
@@ -118,7 +118,7 @@ JavaTest is built on a simple functional core and functionality is expanded on b
 
 * [Matchers](./javatest/javatest-matchers)
 * [Fixtures](./javatest/javatest-fixtures)
-* [Parameterised Testing](./javatest/javatest-pararmeterised)
+* [Parameterised Testing](./javatest/javatest-parameterised)
 * [Eventual Consistency](./javatest/javatest-eventually)
 * [JUnit](./javatest/javatest-junit)
 
@@ -154,7 +154,7 @@ Assertions are created simply from boolean expressions and a string description.
 ```java
 import static org.javatest.JavaTest.*;
 
-public class MyTests implements TestSuite {
+public class MyTests {
     @Override
     public Stream<Test> testStream() {
         return Stream.of(
@@ -179,18 +179,40 @@ Assertions can be composed using the `and`, `or` and `xor` default methods. Thes
 that hold (i.e. will pass tests):
 
 ```java
-var orAssertion = that(1 + 1 == 3, "Expected one add one to be three")
-    .or(that(2 + 2 == 4, "Expected two add two to be four")) 
-var andAssertion = that(1 + 1 == 2, "Expected one add one to be two").and(orAssertion)
+import static org.javatest.JavaTest.*;
+
+class MyAssertions { 
+    Assertion orAssertion = that(1 + 1 == 3, "Expected one add one to be three")
+        .or(that(2 + 2 == 4, "Expected two add two to be four"));
+         
+    Assertion andAssertion = that(1 + 1 == 2, "Expected one add one to be two").and(orAssertion);
   
-that(true, "Expected to hold").xor(that(false, "Expected not to hold"))
+    Assertion xorAssertion = that(true, "Expected to hold").xor(that(false, "Expected not to hold"));
+
+}
 ````
 
-### Composing Test Suites
+### Test Suites
+
+You can group your tests into logical units using `TestSuite`s
+
+```java
+import static org.javatest.JavaTest.*;
+
+public class MyFirstTests implements TestSuite {
+    @Override
+    public Stream<Test> testStream() {
+        return Stream.of(test("Simple Test", () -> that(true, "Expected test to pass")));
+    }
+}
+```
+
 
 If you split your tests across multiple `TestSuite`s you can easily combine them as such:
 
 ```java
+import static org.javatest.JavaTest.*;
+
 public class AllMyTests implements TestSuite {
     @Override
     public Stream<Test> testStream() {
@@ -206,6 +228,8 @@ pending tests come in. They will not fail your build but will logged in a differ
 You can optionally provide a reason this test has not yet been written.
 
 ```java
+import static org.javatest.JavaTest.*;
+
 public class MyTests implements TestSuite {
     @Override
     public Stream<Test> testStream() {
@@ -225,10 +249,17 @@ Tagging tests is quite common to define subsets of tests, you can pass a `Collec
 Running all tests with a certain tag is then as simple as:
 
 ```java
+import static org.javatest.JavaTest.*;
 
-// In a suite
-test("My special test", () -> that(true, "Expected to pass"), List.of("special"))
-
+public class AllMyTests implements TestSuite {
+    @Override
+    public Stream<Test> testStream() {
+        return Stream.of(
+                test("My special test", () -> that(true, "Expected to pass"), List.of("special"))
+                // .... more tests ...
+        );
+    }
+}
 
 public class MySpecialTests implements TestSuite {
     @Override
@@ -239,8 +270,7 @@ public class MySpecialTests implements TestSuite {
 }
 ```
 
-
-Core library maven dependency:
+### Core library maven dependency
 
 ```xml
 <dependency>

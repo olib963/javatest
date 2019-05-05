@@ -12,8 +12,8 @@ public class MyIntegrationTests implements TestProvider {
     public Stream<Test> testStream() {
         // Create some tests that write to files and/or directories in tmpDir
         return Stream.of(
-                ...
-        )
+                //...
+        );
     }
 }
 
@@ -25,12 +25,11 @@ public class MyEntryPoint {
             // Name the fixture
             "test directory",
             // Use the existing fixture definition for temporary directories
-            Fixtures.temporaryDirectory("integraton-test"),
+            Fixtures.temporaryDirectory("integration-test"),
             // Create your test runner using the fixture
             d -> testStreamRunner(new IntegrationTests(d)));
         
         var results = JavaTest.run(runner);
-        ...
     }
 }
 ```
@@ -48,7 +47,7 @@ public class CustomDefinitions {
                 Fixtures.definitionFromFunctions(Executors::newSingleThreadExecutor, ExecutorService::shutdown);
 
     // If you only need to create the fixture and no clean up is needed:
-    FixtureDefinition<Map<String, String>> hashmapDefinition =
+    FixtureDefinition<Map<String, String>> hashMapDefinition =
         Fixtures.definitionFromFunction(() -> new HashMap<>());
     
     // Throw exceptions (for now) if the create/tear down fail

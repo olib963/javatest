@@ -6,7 +6,7 @@ import org.javatest.TestResults;
 
 public class LoggingObserver implements TestCompletionObserver {
 
-    public static String SEPARATOR = System.lineSeparator();
+    public static final String SEPARATOR = System.lineSeparator();
     private final boolean useColour;
 
     public LoggingObserver(boolean useColour) {

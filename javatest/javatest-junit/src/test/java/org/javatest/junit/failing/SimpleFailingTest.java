@@ -7,6 +7,6 @@ public class SimpleFailingTest {
 
     @Test
     public void testFalseIsTrue() {
-        Assertions.assertTrue(false);
+        Assertions.fail();
     }
 }

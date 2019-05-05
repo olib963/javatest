@@ -18,6 +18,6 @@
         <module>javatest-fixtures</module>
         <module>javatest-junit</module>
         <module>javatest-matchers</module>
-        <module>javatest-pararmeterised</module>
+        <module>javatest-parameterised</module>
     </modules>
 </project>

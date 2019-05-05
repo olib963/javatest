@@ -117,7 +117,7 @@ class JavaTestRunner {
     // TODO Consider splitting this whole class, as needed this exception class to control the flow (a lot going on!)
     private static class InternalTestException extends Exception {
 
-        private Status status;
+        private final Status status;
 
         public InternalTestException(Status executionFailure, String message, Throwable t) {
             super(message, t);
