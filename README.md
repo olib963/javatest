@@ -11,7 +11,7 @@ An opinionated, functional test framework written in pure Java aiming to leverag
 power back to the test writer.
 
 * If you know how to write a Java application, I think you should automatically know how to write the tests, 
-therefore JavaTest only introduces a few new functions and types to the language.
+therefore JavaTest only introduces a few new functions and types to the language, there is no new syntax.
 
 * Instead of being **Annotation** and **Exception** driven, JavaTest is **Function** and **Value** driven,
  lending itself to composability of tests and assertions.
@@ -30,9 +30,12 @@ Tests should be easy to understand and enjoyable to write, after all we all spen
 <details>
 <summary>Expand</summary>
 
-Download the latest jar artifact of JavaTest Core. Then create and compile these files:
+Download the latest jar artifact of JavaTest Core. Then create these files:
 
-foo/Calculator.java
+1. foo/Calculator.java
+
+This is the System Under Test representing the source code for your application (in this case a calculator that can add integers)
+
 ```java
 package foo;
 
@@ -43,11 +46,19 @@ public class Calculator {
 }
 ```
 
-foo/Tests.java
+2. foo/Tests.java
+
+This file contains tests for our SUT, it exists in the same package so there is no need to 
+`import foo.Calculator;`. 
+
+This example defines two simple tests, one is testing that `1 + 1 = 2` by
+simply using the java `+` function and the other test checks our calculator gets the same result. We then
+invoke the `run` function to run our tests and check if they passed.
+
+
 ```java
 package foo;
 
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.javatest.JavaTest.*;
@@ -125,25 +136,12 @@ The most basic `Test` can be defined by:
 - A name
 - A `Supplier` of an `Assertion` - a check with a description 
 
-Functions to help you define your tests are available from the `TestProvider` interface e.g.
-```java
-public class MyTests implements TestProvider {
-    @Override
-    public Stream<Test> testStream() {
-        return Stream.of(test("Simple Test", () -> that(true, "Expected test to pass")));
-    }
-}
-```
-
-They are also directly available as static imports from the main `JavaTest` class:
-
+Functions to help you define your tests are available by statically importing them from `JavaTest` e.g.
 ```java
 import static org.javatest.JavaTest.*;
 
-public class MyClass {
-    private Stream<Test> tests = Stream.of(
-            test("Simple Test", () -> that(true, "Expected test to pass"))
-          );
+public class MyTests {
+    Test myFirstTest = test("Simple Test", () -> that(true, "Expected test to pass"));
 }
 ```
 
@@ -152,6 +150,8 @@ public class MyClass {
 Assertions are created simply from boolean expressions and a string description.
 
 ```java
+import static org.javatest.JavaTest.*;
+
 public class MyTests implements TestProvider {
     @Override
     public Stream<Test> testStream() {
@@ -303,7 +303,7 @@ during mavens `test` phase:
 
 ### JShell
 
-Since JavaTest is built on pure Java it plays quite nicely with the REPL. A startup script you may find useful:
+Since JavaTest is built on pure Java it plays quite nicely with the REPL. This startup script may be useful:
 ```jshelllanguage
 /env -class-path /absolute/path/to/javatest/jar
 import static org.javatest.JavaTest.*;
@@ -340,7 +340,7 @@ Ran a total of 1 tests.
 0 failed
 0 were pending
 
-results2 ==> org.javatest.TestResults@4b553d26
+results2 ==> org.javatest.TestResults@3e6fa38a
 
 jshell> results.succeeded && results2.succeeded
 $3 ==> true
@@ -358,11 +358,11 @@ My plan for the first released version is to:
 - [x] Create a module to allow you to run JUnit tests within JavaTest.
 - [x] Create a module to allow parameterised testing. 
 - [x] Decide how (or even if) to handle null values. E.g. someone returning `Stream.of(null)` or `() -> null` for an assertion. 
-I decided to not handle `null` values at all for now.
+**I decided to not handle `null` values at all for now**.
 - [x] Separate the side effects into test observers that can be excluded. Initially this is just a logger to print
 each result.
-- [x] Decide on which approach to take for the API: Mixins or static imports. I have decided for most cases static imports
-are the most flexible with optional mixins where it is beneficial e.g. `Eventually`.
+- [x] Decide on which approach to take for the API: Mixins or static imports. **I have decided for most cases static imports
+are the most flexible with optional mixins where it is beneficial e.g. `Eventually`.**
 - [ ] Ensure I am happy with the level of simplicity in each module, especially the core.
 - [ ] Review Documentation with people new to and familiar with Java.
 - [ ] Release and get much feedbacks.
