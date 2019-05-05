@@ -4,7 +4,7 @@ Sometimes you will need to write an assertion that you cannot guarantee will hol
 interface to write tests that will eventually hold.
 
 ```java
-public class MyEventualTest implements TestProvider, Eventually {
+public class MyEventualTest implements TestSuite, Eventually {
     
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     
@@ -31,7 +31,7 @@ The `eventually` function will by default wait 5 seconds between each attempt an
 which covers one minute. There are multiple ways to configure the number of attempts and wait duration:
 
 ```java
-public class MyCustomEventualTest implements TestProvider, Eventually {
+public class MyCustomEventualTest implements TestSuite, Eventually {
     
     // You can override the default number of attempts made
     @Override

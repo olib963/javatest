@@ -11,7 +11,7 @@ import org.apache.maven.project.MavenProject;
 import org.javatest.javafire.JavaTestRunner.Result;
 
 /**
- * Run all of the JavaTest tests from the given test provider
+ * Run all of the JavaTest tests from the given test runners
  */
 @Mojo(name = "test", requiresDependencyResolution = ResolutionScope.TEST, defaultPhase = LifecyclePhase.TEST)
 public class JavaTestMojo extends AbstractMojo {

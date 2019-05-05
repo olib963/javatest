@@ -3,7 +3,6 @@ package org.javatest;
 import org.javatest.assertions.BooleanAssertion;
 import org.javatest.assertions.PendingAssertion;
 import org.javatest.runners.StreamRunner;
-import org.javatest.tests.SimpleTest;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -45,7 +44,7 @@ public class JavaTest {
     }
 
     public static Test test(String name, CheckedSupplier<Assertion> testFunction, Collection<String> tags) {
-        return new SimpleTest(name, testFunction, tags);
+        return new Test(name, testFunction, tags);
     }
 
     public static Assertion that(boolean asserted, String description) {

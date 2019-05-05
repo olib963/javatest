@@ -4,7 +4,7 @@ Some tests (usually integration tests) will require external resources in order 
 `FixtureDefinition<Fixture>` with a `FixtureRunner<Fixture>` to run such tests. For example:
 
 ```java
-public class MyIntegrationTests implements TestProvider {
+public class MyIntegrationTests implements TestSuite {
     private final File tmpDir;
     public MyIntegrationTests(File tmpDir) { this.tmpDir = tmpDir; }
     
@@ -27,7 +27,7 @@ public class MyEntryPoint {
             // Use the existing fixture definition for temporary directories
             Fixtures.temporaryDirectory("integration-test"),
             // Create your test runner using the fixture
-            d -> testStreamRunner(new IntegrationTests(d)));
+            d -> testStreamRunner(new IntegrationTests(d).testStream()));
         
         var results = JavaTest.run(runner);
     }
