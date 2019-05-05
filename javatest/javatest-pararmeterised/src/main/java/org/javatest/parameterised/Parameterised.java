@@ -14,43 +14,43 @@ public class Parameterised {
     private Parameterised() {
     }
 
-    static <A> Stream<Test> parameterised(Stream<A> inputs, Function<A, Test> testFunction) {
+    public static <A> Stream<Test> parameterised(Stream<A> inputs, Function<A, Test> testFunction) {
         return inputs.map(testFunction);
     }
 
-    static <A, B> Stream<Test> parameterised(Stream<Tuple2<A, B>> inputs, BiFunction<A, B, Test> testFunction) {
+    public static <A, B> Stream<Test> parameterised(Stream<Tuple2<A, B>> inputs, BiFunction<A, B, Test> testFunction) {
         return inputs.map(t -> testFunction.apply(t._1, t._2));
     }
 
-    static <A, B, C> Stream<Test> parameterised(Stream<Tuple3<A, B, C>> inputs, Function3<A, B, C, Test> testFunction) {
+    public static <A, B, C> Stream<Test> parameterised(Stream<Tuple3<A, B, C>> inputs, Function3<A, B, C, Test> testFunction) {
         return inputs.map(t -> testFunction.apply(t._1, t._2, t._3));
     }
 
-    static <A, B, C, D> Stream<Test> parameterised(Stream<Tuple4<A, B, C, D>> inputs, Function4<A, B, C, D, Test> testFunction) {
+    public static <A, B, C, D> Stream<Test> parameterised(Stream<Tuple4<A, B, C, D>> inputs, Function4<A, B, C, D, Test> testFunction) {
         return inputs.map(t -> testFunction.apply(t._1, t._2, t._3, t._4));
     }
 
-    static <A, B, C, D, E> Stream<Test> parameterised(Stream<Tuple5<A, B, C, D, E>> inputs, Function5<A, B, C, D, E, Test> testFunction) {
+    public static <A, B, C, D, E> Stream<Test> parameterised(Stream<Tuple5<A, B, C, D, E>> inputs, Function5<A, B, C, D, E, Test> testFunction) {
         return inputs.map(t -> testFunction.apply(t._1, t._2, t._3, t._4, t._5));
     }
 
-    static <A, B, C, D, E, F> Stream<Test> parameterised(Stream<Tuple6<A, B, C, D, E, F>> inputs, Function6<A, B, C, D, E, F, Test> testFunction) {
+    public static <A, B, C, D, E, F> Stream<Test> parameterised(Stream<Tuple6<A, B, C, D, E, F>> inputs, Function6<A, B, C, D, E, F, Test> testFunction) {
         return inputs.map(t -> testFunction.apply(t._1, t._2, t._3, t._4, t._5, t._6));
     }
 
-    static <A, B, C, D, E, F, G> Stream<Test> parameterised(Stream<Tuple7<A, B, C, D, E, F, G>> inputs, Function7<A, B, C, D, E, F, G, Test> testFunction) {
+    public static <A, B, C, D, E, F, G> Stream<Test> parameterised(Stream<Tuple7<A, B, C, D, E, F, G>> inputs, Function7<A, B, C, D, E, F, G, Test> testFunction) {
         return inputs.map(t -> testFunction.apply(t._1, t._2, t._3, t._4, t._5, t._6, t._7));
     }
 
-    static <A, B, C, D, E, F, G, H> Stream<Test> parameterised(Stream<Tuple8<A, B, C, D, E, F, G, H>> inputs, Function8<A, B, C, D, E, F, G, H, Test> testFunction) {
+    public static <A, B, C, D, E, F, G, H> Stream<Test> parameterised(Stream<Tuple8<A, B, C, D, E, F, G, H>> inputs, Function8<A, B, C, D, E, F, G, H, Test> testFunction) {
         return inputs.map(t -> testFunction.apply(t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8));
     }
 
-    static <A, B, C, D, E, F, G, H, I> Stream<Test> parameterised(Stream<Tuple9<A, B, C, D, E, F, G, H, I>> inputs, Function9<A, B, C, D, E, F, G, H, I, Test> testFunction) {
+    public static <A, B, C, D, E, F, G, H, I> Stream<Test> parameterised(Stream<Tuple9<A, B, C, D, E, F, G, H, I>> inputs, Function9<A, B, C, D, E, F, G, H, I, Test> testFunction) {
         return inputs.map(t -> testFunction.apply(t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8, t._9));
     }
 
-    static <A, B, C, D, E, F, G, H, I, J> Stream<Test> parameterised(Stream<Tuple10<A, B, C, D, E, F, G, H, I, J>> inputs, Function10<A, B, C, D, E, F, G, H, I, J, Test> testFunction) {
+    public static <A, B, C, D, E, F, G, H, I, J> Stream<Test> parameterised(Stream<Tuple10<A, B, C, D, E, F, G, H, I, J>> inputs, Function10<A, B, C, D, E, F, G, H, I, J, Test> testFunction) {
         return inputs.map(t -> testFunction.apply(t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8, t._9, t._10));
     }
 

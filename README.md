@@ -11,7 +11,7 @@ An opinionated, functional test framework written in pure Java aiming to leverag
 power back to the test writer.
 
 * If you know how to write a Java application, I think you should automatically know how to write the tests, 
-therefore JavaTest only introduces a few new functions and types to the language.
+therefore JavaTest only introduces a few new functions and types to the language, there is no new syntax.
 
 * Instead of being **Annotation** and **Exception** driven, JavaTest is **Function** and **Value** driven,
  lending itself to composability of tests and assertions.
@@ -30,9 +30,12 @@ Tests should be easy to understand and enjoyable to write, after all we all spen
 <details>
 <summary>Expand</summary>
 
-Download the latest jar artifact of JavaTest Core. Then create and compile these files:
+Download the latest jar artifact of JavaTest Core. Then create these files:
 
-foo/Calculator.java
+1. foo/Calculator.java
+
+This is the System Under Test representing the source code for your application (in this case a calculator that can add integers)
+
 ```java
 package foo;
 
@@ -43,11 +46,19 @@ public class Calculator {
 }
 ```
 
-foo/Tests.java
+2. foo/Tests.java
+
+This file contains tests for our SUT, it exists in the same package so there is no need to 
+`import foo.Calculator;`. 
+
+This example defines two simple tests, one is testing that `1 + 1 = 2` by
+simply using the java `+` function and the other test checks our calculator gets the same result. We then
+invoke the `run` function to run our tests and check if they passed.
+
+
 ```java
 package foo;
 
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.javatest.JavaTest.*;
@@ -55,7 +66,7 @@ import static org.javatest.JavaTest.*;
 public class Tests {
 
     public static void main(String... args) {
-        var result = run(Stream.of(
+        var result = runTests(Stream.of(
                 test("Addition", () -> that(1 + 1 == 2, "Math still works, one add one is still two")),
                 test("Calculator Addition", () -> that(Calculator.add(1, 1) == 2, "My math is correct, one add one is still two"))));
         if (!result.succeeded) {
@@ -113,11 +124,13 @@ JavaTest is built on a simple functional core and functionality is expanded on b
 
 ## Core Library
 
-- `JavaTest`: the entrypoint class. It contains the main `run` function aswell as factory functions
+- `JavaTest`: the entrypoint class. It contains the main `run` function as well as factory functions
 - `TestRunner`: returns `TestResults`, the only core implementation being `StreamRunner`
-- `TestProvider`: provides a stream of `Test`s <!-- TODO rename to `TestSuite`. Probably more intuitive -->
+- `TestSuite`: logical collection of a stream of `Test`s
 - `Test`: a named instance of a test, each test must return an `Assertion`
-- `Assertion`: represents the expected state at the end of a test.
+- `Assertion`: represents the expected state at the end of a test
+- `TestResult`: represents the result of a single test
+- `TestResults`: represents the combined result of multiple tests
 
 ### Simple Test Definitions
 
@@ -125,25 +138,12 @@ The most basic `Test` can be defined by:
 - A name
 - A `Supplier` of an `Assertion` - a check with a description 
 
-Functions to help you define your tests are available from the `TestProvider` interface e.g.
-```java
-public class MyTests implements TestProvider {
-    @Override
-    public Stream<Test> testStream() {
-        return Stream.of(test("Simple Test", () -> that(true, "Expected test to pass")));
-    }
-}
-```
-
-They are also directly available as static imports from the main `JavaTest` class:
-
+Functions to help you define your tests are available by statically importing them from `JavaTest` e.g.
 ```java
 import static org.javatest.JavaTest.*;
 
-public class MyClass {
-    private Stream<Test> tests = Stream.of(
-            test("Simple Test", () -> that(true, "Expected test to pass"))
-          );
+public class MyTests {
+    Test myFirstTest = test("Simple Test", () -> that(true, "Expected test to pass"));
 }
 ```
 
@@ -152,7 +152,9 @@ public class MyClass {
 Assertions are created simply from boolean expressions and a string description.
 
 ```java
-public class MyTests implements TestProvider {
+import static org.javatest.JavaTest.*;
+
+public class MyTests implements TestSuite {
     @Override
     public Stream<Test> testStream() {
         return Stream.of(
@@ -184,12 +186,12 @@ var andAssertion = that(1 + 1 == 2, "Expected one add one to be two").and(orAsse
 that(true, "Expected to hold").xor(that(false, "Expected not to hold"))
 ````
 
-### Composing Test Providers
+### Composing Test Suites
 
-If you split your tests across multiple `TestProvider`s you can easily combine them as such:
+If you split your tests across multiple `TestSuite`s you can easily combine them as such:
 
 ```java
-public class AllMyTests implements TestProvider {
+public class AllMyTests implements TestSuite {
     @Override
     public Stream<Test> testStream() {
         return allTestsFrom(new MyFirstTests(), new MySecondTests()); 
@@ -204,7 +206,7 @@ pending tests come in. They will not fail your build but will logged in a differ
 You can optionally provide a reason this test has not yet been written.
 
 ```java
-public class MyTests implements TestProvider {
+public class MyTests implements TestSuite {
     @Override
     public Stream<Test> testStream() {
         return Stream.of(
@@ -224,11 +226,11 @@ Running all tests with a certain tag is then as simple as:
 
 ```java
 
-// In a provider
+// In a suite
 test("My special test", () -> that(true, "Expected to pass"), List.of("special"))
 
 
-public class MySpecialTests implements TestProvider {
+public class MySpecialTests implements TestSuite {
     @Override
     public Stream<Test> testStream() {
         return allTestsFrom(new AllMyTests())
@@ -252,14 +254,14 @@ Core library maven dependency:
 ## Running JavaTest
 
 To run Javatest simply pass your `TestRunner` instances to the `JavaTest.run()` function and handle the
-result how you see fit. There is a convenience function defined to just run a `Stream<Test>` using the default `StreamRunner`: 
+result how you see fit. There is a convenience function `runTests` defined to just run a `Stream<Test>` using the default `StreamRunner`: 
 
 ```java
 import static org.javatest.JavaTest.*;
 
 class MyTests {
     public static void main(String... args) {
-        var results = run(Stream.of(
+        var results = runTests(Stream.of(
                 test("Addition", () -> that(1 + 1 == 2, "Expected one add one to be two")),
                 test("String lower case", () -> 
                     that("HELLO".toLowerCase().equals("hello"), "Expected lowercase 'HELLO' to be 'hello'"))
@@ -277,16 +279,36 @@ class MyTests {
 
 ### With JavaFire Maven plugin
 
-If you are using maven you can add the `JavaFire` maven plugin to your pom to run tests defined by a `TestProvider` for you
-during mavens `test` phase:
+If you are using maven you can add the `JavaFire` maven plugin to your pom to run tests defined by a `TestRunners` class for you
+during mavens `test` phase. Your `TestRunners` class _must_ have a zero arg constructor.
 
+```java
+package my.awesome.app;
+
+import static org.javatest.JavaTest.*;
+
+public class MyTests implements TestRunners {
+    @Override
+    public Stream<TestRunner> runners() {
+        var unitTests = testStreamRunner(allTestsFrom(/* list of suites */).parallel());
+        var applicationTests = Fixtures.fixtureRunner(
+                "database connection",
+                 MyFixtures.connectToDb(), 
+                 db -> testStreamRunner(new MyIntegrationTests(db).testStream()));
+        return Stream.of(unitTests, applicationTests);
+    }
+}
+```
+
+In `pom.xml`:
+ 
 ```xml
 <plugin>
     <groupId>org.javatest</groupId>
     <artifactId>javafire-maven-plugin</artifactId>
     <version>${javatest.version}</version>
     <configuration>
-        <testProvider>your.class.Here</testProvider>
+        <testRunners>my.awesome.app.MyTests</testRunners>
     </configuration>
     <executions>
         <execution>
@@ -299,17 +321,15 @@ during mavens `test` phase:
 </plugin>
 ```
 
-**TODO:** change this to use `TestRunner`s instead of `TestProvider`s.
-
 ### JShell
 
-Since JavaTest is built on pure Java it plays quite nicely with the REPL. A startup script you may find useful:
+Since JavaTest is built on pure Java it plays quite nicely with the REPL. This startup script may be useful:
 ```jshelllanguage
 /env -class-path /absolute/path/to/javatest/jar
 import static org.javatest.JavaTest.*;
 
 org.javatest.TestResults runTest(org.javatest.CheckedSupplier<org.javatest.Assertion> testFn) {
-    return run(Stream.of(test("JShell test", testFn)));
+    return runTests(Stream.of(test("JShell test", testFn)));
 }
 ```
 
@@ -340,7 +360,7 @@ Ran a total of 1 tests.
 0 failed
 0 were pending
 
-results2 ==> org.javatest.TestResults@4b553d26
+results2 ==> org.javatest.TestResults@3e6fa38a
 
 jshell> results.succeeded && results2.succeeded
 $3 ==> true
@@ -358,11 +378,11 @@ My plan for the first released version is to:
 - [x] Create a module to allow you to run JUnit tests within JavaTest.
 - [x] Create a module to allow parameterised testing. 
 - [x] Decide how (or even if) to handle null values. E.g. someone returning `Stream.of(null)` or `() -> null` for an assertion. 
-I decided to not handle `null` values at all for now.
+**I decided to not handle `null` values at all for now**.
 - [x] Separate the side effects into test observers that can be excluded. Initially this is just a logger to print
 each result.
-- [x] Decide on which approach to take for the API: Mixins or static imports. I have decided for most cases static imports
-are the most flexible with optional mixins where it is beneficial e.g. `Eventually`.
+- [x] Decide on which approach to take for the API: Mixins or static imports. **I have decided for most cases static imports
+are the most flexible with optional mixins where it is beneficial e.g. `Eventually`.**
 - [ ] Ensure I am happy with the level of simplicity in each module, especially the core.
 - [ ] Review Documentation with people new to and familiar with Java.
 - [ ] Release and get much feedbacks.

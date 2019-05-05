@@ -3,7 +3,7 @@ package org.javatest.eventually;
 import org.javatest.Assertion;
 import org.javatest.CheckedSupplier;
 import org.javatest.Test;
-import org.javatest.TestProvider;
+import org.javatest.TestSuite;
 
 import java.time.Duration;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -13,14 +13,14 @@ import static org.javatest.JavaTest.*;
 
 public class EventuallyTests {
 
-    public static TestProvider passing() {
+    public static TestSuite passing() {
         return new PassingTests();
     }
-    public static TestProvider failing() {
+    public static TestSuite failing() {
         return new FailingTests();
     }
 
-    static class PassingTests implements TestProvider, Eventually {
+    static class PassingTests implements TestSuite, Eventually {
         @Override
         public Stream<Test> testStream() {
             var simpleTests = Stream.of(
@@ -44,7 +44,7 @@ public class EventuallyTests {
         }
     }
 
-    static class FailingTests implements TestProvider, Eventually {
+    static class FailingTests implements TestSuite, Eventually {
 
         @Override
         public Stream<Test> testStream() {

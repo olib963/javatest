@@ -10,7 +10,7 @@ import static org.javatest.JavaTest.*;
 public class Tests {
 
     public static void main(String... args) {
-        var result = JavaTest.run(Stream.of(
+        var result = JavaTest.runTests(Stream.of(
                 test("Passing Tests", () -> {
                     var tests = allTestsFrom(
                             SimpleMatcherTests.passing(),
@@ -20,7 +20,7 @@ public class Tests {
                             ComparableMatcherTests.passing(),
                             CollectionMatcherTests.passing(),
                             MapMatcherTests.passing());
-                    var results = JavaTest.run(tests);
+                    var results = JavaTest.runTests(tests);
                     return that(results.succeeded, "Expected all 'passing' tests to pass");
                 }),
                 test("Failing Tests", () -> {
@@ -32,7 +32,7 @@ public class Tests {
                             ComparableMatcherTests.failing(),
                             CollectionMatcherTests.failing(),
                             MapMatcherTests.failing());
-                    var results = tests.map(t -> JavaTest.run(Stream.of(t)));
+                    var results = tests.map(t -> JavaTest.runTests(Stream.of(t)));
                     var passingTests = results.filter(r -> r.succeeded).collect(Collectors.toList());
                     return that(passingTests.isEmpty(), "Expected all 'failing' tests to fail");
                 })

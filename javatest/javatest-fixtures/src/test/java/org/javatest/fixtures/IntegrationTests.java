@@ -1,7 +1,7 @@
 package org.javatest.fixtures;
 
 import org.javatest.Test;
-import org.javatest.TestProvider;
+import org.javatest.TestSuite;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 
 import static org.javatest.JavaTest.*;
 
-public class IntegrationTests implements TestProvider {
+public class IntegrationTests implements TestSuite {
     private final File testDirectory;
 
     public IntegrationTests(File testDirectory) {

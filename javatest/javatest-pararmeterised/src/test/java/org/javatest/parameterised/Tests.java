@@ -5,7 +5,7 @@ import org.javatest.JavaTest;
 public class Tests {
 
     public static void main(String... args) {
-        var result = JavaTest.run(new ParameterisedTests());
+        var result = JavaTest.runTests(new ParameterisedTests().testStream());
         if (!result.succeeded) {
             throw new RuntimeException("Tests failed!");
         }

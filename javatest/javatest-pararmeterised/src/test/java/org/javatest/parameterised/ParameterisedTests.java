@@ -1,7 +1,7 @@
 package org.javatest.parameterised;
 
 import org.javatest.Test;
-import org.javatest.TestProvider;
+import org.javatest.TestSuite;
 
 import java.util.Arrays;
 import java.util.function.Function;
@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 import static org.javatest.parameterised.Parameterised.*;
 import static org.javatest.JavaTest.*;
 
-public class ParameterisedTests implements TestProvider {
+public class ParameterisedTests implements TestSuite {
     @Override
     public Stream<Test> testStream() {
         // TODO create joinStreams function

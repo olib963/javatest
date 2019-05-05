@@ -19,7 +19,7 @@ public class MyPalindromeTests implements TestProvider {
 
 // Or if you need larger datasets/longer test methods and want to clean up the code:
 public class MyLargeTest implements TestProvider {
-    Stream<String> palindromes = // create large stream
+    Stream<String> palindromes = Files.lines(Path.of("/my-palindromes.txt"));
     
     @Override
     public Stream<Test> testStream() {

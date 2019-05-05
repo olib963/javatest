@@ -14,12 +14,12 @@ public class FunctionFixtureDefinition<FixtureType> implements FixtureDefinition
     }
 
     @Override
-    public FixtureType create() throws Throwable {
+    public FixtureType create() throws Exception {
         return creator.get();
     }
 
     @Override
-    public void destroy(FixtureType fixture) throws Throwable {
+    public void destroy(FixtureType fixture) throws Exception {
         destroyer.accept(fixture);
     }
 }

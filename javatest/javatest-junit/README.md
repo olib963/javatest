@@ -11,7 +11,7 @@ public class RunningJUnit {
     public static void main(String... args) {
         var fromPackage = JUnitTestRunner.fromPackage("foo.bar");
         LauncherDiscoveryRequest customRequest = createCustomRequest();
-        var customRunner = new JUnitTestRunner(customRequest);
+        var customRunner = JUnitTestRunner.fromRequest(customRequest);
         var result = JavaTest.run(fromPackage, customRunner);
         if(!result.succeeded) {
             throw new IllegalStateException("OH NO! JUnit tests failed");

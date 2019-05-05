@@ -5,20 +5,20 @@ import static org.javatest.JavaTest.*;
 
 public class SimpleTests {
 
-    public static TestProvider passing() {
+    public static TestSuite passing() {
         return new PassingTests();
     }
-    public static TestProvider failing() {
+    public static TestSuite failing() {
         return new FailingTests();
     }
 
-    static class PassingTests implements TestProvider {
+    static class PassingTests implements TestSuite {
 
         @Override
         public Stream<Test> testStream() {
             return Stream.of(
                     test("Simple test", () -> that(true, "Expected true to be true")),
-                    test("Pending test that has yet to be written", Assertion::pending),
+                    test("Pending test that has yet to be written", JavaTest::pending),
                     test("Pending test that has yet to be written", () -> pending("That has a name")),
                     test("And test", () -> that(true, "Expected true").and(that(true, "Expected true"))),
                     test("Pending test and 1", () -> that(true, "Expected true").and(pending())),
@@ -37,7 +37,7 @@ public class SimpleTests {
             );
         }
     }
-    static class FailingTests implements TestProvider {
+    static class FailingTests implements TestSuite {
         @Override
         public Stream<Test> testStream() {
             return Stream.of(
