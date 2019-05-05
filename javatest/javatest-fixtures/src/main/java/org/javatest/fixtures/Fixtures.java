@@ -14,21 +14,21 @@ public class Fixtures {
     private Fixtures() {
     }
 
-    static <Fixture> TestRunner fixtureRunner(String fixtureName,
+    public static <Fixture> TestRunner fixtureRunner(String fixtureName,
                                                FixtureDefinition<Fixture> fixtureDefinition,
                                                Function<Fixture, TestRunner> testFunction) {
         return new FixtureRunner<>(fixtureName, fixtureDefinition, testFunction);
     }
 
-    static <Fixture> FixtureDefinition<Fixture> definitionFromFunction(CheckedSupplier<Fixture> creator) {
+    public static <Fixture> FixtureDefinition<Fixture> definitionFromFunction(CheckedSupplier<Fixture> creator) {
         return definitionFromFunctions(creator, x -> {});
     }
 
-    static <Fixture> FixtureDefinition<Fixture> definitionFromFunctions(CheckedSupplier<Fixture> creator, CheckedConsumer<Fixture> destroyer) {
+    public static <Fixture> FixtureDefinition<Fixture> definitionFromFunctions(CheckedSupplier<Fixture> creator, CheckedConsumer<Fixture> destroyer) {
         return new FunctionFixtureDefinition<>(creator, destroyer);
     }
 
-    static FixtureDefinition<File> temporaryDirectory(String path) {
+    public static FixtureDefinition<File> temporaryDirectory(String path) {
         return new TemporaryDirectory(path);
     }
 
