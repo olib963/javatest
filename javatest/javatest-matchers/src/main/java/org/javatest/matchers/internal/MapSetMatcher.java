@@ -23,7 +23,7 @@ public class MapSetMatcher<K, V, E> implements Matcher<Map<K, V>> {
     @Override
     public MatchResult matches(Map<K, V> value) {
         // TODO mismatch descriptions
-        return MatchResult.from(setFunction.apply(value)
+        return MatchResult.of(setFunction.apply(value)
                 .stream()
                 .map(elementMatcher::matches)
                 .anyMatch(r -> r.matches));
