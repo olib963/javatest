@@ -61,6 +61,21 @@ public class MyCustomEventualTest implements TestProvider, Eventually {
 }
 ```
 
+You also have the option to statically import the `eventually` constructor but will not 
+have default attempts or duration.
+
+```java
+import static org.javatest.eventually.Eventual.*;
+import static org.javatest.JavaTest.*;
+
+public class MyTests {
+    
+    private Assertion eventualAssertion = 
+        eventually(() -> that(true, "Passes"), Duration.ofSeconds(2), 3);
+}
+
+```
+
 _______
 
 You can include this module with this dependency: 
