@@ -1,10 +1,14 @@
 package org.javatest.parameterised;
 
+import org.javatest.parameterised.tuples.Tuple10;
+import org.javatest.parameterised.tuples.Tuple2;
+import org.javatest.parameterised.tuples.Tuple3;
+
 import java.util.stream.Stream;
 
-import static org.javatest.parameterised.Helpers.t;
+import static org.javatest.parameterised.Parameterised.t;
 
-public class Data implements Parameterised {
+public class Data {
     private Data() {
     }
 
@@ -35,7 +39,7 @@ public class Data implements Parameterised {
         );
     }
 
-    public static Stream<Helpers.Tuple2<Integer, Long>> fibonacci() {
+    public static Stream<Tuple2<Integer, Long>> fibonacci() {
         return Stream.of(
                 t(0, 0L),
                 t(1, 1L),
@@ -52,7 +56,7 @@ public class Data implements Parameterised {
     }
 
 
-    public static Stream<Helpers.Tuple3<Integer, Integer, Integer>> multiplication() {
+    public static Stream<Tuple3<Integer, Integer, Integer>> multiplication() {
         return Stream.of(
                 t(1, 1, 1),
                 t(2, 4, 8),
@@ -63,7 +67,7 @@ public class Data implements Parameterised {
         );
     }
 
-    public static Stream<Helpers.Tuple10<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>> madAddition() {
+    public static Stream<Tuple10<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer>> madAddition() {
         return Stream.of(
                 t(1, 2, 3, 4, 5, 6, 7, 8, 9, 45),
                 t(1, 2, 3, 5, 7, 11, 13, 17, 19, 78),
