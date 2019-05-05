@@ -154,23 +154,15 @@ Assertions are created simply from boolean expressions and a string description.
 ```java
 import static org.javatest.JavaTest.*;
 
-public class MyTests {
-    @Override
-    public Stream<Test> testStream() {
-        return Stream.of(
-                test("Addition", () -> that(1 + 1 == 2, "Expected one add one to be two")),
-                test("Multiplication", () -> {
-                    var two = 2;
-                    var ten = 10;
-                    var twenty = 20;
-                    var expected = String.format("Expected %d times %d to be %d", two, ten, twenty);
-                    return that(two * ten == twenty, expected);
-                }),
-                test("Palindrome", () -> {
-                    var word = "Level";
-                    return that(MyObject.isPalindrome(word), "Expected " + word + " to be a palindrome");
-                })
-            );
+public class MyAssertions {
+    Assertion simpleAssertion = that(1 + 1 == 2, "Expected one add one to be two");
+    
+    public Assertion multilineFormattedAssertion() {
+        var two = 2;
+        var ten = 10;
+        var twenty = 20;
+        var expected = String.format("Expected %d times %d to be %d", two, ten, twenty);
+        return that(two * ten == twenty, expected); 
     }
 }
 ```
@@ -181,7 +173,7 @@ that hold (i.e. will pass tests):
 ```java
 import static org.javatest.JavaTest.*;
 
-class MyAssertions { 
+class MyComposedAssertions { 
     Assertion orAssertion = that(1 + 1 == 3, "Expected one add one to be three")
         .or(that(2 + 2 == 4, "Expected two add two to be four"));
          
