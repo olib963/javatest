@@ -14,7 +14,7 @@ public class JUnitTestRunner implements TestRunner {
 
     private final LauncherDiscoveryRequest request;
 
-    public JUnitTestRunner(LauncherDiscoveryRequest request) {
+    private JUnitTestRunner(LauncherDiscoveryRequest request) {
         this.request = request;
     }
 
@@ -32,6 +32,10 @@ public class JUnitTestRunner implements TestRunner {
         // TODO we can print failure logs to a string writer, but we cannot seem to print success logs.
         // See if people want to get the logs into the test results object.
         return TestResults.from(failures, successes);
+    }
+
+    public static TestRunner fromRequest(LauncherDiscoveryRequest request) {
+        return new JUnitTestRunner(request);
     }
 
     public static TestRunner fromPackage(String packageName) {
