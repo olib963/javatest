@@ -16,7 +16,7 @@ public class JavaTestRunnerTest implements TestSuite {
 
     // Running tests
     public static void main(String... args) {
-        if (!JavaTest.run(new JavaTestRunnerTest()).succeeded) {
+        if (!JavaTest.runTests(new JavaTestRunnerTest().testStream()).succeeded) {
             throw new RuntimeException("Tests failed!");
         }
         System.out.println("Tests passed");

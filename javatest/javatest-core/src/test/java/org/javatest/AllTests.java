@@ -8,13 +8,13 @@ import static org.javatest.JavaTest.*;
 public class AllTests {
 
     public static void main(String... args) {
-        var result = JavaTest.run(Stream.of(
+        var result = JavaTest.runTests(Stream.of(
                 test("Passing Tests", () -> {
-                    var results = JavaTest.run(SimpleTests.passing());
+                    var results = JavaTest.runTests(SimpleTests.passing().testStream());
                     return that(results.succeeded, "Expected all 'passing' tests to pass");
                 }),
                 test("Failing Tests", () -> {
-                    var results = SimpleTests.failing().testStream().map(t -> JavaTest.run(Stream.of(t)));
+                    var results = SimpleTests.failing().testStream().map(t -> JavaTest.runTests(Stream.of(t)));
                     var passingTests = results.filter(r -> r.succeeded).collect(Collectors.toList());
                     return that(passingTests.isEmpty(), "Expected all 'failing' tests to fail");
                 })));

@@ -18,7 +18,7 @@ public class SimpleTests {
         public Stream<Test> testStream() {
             return Stream.of(
                     test("Simple test", () -> that(true, "Expected true to be true")),
-                    test("Pending test that has yet to be written", Assertion::pending),
+                    test("Pending test that has yet to be written", JavaTest::pending),
                     test("Pending test that has yet to be written", () -> pending("That has a name")),
                     test("And test", () -> that(true, "Expected true").and(that(true, "Expected true"))),
                     test("Pending test and 1", () -> that(true, "Expected true").and(pending())),

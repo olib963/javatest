@@ -66,7 +66,7 @@ import static org.javatest.JavaTest.*;
 public class Tests {
 
     public static void main(String... args) {
-        var result = run(Stream.of(
+        var result = runTests(Stream.of(
                 test("Addition", () -> that(1 + 1 == 2, "Math still works, one add one is still two")),
                 test("Calculator Addition", () -> that(Calculator.add(1, 1) == 2, "My math is correct, one add one is still two"))));
         if (!result.succeeded) {
@@ -124,11 +124,13 @@ JavaTest is built on a simple functional core and functionality is expanded on b
 
 ## Core Library
 
-- `JavaTest`: the entrypoint class. It contains the main `run` function aswell as factory functions
+- `JavaTest`: the entrypoint class. It contains the main `run` function as well as factory functions
 - `TestRunner`: returns `TestResults`, the only core implementation being `StreamRunner`
 - `TestSuite`: logical collection of a stream of `Test`s
 - `Test`: a named instance of a test, each test must return an `Assertion`
-- `Assertion`: represents the expected state at the end of a test.
+- `Assertion`: represents the expected state at the end of a test
+- `TestResult`: represents the result of a single test
+- `TestResults`: represents the combined result of multiple tests
 
 ### Simple Test Definitions
 
@@ -252,14 +254,14 @@ Core library maven dependency:
 ## Running JavaTest
 
 To run Javatest simply pass your `TestRunner` instances to the `JavaTest.run()` function and handle the
-result how you see fit. There is a convenience function defined to just run a `Stream<Test>` using the default `StreamRunner`: 
+result how you see fit. There is a convenience function `runTests` defined to just run a `Stream<Test>` using the default `StreamRunner`: 
 
 ```java
 import static org.javatest.JavaTest.*;
 
 class MyTests {
     public static void main(String... args) {
-        var results = run(Stream.of(
+        var results = runTests(Stream.of(
                 test("Addition", () -> that(1 + 1 == 2, "Expected one add one to be two")),
                 test("String lower case", () -> 
                     that("HELLO".toLowerCase().equals("hello"), "Expected lowercase 'HELLO' to be 'hello'"))
@@ -309,7 +311,7 @@ Since JavaTest is built on pure Java it plays quite nicely with the REPL. This s
 import static org.javatest.JavaTest.*;
 
 org.javatest.TestResults runTest(org.javatest.CheckedSupplier<org.javatest.Assertion> testFn) {
-    return run(Stream.of(test("JShell test", testFn)));
+    return runTests(Stream.of(test("JShell test", testFn)));
 }
 ```
 

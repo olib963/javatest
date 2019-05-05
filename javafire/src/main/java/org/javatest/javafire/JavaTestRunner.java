@@ -31,7 +31,7 @@ class JavaTestRunner {
 
 			TestSuite suite = instantiateSuite(suiteClass);
 
-			var results = JavaTest.run(suite.testStream());
+			var results = JavaTest.runTests(suite.testStream());
 
 			if (results.succeeded) {
 				return new Result(Status.SUCCESS, "All tests passed");

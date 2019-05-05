@@ -1,8 +1,6 @@
 package org.javatest;
 
-import org.javatest.assertions.BooleanAssertion;
 import org.javatest.assertions.CompositeAssertion;
-import org.javatest.assertions.PendingAssertion;
 
 public interface Assertion {
     AssertionResult run();
@@ -19,13 +17,4 @@ public interface Assertion {
         return CompositeAssertion.xor(this, other);
     }
 
-    static Assertion that(boolean asserted, String description) { return new BooleanAssertion(asserted, description); }
-
-    static Assertion pending() {
-        return pending("Test has not yet been written");
-    }
-
-    static Assertion pending(String reason) {
-        return new PendingAssertion(reason);
-    }
 }

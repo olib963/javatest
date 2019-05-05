@@ -5,7 +5,7 @@ import static org.javatest.JavaTest.*;
 public class Tests {
 
     public static void main(String... args) {
-        var result = run(new SimpleTests());
+        var result = runTests(new SimpleTests().testStream());
         if (!result.succeeded) {
             throw new RuntimeException("Unit tests failed!");
         }
@@ -14,7 +14,7 @@ public class Tests {
                 Fixtures.fixtureRunner(
                         "test directory",
                         Fixtures.temporaryDirectory("integraton-test"),
-                        d -> testStreamRunner(new IntegrationTests(d))
+                        d -> testStreamRunner(new IntegrationTests(d).testStream())
                 )
         );
         if (!integrationResult.succeeded) {
