@@ -20,11 +20,11 @@ public class EventualAssertion implements Assertion {
     @Override
     public AssertionResult run() {
         if (attempts < 1) {
-            return AssertionResult.of(false, "You must make at least one attempt in your test. Attempts given: " + attempts);
+            return AssertionResult.failure("You must make at least one attempt in your test. Attempts given: " + attempts);
         }
 
         if (sleepTime <= 0) {
-            return AssertionResult.of(false, "Millisecond sleep time given must be greater than 0. (Sleep time was " + sleepTime + ")");
+            return AssertionResult.failure("Millisecond sleep time given must be greater than 0. (Sleep time was " + sleepTime + ")");
         }
 
         var firstAttempt = runTest(test, 1);
@@ -38,7 +38,7 @@ public class EventualAssertion implements Assertion {
                         this::nextAttempt,
                         (r1, r2) -> r1.holds ? r1 : r2);
         if (!result.holds) {
-            return AssertionResult.of(false, result.description + " (Failed after " + attempts + " attempts)");
+            return AssertionResult.failure(result.description + " (Failed after " + attempts + " attempts)");
         }
         return result;
     }
@@ -60,7 +60,7 @@ public class EventualAssertion implements Assertion {
             var result = test.get().run();
             if (result.holds) {
                 var suffix = " (Passed on attempt " + currentAttempt + " of " + attempts + ")";
-                return AssertionResult.of(true, result.description + suffix);
+                return AssertionResult.success(result.description + suffix);
             }
             return result;
         } catch (Exception e) {
