@@ -1,20 +1,20 @@
 package org.javatest.fixtures;
 
-import org.javatest.JavaTest;
+import static org.javatest.JavaTest.*;
 
 public class Tests {
 
     public static void main(String... args) {
-        var result = JavaTest.run(new SimpleTests());
+        var result = run(new SimpleTests());
         if (!result.succeeded) {
             throw new RuntimeException("Unit tests failed!");
         }
 
-        var integrationResult = JavaTest.run(
-                Fixtures.fixtureRunnerFromProvider(
+        var integrationResult = run(
+                Fixtures.fixtureRunner(
                         "test directory",
                         Fixtures.temporaryDirectory("integraton-test"),
-                        IntegrationTests::new
+                        d -> testStreamRunner(new IntegrationTests(d))
                 )
         );
         if (!integrationResult.succeeded) {

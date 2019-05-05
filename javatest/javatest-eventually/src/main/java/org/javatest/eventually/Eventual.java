@@ -6,7 +6,7 @@ import org.javatest.eventually.internal.EventualAssertion;
 
 import java.time.Duration;
 
-public class Eventual {
+final public class Eventual {
 
     private Eventual() {}
 
