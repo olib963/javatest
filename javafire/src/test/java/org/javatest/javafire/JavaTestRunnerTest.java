@@ -10,6 +10,7 @@ import java.util.*;
 import java.util.stream.Stream;
 
 import static org.mockito.Mockito.*;
+import static org.javatest.JavaTest.*;
 
 public class JavaTestRunnerTest implements TestProvider {
 

@@ -6,6 +6,10 @@ import org.javatest.TestProvider;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static org.javatest.JavaTest.*;
+import static org.javatest.matchers.Matcher.*;
+import static org.javatest.matchers.ComparableMatchers.*;
+
 import static org.javatest.matchers.ComparableMatcherTests.ComparableInt.wrap;
 
 public class ComparableMatcherTests {
@@ -19,7 +23,7 @@ public class ComparableMatcherTests {
         return new FailingTests();
     }
 
-    static class PassingTests implements MatcherTestProvider, ComparableMatchers {
+    static class PassingTests implements TestProvider {
         @Override
         public Stream<Test> testStream() {
             return Stream.of(
@@ -34,7 +38,7 @@ public class ComparableMatcherTests {
         }
     }
 
-    static class FailingTests implements MatcherTestProvider, ComparableMatchers {
+    static class FailingTests implements TestProvider {
         @Override
         public Stream<Test> testStream() {
             return Stream.of(

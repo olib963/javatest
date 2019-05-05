@@ -3,7 +3,7 @@ package org.javatest.matchers;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class MatchResult {
+public final class MatchResult {
     public final boolean matches;
     public final Optional<String> mismatch;
     private MatchResult(boolean matches, Optional<String> mismatch) {

@@ -1,12 +1,14 @@
 # Matchers
 
 This module contains `Assertion`s that are based on common `Matcher`s, they provide both the check and description for your tests. 
-By implementing `MatcherTestProvider` you will inherit a few default `Matcher`s and the ability to create `Matcher` based `Assertion`s. Other matchers will
-be able to be mixed into your test class by adding different interfaces e.g. `StringMatchers` which contains `String` specific
-`Matcher`s.
+By statically importing `Matcher` you will inherit a few default `Matcher`s and the ability to create `Matcher` based `Assertion`s. Other `Matcher`s are
+able to be imported into your tests from various classes e.g. `StringMatchers` which contains `String` specific `Matcher`s.
 
 ```java
-public class MyTests implements MatcherTestProvider, StringMatchers {
+import static org.javatest.matchers.Matcher.*;
+import static org.javatest.matchers.StringMatchers.*;
+
+public class MyTests implements TestProvider {
     private static final String TEST_STRING = "Hello World";
     @Override
     public Stream<Test> testStream() {
@@ -36,7 +38,11 @@ exception driven Java APIs so I have added `Matcher` syntax for exceptions. Thes
 ensure that the test will only pass if the matched exception is thrown from the expected code block.
 
 ```java
-public class MyExceptionTests implements MatcherTestProvider, ExceptionMatchers, StringMatchers {
+import static org.javatest.matchers.Matcher.*;
+import static org.javatest.matchers.StringMatchers.*;
+import static org.javatest.matchers.ExceptionMatchers.*;
+
+public class MyExceptionTests implements TestProvider {
     @Override
     public Stream<Test> testStream() { 
         return Stream.of(
@@ -69,7 +75,9 @@ You can obiously provide your own `Matcher`s by implementing the interface, but 
 to create simple `Matcher`s from functions, for example:
 
 ```java
-public class TestTheUniverse implements MatcherTestProvider {
+import static org.javatest.matchers.Matcher.*;
+
+public class TestTheUniverse implements TestProvider {
     
     private final Matcher<Integer> isFourtyTwo =
         Matcher.fromFunctions((Integer i) -> i == 42, "be 42");

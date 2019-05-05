@@ -21,13 +21,13 @@ public class MyIntegrationTests implements TestProvider {
 public class MyEntryPoint {
     
     public static void main(String... args) {
-        var runner = Fixtures.fixtureRunnerFromProvider(
+        var runner = Fixtures.fixtureRunner(
             // Name the fixture
             "test directory",
             // Use the existing fixture definition for temporary directories
             Fixtures.temporaryDirectory("integraton-test"),
-            // Create your test provider using the fixture
-            IntegrationTests::new);
+            // Create your test runner using the fixture
+            d -> testStreamRunner(new IntegrationTests(d)));
         
         var results = JavaTest.run(runner);
         ...

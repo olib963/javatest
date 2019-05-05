@@ -361,7 +361,8 @@ My plan for the first released version is to:
 I decided to not handle `null` values at all for now.
 - [x] Separate the side effects into test observers that can be excluded. Initially this is just a logger to print
 each result.
-- [ ] Decide on which approach to take for the API: Mixins or static imports.
+- [x] Decide on which approach to take for the API: Mixins or static imports. I have decided for most cases static imports
+are the most flexible with optional mixins where it is beneficial e.g. `Eventually`.
 - [ ] Ensure I am happy with the level of simplicity in each module, especially the core.
 - [ ] Review Documentation with people new to and familiar with Java.
 - [ ] Release and get much feedbacks.

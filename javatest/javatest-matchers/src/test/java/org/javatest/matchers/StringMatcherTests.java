@@ -6,6 +6,10 @@ import org.javatest.TestProvider;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static org.javatest.JavaTest.*;
+import static org.javatest.matchers.Matcher.*;
+import static org.javatest.matchers.StringMatchers.*;
+
 public class StringMatcherTests {
     private static final List<String> tags = List.of("string-matchers");
     public static TestProvider passing() {
@@ -15,7 +19,7 @@ public class StringMatcherTests {
         return new FailingTests();
     }
 
-    static class PassingTests implements MatcherTestProvider, StringMatchers {
+    static class PassingTests implements TestProvider {
         @Override
         public Stream<Test> testStream() {
             return Stream.of(
@@ -30,7 +34,7 @@ public class StringMatcherTests {
         }
     }
 
-    static class FailingTests implements MatcherTestProvider, StringMatchers {
+    static class FailingTests implements TestProvider {
         @Override
         public Stream<Test> testStream() {
             return Stream.of(

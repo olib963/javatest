@@ -2,33 +2,35 @@ package org.javatest.matchers;
 
 import org.javatest.matchers.internal.PredicateMatcher;
 
-public interface StringMatchers {
+public class StringMatchers {
 
-    default Matcher<String> startsWith(final String prefix) {
+    private StringMatchers() {}
+
+    static Matcher<String> startsWith(final String prefix) {
         return new PredicateMatcher<>(s -> s.startsWith(prefix), "start with {" + prefix + "}");
     }
 
-    default Matcher<String> endsWith(final String suffix) {
+    static Matcher<String> endsWith(final String suffix) {
         return new PredicateMatcher<>(s -> s.endsWith(suffix), "end with {" + suffix + "}");
     }
 
-    default Matcher<String> containsString(final String subString) {
+    static Matcher<String> containsString(final String subString) {
         return new PredicateMatcher<>(s -> s.contains(subString), "contain {" + subString + "}");
     }
 
-    default Matcher<String> isEmptyString() {
+    static Matcher<String> isEmptyString() {
         return new PredicateMatcher<>(String::isEmpty, "be the empty string");
     }
 
-    default Matcher<String> isBlankString() {
+    static Matcher<String> isBlankString() {
         return new PredicateMatcher<>(String::isBlank, "be a blank string");
     }
 
-    default Matcher<String> isEqualToIgnoringCase(String expected) {
+    static Matcher<String> isEqualToIgnoringCase(String expected) {
         return new PredicateMatcher<>(s -> s.equalsIgnoreCase(expected), "be equal to (ignoring case) {" + expected + "}");
     }
 
-    default Matcher<String> hasLength(int length) {
+    static Matcher<String> hasLength(int length) {
         return new PredicateMatcher<>(s -> s.length() == length, "have length {" + length + "}", s -> "had length {" + s.length() + "}");
     }
 }
