@@ -8,6 +8,9 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import static org.javatest.JavaTest.*;
+import static org.javatest.matchers.Matcher.*;
+import static org.javatest.matchers.OptionalMatchers.*;
+import static org.javatest.matchers.StringMatchers.*;
 
 public class OptionalMatcherTests {
     private static final List<String> tags = List.of("optional-matchers");
@@ -20,7 +23,7 @@ public class OptionalMatcherTests {
         return new FailingTests();
     }
 
-    static class PassingTests implements MatcherTestProvider, OptionalMatchers, StringMatchers {
+    static class PassingTests implements TestProvider {
         @Override
         public Stream<Test> testStream() {
             return Stream.of(
@@ -31,7 +34,7 @@ public class OptionalMatcherTests {
         }
     }
 
-    static class FailingTests implements MatcherTestProvider, OptionalMatchers, StringMatchers {
+    static class FailingTests implements TestProvider {
         @Override
         public Stream<Test> testStream() {
             return Stream.of(

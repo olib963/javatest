@@ -10,7 +10,7 @@ import org.javatest.fixtures.internal.TemporaryDirectory;
 import java.io.File;
 import java.util.function.Function;
 
-final public class Fixtures {
+public class Fixtures {
     private Fixtures() {
     }
 

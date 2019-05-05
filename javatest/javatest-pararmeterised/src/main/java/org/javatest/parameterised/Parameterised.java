@@ -10,10 +10,10 @@ import java.util.stream.Stream;
 
 public class Parameterised {
 
+    // TODO see if there is a plan to integrate value types, tuples and better functions into Java. If so, these types could be replaced.
     private Parameterised() {
     }
 
-    // TODO I am not sure this is much better. It may be a good idea to wait for java to just support tuples and functions properly, we would likely get better compile errors
     static <A> Stream<Test> parameterised(Stream<A> inputs, Function<A, Test> testFunction) {
         return inputs.map(testFunction);
     }

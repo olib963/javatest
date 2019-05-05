@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static org.javatest.JavaTest.*;
+import static org.javatest.matchers.Matcher.*;
+import static org.javatest.matchers.CollectionMatchers.*;
 
 public class CollectionMatcherTests {
     private static final List<String> tags = List.of("collection-matchers");
@@ -20,7 +22,7 @@ public class CollectionMatcherTests {
         return new FailingTests();
     }
 
-    static class PassingTests implements MatcherTestProvider, CollectionMatchers {
+    static class PassingTests implements TestProvider {
         @Override
         public Stream<Test> testStream() {
             return Stream.of(
@@ -33,7 +35,7 @@ public class CollectionMatcherTests {
         }
     }
 
-    static class FailingTests implements MatcherTestProvider, CollectionMatchers {
+    static class FailingTests implements TestProvider {
         @Override
         public Stream<Test> testStream() {
             return Stream.of(

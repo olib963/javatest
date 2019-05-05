@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.stream.Stream;
 
 // TODO remove most of the functions and only leave the simplest ones
-final public class JavaTest {
+public class JavaTest {
     private JavaTest() {}
 
     private static final Collection<TestCompletionObserver> DEFAULT_OBSERVER =

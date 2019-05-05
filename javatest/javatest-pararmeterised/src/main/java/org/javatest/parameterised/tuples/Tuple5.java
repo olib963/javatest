@@ -1,6 +1,6 @@
 package org.javatest.parameterised.tuples;
 
-public class Tuple5<A, B, C, D, E> {
+final public class Tuple5<A, B, C, D, E> {
     public final A _1;
     public final B _2;
     public final C _3;

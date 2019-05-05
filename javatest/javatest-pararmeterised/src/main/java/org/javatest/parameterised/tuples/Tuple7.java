@@ -1,6 +1,6 @@
 package org.javatest.parameterised.tuples;
 
-public class Tuple7<A, B, C, D, E, F, G> {
+final public class Tuple7<A, B, C, D, E, F, G> {
     public final A _1;
     public final B _2;
     public final C _3;

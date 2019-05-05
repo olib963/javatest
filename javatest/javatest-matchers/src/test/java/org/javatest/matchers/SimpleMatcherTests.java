@@ -5,7 +5,8 @@ import org.javatest.TestProvider;
 
 import java.util.stream.Stream;
 
-import static org.javatest.JavaTest.*;
+import static org.javatest.JavaTest.test;
+import static org.javatest.matchers.Matcher.*;
 
 public class SimpleMatcherTests {
     public static TestProvider passing() {
@@ -15,7 +16,7 @@ public class SimpleMatcherTests {
         return new FailingTests();
     }
 
-    static class PassingTests implements MatcherTestProvider {
+    static class PassingTests implements TestProvider {
 
         @Override
         public Stream<Test> testStream() {
@@ -29,7 +30,7 @@ public class SimpleMatcherTests {
             );
         }
     }
-    static class FailingTests implements MatcherTestProvider {
+    static class FailingTests implements TestProvider {
         @Override
         public Stream<Test> testStream() {
             return Stream.of(

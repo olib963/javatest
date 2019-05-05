@@ -3,7 +3,7 @@ package org.javatest;
 import java.util.ArrayList;
 import java.util.List;
 
-final public class TestResults {
+public final class TestResults {
     public final boolean succeeded;
     public final long successCount;
     public final long failureCount;

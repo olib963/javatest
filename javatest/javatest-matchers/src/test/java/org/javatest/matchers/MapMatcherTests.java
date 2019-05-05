@@ -8,6 +8,10 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import static org.javatest.JavaTest.*;
+import static org.javatest.matchers.Matcher.*;
+import static org.javatest.matchers.MapMatchers.*;
+import static org.javatest.matchers.ComparableMatchers.*;
+import static org.javatest.matchers.StringMatchers.*;
 
 public class MapMatcherTests {
     private static final List<String> tags = List.of("map-matchers");
@@ -21,7 +25,7 @@ public class MapMatcherTests {
         return new FailingTests();
     }
 
-    static class PassingTests implements MatcherTestProvider, MapMatchers, ComparableMatchers, StringMatchers {
+    static class PassingTests implements TestProvider {
         @Override
         public Stream<Test> testStream() {
             return Stream.of(
@@ -37,7 +41,7 @@ public class MapMatcherTests {
         }
     }
 
-    static class FailingTests implements MatcherTestProvider, MapMatchers, ComparableMatchers, StringMatchers {
+    static class FailingTests implements TestProvider {
         @Override
         public Stream<Test> testStream() {
             return Stream.of(

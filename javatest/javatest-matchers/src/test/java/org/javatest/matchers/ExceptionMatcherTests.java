@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static org.javatest.JavaTest.*;
+import static org.javatest.matchers.Matcher.*;
+import static org.javatest.matchers.ExceptionMatchers.*;
+import static org.javatest.matchers.StringMatchers.*;
 
 public class ExceptionMatcherTests {
     private static final List<String> tags = List.of("exception-matchers");
@@ -17,7 +20,7 @@ public class ExceptionMatcherTests {
         return new FailingTests();
     }
 
-    static class PassingTests implements MatcherTestProvider, ExceptionMatchers, StringMatchers {
+    static class PassingTests implements TestProvider {
         @Override
         public Stream<Test> testStream() {
             return Stream.of(
@@ -48,7 +51,7 @@ public class ExceptionMatcherTests {
     }
 
     // TODO the latter tests errors don't compose nicely!
-    static class FailingTests implements MatcherTestProvider, ExceptionMatchers, StringMatchers {
+    static class FailingTests implements TestProvider {
         @Override
         public Stream<Test> testStream() {
             return Stream.of(
