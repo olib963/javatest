@@ -279,16 +279,36 @@ class MyTests {
 
 ### With JavaFire Maven plugin
 
-If you are using maven you can add the `JavaFire` maven plugin to your pom to run tests defined by a `TestSuite` for you
-during mavens `test` phase:
+If you are using maven you can add the `JavaFire` maven plugin to your pom to run tests defined by a `TestRunners` class for you
+during mavens `test` phase. Your `TestRunners` class _must_ have a zero arg constructor.
 
+```java
+package my.awesome.app;
+
+import static org.javatest.JavaTest.*;
+
+public class MyTests implements TestRunners {
+    @Override
+    public Stream<TestRunner> runners() {
+        var unitTests = testStreamRunner(allTestsFrom(/* list of suites */).parallel());
+        var applicationTests = Fixtures.fixtureRunner(
+                "database connection",
+                 MyFixtures.connectToDb(), 
+                 db -> testStreamRunner(new MyIntegrationTests(db).testStream()));
+        return Stream.of(unitTests, applicationTests);
+    }
+}
+```
+
+In `pom.xml`:
+ 
 ```xml
 <plugin>
     <groupId>org.javatest</groupId>
     <artifactId>javafire-maven-plugin</artifactId>
     <version>${javatest.version}</version>
     <configuration>
-        <testSuite>your.class.Here</testSuite>
+        <testRunners>my.awesome.app.MyTests</testRunners>
     </configuration>
     <executions>
         <execution>
@@ -300,8 +320,6 @@ during mavens `test` phase:
     </executions>
 </plugin>
 ```
-
-**TODO:** change this to use `TestRunner`s instead of `TestSuite`s.
 
 ### JShell
 

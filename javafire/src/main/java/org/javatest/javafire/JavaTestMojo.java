@@ -17,21 +17,16 @@ import org.javatest.javafire.JavaTestRunner.Result;
 public class JavaTestMojo extends AbstractMojo {
 
 	/**
-	 * The name of the class that implements TestSuite to run
+	 * The name of the class that implements TestRunners, providing the runners for testing
 	 */
 	@Parameter(required = true)
-	private String testSuite;
+	private String testRunners;
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
-
-		var testRunner = new JavaTestRunner(testSuite, new ThreadLocalClassLoaderProvider(), lookupProject());
-		
+		var testRunner = new JavaTestRunner(testRunners, new ThreadLocalClassLoaderProvider(), lookupProject());
 		validateResult(testRunner.run());
 	}
-
-	
-	// private methods to aid readability
 
 	private MavenProject lookupProject() throws MojoExecutionException {
 		try {
@@ -43,7 +38,6 @@ public class JavaTestMojo extends AbstractMojo {
 	}
 	
 	private void validateResult(Result result) throws MojoExecutionException, MojoFailureException {
-
 		if (result.status == JavaTestRunner.Status.EXECUTION_FAILURE) {
 			throw result.cause.map(cause -> new MojoExecutionException(result.description, cause))
 					.orElseGet(() -> new MojoExecutionException(result.description));

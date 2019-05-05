@@ -2,9 +2,7 @@ package org.javatest.javafire;
 
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.project.MavenProject;
-import org.javatest.JavaTest;
-import org.javatest.Test;
-import org.javatest.TestSuite;
+import org.javatest.*;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -53,58 +51,58 @@ public class JavaTestRunnerTest implements TestSuite {
         return provider;
     }
 
-    private JavaTestRunner.Result runWithTestSuite(Class<?> testClass) throws ClassNotFoundException, ClassLoaderProvider.ClassLoadingException, DependencyResolutionRequiredException {
+    private JavaTestRunner.Result runWithRunners(Class<?> testClass) throws ClassNotFoundException, ClassLoaderProvider.ClassLoadingException, DependencyResolutionRequiredException {
         var mavenProject = projectWithExpectedClasspathDependencies();
-        var testSuite = testClass.getName();
+        var testRunners = testClass.getName();
         var classLoaderProvider = providerFor(testClass);
-        return new JavaTestRunner(testSuite, classLoaderProvider, mavenProject).run();
+        return new JavaTestRunner(testRunners, classLoaderProvider, mavenProject).run();
     }
 
     @Override
     public Stream<Test> testStream() {
         return Stream.of(
-                test("SimpleTest failure to get runtime classpath elements", () -> {
+                test("Test failure to get runtime classpath elements", () -> {
                     var mavenProject = mock(MavenProject.class);
                     doThrow(DependencyResolutionRequiredException.class).when(mavenProject).getRuntimeClasspathElements();
                     var result = new JavaTestRunner(null, null, mavenProject).run();
                     return that(result.status == JavaTestRunner.Status.EXECUTION_FAILURE, "Should return an execution failure");
                 }),
-                test("SimpleTest failure to get test classpath elements", () -> {
+                test("Test failure to get test classpath elements", () -> {
                     var mavenProject = mock(MavenProject.class);
                     doThrow(DependencyResolutionRequiredException.class).when(mavenProject).getTestClasspathElements();
                     var result = new JavaTestRunner(null, null, mavenProject).run();
                     return that(result.status == JavaTestRunner.Status.EXECUTION_FAILURE, "Should return an execution failure");
                 }),
-                test("SimpleTest failure load classpath elements", () -> {
+                test("Test failure load classpath elements", () -> {
                     var mavenProject = projectWithExpectedClasspathDependencies();
                     var classLoaderProvider = mock(ClassLoaderProvider.class);
                     doThrow(ClassLoaderProvider.ClassLoadingException.class).when(classLoaderProvider).classLoaderFor(eq(ALL_ELEMENTS));
                     var result = new JavaTestRunner(null, classLoaderProvider, mavenProject).run();
                     return that(result.status == JavaTestRunner.Status.EXECUTION_FAILURE, "Should return an execution failure");
                 }),
-                test("SimpleTest when test suite class cannot be loaded", () -> {
+                test("Test when test runners class cannot be loaded", () -> {
                     var mavenProject = projectWithExpectedClasspathDependencies();
-                    var testSuite = "org.foo.Bar";
+                    var runners = "org.foo.Bar";
                     var classLoader = mock(ClassLoader.class);
-                    doThrow(ClassNotFoundException.class).when(classLoader).loadClass(testSuite);
+                    doThrow(ClassNotFoundException.class).when(classLoader).loadClass(runners);
                     var classLoaderProvider = providerFor(classLoader);
-                    var result = new JavaTestRunner(testSuite, classLoaderProvider, mavenProject).run();
+                    var result = new JavaTestRunner(runners, classLoaderProvider, mavenProject).run();
                     return that(result.status == JavaTestRunner.Status.EXECUTION_FAILURE, "Should return an execution failure");
                 }),
-                test("SimpleTest when test suite class does not extend TestSuite", () -> {
-                    var result = runWithTestSuite(IncorrectTypeClass.class);
+                test("Test when test runners class does not extend TestRunners", () -> {
+                    var result = runWithRunners(IncorrectTypeClass.class);
                     return that(result.status == JavaTestRunner.Status.FAILURE, "Should return a failure");
                 }),
-                test("SimpleTest when test suite class cannot be instantiated", () -> {
-                    var result = runWithTestSuite(SuiteWithNoDefaultConstructor.class);
+                test("Test when test runners class cannot be instantiated", () -> {
+                    var result = runWithRunners(RunnersWithNoDefaultConstructor.class);
                     return that(result.status == JavaTestRunner.Status.FAILURE, "Should return a failure");
                 }),
-                test("SimpleTest when test suite contains a failing test", () -> {
-                    var result = runWithTestSuite(ProviderWithFailingTest.class);
+                test("Test when test runners contains a failing test", () -> {
+                    var result = runWithRunners(RunnersWithFailingTest.class);
                     return that(result.status == JavaTestRunner.Status.FAILURE, "Should return a failure");
                 }),
-                test("SimpleTest when all tests from a suite pass", () -> {
-                    var result = runWithTestSuite(SuiteWithPassingTests.class);
+                test("Test when all tests from runners pass", () -> {
+                    var result = runWithRunners(RunnersWithPassingTests.class);
                     return that(result.status == JavaTestRunner.Status.SUCCESS, "Should return a success");
                 })
         );
@@ -112,25 +110,31 @@ public class JavaTestRunnerTest implements TestSuite {
 
     public static class IncorrectTypeClass {}
 
-    public static class SuiteWithNoDefaultConstructor implements TestSuite {
-        private SuiteWithNoDefaultConstructor() {}
+    public static class RunnersWithNoDefaultConstructor implements TestRunners {
+        private RunnersWithNoDefaultConstructor() {}
 
         @Override
-        public Stream<Test> testStream() {
+        public Stream<TestRunner> runners() {
             return Stream.empty();
         }
     }
-    // TODO make these tests run silently by turning off logging
-    public static class ProviderWithFailingTest implements TestSuite {
+
+    public static class RunnersWithFailingTest implements TestRunners {
         @Override
-        public Stream<Test> testStream() {
-            return Stream.of(test("Failure", () -> that(false, "Expected false")));
+        public Stream<TestRunner> runners() {
+            return Stream.of(testStreamRunner(
+                    Stream.of(test("Failure", () -> that(false, "Expected false"))),
+                    Collections.emptyList()
+            ));
         }
     }
-    public static class SuiteWithPassingTests implements TestSuite {
+    public static class RunnersWithPassingTests implements TestRunners {
         @Override
-        public Stream<Test> testStream() {
-            return Stream.of(test("Success", () -> that(true, "Expected true")));
+        public Stream<TestRunner> runners() {
+            return Stream.of(testStreamRunner(
+                    Stream.of(test("Success", () -> that(true, "Expected true"))),
+                    Collections.emptyList()
+            ));
         }
     }
 
