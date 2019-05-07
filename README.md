@@ -426,7 +426,7 @@ My plan for the first released version is to:
 - [x] Separate the side effects into test observers that can be excluded. Initially this is just a logger to print
 each result.
 - [x] Decide on which approach to take for the API: Mixins or static imports. **I have decided for most cases static imports
-are the most flexible with optional mixins where it is beneficial e.g. `Eventually`.**
+are the most flexible.**
 - [x] Ensure I am happy with the level of simplicity in each module, especially the core.
 - [ ] Review Documentation with people new to and familiar with Java.
 - [ ] Repackage to appropriate package and `groupId`
