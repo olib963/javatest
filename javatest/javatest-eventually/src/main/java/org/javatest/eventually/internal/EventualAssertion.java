@@ -4,17 +4,20 @@ import org.javatest.Assertion;
 import org.javatest.AssertionResult;
 import org.javatest.CheckedSupplier;
 
+import java.util.Optional;
 import java.util.stream.Stream;
 
 public class EventualAssertion implements Assertion {
     private final CheckedSupplier<Assertion> test;
     private final int attempts;
     private final long sleepTime;
+    private final Optional<Long> initialDelay;
 
-    public EventualAssertion(CheckedSupplier<Assertion> test, long sleepTime, int attempts) {
+    public EventualAssertion(CheckedSupplier<Assertion> test, long sleepTime, int attempts, Optional<Long> initialDelay) {
         this.test = test;
         this.attempts = attempts;
         this.sleepTime = sleepTime;
+        this.initialDelay = initialDelay;
     }
 
     @Override
@@ -22,13 +25,28 @@ public class EventualAssertion implements Assertion {
         if (attempts < 1) {
             return AssertionResult.failure("You must make at least one attempt in your test. Attempts given: " + attempts);
         }
-
         if (sleepTime <= 0) {
             return AssertionResult.failure("Millisecond sleep time given must be greater than 0. (Sleep time was " + sleepTime + ")");
         }
+        return initialDelay.flatMap(this::waitForInitialDelay).orElseGet(this::runAllAttempts);
+    }
 
+    private Optional<AssertionResult> waitForInitialDelay(Long delay) {
+            if (delay <= 0) {
+                return Optional.of(AssertionResult.failure("Millisecond initial delay time given must be greater than 0. (Delay time was " + delay + ")"));
+            }
+            try {
+                Thread.sleep(delay);
+            } catch (InterruptedException e) {
+                return Optional.of(AssertionResult.exception(e));
+            }
+            return Optional.empty();
+    }
+
+    private AssertionResult runAllAttempts() {
         var firstAttempt = runTest(test, 1);
 
+        // TODO this is just zipWithIndex. Is there some Java equivalent?
         var remainingAttempts = Stream
                 .iterate(new Attempt(test, 2), Attempt::increment)
                 .limit(attempts - 1);
@@ -71,11 +89,13 @@ public class EventualAssertion implements Assertion {
     private class Attempt {
         final CheckedSupplier<Assertion> test;
         final int attempt;
-        public Attempt(CheckedSupplier<Assertion> test, int attempt) {
+
+        private Attempt(CheckedSupplier<Assertion> test, int attempt) {
             this.test = test;
             this.attempt = attempt;
         }
-        public Attempt increment() {
+
+        private Attempt increment() {
             return new Attempt(test, attempt + 1);
         }
     }

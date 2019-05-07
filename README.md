@@ -429,6 +429,7 @@ each result.
 are the most flexible with optional mixins where it is beneficial e.g. `Eventually`.**
 - [x] Ensure I am happy with the level of simplicity in each module, especially the core.
 - [ ] Review Documentation with people new to and familiar with Java.
+- [ ] Repackage to appropriate package and `groupId`
 - [ ] Release and get much feedbacks.
 
 Features I would like to look at implementing in the future:

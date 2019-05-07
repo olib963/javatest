@@ -10,6 +10,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 import static org.javatest.JavaTest.*;
+import static org.javatest.eventually.Eventually.*;
+import static org.javatest.eventually.EventualConfig.DEFAULT_CONFIG;
 
 public class EventuallyTests {
 
@@ -20,7 +22,7 @@ public class EventuallyTests {
         return new FailingTests();
     }
 
-    static class PassingTests implements TestSuite, Eventually {
+    static class PassingTests implements TestSuite {
         @Override
         public Stream<Test> testStream() {
             var simpleTests = Stream.of(
@@ -39,21 +41,22 @@ public class EventuallyTests {
                     int value = integer.getAndIncrement();
                     return that(value == 6, "Atomic integer (" + value + ") is 6");
                 };
-                return eventually(valueBecomes6, Duration.ofMillis(50));
+                return eventually(valueBecomes6, DEFAULT_CONFIG.withWaitInterval(Duration.ofMillis(50)));
             });
         }
     }
 
-    static class FailingTests implements TestSuite, Eventually {
+    static class FailingTests implements TestSuite {
 
         @Override
         public Stream<Test> testStream() {
             return Stream.of(
-                    test("Simple fail", () -> eventually(() -> that(false, "should fail"), 1)),
-                    test("Exception fail", () -> eventually(() -> { throw new Exception("Test failure"); }, 1)),
-                    test("Fails if 0 attempts", () -> eventually(() -> that(true, "should pass"), 0)),
-                    test("Fails if negative attempts", () -> eventually(() -> that(true, "should pass"), -1)),
-                    test("Fails if empty duration", () -> eventually(() -> that(true, "should pass"), Duration.ZERO)),
+                    test("Simple fail", () -> eventually(() -> that(false, "should fail"), DEFAULT_CONFIG.withAttempts(1))),
+                    test("Exception fail", () -> eventually(() -> { throw new Exception("Test failure"); }, DEFAULT_CONFIG.withAttempts(1))),
+                    test("Fails if 0 attempts", () -> eventually(() -> that(true, "should pass"), DEFAULT_CONFIG.withAttempts(0))),
+                    test("Fails if negative attempts", () -> eventually(() -> that(true, "should pass"), DEFAULT_CONFIG.withAttempts(-1))),
+                    test("Fails if empty duration", () -> eventually(() -> that(true, "should pass"), DEFAULT_CONFIG.withWaitInterval(Duration.ZERO))),
+                    test("Fails if empty initial delay", () -> eventually(() -> that(true, "should pass"), DEFAULT_CONFIG.withInitialDelay(Duration.ZERO))),
                     atomicIntegerTest()
             );
         }
@@ -65,7 +68,7 @@ public class EventuallyTests {
                     int value = integer.getAndIncrement();
                     return that(value == 6, "Atomic integer (" + value + ") is 6");
                 };
-                return eventually(valueBecomes6, Duration.ofMillis(50), 5);
+                return eventually(valueBecomes6, EventualConfig.of(5, Duration.ofMillis(50)));
             });
         }
     }
