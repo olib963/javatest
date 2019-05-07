@@ -20,6 +20,12 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>javatest-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>javatest-fixtures</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

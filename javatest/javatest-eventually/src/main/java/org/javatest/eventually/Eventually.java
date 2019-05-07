@@ -4,33 +4,18 @@ import org.javatest.Assertion;
 import org.javatest.CheckedSupplier;
 import org.javatest.eventually.internal.EventualAssertion;
 
-import java.time.Duration;
+public class Eventually {
 
-public interface Eventually {
+    private Eventually() {}
 
-    // Defaults to 13 attempts over 1 minute.
-    default Duration defaultDuration() {
-        return Duration.ofSeconds(5);
+    public static Assertion eventually(CheckedSupplier<Assertion> test) {
+        return eventually(test, EventualConfig.DEFAULT_CONFIG);
     }
 
-    default int defaultAttempts() {
-        return 13;
+    public static Assertion eventually(CheckedSupplier<Assertion> test, EventualConfig config) {
+        return new EventualAssertion(test,
+                config.waitInterval.abs().toMillis(),
+                config.attempts,
+                config.initialDelay.map(d -> d.abs().toMillis()));
     }
-
-    default Assertion eventually(CheckedSupplier<Assertion> test) {
-        return eventually(test, defaultDuration(), defaultAttempts());
-    }
-
-    default Assertion eventually(CheckedSupplier<Assertion> test, Duration duration) {
-        return eventually(test, duration, defaultAttempts());
-    }
-
-    default Assertion eventually(CheckedSupplier<Assertion> test, int attempts) {
-        return eventually(test, defaultDuration(), attempts);
-    }
-
-    default Assertion eventually(CheckedSupplier<Assertion> test, Duration duration, int attempts) {
-        return new EventualAssertion(test, duration.abs().toMillis(), attempts);
-    }
-
 }
