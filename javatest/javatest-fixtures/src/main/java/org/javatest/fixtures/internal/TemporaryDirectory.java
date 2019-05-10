@@ -1,11 +1,15 @@
 package org.javatest.fixtures.internal;
 
 import org.javatest.fixtures.FixtureDefinition;
+import org.javatest.fixtures.Try;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static org.javatest.fixtures.Try.Failure;
+import static org.javatest.fixtures.Try.Success;
 
 public class TemporaryDirectory implements FixtureDefinition<File> {
     private final String filePath;
@@ -15,21 +19,22 @@ public class TemporaryDirectory implements FixtureDefinition<File> {
     }
 
     @Override
-    public File create() throws Exception {
+    public Try<File> create() {
         var dir = new File(filePath);
         if (dir.mkdirs()) {
-            return dir;
+            return Success(dir);
         }
-        throw new Exception("Could not create temporary directory " + dir.getAbsolutePath());
+        return Failure("Could not create temporary directory " + dir.getAbsolutePath());
     }
 
     @Override
-    public void destroy(File fixture) throws Exception {
+    public Try<Void> destroy(File fixture) {
         var failedToDelete = deleteAll(fixture);
         var allFailedFiles = failedToDelete.collect(Collectors.joining(", "));
         if (!allFailedFiles.isEmpty()) {
-            throw new Exception("Could not delete files: " + allFailedFiles);
+            return Failure("Could not delete files: " + allFailedFiles);
         }
+        return Success();
     }
 
     private Stream<String> deleteAll(File file) {

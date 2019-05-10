@@ -8,6 +8,9 @@ import org.javatest.fixtures.internal.TemporaryDirectory;
 
 import java.io.File;
 import java.util.function.Function;
+import java.util.function.Supplier;
+
+import static org.javatest.fixtures.Try.*;
 
 public class Fixtures {
     private Fixtures() {
@@ -24,6 +27,14 @@ public class Fixtures {
     }
 
     public static <Fixture> FixtureDefinition<Fixture> definitionFromFunctions(CheckedSupplier<Fixture> creator, CheckedConsumer<Fixture> destroyer) {
+        return definitionFromFunctions(() -> Try(creator), (Fixture f) -> Try(destroyer, f));
+    }
+
+    public static <Fixture> FixtureDefinition<Fixture> definitionFromFunction(Supplier<Try<Fixture>> creator) {
+        return definitionFromFunctions(creator, x -> Success());
+    }
+
+    public static <Fixture> FixtureDefinition<Fixture> definitionFromFunctions(Supplier<Try<Fixture>> creator, Function<Fixture, Try<Void>> destroyer) {
         return new FunctionFixtureDefinition<>(creator, destroyer);
     }
 

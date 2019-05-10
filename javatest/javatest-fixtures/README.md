@@ -69,8 +69,3 @@ You can include this module with this dependency:
     <scope>test</scope>
 </dependency>
 ```
-
-## TODO
-
-- [ ] If there are any common test fixtures create the required functions.
-- [ ] Decide how to handle failures, should we create a `Try[A]` control structure?
