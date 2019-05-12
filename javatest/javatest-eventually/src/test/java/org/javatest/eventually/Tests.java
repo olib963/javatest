@@ -28,7 +28,7 @@ public class Tests {
 
         var delayTests = Fixtures.fixtureRunner(
                 "Executor Service",
-                Fixtures.definitionFromFunctions(Executors::newSingleThreadExecutor, ExecutorService::shutdown),
+                Fixtures.definitionFromThrowingFunctions(Executors::newSingleThreadExecutor, ExecutorService::shutdown),
                 es -> testStreamRunner(new InitialDelayTests(es).testStream())
         );
 

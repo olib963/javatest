@@ -3,6 +3,7 @@ package org.javatest.fixtures.internal;
 import org.javatest.*;
 import org.javatest.fixtures.FixtureDefinition;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 // TODO are there valid use cases for the before each and after each fixtures?
@@ -22,25 +23,28 @@ public class FixtureRunner<Fixture> implements TestRunner {
     // it would be good to rework this so the test counts remain the same, but the result fails and a log is added.
     @Override
     public TestResults run() {
-        try {
-            var fixture = fixtureDefinition.create();
-            return runWithFixture(fixture);
-        } catch (Exception error) {
-            var failed = AssertionResult.exception(error);
-            var result = new TestResult(failed, "Could not create fixture \"" + fixtureName + "\"\n" + failed.description);
-            return TestResults.init().addResult(result);
-        }
+        return fixtureDefinition.create()
+                .mapError(e -> new Exception("Could not create fixture \"" + fixtureName + '"', e))
+                .map(this::runWithFixture)
+                .recoverWith(e -> TestResults.init().addResult(exceptionToResult(e)));
+
     }
 
     private TestResults runWithFixture(Fixture fixture) {
         var results = testFunction.apply(fixture).run();
-        try {
-            fixtureDefinition.destroy(fixture);
-            return results;
-        } catch (Exception error) {
-            var failed = AssertionResult.exception(error);
-            var result = new TestResult(failed, "Could not destroy fixture \"" + fixtureName + "\"\n" + failed.description);
-            return results.addResult(result);
-        }
+        return fixtureDefinition.destroy(fixture)
+                .map(unit -> results)
+                .recoverWith(e -> results.addResult(
+                        exceptionToResult(new Exception("Could not destroy fixture \"" + fixtureName + '"', e))));
+    }
+
+    private TestResult exceptionToResult(Exception e) {
+        return new TestResult(AssertionResult.exception(e), flattenMessages(e));
+    }
+
+    private String flattenMessages(Throwable t) {
+        return Optional.ofNullable(t.getCause())
+                .map(c -> t.getMessage() + System.lineSeparator() + flattenMessages(c))
+                .orElseGet(t::getMessage);
     }
 }

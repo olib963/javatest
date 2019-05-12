@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 
 import static org.javatest.JavaTest.*;
 import static org.javatest.fixtures.Fixtures.*;
+import static org.javatest.fixtures.Try.*;
 
 public class SimpleTests implements TestSuite {
 
@@ -16,7 +17,7 @@ public class SimpleTests implements TestSuite {
                 test("Tests using fixture", () -> {
                     var result = run(fixtureRunner(
                             "string fixture",
-                            definitionFromFunction(() -> "fixture"),
+                            definitionFromFunction(() -> Success("fixture")),
                             s -> testStreamRunner(Stream.of(
                                     test("Testing with " + s, () -> that(true, "this test should pass"))
                             ))
@@ -26,7 +27,7 @@ public class SimpleTests implements TestSuite {
                 test("Failure to create fixture", () -> {
                     var result = run(fixtureRunner(
                             "fail to create",
-                            definitionFromFunction(() -> { throw new RuntimeException("Could not create fixture"); }),
+                            definitionFromFunction(() -> Failure("Could not create fixture")),
                             s -> testStreamRunner(Stream.of(
                                     test("Testing with " + s, () -> that(true, "this test should pass"))
                             ))
@@ -36,7 +37,7 @@ public class SimpleTests implements TestSuite {
                 test("Failure to destroy fixture", () -> {
                     var result = run(fixtureRunner(
                             "fail to destroy",
-                            definitionFromFunctions(() -> "fixture", s -> { throw new RuntimeException("Could not destroy fixture"); }),
+                            definitionFromFunctions(() -> Success("fixture"), s -> Failure("Could not destroy fixture")),
                             s -> testStreamRunner(Stream.of(
                                     test("Testing with " + s, () -> that(true, "this test should pass"))
                             ))
@@ -46,7 +47,7 @@ public class SimpleTests implements TestSuite {
                 test("FixtureDefinition is fine but tests fail", () -> {
                     var result = run(fixtureRunner(
                             "test failures",
-                            definitionFromFunction(() -> "fixture"),
+                            definitionFromFunction(() -> Success("fixture")),
                             s -> testStreamRunner(Stream.of(
                                     test("Testing with " + s, () -> that(false, "this test should fail"))
                             ))
