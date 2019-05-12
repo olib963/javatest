@@ -37,24 +37,39 @@ public class MyEntryPoint {
 ## Custom Fixture Definitions
 
 You can create your own `FixtureDefinition`s by extending the interface or for simple cases using the convenience functions
-to create definitions from functions:
+to create definitions from functions. You can make use of the `org.javatest.fixtures.Try` static factories to
+create `Success` and `Failure` results for your definition.
 
 ```java
 
+import static org.javatest.fixtures.Try.*;
+
 public class CustomDefinitions {
     
+
+    // If you only need to create the fixture and no clean up is needed:
+    FixtureDefinition<String> stringDefinition =
+            Fixtures.definitionFromFunction(() -> Success("Hello"));
+    
+    // Express failures as a string
+    FixtureDefinition<Integer> intDefinition = 
+            Fixtures.definitionFromFunction(() -> Failure("Oh dear something went wrong!"));
+    
+    // Add a tear down function
+    FixtureDefinition<Map<String, String>> hashMapDefinition =
+            Fixtures.definitionFromFunctions(
+                    () -> Success(new HashMap<>()), 
+                    map -> { 
+                        map.clear();
+                        return Success(); 
+                    });
+    
+    // Equivalent helpers are available that can wrap existing java functions that throw exceptions
     FixtureDefinition<ExecutorService> singleThreadExecutorDefinition =
                 Fixtures.definitionFromFunctions(Executors::newSingleThreadExecutor, ExecutorService::shutdown);
 
-    // If you only need to create the fixture and no clean up is needed:
-    FixtureDefinition<Map<String, String>> hashMapDefinition =
-        Fixtures.definitionFromFunction(() -> new HashMap<>());
-    
-    // Throw exceptions (for now) if the create/tear down fail
-    FixtureDefinition<Integer> stringDefinition = 
-            Fixtures.definitionFromFunction(() -> { throw new IllegalStateException("Oh dear something went wrong!"); });
-
 }
+
 
 ```
 _______
