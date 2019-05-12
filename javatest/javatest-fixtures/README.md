@@ -66,7 +66,7 @@ public class CustomDefinitions {
     
     // Equivalent helpers are available that can wrap existing java functions that throw exceptions
     FixtureDefinition<ExecutorService> singleThreadExecutorDefinition =
-                Fixtures.definitionFromFunctions(Executors::newSingleThreadExecutor, ExecutorService::shutdown);
+                Fixtures.definitionFromThrowingFunctions(Executors::newSingleThreadExecutor, ExecutorService::shutdown);
 
 }
 
