@@ -23,18 +23,22 @@ public class JavaTest {
     }
 
     public static TestResults runTests(Stream<Test> tests) {
-        return run(testStreamRunner(tests));
+        return run(testableRunner(tests.map(t -> t)));
     }
 
     // Stream Runner factory methods
     private static final Collection<TestCompletionObserver> DEFAULT_OBSERVER =
             Collections.singletonList(TestCompletionObserver.colourLogger());
 
-    public static TestRunner testStreamRunner(Stream<Test> tests) {
-        return new StreamRunner(tests, DEFAULT_OBSERVER);
+    public static TestRunner testableRunner(Testable testable) {
+        return testableRunner(Stream.of(testable));
     }
 
-    public static TestRunner testStreamRunner(Stream<Test> tests, Collection<TestCompletionObserver> observers) {
+    public static TestRunner testableRunner(Stream<Testable> tests) {
+        return testableRunner(tests, DEFAULT_OBSERVER);
+    }
+
+    public static TestRunner testableRunner(Stream<Testable> tests, Collection<TestCompletionObserver> observers) {
         return new StreamRunner(tests, observers);
     }
 
@@ -59,8 +63,5 @@ public class JavaTest {
         return new PendingAssertion(reason);
     }
 
-    public static Stream<Test> allTestsFrom(TestSuite... suites) {
-        return Arrays.stream(suites).flatMap(TestSuite::testStream);
-    }
 }
 

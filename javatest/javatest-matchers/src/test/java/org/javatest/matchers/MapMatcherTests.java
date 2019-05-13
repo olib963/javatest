@@ -27,7 +27,7 @@ public class MapMatcherTests {
 
     static class PassingTests implements TestSuite {
         @Override
-        public Stream<Test> testStream() {
+        public Stream<Test> tests() {
             return Stream.of(
                     test("Empty", () -> that(Map.of(), isEmptyMap()), tags),
                     test("Size", () -> that(SIMPLE_MAP, hasMapSize(1)), tags),
@@ -43,7 +43,7 @@ public class MapMatcherTests {
 
     static class FailingTests implements TestSuite {
         @Override
-        public Stream<Test> testStream() {
+        public Stream<Test> tests() {
             return Stream.of(
                     test("Empty (FAIL)", () -> that(SIMPLE_MAP, isEmptyMap()), tags),
                     test("Size (FAIL)", () -> that(SIMPLE_MAP, hasMapSize(2)), tags),

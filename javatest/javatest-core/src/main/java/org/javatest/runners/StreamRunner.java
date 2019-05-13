@@ -4,13 +4,14 @@ import org.javatest.*;
 import org.javatest.logging.LoggingObserver;
 
 import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 public class StreamRunner implements TestRunner {
-    private final Stream<Test> tests;
+    private final Stream<Testable> tests;
     private final Collection<TestCompletionObserver> observers;
 
-    public StreamRunner(Stream<Test> tests, Collection<TestCompletionObserver> observers) {
+    public StreamRunner(Stream<Testable> tests, Collection<TestCompletionObserver> observers) {
         this.tests = tests;
         this.observers = observers;
     }
@@ -18,18 +19,24 @@ public class StreamRunner implements TestRunner {
     @Override
     public TestResults run() {
         var results = tests
-                .map(this::runTest)
-                .reduce(TestResults.init(), TestResults::addResult, TestResults::combine);
+                .map(this::runTestable)
+                .reduce(TestResults.init(), TestResults::combine);
         observers.forEach(o -> o.onRunCompletion(results));
         return results;
     }
 
-    private TestResult runTest(Test test) {
+    private TestResults runTestable(Testable testable) {
+        return testable.tests().map(test -> runTest(testable.suiteName(), test))
+                .reduce(TestResults.init(), TestResults::addResult, TestResults::combine);
+    }
+
+    private TestResult runTest(Optional<String> suiteName, Test test) {
         // TODO allow a test to add to the log. Ideally immutable :/ probably have to be some kind of builder per test case.
         // TODO create a structured log
         var result = safeRunTest(test.test);
         var log = test.name + LoggingObserver.SEPARATOR + "\t" + result.description;
-        var testResult = new TestResult(result, log);
+        var withSuite = suiteName.map(n -> n + ':' + log).orElse(log);
+        var testResult = new TestResult(result, withSuite);
         observers.forEach(o -> o.onTestCompletion(testResult));
         return testResult;
     }

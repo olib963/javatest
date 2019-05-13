@@ -18,7 +18,7 @@ public class InitialDelayTests implements TestSuite {
     }
 
     @Override
-    public Stream<Test> testStream() {
+    public Stream<Test> tests() {
         return Stream.of(
                 test("Initial delay", () -> {
                     var failer = new FailIfNotSet();

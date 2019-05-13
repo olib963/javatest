@@ -21,7 +21,7 @@ public class StringMatcherTests {
 
     static class PassingTests implements TestSuite {
         @Override
-        public Stream<Test> testStream() {
+        public Stream<Test> tests() {
             return Stream.of(
                     test("String Prefix", () -> that("Hello World", startsWith("Hello")), tags),
                     test("String Suffix", () -> that("Hello World", endsWith("World")), tags),
@@ -36,7 +36,7 @@ public class StringMatcherTests {
 
     static class FailingTests implements TestSuite {
         @Override
-        public Stream<Test> testStream() {
+        public Stream<Test> tests() {
             return Stream.of(
                     test("String Prefix (FAIL)", () -> that("Hello World", startsWith("World")), tags),
                     test("String Suffix (FAIL)", () -> that("Hello World", endsWith("Hello")), tags),

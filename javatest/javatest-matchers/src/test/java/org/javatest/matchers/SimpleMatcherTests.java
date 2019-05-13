@@ -19,7 +19,7 @@ public class SimpleMatcherTests {
     static class PassingTests implements TestSuite {
 
         @Override
-        public Stream<Test> testStream() {
+        public Stream<Test> tests() {
             return Stream.of(
                     test("One add One is Two!", () -> that(1 + 1, isEqualTo(2))),
                     test("Object is the correct type", () -> that("Hello", hasType(String.class))),
@@ -32,7 +32,7 @@ public class SimpleMatcherTests {
     }
     static class FailingTests implements TestSuite {
         @Override
-        public Stream<Test> testStream() {
+        public Stream<Test> tests() {
             return Stream.of(
                     test("One add One is Three! (FAIL)", () ->  that(1 + 1, isEqualTo(3))),
                     test("Object is the incorrect type (FAIL)", () -> that("Hello", hasType(int.class))),

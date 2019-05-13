@@ -12,7 +12,7 @@ import static org.javatest.JavaTest.*;
 
 public class ParameterisedTests implements TestSuite {
     @Override
-    public Stream<Test> testStream() {
+    public Stream<Test> tests() {
         // TODO create joinStreams function
         return Stream.of(
                 parameterised(Data.palindromes(), this::palindromeTest),

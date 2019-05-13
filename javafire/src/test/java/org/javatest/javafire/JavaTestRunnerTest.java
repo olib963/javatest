@@ -14,7 +14,7 @@ public class JavaTestRunnerTest implements TestSuite {
 
     // Running tests
     public static void main(String... args) {
-        if (!JavaTest.runTests(new JavaTestRunnerTest().testStream()).succeeded) {
+        if (!JavaTest.runTests(new JavaTestRunnerTest().tests()).succeeded) {
             throw new RuntimeException("Tests failed!");
         }
         System.out.println("Tests passed");
@@ -59,7 +59,7 @@ public class JavaTestRunnerTest implements TestSuite {
     }
 
     @Override
-    public Stream<Test> testStream() {
+    public Stream<Test> tests() {
         return Stream.of(
                 test("Test failure to get runtime classpath elements", () -> {
                     var mavenProject = mock(MavenProject.class);
@@ -122,7 +122,7 @@ public class JavaTestRunnerTest implements TestSuite {
     public static class RunnersWithFailingTest implements TestRunners {
         @Override
         public Stream<TestRunner> runners() {
-            return Stream.of(testStreamRunner(
+            return Stream.of(JavaTest.testableRunner(
                     Stream.of(test("Failure", () -> that(false, "Expected false"))),
                     Collections.emptyList()
             ));
@@ -131,7 +131,7 @@ public class JavaTestRunnerTest implements TestSuite {
     public static class RunnersWithPassingTests implements TestRunners {
         @Override
         public Stream<TestRunner> runners() {
-            return Stream.of(testStreamRunner(
+            return Stream.of(JavaTest.testableRunner(
                     Stream.of(test("Success", () -> that(true, "Expected true"))),
                     Collections.emptyList()
             ));
