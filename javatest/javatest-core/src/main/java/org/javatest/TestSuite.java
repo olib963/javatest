@@ -7,7 +7,11 @@ public interface TestSuite extends Testable {
 
     @Override
     default Optional<String> suiteName() {
-        return Optional.of(getClass().getSimpleName());
+        return Optional.of(name());
+    }
+
+    default String name() {
+        return getClass().getSimpleName();
     }
 
     Stream<Test> tests();
