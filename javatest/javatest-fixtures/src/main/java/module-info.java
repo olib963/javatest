@@ -1,4 +1,4 @@
 module javatest.fixtures {
     requires javatest.core;
-    exports org.javatest.fixtures;
+    exports io.github.olib963.javatest.fixtures;
 }

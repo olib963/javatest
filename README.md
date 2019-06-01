@@ -61,7 +61,7 @@ package foo;
 
 import java.util.stream.Stream;
 
-import static org.javatest.JavaTest.*;
+import static io.github.olib963.javatest.JavaTest.*;
 
 public class Tests {
 
@@ -141,7 +141,7 @@ The most basic `Test` can be defined by:
 
 Functions to help you define your tests are available by statically importing them from `JavaTest` e.g.
 ```java
-import static org.javatest.JavaTest.*;
+import static io.github.olib963.javatest.JavaTest.*;
 
 public class MyTests {
     Test myFirstTest = test("Simple Test", () -> that(true, "Expected test to pass"));
@@ -153,7 +153,7 @@ public class MyTests {
 Assertions are created simply from boolean expressions and a string description.
 
 ```java
-import static org.javatest.JavaTest.*;
+import static io.github.olib963.javatest.JavaTest.*;
 
 public class MyAssertions {
     Assertion simpleAssertion = that(1 + 1 == 2, "Expected one add one to be two");
@@ -172,7 +172,7 @@ Assertions can be composed using the `and`, `or` and `xor` default methods. Thes
 that hold (i.e. will pass tests):
 
 ```java
-import static org.javatest.JavaTest.*;
+import static io.github.olib963.javatest.JavaTest.*;
 
 class MyComposedAssertions { 
     Assertion orAssertion = that(1 + 1 == 3, "Expected one add one to be three")
@@ -190,7 +190,7 @@ class MyComposedAssertions {
 You can group your tests into logical units using `TestSuite`s
 
 ```java
-import static org.javatest.JavaTest.*;
+import static io.github.olib963.javatest.JavaTest.*;
 
 public class MyFirstTests implements TestSuite {
     @Override
@@ -204,7 +204,7 @@ public class MyFirstTests implements TestSuite {
 If you split your tests across multiple `TestSuite`s you can easily combine them as such:
 
 ```java
-import static org.javatest.JavaTest.*;
+import static io.github.olib963.javatest.JavaTest.*;
 
 public class AllMyTests implements TestSuite {
     @Override
@@ -220,7 +220,7 @@ By default a `TestSuite` will just use its own class name as the suite name, mak
 change this behaviour if you wish:
 
 ```java
-import static org.javatest.JavaTest.*;
+import static io.github.olib963.javatest.JavaTest.*;
 
 public class AllMyTests implements TestSuite {
     
@@ -243,7 +243,7 @@ pending tests come in. They will not fail your build but will logged in a differ
 You can optionally provide a reason this test has not yet been written.
 
 ```java
-import static org.javatest.JavaTest.*;
+import static io.github.olib963.javatest.JavaTest.*;
 
 public class MyTests implements TestSuite {
     @Override
@@ -264,7 +264,7 @@ Tagging tests is quite common to define subsets of tests, you can pass a `Collec
 Running all tests with a certain tag is then as simple as:
 
 ```java
-import static org.javatest.JavaTest.*;
+import static io.github.olib963.javatest.JavaTest.*;
 
 public class AllMyTests implements TestSuite {
     @Override
@@ -292,7 +292,7 @@ the runner, by default a logging observer is passed that logs each test result w
 (green for passing, red for failing and yellow for pending). If you want to turn off logging just pass an empty collection.
 
 ```java
-import static org.javatest.JavaTest.*;
+import static io.github.olib963.javatest.JavaTest.*;
 
 public class MyRunners {
     
@@ -311,7 +311,7 @@ public class MyRunners {
 
 ```xml
 <dependency>
-    <groupId>org.javatest</groupId>
+    <groupId>io.github.olib963</groupId>
     <artifactId>javatest-core</artifactId>
     <version>${javatest.version}</version>
     <scope>test</scope>
@@ -324,7 +324,7 @@ To run Javatest simply pass your `TestRunner` instances to the `JavaTest.run()` 
 result how you see fit. There is a convenience function `runTests` defined to just run a `Stream<Test>` using the default `StreamRunner`: 
 
 ```java
-import static org.javatest.JavaTest.*;
+import static io.github.olib963.javatest.JavaTest.*;
 
 class MyTests {
     public static void main(String... args) {
@@ -352,7 +352,7 @@ during mavens `test` phase. Your `TestRunners` class _must_ have a zero arg cons
 ```java
 package my.awesome.app;
 
-import static org.javatest.JavaTest.*;
+import static io.github.olib963.javatest.JavaTest.*;
 
 public class MyTests implements TestRunners {
     @Override
@@ -371,7 +371,7 @@ In `pom.xml`:
  
 ```xml
 <plugin>
-    <groupId>org.javatest</groupId>
+    <groupId>io.github.olib963</groupId>
     <artifactId>javafire-maven-plugin</artifactId>
     <version>${javatest.version}</version>
     <configuration>
@@ -393,9 +393,9 @@ In `pom.xml`:
 Since JavaTest is built on pure Java it plays quite nicely with the REPL. This startup script may be useful:
 ```jshelllanguage
 /env -class-path /absolute/path/to/javatest/jar
-import static org.javatest.JavaTest.*;
+import static io.github.olib963.javatest.JavaTest.*;
 
-org.javatest.TestResults runTest(org.javatest.CheckedSupplier<org.javatest.Assertion> testFn) {
+io.github.olib963.javatest.TestResults runTest(io.github.olib963.javatest.CheckedSupplier<io.github.olib963.javatest.Assertion> testFn) {
     return runTests(Stream.of(test("JShell test", testFn)));
 }
 ```
@@ -416,7 +416,7 @@ Ran a total of 1 tests.
 0 failed
 0 were pending
 
-results ==> org.javatest.TestResults@4b553d26
+results ==> io.github.olib963.javatest.TestResults@4b553d26
 
 jshell> var results2 = runTest(() -> that(1 + 1 == 2, "Addition is working"))
 JShell test
@@ -427,7 +427,7 @@ Ran a total of 1 tests.
 0 failed
 0 were pending
 
-results2 ==> org.javatest.TestResults@3e6fa38a
+results2 ==> io.github.olib963.javatest.TestResults@3e6fa38a
 
 jshell> results.succeeded && results2.succeeded
 $3 ==> true
@@ -452,12 +452,12 @@ each result.
 are the most flexible.**
 - [x] Ensure I am happy with the level of simplicity in each module, especially the core.
 - [ ] Review Documentation with people new to and familiar with Java.
-- [ ] Repackage to appropriate package and `groupId`
+- [x] Repackage to appropriate package and `groupId`
 - [ ] Release and get much feedback.
 
 Features I would like to look at implementing in the future:
 
-* A way to add arbitrary logs to your test cases.
+* A way to add arbitrary logs to your test cases. (Possibly replacing the `String` log with a structural log)
 * A module that allows for generative property testing & test specifications e.g. the `Comparable[T]` spec.
 * Acceptance tests for the JavaFire maven plugin, this proved too complex and painful to do in the first version.
 * A Gradle plugin?
@@ -465,7 +465,7 @@ Features I would like to look at implementing in the future:
 more intuitive and better due to their functional nature.
 * Dependant tests and/or assertions.
 * Support for mocks as assertions. Pseudo-code example with mockito: something like 
-`verifyThat(myMock).calledFunction().foo(eq("hello))`.
+`verifyThat(myMock).calledFunction().foo(eq("hello))`. I am still unsure of this one.
 * TestNG Runner?
 * IntelliJ Plugin if possible?
 * Parallelism Options - currently achievable by using `.parallel()` on the streams but that uses the default fork join pool.

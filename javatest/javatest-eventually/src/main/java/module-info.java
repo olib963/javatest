@@ -1,4 +1,4 @@
 module javatest.eventually {
     requires javatest.core;
-    exports org.javatest.eventually;
+    exports io.github.olib963.javatest.eventually;
 }

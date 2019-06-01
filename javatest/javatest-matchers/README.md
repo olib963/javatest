@@ -5,8 +5,8 @@ By statically importing `Matcher` you will inherit a few default `Matcher`s and 
 able to be imported into your tests from various classes e.g. `StringMatchers` which contains `String` specific `Matcher`s.
 
 ```java
-import static org.javatest.matchers.Matcher.*;
-import static org.javatest.matchers.StringMatchers.*;
+import static io.github.olib963.javatest.matchers.Matcher.*;
+import static io.github.olib963.javatest.matchers.StringMatchers.*;
 
 public class MyTests implements TestSuite {
     private static final String TEST_STRING = "Hello World";
@@ -38,9 +38,9 @@ exception driven Java APIs so I have added `Matcher` syntax for exceptions. Thes
 ensure that the test will only pass if the matched exception is thrown from the expected code block.
 
 ```java
-import static org.javatest.matchers.Matcher.*;
-import static org.javatest.matchers.StringMatchers.*;
-import static org.javatest.matchers.ExceptionMatchers.*;
+import static io.github.olib963.javatest.matchers.Matcher.*;
+import static io.github.olib963.javatest.matchers.StringMatchers.*;
+import static io.github.olib963.javatest.matchers.ExceptionMatchers.*;
 
 public class MyExceptionTests implements TestSuite {
     @Override
@@ -75,7 +75,7 @@ You can obviously provide your own `Matcher`s by implementing the interface, but
 to create simple `Matcher`s from functions, for example:
 
 ```java
-import static org.javatest.matchers.Matcher.*;
+import static io.github.olib963.javatest.matchers.Matcher.*;
 
 public class TestTheUniverse implements TestSuite {
     
@@ -98,7 +98,7 @@ You can include this module with this dependency:
 
 ```xml
 <dependency>
-    <groupId>org.javatest</groupId>
+    <groupId>io.github.olib963</groupId>
     <artifactId>javatest-matchers</artifactId>
     <version>${javatest.version}</version>
     <scope>test</scope>

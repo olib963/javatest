@@ -4,8 +4,8 @@ Sometimes you will need to write an assertion that you cannot guarantee will hol
 static imports to write tests that will eventually hold.
 
 ```java
-import static org.javatest.JavaTest.*;
-import static org.javatest.eventually.Eventually.*;
+import static io.github.olib963.javatest.JavaTest.*;
+import static io.github.olib963.javatest.eventually.Eventually.*;
 
 public class MyEventualTest implements TestSuite {
     
@@ -34,9 +34,9 @@ The `eventually` function will by default wait 5 seconds between each attempt an
 which covers one minute. You can pass an instance of `EventualConfig` to the `eventually` function to customise the behaviour:
 
 ```java
-import static org.javatest.JavaTest.*;
-import static org.javatest.eventually.Eventually.*;
-import static org.javatest.eventually.EventualConfig;
+import static io.github.olib963.javatest.JavaTest.*;
+import static io.github.olib963.javatest.eventually.Eventually.*;
+import static io.github.olib963.javatest.eventually.EventualConfig;
 
 public class MyCustomEventualTest implements TestSuite {
     
@@ -70,7 +70,7 @@ You can include this module with this dependency:
 
 ```xml
 <dependency>
-    <groupId>org.javatest</groupId>
+    <groupId>io.github.olib963</groupId>
     <artifactId>javatest-eventually</artifactId>
     <version>${javatest.version}</version>
     <scope>test</scope>

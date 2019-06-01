@@ -4,7 +4,7 @@ It can be useful to create multiple tests that have the same structure but diffe
 done by providing a stream of inputs and a function from the type of that input to a `Test`.
 
 ```java
-import static org.javatest.parameterised.Parameterised.*;
+import static io.github.olib963.javatest.parameterised.Parameterised.*;
 
 public class MyPalindromeTests implements TestSuite {
     
@@ -39,7 +39,7 @@ If you need multiple parameters you can make use of some helper `Tuple` classes 
 and provide a function with the correct arity and typed arguments to create your tests.
 
 ```java
-import static org.javatest.parameterised.Parameterised.*;
+import static io.github.olib963.javatest.parameterised.Parameterised.*;
 
 public class FibonacciTests implements TestSuite {
     
@@ -73,7 +73,7 @@ You can include this module with this dependency:
 
 ```xml
 <dependency>
-    <groupId>org.javatest</groupId>
+    <groupId>io.github.olib963</groupId>
     <artifactId>javatest-parameterised</artifactId>
     <version>${javatest.version}</version>
     <scope>test</scope>

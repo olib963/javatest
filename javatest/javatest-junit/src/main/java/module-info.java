@@ -3,5 +3,5 @@ module javatest.junit {
     requires org.junit.platform.launcher;
     requires org.junit.platform.engine;
 
-    exports org.javatest.junit;
+    exports io.github.olib963.javatest.junit;
 }

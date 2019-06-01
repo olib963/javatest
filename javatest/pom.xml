@@ -6,7 +6,7 @@
 
     <parent>
         <artifactId>javatest-parent</artifactId>
-        <groupId>org.javatest</groupId>
+        <groupId>io.github.olib963</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>javatest</artifactId>
