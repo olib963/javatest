@@ -4,15 +4,16 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>javatest</artifactId>
-        <groupId>org.javatest</groupId>
+        <groupId>io.github.olib963</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>javatest-eventually</artifactId>
+    <name>JavaTest Eventual Consistency Module</name>
 
     <properties>
-        <javatest.testClass>org.javatest.eventually.Tests</javatest.testClass>
+        <javatest.testClass>io.github.olib963.javatest.eventually.Tests</javatest.testClass>
     </properties>
 
     <dependencies>

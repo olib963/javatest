@@ -37,12 +37,12 @@ public class MyEntryPoint {
 ## Custom Fixture Definitions
 
 You can create your own `FixtureDefinition`s by extending the interface or for simple cases using the convenience functions
-to create definitions from functions. You can make use of the `org.javatest.fixtures.Try` static factories to
+to create definitions from functions. You can make use of the `io.github.olib963.javatest.fixtures.Try` static factories to
 create `Success` and `Failure` results for your definition.
 
 ```java
 
-import static org.javatest.fixtures.Try.*;
+import static io.github.olib963.javatest.fixtures.Try.*;
 
 public class CustomDefinitions {
     
@@ -78,7 +78,7 @@ You can include this module with this dependency:
 
 ```xml
 <dependency>
-    <groupId>org.javatest</groupId>
+    <groupId>io.github.olib963</groupId>
     <artifactId>javatest-fixtures</artifactId>
     <version>${javatest.version}</version>
     <scope>test</scope>

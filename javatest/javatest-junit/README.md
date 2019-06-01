@@ -28,7 +28,7 @@ You can include this module with this dependency:
 
 ```xml
 <dependency>
-    <groupId>org.javatest</groupId>
+    <groupId>io.github.olib963</groupId>
     <artifactId>javatest-junit</artifactId>
     <version>${javatest.version}</version>
     <scope>test</scope>

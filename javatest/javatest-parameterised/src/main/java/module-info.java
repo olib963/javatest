@@ -1,6 +1,6 @@
 module javatest.parameterised {
     requires javatest.core;
-    exports org.javatest.parameterised;
-    exports org.javatest.parameterised.functions;
-    exports org.javatest.parameterised.tuples;
+    exports io.github.olib963.javatest.parameterised;
+    exports io.github.olib963.javatest.parameterised.functions;
+    exports io.github.olib963.javatest.parameterised.tuples;
 }

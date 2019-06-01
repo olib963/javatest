@@ -1,3 +1,3 @@
 module javatest.core {
-    exports org.javatest;
+    exports io.github.olib963.javatest;
 }

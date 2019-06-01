@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <!-- TODO sort out all POMS -->
-    <groupId>org.javatest</groupId>
+    <groupId>io.github.olib963</groupId>
     <artifactId>javatest-parent</artifactId>
     <packaging>pom</packaging>
     <version>0.0.1-SNAPSHOT</version>
@@ -12,6 +12,7 @@
         <module>javatest</module>
         <module>javafire</module>
     </modules>
+    <name>JavaTest Parent</name>
     <properties>
         <java.version>1.11</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
