@@ -1,6 +1,8 @@
 package org.javatest.matchers;
 
 import org.javatest.JavaTest;
+import org.javatest.TestSuite;
+import org.javatest.Testable;
 
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -12,7 +14,7 @@ public class Tests {
     public static void main(String... args) {
         var result = JavaTest.runTests(Stream.of(
                 test("Passing Tests", () -> {
-                    var tests = allTestsFrom(
+                    var tests = Stream.<Testable>of(
                             SimpleMatcherTests.passing(),
                             StringMatcherTests.passing(),
                             ExceptionMatcherTests.passing(),
@@ -20,11 +22,11 @@ public class Tests {
                             ComparableMatcherTests.passing(),
                             CollectionMatcherTests.passing(),
                             MapMatcherTests.passing());
-                    var results = JavaTest.runTests(tests);
+                    var results = run(testableRunner(tests));
                     return that(results.succeeded, "Expected all 'passing' tests to pass");
                 }),
                 test("Failing Tests", () -> {
-                    var tests = allTestsFrom(
+                    var tests = Stream.of(
                             SimpleMatcherTests.failing(),
                             StringMatcherTests.failing(),
                             ExceptionMatcherTests.failing(),
@@ -32,7 +34,7 @@ public class Tests {
                             ComparableMatcherTests.failing(),
                             CollectionMatcherTests.failing(),
                             MapMatcherTests.failing());
-                    var results = tests.map(t -> JavaTest.runTests(Stream.of(t)));
+                    var results = tests.flatMap(TestSuite::tests).map(t -> JavaTest.runTests(Stream.of(t)));
                     var passingTests = results.filter(r -> r.succeeded).collect(Collectors.toList());
                     return that(passingTests.isEmpty(), "Expected all 'failing' tests to fail");
                 })

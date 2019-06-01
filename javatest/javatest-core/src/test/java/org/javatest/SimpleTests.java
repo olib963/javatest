@@ -1,21 +1,19 @@
 package org.javatest;
 
 import java.util.stream.Stream;
+
 import static org.javatest.JavaTest.*;
 
 public class SimpleTests {
 
-    public static TestSuite passing() {
+    public static Testable passing() {
         return new PassingTests();
-    }
-    public static TestSuite failing() {
-        return new FailingTests();
     }
 
     static class PassingTests implements TestSuite {
 
         @Override
-        public Stream<Test> testStream() {
+        public Stream<Test> tests() {
             return Stream.of(
                     test("Simple test", () -> that(true, "Expected true to be true")),
                     test("Pending test that has yet to be written", JavaTest::pending),
@@ -37,21 +35,17 @@ public class SimpleTests {
             );
         }
     }
-    static class FailingTests implements TestSuite {
-        @Override
-        public Stream<Test> testStream() {
-            return Stream.of(
-                    test("Simple test (FAIL)", () ->  that(false, "Expected false to be true")),
-                    test("And test 1 (FAIL)", () -> that(false, "Expected false").and(that(false, "Expected false"))),
-                    test("And test 2 (FAIL)", () -> that(true, "Expected true").and(that(false, "Expected false"))),
-                    test("And test 3 (FAIL)", () -> that(false, "Expected false").and(that(true, "Expected true"))),
-                    test("Or test (FAIL)", () -> that(false, "Expected false").or(that(false, "Expected false"))),
-                    test("Xor test 1 (FAIL)", () -> that(true, "Expected true").xor(that(true, "Expected true"))),
-                    test("Xor test 2 (FAIL)", () -> that(false, "Expected false").xor(that(false, "Expected false"))),
-                    test("SimpleTest throwing exception (FAIL)", () -> { throw new RuntimeException("This is an error"); }),
-                    test("SimpleTest throwing checked exception (FAIL)", () -> { throw new Exception("This is an error"); }),
-                    test("SimpleTest throwing assertion error (FAIL)", () -> { throw new AssertionError("This is an 'assertion'"); })
-            );
-        }
-    }
+
+    public static Stream<Test> FAILING = Stream.of(
+            test("Simple test (FAIL)", () -> that(false, "Expected false to be true")),
+            test("And test 1 (FAIL)", () -> that(false, "Expected false").and(that(false, "Expected false"))),
+            test("And test 2 (FAIL)", () -> that(true, "Expected true").and(that(false, "Expected false"))),
+            test("And test 3 (FAIL)", () -> that(false, "Expected false").and(that(true, "Expected true"))),
+            test("Or test (FAIL)", () -> that(false, "Expected false").or(that(false, "Expected false"))),
+            test("Xor test 1 (FAIL)", () -> that(true, "Expected true").xor(that(true, "Expected true"))),
+            test("Xor test 2 (FAIL)", () -> that(false, "Expected false").xor(that(false, "Expected false"))),
+            test("SimpleTest throwing exception (FAIL)", () -> { throw new RuntimeException("This is an error"); }),
+            test("SimpleTest throwing checked exception (FAIL)", () -> { throw new Exception("This is an error"); }),
+            test("SimpleTest throwing assertion error (FAIL)", () -> { throw new AssertionError("This is an 'assertion'"); })
+    );
 }

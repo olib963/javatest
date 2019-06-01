@@ -1,8 +1,10 @@
 package org.javatest;
 
 import java.util.Collection;
+import java.util.Optional;
+import java.util.stream.Stream;
 
-public final class Test {
+public final class Test implements Testable {
     public final String name;
     public final CheckedSupplier<Assertion> test;
     // TODO immutable collection
@@ -13,10 +15,13 @@ public final class Test {
         this.tags = tags;
     }
 
-    // TODO it may be useful to have a couple of helper functions such as
-    // mapName(f: String => String)
-    // withTag(f: String => String)
-    // after(f: Assertion => Assertion)
-    // around(f: (() => Assertion) => (() => Assertion)
-    // Or some such functions
+    @Override
+    public Optional<String> suiteName() {
+        return Optional.empty();
+    }
+
+    @Override
+    public Stream<Test> tests() {
+        return Stream.of(this);
+    }
 }

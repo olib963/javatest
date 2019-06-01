@@ -126,8 +126,9 @@ JavaTest is built on a simple functional core and functionality is expanded on b
 
 - `JavaTest`: the entrypoint class. It contains the main `run` function as well as factory functions
 - `TestRunner`: returns `TestResults`, the only core implementation being `StreamRunner`
-- `TestSuite`: logical collection of a stream of `Test`s
-- `Test`: a named instance of a test, each test must return an `Assertion`
+- `Testable`: wrapper around one of:
+    - `Test`: a named instance of a test, each test must return an `Assertion`
+    - `TestSuite`: logical collection of a stream of `Test`s
 - `Assertion`: represents the expected state at the end of a test
 - `TestResult`: represents the result of a single test
 - `TestResults`: represents the combined result of multiple tests
@@ -209,6 +210,28 @@ public class AllMyTests implements TestSuite {
     @Override
     public Stream<Test> testStream() {
         return allTestsFrom(new MyFirstTests(), new MySecondTests()); 
+    }
+}
+```
+
+#### Suite Names
+
+By default a `TestSuite` will just use its own class name as the suite name, making tests easier to locate. You can however
+change this behaviour if you wish:
+
+```java
+import static org.javatest.JavaTest.*;
+
+public class AllMyTests implements TestSuite {
+    
+    @Override
+    public String name() {
+        return "MySuite";
+    }
+    
+    @Override
+    public Stream<Test> testStream() {
+        // ...
     }
 }
 ```
@@ -430,7 +453,7 @@ are the most flexible.**
 - [x] Ensure I am happy with the level of simplicity in each module, especially the core.
 - [ ] Review Documentation with people new to and familiar with Java.
 - [ ] Repackage to appropriate package and `groupId`
-- [ ] Release and get much feedbacks.
+- [ ] Release and get much feedback.
 
 Features I would like to look at implementing in the future:
 

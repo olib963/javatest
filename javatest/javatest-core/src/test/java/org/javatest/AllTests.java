@@ -10,11 +10,11 @@ public class AllTests {
     public static void main(String... args) {
         var result = JavaTest.runTests(Stream.of(
                 test("Passing Tests", () -> {
-                    var results = JavaTest.runTests(SimpleTests.passing().testStream());
+                    var results = run(testableRunner(SimpleTests.passing()));
                     return that(results.succeeded, "Expected all 'passing' tests to pass");
                 }),
                 test("Failing Tests", () -> {
-                    var results = SimpleTests.failing().testStream().map(t -> JavaTest.runTests(Stream.of(t)));
+                    var results = SimpleTests.FAILING.map(t -> JavaTest.runTests(Stream.of(t)));
                     var passingTests = results.filter(r -> r.succeeded).collect(Collectors.toList());
                     return that(passingTests.isEmpty(), "Expected all 'failing' tests to fail");
                 })));

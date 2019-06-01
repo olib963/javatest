@@ -1,11 +1,11 @@
 package org.javatest.parameterised;
 
-import org.javatest.JavaTest;
+import static org.javatest.JavaTest.*;
 
 public class Tests {
 
     public static void main(String... args) {
-        var result = JavaTest.runTests(new ParameterisedTests().testStream());
+        var result = run(testableRunner(new ParameterisedTests()));
         if (!result.succeeded) {
             throw new RuntimeException("Tests failed!");
         }

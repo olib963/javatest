@@ -24,7 +24,7 @@ public class CollectionMatcherTests {
 
     static class PassingTests implements TestSuite {
         @Override
-        public Stream<Test> testStream() {
+        public Stream<Test> tests() {
             return Stream.of(
                     test("Size", () -> that(List.of(1, 2), hasSize(2)), tags),
                     test("Empty", () -> that(List.of(), isEmpty()), tags),
@@ -37,7 +37,7 @@ public class CollectionMatcherTests {
 
     static class FailingTests implements TestSuite {
         @Override
-        public Stream<Test> testStream() {
+        public Stream<Test> tests() {
             return Stream.of(
                     test("Size (FAIL - bigger)", () -> that(List.of(1, 2), hasSize(1)), tags),
                     test("Size (FAIL - smaller)", () -> that(List.of(1, 2), hasSize(3)), tags),

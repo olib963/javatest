@@ -13,11 +13,11 @@ public class Tests {
     public static void main(String... args) {
         var result = runTests(Stream.of(
                 test("Passing Tests", () -> {
-                    var results = runTests(EventuallyTests.passing().testStream());
+                    var results = run(testableRunner(EventuallyTests.passing()));
                     return that(results.succeeded, "Expected all 'passing' tests to pass");
                 }),
                 test("Failing Tests", () -> {
-                    var results = EventuallyTests.failing().testStream().map(t -> runTests(Stream.of(t)));
+                    var results = EventuallyTests.FAILING.map(t -> runTests(Stream.of(t)));
                     var passingTests = results.filter(r -> r.succeeded).collect(Collectors.toList());
                     return that(passingTests.isEmpty(), "Expected all 'failing' tests to fail");
                 })
@@ -29,7 +29,7 @@ public class Tests {
         var delayTests = Fixtures.fixtureRunner(
                 "Executor Service",
                 Fixtures.definitionFromThrowingFunctions(Executors::newSingleThreadExecutor, ExecutorService::shutdown),
-                es -> testStreamRunner(new InitialDelayTests(es).testStream())
+                es -> testableRunner(new InitialDelayTests(es))
         );
 
         if (!run(delayTests).succeeded) {

@@ -19,7 +19,7 @@ public class IntegrationTests implements TestSuite {
     }
 
     @Override
-    public Stream<Test> testStream() {
+    public Stream<Test> tests() {
         return Stream.of(
                 test("Exists", () ->
                         that(testDirectory.isDirectory(), "Expected test file to be a directory")

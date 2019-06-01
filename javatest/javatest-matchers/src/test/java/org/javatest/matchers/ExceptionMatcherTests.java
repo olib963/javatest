@@ -22,7 +22,7 @@ public class ExceptionMatcherTests {
 
     static class PassingTests implements TestSuite {
         @Override
-        public Stream<Test> testStream() {
+        public Stream<Test> tests() {
             return Stream.of(
                     test("Exception of correct type is thrown", () ->
                             that(() -> { throw new RuntimeException("whoopsie"); }, willThrowExceptionThat(hasType(RuntimeException.class))), tags),
@@ -53,7 +53,7 @@ public class ExceptionMatcherTests {
     // TODO the latter tests errors don't compose nicely!
     static class FailingTests implements TestSuite {
         @Override
-        public Stream<Test> testStream() {
+        public Stream<Test> tests() {
             return Stream.of(
                     test("Exception is thrown (FAIL)", () ->
                             that(() -> {}, willThrowExceptionThat(hasType(IllegalStateException.class))), tags),

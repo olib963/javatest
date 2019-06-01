@@ -25,7 +25,7 @@ public class ComparableMatcherTests {
 
     static class PassingTests implements TestSuite {
         @Override
-        public Stream<Test> testStream() {
+        public Stream<Test> tests() {
             return Stream.of(
                     test("Comparably Equal", () -> that(wrap(10), isComparablyEqualTo(wrap(10))), tags),
                     test("Less than", () -> that(wrap(10), isLessThan(wrap(11))), tags),
@@ -40,7 +40,7 @@ public class ComparableMatcherTests {
 
     static class FailingTests implements TestSuite {
         @Override
-        public Stream<Test> testStream() {
+        public Stream<Test> tests() {
             return Stream.of(
                     test("Comparably Equal (FAIL)", () -> that(wrap(10), isComparablyEqualTo(wrap(11))), tags),
                     test("Less than (FAIL - equal)", () -> that(wrap(10), isLessThan(wrap(10))), tags),

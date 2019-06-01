@@ -18,13 +18,10 @@ public class EventuallyTests {
     public static TestSuite passing() {
         return new PassingTests();
     }
-    public static TestSuite failing() {
-        return new FailingTests();
-    }
 
     static class PassingTests implements TestSuite {
         @Override
-        public Stream<Test> testStream() {
+        public Stream<Test> tests() {
             var simpleTests = Stream.of(
                     test("Simple pass", () -> eventually(() -> that(true, "should pass"))),
                     test("Eventually pending", () -> eventually(() -> pending("have not yet written eventual condition")))
@@ -46,30 +43,28 @@ public class EventuallyTests {
         }
     }
 
-    static class FailingTests implements TestSuite {
+    public static Stream<Test> FAILING = Stream.of(
+            test("Simple fail", () -> eventually(() -> that(false, "should fail"), DEFAULT_CONFIG.withAttempts(1))),
+            test("Exception fail", () -> eventually(() -> {
+                throw new Exception("Test failure");
+            }, DEFAULT_CONFIG.withAttempts(1))),
+            test("Fails if 0 attempts", () -> eventually(() -> that(true, "should pass"), DEFAULT_CONFIG.withAttempts(0))),
+            test("Fails if negative attempts", () -> eventually(() -> that(true, "should pass"), DEFAULT_CONFIG.withAttempts(-1))),
+            test("Fails if empty duration", () -> eventually(() -> that(true, "should pass"), DEFAULT_CONFIG.withWaitInterval(Duration.ZERO))),
+            test("Fails if empty initial delay", () -> eventually(() -> that(true, "should pass"), DEFAULT_CONFIG.withInitialDelay(Duration.ZERO))),
+            atomicIntegerTest()
+    );
 
-        @Override
-        public Stream<Test> testStream() {
-            return Stream.of(
-                    test("Simple fail", () -> eventually(() -> that(false, "should fail"), DEFAULT_CONFIG.withAttempts(1))),
-                    test("Exception fail", () -> eventually(() -> { throw new Exception("Test failure"); }, DEFAULT_CONFIG.withAttempts(1))),
-                    test("Fails if 0 attempts", () -> eventually(() -> that(true, "should pass"), DEFAULT_CONFIG.withAttempts(0))),
-                    test("Fails if negative attempts", () -> eventually(() -> that(true, "should pass"), DEFAULT_CONFIG.withAttempts(-1))),
-                    test("Fails if empty duration", () -> eventually(() -> that(true, "should pass"), DEFAULT_CONFIG.withWaitInterval(Duration.ZERO))),
-                    test("Fails if empty initial delay", () -> eventually(() -> that(true, "should pass"), DEFAULT_CONFIG.withInitialDelay(Duration.ZERO))),
-                    atomicIntegerTest()
-            );
-        }
 
-        private Test atomicIntegerTest() {
-            return test("Atomic integer increment", () -> {
-                var integer = new AtomicInteger(1);
-                CheckedSupplier<Assertion> valueBecomes6 = () -> {
-                    int value = integer.getAndIncrement();
-                    return that(value == 6, "Atomic integer (" + value + ") is 6");
-                };
-                return eventually(valueBecomes6, EventualConfig.of(5, Duration.ofMillis(50)));
-            });
-        }
+    private static Test atomicIntegerTest() {
+        return test("Atomic integer increment", () -> {
+            var integer = new AtomicInteger(1);
+            CheckedSupplier<Assertion> valueBecomes6 = () -> {
+                int value = integer.getAndIncrement();
+                return that(value == 6, "Atomic integer (" + value + ") is 6");
+            };
+            return eventually(valueBecomes6, EventualConfig.of(5, Duration.ofMillis(50)));
+        });
     }
+
 }
