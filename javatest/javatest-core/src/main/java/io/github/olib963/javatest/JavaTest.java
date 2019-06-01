@@ -44,11 +44,7 @@ public class JavaTest {
 
     // Test factory methods
     public static Test test(String name, CheckedSupplier<Assertion> testFunction) {
-        return test(name, testFunction, Collections.emptyList());
-    }
-
-    public static Test test(String name, CheckedSupplier<Assertion> testFunction, Collection<String> tags) {
-        return new Test(name, testFunction, tags);
+        return new Test(name, testFunction);
     }
 
     public static Assertion that(boolean asserted, String description) {
