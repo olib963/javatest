@@ -4,7 +4,6 @@ import io.github.olib963.javatest.JavaTest;
 import io.github.olib963.javatest.Test;
 import io.github.olib963.javatest.TestSuite;
 
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -17,7 +16,6 @@ import static io.github.olib963.javatest.matchers.StringMatchers.endsWith;
 import static io.github.olib963.javatest.matchers.StringMatchers.startsWith;
 
 public class MapMatcherTests {
-    private static final List<String> tags = List.of("map-matchers");
     private static final Map<Integer, String> SIMPLE_MAP = Map.of(1, "hello");
 
     public static TestSuite passing() {
@@ -32,14 +30,14 @@ public class MapMatcherTests {
         @Override
         public Stream<Test> tests() {
             return Stream.of(
-                    JavaTest.test("Empty", () -> that(Map.of(), isEmptyMap()), tags),
-                    test("Size", () -> that(SIMPLE_MAP, hasMapSize(1)), tags),
-                    test("Key", () -> that(SIMPLE_MAP, hasKey(1)), tags),
-                    test("Key That", () -> that(SIMPLE_MAP, hasKeyThat(isLessThan(2))), tags),
-                    test("Value", () -> that(SIMPLE_MAP, hasValue("hello")), tags),
-                    test("Value That", () -> that(SIMPLE_MAP, hasValueThat(startsWith("hell"))), tags),
-                    test("Entry", () -> that(SIMPLE_MAP, hasEntry(1, "hello")), tags),
-                    test("Entry That", () -> that(SIMPLE_MAP, hasEntryThat(isLessThan(2), startsWith("hell"))), tags)
+                    JavaTest.test("Empty", () -> that(Map.of(), isEmptyMap())),
+                    test("Size", () -> that(SIMPLE_MAP, hasMapSize(1))),
+                    test("Key", () -> that(SIMPLE_MAP, hasKey(1))),
+                    test("Key That", () -> that(SIMPLE_MAP, hasKeyThat(isLessThan(2)))),
+                    test("Value", () -> that(SIMPLE_MAP, hasValue("hello"))),
+                    test("Value That", () -> that(SIMPLE_MAP, hasValueThat(startsWith("hell")))),
+                    test("Entry", () -> that(SIMPLE_MAP, hasEntry(1, "hello"))),
+                    test("Entry That", () -> that(SIMPLE_MAP, hasEntryThat(isLessThan(2), startsWith("hell"))))
             );
         }
     }
@@ -48,18 +46,18 @@ public class MapMatcherTests {
         @Override
         public Stream<Test> tests() {
             return Stream.of(
-                    test("Empty (FAIL)", () -> that(SIMPLE_MAP, isEmptyMap()), tags),
-                    test("Size (FAIL)", () -> that(SIMPLE_MAP, hasMapSize(2)), tags),
-                    test("Key (FAIL)", () -> that(SIMPLE_MAP, hasKey(2)), tags),
-                    test("Key That (FAIL)", () -> that(SIMPLE_MAP, hasKeyThat(isGreaterThan(2))), tags),
-                    test("Value (FAIL)", () -> that(SIMPLE_MAP, hasValue("goodbye")), tags),
-                    test("Value That (FAIL)", () -> that(SIMPLE_MAP, hasValueThat(endsWith("bye"))), tags),
-                    test("Entry (FAIL - key)", () -> that(SIMPLE_MAP, hasEntry(2, "hello")), tags),
-                    test("Entry (FAIL - value)", () -> that(SIMPLE_MAP, hasEntry(1, "goodbye")), tags),
-                    test("Entry (FAIL - both)", () -> that(SIMPLE_MAP, hasEntry(2, "goodbye")), tags),
-                    test("Entry That (FAIL - key)", () -> that(SIMPLE_MAP, hasEntryThat(isGreaterThan(2), startsWith("hell"))), tags),
-                    test("Entry That (FAIL - value)", () -> that(SIMPLE_MAP, hasEntryThat(isLessThan(2), endsWith("bye"))), tags),
-                    test("Entry That (FAIL - both)", () -> that(SIMPLE_MAP, hasEntryThat(isGreaterThan(2), endsWith("bye"))), tags)
+                    test("Empty (FAIL)", () -> that(SIMPLE_MAP, isEmptyMap())),
+                    test("Size (FAIL)", () -> that(SIMPLE_MAP, hasMapSize(2))),
+                    test("Key (FAIL)", () -> that(SIMPLE_MAP, hasKey(2))),
+                    test("Key That (FAIL)", () -> that(SIMPLE_MAP, hasKeyThat(isGreaterThan(2)))),
+                    test("Value (FAIL)", () -> that(SIMPLE_MAP, hasValue("goodbye"))),
+                    test("Value That (FAIL)", () -> that(SIMPLE_MAP, hasValueThat(endsWith("bye")))),
+                    test("Entry (FAIL - key)", () -> that(SIMPLE_MAP, hasEntry(2, "hello"))),
+                    test("Entry (FAIL - value)", () -> that(SIMPLE_MAP, hasEntry(1, "goodbye"))),
+                    test("Entry (FAIL - both)", () -> that(SIMPLE_MAP, hasEntry(2, "goodbye"))),
+                    test("Entry That (FAIL - key)", () -> that(SIMPLE_MAP, hasEntryThat(isGreaterThan(2), startsWith("hell")))),
+                    test("Entry That (FAIL - value)", () -> that(SIMPLE_MAP, hasEntryThat(isLessThan(2), endsWith("bye")))),
+                    test("Entry That (FAIL - both)", () -> that(SIMPLE_MAP, hasEntryThat(isGreaterThan(2), endsWith("bye"))))
             );
         }
     }

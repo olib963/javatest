@@ -200,20 +200,6 @@ public class MyFirstTests implements TestSuite {
 }
 ```
 
-
-If you split your tests across multiple `TestSuite`s you can easily combine them as such:
-
-```java
-import static io.github.olib963.javatest.JavaTest.*;
-
-public class AllMyTests implements TestSuite {
-    @Override
-    public Stream<Test> testStream() {
-        return allTestsFrom(new MyFirstTests(), new MySecondTests()); 
-    }
-}
-```
-
 #### Suite Names
 
 By default a `TestSuite` will just use its own class name as the suite name, making tests easier to locate. You can however
@@ -254,33 +240,6 @@ public class MyTests implements TestSuite {
             test("Division by Zero",
                 () -> pending("I am not yet sure if this should throw an exception or return a failure value"))
         );
-    }
-}
-```
-
-### Tagging Tests
-
-Tagging tests is quite common to define subsets of tests, you can pass a `Collection` of `String` tags to any test. 
-Running all tests with a certain tag is then as simple as:
-
-```java
-import static io.github.olib963.javatest.JavaTest.*;
-
-public class AllMyTests implements TestSuite {
-    @Override
-    public Stream<Test> testStream() {
-        return Stream.of(
-                test("My special test", () -> that(true, "Expected to pass"), List.of("special"))
-                // .... more tests ...
-        );
-    }
-}
-
-public class MySpecialTests implements TestSuite {
-    @Override
-    public Stream<Test> testStream() {
-        return allTestsFrom(new AllMyTests())
-            .filter(test -> test.tags().contains("special")); 
     }
 }
 ```
@@ -457,6 +416,7 @@ are the most flexible.**
 
 Features I would like to look at implementing in the future:
 
+* Add tags back onto tests in such a way that it is easy to filter and split tests. Await use cases before doing this though.
 * A way to add arbitrary logs to your test cases. (Possibly replacing the `String` log with a structural log)
 * A module that allows for generative property testing & test specifications e.g. the `Comparable[T]` spec.
 * Acceptance tests for the JavaFire maven plugin, this proved too complex and painful to do in the first version.
