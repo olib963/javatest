@@ -357,11 +357,11 @@ import static io.github.olib963.javatest.JavaTest.*;
 public class MyTests implements TestRunners {
     @Override
     public Stream<TestRunner> runners() {
-        var unitTests = testStreamRunner(allTestsFrom(/* list of suites */).parallel());
+        var unitTests = testableRunner(/* list of suites */.parallelStream());
         var applicationTests = Fixtures.fixtureRunner(
                 "database connection",
                  MyFixtures.connectToDb(), 
-                 db -> testStreamRunner(new MyIntegrationTests(db).testStream()));
+                 db -> testableRunner(new MyIntegrationTests(db)));
         return Stream.of(unitTests, applicationTests);
     }
 }
@@ -451,8 +451,8 @@ each result.
 - [x] Decide on which approach to take for the API: Mixins or static imports. **I have decided for most cases static imports
 are the most flexible.**
 - [x] Ensure I am happy with the level of simplicity in each module, especially the core.
-- [ ] Review Documentation with people new to and familiar with Java.
 - [x] Repackage to appropriate package and `groupId`
+- [ ] Review Documentation with people new to and familiar with Java.
 - [ ] Release and get much feedback.
 
 Features I would like to look at implementing in the future:
@@ -468,8 +468,10 @@ more intuitive and better due to their functional nature.
 `verifyThat(myMock).calledFunction().foo(eq("hello))`. I am still unsure of this one.
 * TestNG Runner?
 * IntelliJ Plugin if possible?
-* Parallelism Options - currently achievable by using `.parallel()` on the streams but that uses the default fork join pool.
+* Parallelism Options - currently achievable by using `.parallel()` on the streams but that uses the default fork join pool
+otherwise you have to submit the action to a custom thread pool which would be internal to `JavaTest`. This could be provided 
+as an option if nothing else works by accepting an `ExecutorService` in the `StreamRunner`.
 
 ## Feedback
 
-Any feedback/constructive criticism is appreciated. Please open an issue if you have any suggestions
+Any feedback/constructive criticism is appreciated. Please open an issue if you have any suggestions.

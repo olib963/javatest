@@ -1,6 +1,5 @@
 package io.github.olib963.javatest.matchers;
 
-import io.github.olib963.javatest.javafire.matchers.internal.OptionalMatcher;
 import io.github.olib963.javatest.matchers.internal.OptionalMatcher;
 import io.github.olib963.javatest.matchers.internal.PredicateMatcher;
 

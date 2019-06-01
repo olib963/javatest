@@ -1,7 +1,5 @@
 package io.github.olib963.javatest.matchers;
 
-import io.github.olib963.javatest.javafire.matchers.internal.ElementThatMatcher;
-import io.github.olib963.javatest.javafire.matchers.internal.PredicateMatcher;
 import io.github.olib963.javatest.matchers.internal.ElementThatMatcher;
 import io.github.olib963.javatest.matchers.internal.PredicateMatcher;
 

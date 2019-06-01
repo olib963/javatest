@@ -2,8 +2,6 @@ package io.github.olib963.javatest.eventually;
 
 import io.github.olib963.javatest.JavaTest;
 import io.github.olib963.javatest.fixtures.Fixtures;
-import io.github.olib963.javatest.javafire.JavaTest;
-import io.github.olib963.javatest.javafire.fixtures.Fixtures;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

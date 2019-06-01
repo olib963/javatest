@@ -11,6 +11,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>javatest-parameterised</artifactId>
+    <name>JavaTest Parameterised Testing Module</name>
 
     <properties>
         <javatest.testClass>io.github.olib963.javatest.parameterised.Tests</javatest.testClass>

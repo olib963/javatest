@@ -2,9 +2,6 @@ package io.github.olib963.javatest;
 
 import io.github.olib963.javatest.assertions.BooleanAssertion;
 import io.github.olib963.javatest.assertions.PendingAssertion;
-import io.github.olib963.javatest.javafire.assertions.BooleanAssertion;
-import io.github.olib963.javatest.javafire.assertions.PendingAssertion;
-import io.github.olib963.javatest.javafire.runners.StreamRunner;
 import io.github.olib963.javatest.runners.StreamRunner;
 
 import java.util.Arrays;

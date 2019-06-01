@@ -2,7 +2,6 @@ package io.github.olib963.javatest.fixtures.internal;
 
 import io.github.olib963.javatest.fixtures.FixtureDefinition;
 import io.github.olib963.javatest.fixtures.Try;
-import io.github.olib963.javatest.javafire.fixtures.Try;
 
 import java.util.function.Function;
 import java.util.function.Supplier;

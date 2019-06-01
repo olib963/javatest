@@ -2,8 +2,6 @@ package io.github.olib963.javatest.junit;
 
 import io.github.olib963.javatest.TestResults;
 import io.github.olib963.javatest.TestRunner;
-
-import io.github.olib963.javatest.javafire.TestRunner;
 import org.junit.platform.launcher.LauncherDiscoveryRequest;
 import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
 import org.junit.platform.launcher.core.LauncherFactory;

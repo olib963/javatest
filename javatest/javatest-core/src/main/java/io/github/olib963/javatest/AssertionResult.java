@@ -1,6 +1,5 @@
 package io.github.olib963.javatest;
 
-import io.github.olib963.javatest.javafire.logging.LoggingObserver;
 import io.github.olib963.javatest.logging.LoggingObserver;
 
 import java.io.PrintWriter;

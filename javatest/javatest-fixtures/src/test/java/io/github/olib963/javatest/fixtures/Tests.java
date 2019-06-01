@@ -1,9 +1,9 @@
 package io.github.olib963.javatest.fixtures;
 
 import io.github.olib963.javatest.JavaTest;
-import io.github.olib963.javatest.javafire.JavaTest;
 
-import static io.github.olib963.javatest.JavaTest.*;
+import static io.github.olib963.javatest.JavaTest.run;
+import static io.github.olib963.javatest.JavaTest.testableRunner;
 
 public class Tests {
 

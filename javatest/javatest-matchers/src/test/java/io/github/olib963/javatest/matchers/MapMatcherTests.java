@@ -3,18 +3,18 @@ package io.github.olib963.javatest.matchers;
 import io.github.olib963.javatest.JavaTest;
 import io.github.olib963.javatest.Test;
 import io.github.olib963.javatest.TestSuite;
-import io.github.olib963.javatest.javafire.JavaTest;
-import io.github.olib963.javatest.javafire.Test;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import static io.github.olib963.javatest.JavaTest.*;
-import static io.github.olib963.javatest.matchers.Matcher.*;
+import static io.github.olib963.javatest.JavaTest.test;
+import static io.github.olib963.javatest.matchers.ComparableMatchers.isGreaterThan;
+import static io.github.olib963.javatest.matchers.ComparableMatchers.isLessThan;
 import static io.github.olib963.javatest.matchers.MapMatchers.*;
-import static io.github.olib963.javatest.matchers.ComparableMatchers.*;
-import static io.github.olib963.javatest.matchers.StringMatchers.*;
+import static io.github.olib963.javatest.matchers.Matcher.that;
+import static io.github.olib963.javatest.matchers.StringMatchers.endsWith;
+import static io.github.olib963.javatest.matchers.StringMatchers.startsWith;
 
 public class MapMatcherTests {
     private static final List<String> tags = List.of("map-matchers");

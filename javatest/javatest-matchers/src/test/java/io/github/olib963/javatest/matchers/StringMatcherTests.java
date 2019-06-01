@@ -3,15 +3,12 @@ package io.github.olib963.javatest.matchers;
 import io.github.olib963.javatest.JavaTest;
 import io.github.olib963.javatest.Test;
 import io.github.olib963.javatest.TestSuite;
-import io.github.olib963.javatest.javafire.JavaTest;
-import io.github.olib963.javatest.javafire.Test;
-import io.github.olib963.javatest.javafire.TestSuite;
 
 import java.util.List;
 import java.util.stream.Stream;
 
-import static io.github.olib963.javatest.JavaTest.*;
-import static io.github.olib963.javatest.matchers.Matcher.*;
+import static io.github.olib963.javatest.JavaTest.test;
+import static io.github.olib963.javatest.matchers.Matcher.that;
 import static io.github.olib963.javatest.matchers.StringMatchers.*;
 
 public class StringMatcherTests {

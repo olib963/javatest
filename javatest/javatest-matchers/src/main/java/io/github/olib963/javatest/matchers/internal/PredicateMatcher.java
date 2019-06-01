@@ -1,7 +1,5 @@
 package io.github.olib963.javatest.matchers.internal;
 
-import io.github.olib963.javatest.javafire.matchers.MatchResult;
-import io.github.olib963.javatest.javafire.matchers.Matcher;
 import io.github.olib963.javatest.matchers.MatchResult;
 import io.github.olib963.javatest.matchers.Matcher;
 

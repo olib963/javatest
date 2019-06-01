@@ -2,15 +2,15 @@ package io.github.olib963.javatest.matchers;
 
 import io.github.olib963.javatest.Test;
 import io.github.olib963.javatest.TestSuite;
-import io.github.olib963.javatest.javafire.Test;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static io.github.olib963.javatest.JavaTest.*;
-import static io.github.olib963.javatest.matchers.Matcher.*;
+import static io.github.olib963.javatest.JavaTest.test;
 import static io.github.olib963.javatest.matchers.CollectionMatchers.*;
+import static io.github.olib963.javatest.matchers.Matcher.hasType;
+import static io.github.olib963.javatest.matchers.Matcher.that;
 
 public class CollectionMatcherTests {
     private static final List<String> tags = List.of("collection-matchers");

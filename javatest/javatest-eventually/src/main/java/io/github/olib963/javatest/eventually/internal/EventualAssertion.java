@@ -3,9 +3,6 @@ package io.github.olib963.javatest.eventually.internal;
 import io.github.olib963.javatest.Assertion;
 import io.github.olib963.javatest.AssertionResult;
 import io.github.olib963.javatest.CheckedSupplier;
-import io.github.olib963.javatest.javafire.Assertion;
-import io.github.olib963.javatest.javafire.AssertionResult;
-import io.github.olib963.javatest.javafire.CheckedSupplier;
 
 import java.util.Optional;
 import java.util.stream.Stream;

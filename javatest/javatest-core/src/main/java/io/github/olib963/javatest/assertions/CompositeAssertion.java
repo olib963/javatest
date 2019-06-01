@@ -2,7 +2,6 @@ package io.github.olib963.javatest.assertions;
 
 import io.github.olib963.javatest.Assertion;
 import io.github.olib963.javatest.AssertionResult;
-import io.github.olib963.javatest.javafire.Assertion;
 
 import java.util.function.BinaryOperator;
 

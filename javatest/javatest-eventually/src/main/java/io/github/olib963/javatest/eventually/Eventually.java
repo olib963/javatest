@@ -3,7 +3,6 @@ package io.github.olib963.javatest.eventually;
 import io.github.olib963.javatest.Assertion;
 import io.github.olib963.javatest.CheckedSupplier;
 import io.github.olib963.javatest.eventually.internal.EventualAssertion;
-import io.github.olib963.javatest.javafire.Assertion;
 
 public class Eventually {
 

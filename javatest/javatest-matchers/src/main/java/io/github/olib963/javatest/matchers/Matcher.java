@@ -1,8 +1,6 @@
 package io.github.olib963.javatest.matchers;
 
 import io.github.olib963.javatest.Assertion;
-import io.github.olib963.javatest.javafire.Assertion;
-import io.github.olib963.javatest.javafire.matchers.internal.MatcherAssertion;
 import io.github.olib963.javatest.matchers.internal.MatcherAssertion;
 import io.github.olib963.javatest.matchers.internal.PredicateMatcher;
 

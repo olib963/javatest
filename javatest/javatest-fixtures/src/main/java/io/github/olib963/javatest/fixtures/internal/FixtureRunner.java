@@ -1,11 +1,10 @@
 package io.github.olib963.javatest.fixtures.internal;
 
-import io.github.olib963.javatest.*;
+import io.github.olib963.javatest.AssertionResult;
+import io.github.olib963.javatest.TestResult;
+import io.github.olib963.javatest.TestResults;
+import io.github.olib963.javatest.TestRunner;
 import io.github.olib963.javatest.fixtures.FixtureDefinition;
-import io.github.olib963.javatest.javafire.AssertionResult;
-import io.github.olib963.javatest.javafire.TestResults;
-import io.github.olib963.javatest.javafire.TestRunner;
-import io.github.olib963.javatest.javafire.fixtures.FixtureDefinition;
 
 import java.util.Optional;
 import java.util.function.Function;

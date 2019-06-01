@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>javatest-fixtures</artifactId>
+    <name>JavaTest Fixture Module</name>
 
     <properties>
         <javatest.testClass>io.github.olib963.javatest.fixtures.Tests</javatest.testClass>

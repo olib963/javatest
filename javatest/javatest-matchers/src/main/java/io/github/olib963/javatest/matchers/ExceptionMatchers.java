@@ -1,7 +1,5 @@
 package io.github.olib963.javatest.matchers;
 
-import io.github.olib963.javatest.javafire.matchers.internal.CauseMatcher;
-import io.github.olib963.javatest.javafire.matchers.internal.MessageMatcher;
 import io.github.olib963.javatest.matchers.internal.CauseMatcher;
 import io.github.olib963.javatest.matchers.internal.MessageMatcher;
 import io.github.olib963.javatest.matchers.internal.PredicateMatcher;

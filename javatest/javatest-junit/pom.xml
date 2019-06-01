@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>javatest-junit</artifactId>
+    <name>JavaTest JUnit Module</name>
 
     <properties>
         <javatest.testClass>io.github.olib963.javatest.junit.Tests</javatest.testClass>

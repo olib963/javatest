@@ -1,15 +1,14 @@
 package io.github.olib963.javatest.eventually;
 
 import io.github.olib963.javatest.*;
-import io.github.olib963.javatest.javafire.*;
 
 import java.time.Duration;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 import static io.github.olib963.javatest.JavaTest.*;
-import static io.github.olib963.javatest.eventually.Eventually.*;
 import static io.github.olib963.javatest.eventually.EventualConfig.DEFAULT_CONFIG;
+import static io.github.olib963.javatest.eventually.Eventually.eventually;
 
 public class EventuallyTests {
 

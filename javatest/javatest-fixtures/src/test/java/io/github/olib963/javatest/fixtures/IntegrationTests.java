@@ -3,8 +3,6 @@ package io.github.olib963.javatest.fixtures;
 import io.github.olib963.javatest.JavaTest;
 import io.github.olib963.javatest.Test;
 import io.github.olib963.javatest.TestSuite;
-import io.github.olib963.javatest.javafire.JavaTest;
-import io.github.olib963.javatest.javafire.Test;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -12,7 +10,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.github.olib963.javatest.JavaTest.*;
+import static io.github.olib963.javatest.JavaTest.test;
+import static io.github.olib963.javatest.JavaTest.that;
 
 public class IntegrationTests implements TestSuite {
     private final File testDirectory;

@@ -5,10 +5,6 @@ import io.github.olib963.javatest.TestRunner;
 import io.github.olib963.javatest.fixtures.internal.FixtureRunner;
 import io.github.olib963.javatest.fixtures.internal.FunctionFixtureDefinition;
 import io.github.olib963.javatest.fixtures.internal.TemporaryDirectory;
-import io.github.olib963.javatest.javafire.CheckedSupplier;
-import io.github.olib963.javatest.javafire.TestRunner;
-import io.github.olib963.javatest.javafire.fixtures.internal.FunctionFixtureDefinition;
-import io.github.olib963.javatest.javafire.fixtures.internal.TemporaryDirectory;
 
 import java.io.File;
 import java.util.function.Function;

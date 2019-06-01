@@ -1,7 +1,5 @@
 package io.github.olib963.javatest.matchers;
 
-import io.github.olib963.javatest.javafire.matchers.internal.EntryMatcher;
-import io.github.olib963.javatest.javafire.matchers.internal.MapSetMatcher;
 import io.github.olib963.javatest.matchers.internal.EntryMatcher;
 import io.github.olib963.javatest.matchers.internal.MapSetMatcher;
 import io.github.olib963.javatest.matchers.internal.PredicateMatcher;

@@ -2,8 +2,6 @@ package io.github.olib963.javatest.matchers.internal;
 
 import io.github.olib963.javatest.Assertion;
 import io.github.olib963.javatest.AssertionResult;
-import io.github.olib963.javatest.javafire.Assertion;
-import io.github.olib963.javatest.javafire.AssertionResult;
 import io.github.olib963.javatest.matchers.CheckedRunnable;
 import io.github.olib963.javatest.matchers.Matcher;
 

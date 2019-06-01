@@ -3,8 +3,6 @@ package io.github.olib963.javatest.fixtures;
 import io.github.olib963.javatest.CheckedSupplier;
 import io.github.olib963.javatest.fixtures.internal.Failure;
 import io.github.olib963.javatest.fixtures.internal.Success;
-import io.github.olib963.javatest.javafire.fixtures.internal.Failure;
-import io.github.olib963.javatest.javafire.fixtures.internal.Success;
 
 import java.util.function.Function;
 

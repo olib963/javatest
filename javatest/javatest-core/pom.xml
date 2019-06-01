@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>javatest-core</artifactId>
+    <name>JavaTest Core</name>
 
     <properties>
         <javatest.testClass>io.github.olib963.javatest.AllTests</javatest.testClass>

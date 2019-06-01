@@ -1,7 +1,6 @@
 package io.github.olib963.javatest.runners;
 
 import io.github.olib963.javatest.*;
-import io.github.olib963.javatest.javafire.Assertion;
 import io.github.olib963.javatest.logging.LoggingObserver;
 
 import java.util.Collection;
