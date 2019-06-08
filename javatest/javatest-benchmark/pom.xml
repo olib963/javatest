@@ -14,7 +14,7 @@
     <name>JavaTest Benchmark Module</name>
 
     <properties>
-        <javatest.testClass>io.github.olib963.javatest.benchmarks.Tests</javatest.testClass>
+        <javatest.testClass>io.github.olib963.javatest.benchmark.Tests</javatest.testClass>
     </properties>
 
     <dependencies>

@@ -1,4 +1,4 @@
-package io.github.olib963.javatest.benchmarks.internal;
+package io.github.olib963.javatest.benchmark.internal;
 
 import io.github.olib963.javatest.Assertion;
 import io.github.olib963.javatest.AssertionResult;
@@ -29,7 +29,7 @@ public class BenchmarkAssertion implements Assertion {
         var result = assertion.run();
         var timeTaken = timeFunction.get();
         // TODO it would be nice to have more structured logs in tests rather than \n\t etc.
-        // Maybe even somehow extensible with types?
+        // Maybe even somehow extensible with types like some heterogeneous context? This may make aggregating easier
         var timeLog = "Test took " + formatter.apply(timeTaken);
         var wrappedAssertion = AssertionResult.of(result.holds, result.description + "\n\t" + timeLog);
         return testLimit

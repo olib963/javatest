@@ -1,8 +1,10 @@
-package io.github.olib963.javatest.benchmarks;
+package io.github.olib963.javatest.benchmark;
 
 import io.github.olib963.javatest.Test;
+import io.github.olib963.javatest.TestRunner;
 import io.github.olib963.javatest.Testable;
-import io.github.olib963.javatest.benchmarks.internal.BenchmarkAssertion;
+import io.github.olib963.javatest.benchmark.internal.BenchmarkAssertion;
+import io.github.olib963.javatest.benchmark.internal.BenchmarkRunner;
 
 import java.time.Duration;
 import java.util.Optional;
@@ -10,9 +12,9 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-public class Benchmarking {
+public class Benchmark {
 
-    private Benchmarking(){}
+    private Benchmark(){}
 
     static final Function<Duration, String> DEFAULT_FORMAT = d ->
             String.format("%ss %sms", d.getSeconds(), d.toMillisPart());
@@ -61,5 +63,13 @@ public class Benchmarking {
                 return t.tests().map(test -> benchmark(test, formatter));
             }
         });
+    }
+
+    public static TestRunner benchmark(Stream<TestRunner> runners) {
+        return benchmark(runners, DEFAULT_FORMAT);
+    }
+
+    public static TestRunner benchmark(Stream<TestRunner> runners, Function<Duration, String> formatter) {
+        return new BenchmarkRunner(runners, formatter, System::currentTimeMillis, s -> Duration.ofMillis(System.currentTimeMillis() - s));
     }
 }
