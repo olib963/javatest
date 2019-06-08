@@ -26,6 +26,10 @@ public class JavaTest {
         return run(testableRunner(tests.map(t -> t)));
     }
 
+    public static TestResults runSuite(TestSuite suite) {
+        return run(testableRunner(Stream.of(suite)));
+    }
+
     // Stream Runner factory methods
     private static final Collection<TestCompletionObserver> DEFAULT_OBSERVER =
             Collections.singletonList(TestCompletionObserver.colourLogger());
