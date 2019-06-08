@@ -12,18 +12,32 @@ import java.util.stream.Stream;
 
 public class Benchmarking {
 
+    private Benchmarking(){}
+
     static final Function<Duration, String> DEFAULT_FORMAT = d ->
-            String.format("Test took %ss %sms", d.getSeconds(), d.toMillisPart());
+            String.format("%ss %sms", d.getSeconds(), d.toMillisPart());
 
     public static Test benchmark(Test test) {
         return benchmark(test, DEFAULT_FORMAT);
     }
 
+    public static Test failIfLongerThan(Test test, Duration limit) {
+        return failIfLongerThan(test, limit, DEFAULT_FORMAT);
+    }
+
+    public static Test failIfLongerThan(Test test, Duration limit, Function<Duration, String> formatter) {
+        return benchmarkTest(test, formatter, Optional.of(limit));
+    }
+
     public static Test benchmark(Test test, Function<Duration, String> formatter) {
+        return benchmarkTest(test, formatter, Optional.empty());
+    }
+
+    private static Test benchmarkTest(Test test, Function<Duration, String> formatter, Optional<Duration> limit) {
         return new Test(test.name, () -> {
             var startMillis = System.currentTimeMillis();
             var assertion = test.test.get();
-            return new BenchmarkAssertion(assertion, createTimer(startMillis), formatter);
+            return new BenchmarkAssertion(assertion, createTimer(startMillis), formatter, limit);
         });
     }
 
