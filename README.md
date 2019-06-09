@@ -1,6 +1,7 @@
 # JavaTest
 
 [![CircleCI](https://circleci.com/gh/olib963/javatest.svg?style=svg)](https://circleci.com/gh/olib963/javatest)
+[![Maven](https://img.shields.io/maven-central/v/io.github.olib963/javatest-core.svg?style=plastic)](http://mvnrepository.com/artifact/io.github.olib963/javatest-core)
 
 | Fair Warning: The entirety of this project should currently be considered alpha and subject to change. I am sure I have not got the API or library right on the first try so there may be breaking changes in the future. |
 | --- |
