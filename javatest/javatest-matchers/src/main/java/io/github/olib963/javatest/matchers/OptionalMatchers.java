@@ -10,7 +10,7 @@ public class OptionalMatchers {
     private OptionalMatchers() {}
 
     public static <T> Matcher<Optional<T>> isEmptyOptional() {
-        return new PredicateMatcher<>(Optional::isEmpty, "be an empty Optional");
+        return PredicateMatcher.of(Optional::isEmpty, "be an empty Optional");
     }
 
     public static <T> Matcher<Optional<T>> isOptionalOf(T value) {

@@ -6,7 +6,7 @@
     <groupId>io.github.olib963</groupId>
     <artifactId>javatest-parent</artifactId>
     <packaging>pom</packaging>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.2.0-SNAPSHOT</version>
     <modules>
         <module>javatest</module>
         <module>javafire</module>
@@ -20,7 +20,7 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <!-- Define property for which main class to run tests from -->
-        <javatest.testClass/>
+        <javatest.testClass />
     </properties>
 
     <licenses>
@@ -179,10 +179,6 @@
                                 </goals>
                             </execution>
                         </executions>
-                        <!-- Having a problem with finding javadoc executable :/ -->
-                        <configuration>
-                            <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
-                        </configuration>
                     </plugin>
                     <!-- Sign artifacts -->
                     <plugin>

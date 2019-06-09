@@ -40,7 +40,7 @@ public class EventuallyTests {
         }
     }
 
-    public static Stream<Test> FAILING = Stream.of(
+    public static final Stream<Test> FAILING = Stream.of(
             test("Simple fail", () -> eventually(() -> that(false, "should fail"), DEFAULT_CONFIG.withAttempts(1))),
             test("Exception fail", () -> eventually(() -> {
                 throw new Exception("Test failure");

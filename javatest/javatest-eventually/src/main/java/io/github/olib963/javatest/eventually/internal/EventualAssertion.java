@@ -46,7 +46,6 @@ public class EventualAssertion implements Assertion {
     private AssertionResult runAllAttempts() {
         var firstAttempt = runTest(test, 1);
 
-        // TODO this is just zipWithIndex. Is there some Java equivalent?
         var remainingAttempts = Stream
                 .iterate(new Attempt(test, 2), Attempt::increment)
                 .limit(attempts - 1);

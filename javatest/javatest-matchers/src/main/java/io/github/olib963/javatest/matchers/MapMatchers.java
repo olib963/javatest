@@ -11,15 +11,15 @@ public class MapMatchers {
     private MapMatchers() {}
 
     public static <K, V> Matcher<Map<K, V>> isEmptyMap() {
-        return new PredicateMatcher<>(Map::isEmpty, "be an empty map");
+        return PredicateMatcher.of(Map::isEmpty, "be an empty map");
     }
 
     public static <K, V> Matcher<Map<K, V>> hasMapSize(int size) {
-        return new PredicateMatcher<>(m -> m.size() == size, "have size {" + size + "}", m -> "had size {" + m.size() + "}");
+        return PredicateMatcher.of(m -> m.size() == size, "have size {" + size + "}", m -> "had size {" + m.size() + "}");
     }
 
     public static <K, V> Matcher<Map<K, V>> hasKey(K key) {
-        return new PredicateMatcher<>(m -> m.containsKey(key), "contain the key {" + key + "}");
+        return PredicateMatcher.of(m -> m.containsKey(key), "contain the key {" + key + "}");
     }
 
     public static <K, V> Matcher<Map<K, V>> hasKeyThat(Matcher<K> keyMatcher) {
@@ -27,7 +27,7 @@ public class MapMatchers {
     }
 
     public static <K, V> Matcher<Map<K, V>> hasValue(V value) {
-        return new PredicateMatcher<>(m -> m.containsValue(value), "contain the value {" + value + "}");
+        return PredicateMatcher.of(m -> m.containsValue(value), "contain the value {" + value + "}");
     }
 
     public static <K, V> Matcher<Map<K, V>> hasValueThat(Matcher<V> valueMatcher) {
@@ -36,13 +36,12 @@ public class MapMatchers {
 
     public static <K, V> Matcher<Map<K, V>> hasEntry(K key, V value) {
         var entry = Map.entry(key, value);
-        return new PredicateMatcher<>(
+        return PredicateMatcher.of(
                 m -> m.entrySet().contains(entry),
                 "contain an entry with key {" + key + "} and value {" + value + "}"
         );
     }
 
-    // TODO is this a good enough name?
     public static <K, V> Matcher<Map<K, V>> hasEntryThat(Matcher<K> keyMatcher, Matcher<V> valueMatcher) {
         return new MapSetMatcher<>(Map::entrySet, new EntryMatcher<>(keyMatcher, valueMatcher), "entry");
     }

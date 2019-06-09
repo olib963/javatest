@@ -15,9 +15,8 @@ public class LoggingObserver implements TestCompletionObserver {
 
     @Override
     public void onTestCompletion(TestResult result) {
-        // TODO redefine logs to be structured, only the logger should need to know about line separation and tabbing
         if (useColour) {
-            System.out.println(Colour.forResult(result.result).getCode() + result.testLog + Colour.resetCode());
+            System.out.println(Colour.forResult(result.result).getCode() + result.testLog + Colour.RESET_CODE);
         } else {
             System.out.println(result.testLog);
         }

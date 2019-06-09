@@ -51,7 +51,6 @@ public class ExceptionMatcherTests {
         }
     }
 
-    // TODO the latter tests errors don't compose nicely!
     static class FailingTests implements TestSuite {
         @Override
         public Stream<Test> tests() {

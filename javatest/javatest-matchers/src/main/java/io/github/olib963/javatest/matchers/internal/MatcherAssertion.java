@@ -22,7 +22,6 @@ public class MatcherAssertion<A> implements Assertion {
     }
 
     private String toString(Object value) {
-        // TODO arrays. Arrays are so stupid.
         if (value == null) {
             return "null";
         } else if(value instanceof CheckedRunnable) {
