@@ -179,10 +179,6 @@
                                 </goals>
                             </execution>
                         </executions>
-                        <!-- Having a problem with finding javadoc executable :/ -->
-                        <configuration>
-                            <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
-                        </configuration>
                     </plugin>
                     <!-- Sign artifacts -->
                     <plugin>
