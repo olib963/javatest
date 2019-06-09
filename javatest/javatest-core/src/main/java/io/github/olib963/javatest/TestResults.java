@@ -28,7 +28,7 @@ public final class TestResults {
 
     public TestResults addResult(TestResult result) {
         var logs = new ArrayList<>(testLogs);
-        logs.add(result.testLog); // TODO enforce immutability
+        logs.add(result.testLog);
         var assertionResult = result.result;
         if (assertionResult.pending) {
             return new TestResults(succeeded, successCount, failureCount, pendingCount + 1, logs);

@@ -7,7 +7,6 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.function.Function;
 
-// TODO another candidate for extraction
 public class MapSetMatcher<K, V, E> implements Matcher<Map<K, V>> {
 
     private final Function<Map<K, V>, Collection<E>> setFunction;
@@ -22,7 +21,6 @@ public class MapSetMatcher<K, V, E> implements Matcher<Map<K, V>> {
 
     @Override
     public MatchResult matches(Map<K, V> value) {
-        // TODO mismatch descriptions
         return MatchResult.of(setFunction.apply(value)
                 .stream()
                 .map(elementMatcher::matches)

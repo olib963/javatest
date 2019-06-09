@@ -54,7 +54,6 @@ public class SimpleTests implements TestSuite {
                                     test("Testing with " + s, () -> that(false, "this test should fail"))
                             ))
                     ));
-                    // TODO should we check the failure number?
                     return that(!result.succeeded, "Expected tests to fail when the fixture is fine but internal tests fail");
                 })
         );

@@ -5,7 +5,6 @@ import io.github.olib963.javatest.matchers.Matcher;
 
 import java.util.Collection;
 
-// TODO another candidate for extraction
 public class ElementThatMatcher<T> implements Matcher<Collection<T>> {
 
     private final Matcher<T> elementMatcher;
@@ -16,7 +15,6 @@ public class ElementThatMatcher<T> implements Matcher<Collection<T>> {
 
     @Override
     public MatchResult matches(Collection<T> value) {
-        // TODO do we need any mismatch descriptions for each element?
         return MatchResult.of(
                 value.stream()
                         .map(elementMatcher::matches)

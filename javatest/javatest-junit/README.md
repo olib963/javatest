@@ -34,8 +34,3 @@ You can include this module with this dependency:
     <scope>test</scope>
 </dependency>
 ```
-
-## TODO
-
-- [ ] Collect the logs where appropriate and add them to the `TestResults` object.
-- [ ] Find out what (if any) extensibility of the launcher is required to run JUnit tests your way.

@@ -28,8 +28,6 @@ public final class JUnitTestRunner implements TestRunner {
         var failures = summary.getTestsFailedCount();
         var successes = summary.getTestsSucceededCount();
 
-        // TODO we can print failure logs to a string writer, but we cannot seem to print success logs.
-        // See if people want to get the logs into the test results object.
         return TestResults.from(failures, successes);
     }
 

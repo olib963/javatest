@@ -24,7 +24,6 @@ public final class AssertionResult {
         stringWriter.append("Message: ");
         stringWriter.append(error.getMessage());
         stringWriter.append(LoggingObserver.SEPARATOR);
-        // TODO stack trace trim to the entry point of the test if possible
         error.printStackTrace(new PrintWriter(stringWriter));
         return new AssertionResult(false, stringWriter.toString(), false);
     }

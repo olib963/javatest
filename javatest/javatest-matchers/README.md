@@ -104,14 +104,3 @@ You can include this module with this dependency:
     <scope>test</scope>
 </dependency>
 ```
-
-## TODO
-
-- [ ] Create a `toString` utility. Currently arrays etc. are used with matchers the descriptions are less than useful. 
-- [ ] Create an abstraction for composite matchers.
-- [ ] Provide the ability to add extra descriptions to matcher assertions.
-- [ ] Decide how to handle null. At the moment many `that(null, $matcher)` expressions fail tests with NPEs, maybe this is good enough?
-Maybe I should explicitly fail if null is passed where I don't want it to be?
-- [ ] Try to provide a simple `not()` negatable `Matcher` if possible.
-- [ ] Extend with more matchers. Suggestions include: `List`s, `Set`s, `Class`es, `File`s, more `Collection` ones e.g. `containsAnElementThat(Matcher[T])`
-

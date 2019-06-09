@@ -3,7 +3,6 @@ package io.github.olib963.javatest.matchers.internal;
 import io.github.olib963.javatest.matchers.MatchResult;
 import io.github.olib963.javatest.matchers.Matcher;
 
-// TODO Message, Cause and Throws are all a wrapper around a function and an existing matcher.
 public class MessageMatcher implements Matcher<Throwable> {
     private final Matcher<String> messageMatcher;
 

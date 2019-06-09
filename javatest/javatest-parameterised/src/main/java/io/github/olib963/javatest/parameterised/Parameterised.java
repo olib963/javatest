@@ -10,7 +10,6 @@ import java.util.stream.Stream;
 
 public class Parameterised {
 
-    // TODO see if there is a plan to integrate value types, tuples and better functions into Java. If so, these types could be replaced.
     private Parameterised() {
     }
 

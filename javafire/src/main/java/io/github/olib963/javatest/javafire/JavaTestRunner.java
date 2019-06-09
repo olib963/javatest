@@ -56,7 +56,6 @@ class JavaTestRunner {
         try {
             return classLoaderProvider.classLoaderFor(classPathElements);
         } catch (ClassLoaderProvider.ClassLoadingException e) {
-            // FIXME Add classPathElements to exception message
             throw new InternalTestException(Status.EXECUTION_FAILURE, "Could not create a class loader", e);
         }
     }
@@ -113,7 +112,6 @@ class JavaTestRunner {
         }
     }
 
-    // TODO Consider splitting this whole class, as needed this exception class to control the flow (a lot going on!)
     private static class InternalTestException extends Exception {
 
         private final Status status;

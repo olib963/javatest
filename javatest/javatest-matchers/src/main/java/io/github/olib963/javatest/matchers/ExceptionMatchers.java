@@ -29,8 +29,5 @@ public class ExceptionMatchers {
         return new CauseMatcher(causeMatcher);
     }
 
-    // TODO composable matchers as well as assertions?
-    //    e.g. that(x, willThrowExceptionThat(hasType(y).and(hasCauseThat(hasMessageThat(contains("foo").and(startsWith("bar")))))))
-
 }
 

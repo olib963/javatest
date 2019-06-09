@@ -15,7 +15,6 @@ import static io.github.olib963.javatest.parameterised.Parameterised.t;
 public class ParameterisedTests implements TestSuite {
     @Override
     public Stream<Test> tests() {
-        // TODO create joinStreams function
         return Stream.of(
                 parameterised(Data.palindromes(), this::palindromeTest),
                 parameterised(Data.multiplication(), this::multiplicationTest),

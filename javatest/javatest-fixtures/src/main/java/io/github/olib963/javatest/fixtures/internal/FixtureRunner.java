@@ -9,7 +9,6 @@ import io.github.olib963.javatest.fixtures.FixtureDefinition;
 import java.util.Optional;
 import java.util.function.Function;
 
-// TODO are there valid use cases for the before each and after each fixtures?
 public class FixtureRunner<Fixture> implements TestRunner {
 
     private final String fixtureName;
@@ -22,8 +21,6 @@ public class FixtureRunner<Fixture> implements TestRunner {
         this.testFunction = testFunction;
     }
 
-    // TODO I think this currently adds to the failure count of the test results. This is technically not correct. During refactoring
-    // it would be good to rework this so the test counts remain the same, but the result fails and a log is added.
     @Override
     public TestResults run() {
         return fixtureDefinition.create()

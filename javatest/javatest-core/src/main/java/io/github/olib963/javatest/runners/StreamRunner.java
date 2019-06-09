@@ -31,8 +31,6 @@ public class StreamRunner implements TestRunner {
     }
 
     private TestResult runTest(Optional<String> suiteName, Test test) {
-        // TODO allow a test to add to the log. Ideally immutable :/ probably have to be some kind of builder per test case.
-        // TODO create a structured log
         var result = safeRunTest(test.test);
         var log = test.name + LoggingObserver.SEPARATOR + "\t" + result.description;
         var withSuite = suiteName.map(n -> n + ':' + log).orElse(log);

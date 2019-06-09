@@ -20,7 +20,7 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <!-- Define property for which main class to run tests from -->
-        <javatest.testClass/>
+        <javatest.testClass />
     </properties>
 
     <licenses>
