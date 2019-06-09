@@ -5,13 +5,14 @@
     <parent>
         <artifactId>javatest</artifactId>
         <groupId>io.github.olib963</groupId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.1.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>javatest-parameterised</artifactId>
     <name>JavaTest Parameterised Testing Module</name>
+    <description>Utilities for creating parameterised test cases</description>
 
     <properties>
         <javatest.testClass>io.github.olib963.javatest.parameterised.Tests</javatest.testClass>
@@ -23,18 +24,5 @@
             <artifactId>javatest-core</artifactId>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-enforcer-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

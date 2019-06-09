@@ -5,12 +5,13 @@
     <parent>
         <artifactId>javatest</artifactId>
         <groupId>io.github.olib963</groupId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>javatest-fixtures</artifactId>
     <name>JavaTest Fixture Module</name>
+    <description>Functionality to manage the lifecycle of fixtures required for tests</description>
 
     <properties>
         <javatest.testClass>io.github.olib963.javatest.fixtures.Tests</javatest.testClass>
@@ -22,18 +23,5 @@
             <artifactId>javatest-core</artifactId>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-enforcer-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>
