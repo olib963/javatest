@@ -6,7 +6,7 @@ import java.util.Optional;
 public class EventualConfig {
     public final int attempts;
     public final Duration waitInterval;
-    public Optional<Duration> initialDelay;
+    public final Optional<Duration> initialDelay;
     private EventualConfig(int attempts, Duration waitInterval, Optional<Duration> initialDelay) {
         this.attempts = attempts;
         this.waitInterval = waitInterval;

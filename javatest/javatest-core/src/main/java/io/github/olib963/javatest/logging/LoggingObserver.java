@@ -16,7 +16,7 @@ public class LoggingObserver implements TestCompletionObserver {
     @Override
     public void onTestCompletion(TestResult result) {
         if (useColour) {
-            System.out.println(Colour.forResult(result.result).getCode() + result.testLog + Colour.resetCode());
+            System.out.println(Colour.forResult(result.result).getCode() + result.testLog + Colour.RESET_CODE);
         } else {
             System.out.println(result.testLog);
         }
