@@ -6,7 +6,7 @@ import java.util.stream.Stream;
 public final class Test implements Testable {
     public final String name;
     public final CheckedSupplier<Assertion> test;
-    public Test(String name, CheckedSupplier<Assertion> test) {
+    Test(String name, CheckedSupplier<Assertion> test) {
         this.name = name;
         this.test = test;
     }
