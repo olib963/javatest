@@ -11,6 +11,7 @@
 
     <artifactId>javatest-eventually</artifactId>
     <name>JavaTest Eventual Consistency Module</name>
+    <description>Assertion wrapper for eventual consistency in tests</description>
 
     <properties>
         <javatest.testClass>io.github.olib963.javatest.eventually.Tests</javatest.testClass>
@@ -28,18 +29,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-enforcer-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

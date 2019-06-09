@@ -8,16 +8,16 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
+    <artifactId>javafire-maven-plugin</artifactId>
+    <packaging>maven-plugin</packaging>
+
+    <name>JavaFire Maven Plugin</name>
+    <description>A maven plugin to run your JavaTest tests</description>
 
     <properties>
         <javatest.testClass>io.github.olib963.javatest.javafire.JavaTestRunnerTest</javatest.testClass>
         <maven.version>3.5.0</maven.version>
     </properties>
-
-    <name>JavaFire Maven Plugin</name>
-    <description>A maven plugin to run your JavaTest tests</description>
-    <artifactId>javafire-maven-plugin</artifactId>
-    <packaging>maven-plugin</packaging>
 
     <dependencies>
         <dependency>
@@ -44,14 +44,6 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-enforcer-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-plugin-plugin</artifactId>

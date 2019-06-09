@@ -11,21 +11,9 @@
 
     <artifactId>javatest-core</artifactId>
     <name>JavaTest Core</name>
+    <description>Minimal set of functionality needed to create and run tests</description>
 
     <properties>
         <javatest.testClass>io.github.olib963.javatest.AllTests</javatest.testClass>
     </properties>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-enforcer-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 </project>

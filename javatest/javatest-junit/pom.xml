@@ -11,6 +11,7 @@
 
     <artifactId>javatest-junit</artifactId>
     <name>JavaTest JUnit Module</name>
+    <description>Runs JUnit tests using the programmatic launcher, integrating the results with JavaTest results</description>
 
     <properties>
         <javatest.testClass>io.github.olib963.javatest.junit.Tests</javatest.testClass>
@@ -35,18 +36,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-enforcer-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>
