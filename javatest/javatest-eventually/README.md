@@ -24,7 +24,7 @@ public class MyEventualTest implements TestSuite {
               });
               return eventually(() -> 
                 that("bar".equals(map.get("foo")), "Map contains entry foo:bar"));
-          })      
+          })
         );
     }
 }

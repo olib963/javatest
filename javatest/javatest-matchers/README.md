@@ -50,7 +50,7 @@ public class MyExceptionTests implements TestSuite {
                     // Exceptions can be matched on just like any other object
                     var message = "NOT ALLOWED";
                     var exception = new IllegalArgumentException(message);
-                    return that(exception, hasMessage(message)); 
+                    return that(exception, hasMessage(message));
                 }),
                 test("Simple Exception", () -> {
                     // If you want to check an exception is thrown then provide a runnable containing the throwing method
@@ -80,7 +80,7 @@ import static io.github.olib963.javatest.matchers.Matcher.*;
 public class TestTheUniverse implements TestSuite {
     
     private final Matcher<Integer> isFortyTwo =
-        Matcher.fromFunctions((Integer i) -> i == 42, "be 42");
+        Matcher.fromFunctions(i -> i == 42, "be 42");
     
     @Override
     public Stream<Test> testStream() {

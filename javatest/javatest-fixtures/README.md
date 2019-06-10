@@ -18,19 +18,14 @@ public class MyIntegrationTests implements TestSuite {
 }
 
 
-public class MyEntryPoint {
-    
-    public static void main(String... args) {
-        var runner = Fixtures.fixtureRunner(
-            // Name the fixture
-            "test directory",
-            // Use the existing fixture definition for temporary directories
-            Fixtures.temporaryDirectory("integration-test"),
-            // Create your test runner using the fixture
-            d -> testStreamRunner(new IntegrationTests(d).testStream()));
-        
-        var results = JavaTest.run(runner);
-    }
+public class WithFixtures {
+    TestRunner runner = Fixtures.fixtureRunner(
+        // Name the fixture
+        "test directory",
+        // Use the existing fixture definition for temporary directories
+        Fixtures.temporaryDirectory("/tmp/integration-test"),
+        // Create your test runner using the fixture
+        d -> testableRunner(new IntegrationTests(d)));
 }
 ```
 
