@@ -1,5 +1,6 @@
 package io.github.olib963.javatest.benchmark;
 
+import io.github.olib963.javatest.JavaTest;
 import io.github.olib963.javatest.Test;
 import io.github.olib963.javatest.TestRunner;
 import io.github.olib963.javatest.Testable;
@@ -36,7 +37,7 @@ public class Benchmark {
     }
 
     private static Test benchmarkTest(Test test, Function<Duration, String> formatter, Optional<Duration> limit) {
-        return new Test(test.name, () -> {
+        return JavaTest.test(test.name, () -> {
             var startMillis = System.currentTimeMillis();
             var assertion = test.test.get();
             return new BenchmarkAssertion(assertion, createTimer(startMillis), formatter, limit);
