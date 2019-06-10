@@ -116,21 +116,77 @@ an executable.
 <details>
 <summary>Expand</summary>
 
-An example of a test entrypoint:
+An example of a test entry point:
 
 ```java
+import io.github.olib963.javatest.*;
+
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.stream.Stream;
+
+import static io.github.olib963.javatest.JavaTest.*;
+import static io.github.olib963.javatest.fixtures.Fixtures.*;
+
 public class MyRunners implements TestRunners {
     
-} 
+    @Override
+    public Stream<TestRunner> runners() {
+        // Define a runner for unit tests in parallel
+        List<Testable> tests = List.of(new MyFirstUnitTestSuite(), new MySecondUnitTestSuite());
+        var unitTests = testableRunner(tests.parallelStream());
+
+        // Define integration tests with an executor fixture
+        var executorDefinition = Fixtures.definitionFromThrowingFunctions(
+                Executors::newSingleThreadExecutor, ExecutorService::shutdown);
+        var integrationTests = Fixtures.fixtureRunner("executor",
+                executorDefinition,
+                es -> testableRunner(new MyIntegrationTestSuite(es)));
+        // Run both
+        return Stream.of(unitTests, integrationTests);
+    }
+    
+}
 ```
 
 An example of a test suite:
 
 ```java
+import io.github.olib963.javatest.*;
+
+import java.util.List;
+import java.util.stream.Stream;
+
+import static io.github.olib963.javatest.JavaTest.*;
+import static io.github.olib963.javatest.matchers.Matcher.*;
+import static io.github.olib963.javatest.matchers.CollectionMatchers.*;
+import static io.github.olib963.javatest.matchers.StringMatchers.*;
+
 public class MyFirstUnitTestSuite implements TestSuite {
-    
+    @Override
+    public Stream<Test> tests() {
+        return Stream.of(
+                test("List contains", () -> that(List.of(1,2,3), contains(2))),
+                test("Messaging", () -> {
+                    var myObject = new MyBusinessMessageObject();
+                    var message = myObject.createMessageFor(50);
+                    return that(message, containsString("integer 50"));
+                })
+        );
+    }
 }
 ```
+
+These tests can be run in a few different ways, look into [Running JavaTest](#running-javatest) to find the way that works
+best for you.
+
+The [Core library](#core-library) section explains the fundamentals of how these tests are defined. Functionality from
+the Fixtures and Matchers modules are used in this example, explore the [Module List](#module-list) to see if there are 
+any extentions that fit your needs.
+
+If there is something you cannot achieve with the existing functionality please either look at the 
+[Future Features](#future-features) I have planned or open an issue describing what you want to do :D
 
 </details>
 
@@ -301,6 +357,8 @@ public class MyRunners {
 }
 ```
 
+Other `TestRunner` implementations are available in the other modules.
+
 ### Core library maven dependency
 
 ```xml
@@ -314,7 +372,7 @@ public class MyRunners {
 
 ## Running JavaTest
 
-To run Javatest simply pass your `TestRunner` instances to the `JavaTest.run()` function and handle the
+To run JavaTest simply pass your `TestRunner` instances to the `JavaTest.run()` function and handle the
 result how you see fit. There is a convenience function `runTests` defined to just run a `Stream<Test>` using the default `StreamRunner`: 
 
 ```java
@@ -340,8 +398,8 @@ class MyTests {
 
 ### With JavaFire Maven plugin
 
-If you are using maven you can add the `JavaFire` maven plugin to your pom to run tests defined by a `TestRunners` class for you
-during mavens `test` phase. Your `TestRunners` class _must_ have a zero arg constructor.
+If you are using [maven](https://maven.apache.org/) you can add the `JavaFire` maven plugin to your pom to run tests defined 
+by a `TestRunners` class for you during mavens `test` phase. Your `TestRunners` class _must_ have a zero arg constructor.
 
 ```java
 package my.awesome.app;
@@ -384,12 +442,14 @@ In `pom.xml`:
 
 ### JShell
 
-Since JavaTest is built on pure Java it plays quite nicely with the REPL. This startup script may be useful:
+Since JavaTest is built on pure Java it plays quite nicely with the REPL. This startup script may be useful to you:
+
 ```jshelllanguage
 /env -class-path /absolute/path/to/javatest/jar
+import io.github.olib963.javatest.*;
 import static io.github.olib963.javatest.JavaTest.*;
 
-io.github.olib963.javatest.TestResults runTest(io.github.olib963.javatest.CheckedSupplier<io.github.olib963.javatest.Assertion> testFn) {
+TestResults runTest(CheckedSupplier<Assertion> testFn) {
     return runTests(Stream.of(test("JShell test", testFn)));
 }
 ```
@@ -431,9 +491,11 @@ $3 ==> true
 
 Features I would like to look at implementing in the future:
 
-* Add tags back onto tests in such a way that it is easy to filter and split tests. Await use cases before doing this though.
-* A way to add arbitrary logs to your test cases. (Possibly replacing the `String` log with a structural log)
-* A module that allows for generative property testing & test specifications e.g. the `Comparable[T]` spec.
+* Add tags back onto tests in such a way that it is easy to filter and split tests. I removed this feature as I felt it didn't
+fit the use cases appropriately.
+* A way to add arbitrary logs to your test cases. (Possibly replacing the `String`s log with a structural log)
+* A module that allows for generative property testing & test specifications e.g. the `Comparable[T]` spec, built on the 
+parameterization module.
 * Acceptance tests for the JavaFire maven plugin, this proved too complex and painful to do in the first version.
 * Expand on the matchers for more types and adding the ability to compose and negate them.
 * A Gradle plugin?
