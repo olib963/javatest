@@ -440,6 +440,8 @@ In `pom.xml`:
 </plugin>
 ```
 
+You can override the `testRunners` class being used by setting the maven property e.g. `mvn -Djavafire.testRunners=com.my.app.OtherTests test`.
+
 ### JShell
 
 Since JavaTest is built on pure Java it plays quite nicely with the REPL. This startup script may be useful to you:

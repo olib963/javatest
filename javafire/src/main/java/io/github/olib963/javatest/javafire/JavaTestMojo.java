@@ -19,7 +19,7 @@ public class JavaTestMojo extends AbstractMojo {
 	/**
 	 * The name of the class that implements TestRunners, providing the runners for testing
 	 */
-	@Parameter(required = true)
+	@Parameter(required = true, property = "javafire.testRunners")
 	private String testRunners;
 
 	@Override
