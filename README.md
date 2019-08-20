@@ -205,6 +205,7 @@ JavaTest is built on a simple functional core and functionality is expanded on b
 * [Matchers](./javatest/javatest-matchers)
 * [Fixtures](./javatest/javatest-fixtures)
 * [Parameterised Testing](./javatest/javatest-parameterised)
+* [Benchmarking](./javatest/javatest-benchmark)
 * [Eventual Consistency](./javatest/javatest-eventually)
 * [JUnit](./javatest/javatest-junit)
 

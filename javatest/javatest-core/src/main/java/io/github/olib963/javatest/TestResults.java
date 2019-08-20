@@ -53,4 +53,14 @@ public final class TestResults {
         return successCount + failureCount + pendingCount;
     }
 
+    public List<String> allLogs() {
+        return new ArrayList<>(testLogs);
+    }
+
+    public TestResults addLog(String log) {
+        var logs = new ArrayList<>(testLogs);
+        logs.add(log); // TODO enforce immutability
+        return new TestResults(succeeded, successCount, failureCount, pendingCount, logs);
+    }
+
 }
