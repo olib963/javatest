@@ -1,0 +1,25 @@
+# JUnit Runner
+
+It is simple to run JUnit tests as part of your JavaTest run by using the `JUnitRunner`. This runner makes use of
+the https://junit.org/junit5/docs/current/user-guide/#launcher-api[programmatic launcher API] to run JUnit tests. You
+create any arbitrary `LauncherDiscoveryRequest` to call out to JUnit and there is a convenience method
+that exists for just running all tests in a package.
+
+[source,java]
+----
+include::../src/test/java/io/github/olib963/javatest/junit/documentation/JUnitRunners.java[tags=junitRunners]
+----
+
+'''
+
+You can include this module with this dependency:
+
+[source, xml]
+----
+<dependency>
+    <groupId>io.github.olib963</groupId>
+    <artifactId>javatest-junit</artifactId>
+    <version>${javatest.version}</version>
+    <scope>test</scope>
+</dependency>
+----
