@@ -1,8 +1,9 @@
 aliases:
   - &dependency-cache v1-dependencies-{{ checksum "pom.xml" }}
+  - &ruby-cache v1-ruby-test-dependencies-{{ checksum "gendocs.rb" }}
 version: 2
 jobs:
-  build:
+  test:
     docker:
       - image: circleci/openjdk:11-jdk
     working_directory: ~/javatest
@@ -20,3 +21,39 @@ jobs:
             - ~/.m2
           key: *dependency-cache
       - run: mvn test
+  docTest:
+    docker:
+      - image: circleci/ruby:2.6.0
+    working_directory: ~/javatest
+    environment:
+      GEM_HOME: ~/gems
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - *ruby-cache
+      - run:
+          name: Install AsciiDoctor
+          command: sudo gem install asciidoctor --conservative
+      - save_cache:
+          key: *ruby-cache
+          paths:
+            - ~/gems
+      - run:
+          name: Test no diff
+          command: |
+            ruby gendocs.rb
+            if [ -z "$(git status --porcelain)" ]; then
+              echo "No changes to documentation"
+            else
+              echo "Documentation has changed, please rerun 'ruby gendocs.rb' and commit the changes"
+              exit 1
+            fi
+
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test
+      - docTest
