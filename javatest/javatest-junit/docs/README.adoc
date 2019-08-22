@@ -1,4 +1,4 @@
-# JUnit Runner
+= JUnit Runner
 
 It is simple to run JUnit tests as part of your JavaTest run by using the `JUnitRunner`. This runner makes use of
 the https://junit.org/junit5/docs/current/user-guide/#launcher-api[programmatic launcher API] to run JUnit tests. You
