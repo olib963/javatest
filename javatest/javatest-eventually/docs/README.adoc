@@ -15,9 +15,7 @@ which covers one minute. You can pass an instance of `EventualConfig` to the `ev
 ----
 include::../src/test/java/io/github/olib963/javatest/eventually/documentation/ConfigDocumentationTests.java[tags=imports]
 
-public class MyCustomEventualAssertions {
-include::../src/test/java/io/github/olib963/javatest/eventually/documentation/ConfigDocumentationTests.java[tags=config,indent=4]
-}
+include::../src/test/java/io/github/olib963/javatest/eventually/documentation/ConfigDocumentationTests.java[tags=config,indent=-]
 ----
 
 '''

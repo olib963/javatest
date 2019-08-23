@@ -7,11 +7,7 @@ to the logs of your test.
 ----
 include::../src/test/java/io/github/olib963/javatest/benchmark/DocumentationTests.java[tags=imports]
 
-public class MyBenchMarks {
-
-include::../src/test/java/io/github/olib963/javatest/benchmark/DocumentationTests.java[tags=simple]
-
-}
+include::../src/test/java/io/github/olib963/javatest/benchmark/DocumentationTests.java[tags=simple, indent=-]
 ----
 
 == Setting time limits
@@ -23,11 +19,7 @@ You can set a time limit on an individual test such that it will fail if it take
 import java.time.Duration;
 include::../src/test/java/io/github/olib963/javatest/benchmark/DocumentationTests.java[tags=imports]
 
-public class MyLimitedTest {
-
-include::../src/test/java/io/github/olib963/javatest/benchmark/DocumentationTests.java[tags=limit]
-
-}
+include::../src/test/java/io/github/olib963/javatest/benchmark/DocumentationTests.java[tags=limit, indent=-]
 ----
 
 == Custom duration format
@@ -40,11 +32,7 @@ this function on any benchmarking by providing your own format.
 import java.time.Duration;
 include::../src/test/java/io/github/olib963/javatest/benchmark/DocumentationTests.java[tags=imports]
 
-public class MyCustomBenchmark {
-
-include::../src/test/java/io/github/olib963/javatest/benchmark/DocumentationTests.java[tags=customFormat]
-
-}
+include::../src/test/java/io/github/olib963/javatest/benchmark/DocumentationTests.java[tags=customFormat, indent=-]
 ----
 
 '''

@@ -9,11 +9,7 @@ able to be imported into your tests from various classes e.g. `StringMatchers` w
 include::../src/test/java/io/github/olib963/javatest/matchers/DocumentationTests.java[tags=import]
 include::../src/test/java/io/github/olib963/javatest/matchers/DocumentationTests.java[tags=stringImport]
 
-public class MatcherTests {
-
-include::../src/test/java/io/github/olib963/javatest/matchers/DocumentationTests.java[tags=simpleTests]
-
-}
+include::../src/test/java/io/github/olib963/javatest/matchers/DocumentationTests.java[tags=simpleTests, indent=-]
 ----
 
 Existing `Matcher` collections:
@@ -37,11 +33,7 @@ include::../src/test/java/io/github/olib963/javatest/matchers/DocumentationTests
 include::../src/test/java/io/github/olib963/javatest/matchers/DocumentationTests.java[tags=stringImport]
 include::../src/test/java/io/github/olib963/javatest/matchers/DocumentationTests.java[tags=exceptionImport]
 
-public class MyExceptionTests {
-
-include::../src/test/java/io/github/olib963/javatest/matchers/DocumentationTests.java[tags=exceptionTests]
-
-}
+include::../src/test/java/io/github/olib963/javatest/matchers/DocumentationTests.java[tags=exceptionTests, indent=-]
 ----
 
 == Custom Matchers

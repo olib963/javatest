@@ -15,11 +15,10 @@ public class Tests {
         }
         System.out.println("Tests passed");
 
-        var docs = new DocumentationTests();
         var allDocTests = Stream.of(
-                docs.inMemoryPalindromeTests(),
-                docs.palindromeTestsFromFile(),
-                docs.fibonacciTests()
+                DocumentationTests.palindromes().inMemoryPalindromeTests(),
+                DocumentationTests.palindromes().palindromeTestsFromFile(),
+                DocumentationTests.fibonacci().fibonacciTests()
         ).flatMap(Function.identity());
         var docResult = runTests(allDocTests);
         if (!docResult.succeeded) {

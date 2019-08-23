@@ -9,7 +9,6 @@ library of helper functions to let you achieve this.
 import static io.github.olib963.javatest.parameterised.Parameterised.*;
 
 public class PalindromeTests {
-
     public Stream<Test> inMemoryPalindromeTests() {
         // Create parameterised tests from an in memory stream
         return parameterised(
@@ -33,7 +32,6 @@ public class PalindromeTests {
         Stream<String> lines = Files.lines(Path.of(path));
         return parameterised(lines, this::palindromeTest);
     }
-
 }
 ----
 
@@ -45,7 +43,6 @@ and provide a function with the correct arity and typed arguments to create your
 import static io.github.olib963.javatest.parameterised.Parameterised.*;
 
 public class FibonacciTests {
-
     public Stream<Test> fibonacciTests() {
         return parameterised(
                 Stream.of(
@@ -65,7 +62,6 @@ public class FibonacciTests {
                 (n, expectedFib) -> test(n + "th fibonacci number", () ->
                         that(fibonacci(n) == expectedFib, "The " + n + "th fibonacci number is " + expectedFib)));
     }
-
 }
 ----
 

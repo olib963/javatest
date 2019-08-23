@@ -21,39 +21,43 @@ import static io.github.olib963.javatest.matchers.ExceptionMatchers.*;
 public class DocumentationTests implements TestSuite {
 
     // tag::simpleTests[]
-    private static final String TEST_STRING = "Hello World";
+    public class MatcherTests {
+        private static final String TEST_STRING = "Hello World";
 
-    public Stream<Test> matcherTests() {
-        return Stream.of(
-                test("Addition", () -> that(1 + 1, isEqualTo(2))),
-                test("Types", () -> that("Hello", hasType(String.class))),
-                test("String Prefix", () -> that(TEST_STRING, startsWith("Hello"))),
-                test("Substring", () -> that(TEST_STRING, containsString("Wor")))
-        );
+        public Stream<Test> matcherTests() {
+            return Stream.of(
+                    test("Addition", () -> that(1 + 1, isEqualTo(2))),
+                    test("Types", () -> that("Hello", hasType(String.class))),
+                    test("String Prefix", () -> that(TEST_STRING, startsWith("Hello"))),
+                    test("Substring", () -> that(TEST_STRING, containsString("Wor")))
+            );
+        }
     }
     // end::simpleTests[]
 
     // tag::exceptionTests[]
-    public Stream<Test> exceptionTests() {
-        return Stream.of(
-                test("Matching an exception", () -> {
-                    // Exceptions can be matched on just like any other object
-                    var message = "NOT ALLOWED";
-                    var exception = new IllegalArgumentException(message);
-                    return that(exception, hasMessage(message));
-                }),
-                test("Simple Exception", () -> {
-                    // If you want to check an exception is thrown then provide a runnable containing the throwing method
-                    var validator = new MyValidator();
-                    return that(() -> validator.validate(1),
-                            willThrowExceptionThat(hasType(IllegalArgumentException.class)));
-                }),
-                test("Check Message on cause", () -> {
-                    var myObject = new MyThrowingObject();
-                    // You can compose matchers together
-                    var hasCauseWithMessageContainingFoo = hasCauseThat(hasMessageThat(containsString("Foo")));
-                    return that(() -> myObject.throwingFunction(10), willThrowExceptionThat(hasCauseWithMessageContainingFoo));
-                }));
+    public class MyExceptionTests {
+        public Stream<Test> exceptionTests() {
+            return Stream.of(
+                    test("Matching an exception", () -> {
+                        // Exceptions can be matched on just like any other object
+                        var message = "NOT ALLOWED";
+                        var exception = new IllegalArgumentException(message);
+                        return that(exception, hasMessage(message));
+                    }),
+                    test("Simple Exception", () -> {
+                        // If you want to check an exception is thrown then provide a runnable containing the throwing method
+                        var validator = new MyValidator();
+                        return that(() -> validator.validate(1),
+                                willThrowExceptionThat(hasType(IllegalArgumentException.class)));
+                    }),
+                    test("Check Message on cause", () -> {
+                        var myObject = new MyThrowingObject();
+                        // You can compose matchers together
+                        var hasCauseWithMessageContainingFoo = hasCauseThat(hasMessageThat(containsString("Foo")));
+                        return that(() -> myObject.throwingFunction(10), willThrowExceptionThat(hasCauseWithMessageContainingFoo));
+                    }));
+        }
     }
     // end::exceptionTests[]
 
@@ -91,7 +95,7 @@ public class DocumentationTests implements TestSuite {
     @Override
     public Stream<Test> tests() {
         return Stream.of(
-            matcherTests(), exceptionTests(), Stream.of(new TestTheUniverse().universeTest())
+            new MatcherTests().matcherTests(), new MyExceptionTests().exceptionTests(), Stream.of(new TestTheUniverse().universeTest())
         ).flatMap(Function.identity());
     }
 

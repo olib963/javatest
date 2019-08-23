@@ -1,7 +1,9 @@
 = JavaTest
 
-image::https://circleci.com/gh/olib963/javatest.svg?style=svg[link="https://circleci.com/gh/olib963/javatest"]
-image::https://img.shields.io/maven-central/v/io.github.olib963/javatest-core.svg?style=plastic[link="http://mvnrepository.com/artifact/io.github.olib963/javatest-core"]
+--
+image::https://circleci.com/gh/olib963/javatest.svg?style=svg[link="https://circleci.com/gh/olib963/javatest", float="left"]
+image::https://img.shields.io/maven-central/v/io.github.olib963/javatest-core.svg?style=plastic[link="http://mvnrepository.com/artifact/io.github.olib963/javatest-core", float="left"]
+--
 
 CAUTION: *Fair Warning*: The entirety of this project should currently be considered alpha and subject to change. I am sure I have not got the API or library right on the first try so there may be breaking changes in the future.
 
@@ -54,7 +56,7 @@ public class Calculator {
 
 2. `foo/Tests.java`
 +
-This file contains tests for our SUT, it exists in the same package so there is no need to
+This file is a java executable containing tests for our SUT, it exists in the same package so there is no need to
 `import foo.Calculator;`.
 +
 This example defines two simple tests, one is testing that `1 + 1 = 2` by
@@ -113,7 +115,7 @@ Notes:
 * You will need to include at least the Javatest jar and the current directory (`.`) on the classpath in order for this to work,
 if you are using java classes from any other jars/directories you will need to also ensure they are on the classpath.
 
-You should be able to explore the <<Core Library,Core Library>> and get familiar with testing your code very quickly by running them from
+You should be able to explore the <<Core Library,Core Library>> and get familiar with testing your code by running them from
 an executable.
 
 ====
@@ -129,6 +131,7 @@ An example of a test entry point:
 [source, java]
 ----
 import io.github.olib963.javatest.*;
+import io.github.olib963.javatest.fixtures.Fixtures;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -136,7 +139,6 @@ import java.util.concurrent.Executors;
 import java.util.stream.Stream;
 
 import static io.github.olib963.javatest.JavaTest.*;
-import static io.github.olib963.javatest.fixtures.Fixtures.*;
 
 public class MyRunners implements TestRunners {
 
@@ -149,6 +151,7 @@ public class MyRunners implements TestRunners {
         // Define integration tests with an executor fixture
         var executorDefinition = Fixtures.definitionFromThrowingFunctions(
                 Executors::newSingleThreadExecutor, ExecutorService::shutdown);
+
         var integrationTests = Fixtures.fixtureRunner("executor",
                 executorDefinition,
                 es -> testableRunner(new MyIntegrationTestSuite(es)));
@@ -163,13 +166,14 @@ An example of a test suite:
 
 [source, java]
 ----
-import io.github.olib963.javatest.*;
+import io.github.olib963.javatest.Test;
+import io.github.olib963.javatest.TestSuite;
 
 import java.util.List;
 import java.util.stream.Stream;
 
-import static io.github.olib963.javatest.JavaTest.*;
-import static io.github.olib963.javatest.matchers.Matcher.*;
+import static io.github.olib963.javatest.JavaTest.test;
+import static io.github.olib963.javatest.matchers.Matcher.that;
 import static io.github.olib963.javatest.matchers.CollectionMatchers.*;
 import static io.github.olib963.javatest.matchers.StringMatchers.*;
 
@@ -188,15 +192,15 @@ public class MyFirstUnitTestSuite implements TestSuite {
 }
 ----
 
-These tests can be run in a few different ways, look into [Running JavaTest](#running-javatest) to find the way that works
+These tests can be run in a few different ways, look into <<Running JavaTest,Running JavaTest>> to find the way that works
 best for you.
 
-The [Core library](#core-library) section explains the fundamentals of how these tests are defined. Functionality from
-the Fixtures and Matchers modules are used in this example, explore the [Module List](#module-list) to see if there are
-any extentions that fit your needs.
+The <<Core library,Core library>> section explains the fundamentals of how these tests are defined. Functionality from
+the Fixtures and Matchers modules are used in this example, explore the <<Module List,Module List>> to see if there are
+any extensions that fit your needs.
 
 If there is something you cannot achieve with the existing functionality please either look at the
-[Future Features](#future-features) I have planned or open an issue describing what you want to do :D
+<<Future Features,Future Features>> I have planned or open an issue describing what you want to do :D
 
 ====
 
@@ -212,12 +216,12 @@ If there is something you cannot achieve with the existing functionality please 
 
 JavaTest is built on a simple functional core and functionality is expanded on by several modules found here:
 
-* [Matchers](./javatest/javatest-matchers)
-* [Fixtures](./javatest/javatest-fixtures)
-* [Parameterised Testing](./javatest/javatest-parameterised)
-* [Benchmarking](./javatest/javatest-benchmark)
-* [Eventual Consistency](./javatest/javatest-eventually)
-* [JUnit](./javatest/javatest-junit)
+* <<javatest/javatest-matchers,Matchers>>
+* <<javatest/javatest-fixtures,Fixtures>>
+* <<javatest/javatest-parameterised,Parameterised Testing>>
+* <<javatest/javatest-benchmark,Benchmarking>>
+* <<javatest/javatest-eventually,Eventual Consistency>>
+* <<javatest/javatest-junit,JUnit>>
 
 == Core Library
 

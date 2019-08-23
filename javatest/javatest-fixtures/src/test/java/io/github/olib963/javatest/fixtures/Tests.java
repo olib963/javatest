@@ -2,6 +2,7 @@ package io.github.olib963.javatest.fixtures;
 
 import io.github.olib963.javatest.JavaTest;
 import io.github.olib963.javatest.TestRunner;
+import io.github.olib963.javatest.fixtures.documentation.MyRunners;
 
 import static io.github.olib963.javatest.JavaTest.run;
 import static io.github.olib963.javatest.JavaTest.testableRunner;
@@ -32,12 +33,18 @@ public class Tests {
         if (!integrationResult.succeeded) {
             throw new RuntimeException("Integration tests failed!");
         }
-        System.out.println("Tests passed");
 
         var docResult = JavaTest.run(testableRunner(CustomDefinitions.tests()));
         if (!docResult.succeeded) {
             throw new RuntimeException("Documentation tests failed!");
         }
+
+        // Main README documentation makes use of Fixtures so the documentation file is here.
+        var quickStartResult = JavaTest.run(new MyRunners().runners());
+        if (!quickStartResult.succeeded) {
+            throw new RuntimeException("Quickstart documentation tests failed!");
+        }
+        System.out.println("Tests passed");
     }
 
 }

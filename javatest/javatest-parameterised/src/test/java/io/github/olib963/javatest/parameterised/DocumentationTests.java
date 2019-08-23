@@ -16,28 +16,30 @@ import static io.github.olib963.javatest.parameterised.Parameterised.*;
 public class DocumentationTests {
 
     // tag::palindrome[]
-    public Stream<Test> inMemoryPalindromeTests() {
-        // Create parameterised tests from an in memory stream
-        return parameterised(
-                Stream.of("Civic", "Deified", "Kayak", "Level", "Madam"),
-                this::palindromeTest
-        );
-    }
+    public class PalindromeTests {
+        public Stream<Test> inMemoryPalindromeTests() {
+            // Create parameterised tests from an in memory stream
+            return parameterised(
+                    Stream.of("Civic", "Deified", "Kayak", "Level", "Madam"),
+                    this::palindromeTest
+            );
+        }
 
-    // Function accepting the word and defining the test
-    private Test palindromeTest(String word) {
-        return test(word + " is a palindrome", () -> {
-            var lowercase = word.toLowerCase();
-            var backwards = new StringBuilder(lowercase).reverse().toString();
-            return that(lowercase.equals(backwards), word + " is the same backwards");
-        });
-    }
+        // Function accepting the word and defining the test
+        private Test palindromeTest(String word) {
+            return test(word + " is a palindrome", () -> {
+                var lowercase = word.toLowerCase();
+                var backwards = new StringBuilder(lowercase).reverse().toString();
+                return that(lowercase.equals(backwards), word + " is the same backwards");
+            });
+        }
 
-    // Stream larger data set from a file instead
-    public Stream<Test> palindromeTestsFromFile() throws IOException {
-        String path = getClass().getClassLoader().getResource("palindromes.txt").getPath();
-        Stream<String> lines = Files.lines(Path.of(path));
-        return parameterised(lines, this::palindromeTest);
+        // Stream larger data set from a file instead
+        public Stream<Test> palindromeTestsFromFile() throws IOException {
+            String path = getClass().getClassLoader().getResource("palindromes.txt").getPath();
+            Stream<String> lines = Files.lines(Path.of(path));
+            return parameterised(lines, this::palindromeTest);
+        }
     }
     // end::palindrome[]
 
@@ -55,26 +57,36 @@ public class DocumentationTests {
     }
 
     // tag::fibonacci[]
-    public Stream<Test> fibonacciTests() {
-        return parameterised(
-                Stream.of(
-                        // t() is the tuple constructor and can be applied to up to 10 arguments
-                        t(0, 0L),
-                        t(1, 1L),
-                        t(2, 1L),
-                        t(3, 2L),
-                        t(4, 3L),
-                        t(5, 5L),
-                        t(6, 8L),
-                        t(8, 21L),
-                        t(10, 55L),
-                        t(60, 1548008755920L),
-                        t(90, 2880067194370816120L)),
-                // We then create a function with the same arity and types as our tuples, in this case: (Integer, Long)
-                (n, expectedFib) -> test(n + "th fibonacci number", () ->
-                        that(fibonacci(n) == expectedFib, "The " + n + "th fibonacci number is " + expectedFib)));
+    public class FibonacciTests {
+        public Stream<Test> fibonacciTests() {
+            return parameterised(
+                    Stream.of(
+                            // t() is the tuple constructor and can be applied to up to 10 arguments
+                            t(0, 0L),
+                            t(1, 1L),
+                            t(2, 1L),
+                            t(3, 2L),
+                            t(4, 3L),
+                            t(5, 5L),
+                            t(6, 8L),
+                            t(8, 21L),
+                            t(10, 55L),
+                            t(60, 1548008755920L),
+                            t(90, 2880067194370816120L)),
+                    // We then create a function with the same arity and types as our tuples, in this case: (Integer, Long)
+                    (n, expectedFib) -> test(n + "th fibonacci number", () ->
+                            that(fibonacci(n) == expectedFib, "The " + n + "th fibonacci number is " + expectedFib)));
+        }
     }
     // end::fibonacci[]
+
+    public static PalindromeTests palindromes() {
+        return new DocumentationTests().new PalindromeTests();
+    }
+
+    public static FibonacciTests fibonacci() {
+        return new DocumentationTests().new FibonacciTests();
+    }
 
 }
 

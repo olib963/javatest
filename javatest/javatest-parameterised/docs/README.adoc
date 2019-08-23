@@ -8,11 +8,7 @@ library of helper functions to let you achieve this.
 ----
 include::../src/test/java/io/github/olib963/javatest/parameterised/DocumentationTests.java[tags=import]
 
-public class PalindromeTests {
-
-include::../src/test/java/io/github/olib963/javatest/parameterised/DocumentationTests.java[tags=palindrome]
-
-}
+include::../src/test/java/io/github/olib963/javatest/parameterised/DocumentationTests.java[tags=palindrome, indent=-]
 ----
 
 If you need multiple parameters you can make use of some helper `Tuple` classes that run from `Tuple2` to `Tuple10`
@@ -22,11 +18,7 @@ and provide a function with the correct arity and typed arguments to create your
 ----
 include::../src/test/java/io/github/olib963/javatest/parameterised/DocumentationTests.java[tags=import]
 
-public class FibonacciTests {
-
-include::../src/test/java/io/github/olib963/javatest/parameterised/DocumentationTests.java[tags=fibonacci]
-
-}
+include::../src/test/java/io/github/olib963/javatest/parameterised/DocumentationTests.java[tags=fibonacci, indent=-]
 ----
 
 '''
