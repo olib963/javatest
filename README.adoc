@@ -1,6 +1,6 @@
 = JavaTest
-:toc:
-:toc-placement!:
+:toc: macro
+:toc-title:
 
 --
 image::https://circleci.com/gh/olib963/javatest.svg?style=svg[link="https://circleci.com/gh/olib963/javatest", float="left"]
@@ -207,6 +207,8 @@ If there is something you cannot achieve with the existing functionality please 
 ====
 
 '''
+[discrete]
+== Contents
 
 toc::[]
 

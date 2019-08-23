@@ -1,4 +1,13 @@
 = JavaTest
+:toc: macro
+:toc-title:
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
 
 --
 image::https://circleci.com/gh/olib963/javatest.svg?style=svg[link="https://circleci.com/gh/olib963/javatest", float="left"]
@@ -120,15 +129,13 @@ If there is something you cannot achieve with the existing functionality please 
 
 ====
 
+'''
+[discrete]
 == Contents
 
-* <<Overview,Overview>>
-* <<Quick Start,Quick Start>>
-* <<Core Library,Core Library>>
-* <<Running JavaTest,Running JavaTest>>
-* <<Future Features,Future Features>>
+toc::[]
 
-=== Module List
+== Module List
 
 JavaTest is built on a simple functional core and functionality is expanded on by several modules found here:
 
