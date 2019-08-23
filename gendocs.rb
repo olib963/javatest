@@ -7,7 +7,8 @@ docFiles = {
     "javatest/javatest-eventually/docs/README.adoc" => "javatest/javatest-eventually/README.adoc",
     "javatest/javatest-fixtures/docs/README.adoc" => "javatest/javatest-fixtures/README.adoc",
     "javatest/javatest-parameterised/docs/README.adoc" => "javatest/javatest-parameterised/README.adoc",
-    "javatest/javatest-benchmark/docs/README.adoc" => "javatest/javatest-benchmark/README.adoc"
+    "javatest/javatest-benchmark/docs/README.adoc" => "javatest/javatest-benchmark/README.adoc",
+    "javatest/javatest-matchers/docs/README.adoc" => "javatest/javatest-matchers/README.adoc"
 }
 
 # For each documentation file, process all of the 'include' macros upfront since this is not supported by GitHub

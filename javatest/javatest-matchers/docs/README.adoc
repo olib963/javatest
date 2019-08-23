@@ -1,0 +1,71 @@
+= Matchers
+
+This module contains ``Assertion``s that are based on common ``Matcher``s, they provide both the check and description for your tests.
+By statically importing `Matcher` you will inherit a few default ``Matcher``s and the ability to create `Matcher` based ``Assertion``s. Other ``Matcher``s are
+able to be imported into your tests from various classes e.g. `StringMatchers` which contains `String` specific ``Matcher``s.
+
+[source, java]
+----
+include::../src/test/java/io/github/olib963/javatest/matchers/DocumentationTests.java[tags=import]
+include::../src/test/java/io/github/olib963/javatest/matchers/DocumentationTests.java[tags=stringImport]
+
+public class MatcherTests {
+
+include::../src/test/java/io/github/olib963/javatest/matchers/DocumentationTests.java[tags=simpleTests]
+
+}
+----
+
+Existing `Matcher` collections:
+
+* `CollectionMatchers`
+* `ComparableMatchers`
+* `ExceptionMatchers` <<Exception Matching,see below>>
+* `MapMatchers`
+* `OptionalMatchers`
+* `StringMatchers`
+
+== Exception Matching
+
+While in general I prefer error values to exceptions, I understand there are those that disagree or just have to work with
+exception driven Java APIs so I have added `Matcher` syntax for exceptions. These should still be returned as an assertion and will
+ensure that the test will only pass if the matched exception is thrown from the expected code block.
+
+[source, java]
+----
+include::../src/test/java/io/github/olib963/javatest/matchers/DocumentationTests.java[tags=import]
+include::../src/test/java/io/github/olib963/javatest/matchers/DocumentationTests.java[tags=stringImport]
+include::../src/test/java/io/github/olib963/javatest/matchers/DocumentationTests.java[tags=exceptionImport]
+
+public class MyExceptionTests {
+
+include::../src/test/java/io/github/olib963/javatest/matchers/DocumentationTests.java[tags=exceptionTests]
+
+}
+----
+
+== Custom Matchers
+
+You can obviously provide your own ``Matcher``s by implementing the interface, but there is a convenience function to allow you
+to create simple ``Matcher``s from functions, for example:
+
+[source, java]
+----
+include::../src/test/java/io/github/olib963/javatest/matchers/DocumentationTests.java[tags=import]
+
+include::../src/test/java/io/github/olib963/javatest/matchers/DocumentationTests.java[tags=customMatcher, indent=-]
+----
+
+'''
+
+You can include this module with this dependency:
+
+[source, xml]
+----
+<dependency>
+    <groupId>io.github.olib963</groupId>
+    <artifactId>javatest-matchers</artifactId>
+    <version>${javatest.version}</version>
+    <scope>test</scope>
+</dependency>
+----
