@@ -1,6 +1,11 @@
 = JavaTest
 :toc: macro
 :toc-title:
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
 
 --
 image::https://circleci.com/gh/olib963/javatest.svg?style=svg[link="https://circleci.com/gh/olib963/javatest", float="left"]
@@ -216,7 +221,7 @@ toc::[]
 
 JavaTest is built on a simple functional core and functionality is expanded on by several modules found here:
 
-* <<./javatest/javatest-matchers/README.adoc,Matchers>>
+* link:javatest/javatest-matchers[Matchers]
 * <<./javatest/javatest-fixtures/README.adoc,Fixtures>>
 * <<./javatest/javatest-parameterised/README.adoc,Parameterised Testing>>
 * <<./javatest/javatest-benchmark/README.adoc,Benchmarking>>
