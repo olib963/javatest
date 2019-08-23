@@ -1,0 +1,88 @@
+= Fixtures
+
+Some tests (usually integration tests) will require external resources in order to run. You can use a
+`FixtureDefinition<Fixture>` with a `FixtureRunner<Fixture>` to run such tests. For example:
+
+[source, java]
+----
+public class IntegrationTests {
+
+    public static Stream<Testable> tests(File testDirectory) {
+        return Stream.of(
+                test("Exists", () ->
+                        that(testDirectory.isDirectory(), "Expected test file to be a directory")
+                                .and(that(testDirectory.exists(), "Expected test directory to exist"))),
+                test("Writing to test file", () -> {
+                    var testFile = new File(testDirectory, "test.txt");
+                    var path = testFile.toPath();
+                    var testData = List.of("hello world", "goodbye world");
+                    Files.write(path, testData);
+                    var contents = Files.lines(path).collect(Collectors.toList());
+                    return that(testData.equals(contents), "Written file should contain correct data");
+                })
+        );
+    }
+
+    private static TestRunner integrationTestRunner =
+            Fixtures.fixtureRunner(
+                    // Name the fixture
+                    "test directory",
+
+                    // Use the existing temporary directory fixture
+                    Fixtures.temporaryDirectory("integration-test"),
+
+                    // Define a function to create your test runner that uses the fixture
+                    d -> testableRunner(IntegrationTests.tests(d))
+            );
+}
+----
+
+== Custom Fixture Definitions
+
+You can create your own ``FixtureDefinition``s by extending the interface or for simple cases using the convenience functions
+to create definitions from functions. You can make use of the `io.github.olib963.javatest.fixtures.Try` static factories to
+create `Success` and `Failure` results for your definition.
+
+[source, java]
+----
+import static io.github.olib963.javatest.fixtures.Try.*;
+
+public class CustomDefinitions {
+
+    // If you only need to create the fixture and no clean up is needed:
+    FixtureDefinition<String> stringDefinition =
+            Fixtures.definitionFromFunction(() -> Success("Hello"));
+
+    // Express failures as a string when the fixture cannot be created
+    FixtureDefinition<Integer> intDefinition =
+            Fixtures.definitionFromFunction(() -> Failure("Oh dear something went wrong!"));
+
+    // Add a tear down function to your fixture (also with possible failure)
+    FixtureDefinition<Map<String, String>> hashMapDefinition =
+            Fixtures.definitionFromFunctions(
+                    () -> Success(new HashMap<>()),
+                    map -> {
+                        map.clear();
+                        return Success();
+                    });
+
+    // Equivalent helpers are available that can wrap existing java functions that throw exceptions
+    FixtureDefinition<ExecutorService> singleThreadExecutorDefinition =
+            Fixtures.definitionFromThrowingFunctions(Executors::newSingleThreadExecutor, ExecutorService::shutdown);
+
+}
+----
+
+'''
+
+You can include this module with this dependency:
+
+[source, xml]
+----
+<dependency>
+    <groupId>io.github.olib963</groupId>
+    <artifactId>javatest-fixtures</artifactId>
+    <version>${javatest.version}</version>
+    <scope>test</scope>
+</dependency>
+----

@@ -8,8 +8,8 @@ import io.github.olib963.javatest.eventually.EventualConfig;
 import java.time.Duration;
 import java.util.stream.Stream;
 
-// tag::imports[]
 import static io.github.olib963.javatest.JavaTest.test;
+// tag::imports[]
 import static io.github.olib963.javatest.JavaTest.that;
 import static io.github.olib963.javatest.eventually.Eventually.eventually;
 // end::imports[]

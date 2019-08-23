@@ -2,6 +2,7 @@ package io.github.olib963.javatest.fixtures.internal;
 
 import io.github.olib963.javatest.fixtures.Try;
 
+import java.util.Objects;
 import java.util.function.Function;
 
 public class Failure<A> implements Try<A> {
@@ -29,5 +30,18 @@ public class Failure<A> implements Try<A> {
     @Override
     public A recoverWith(Function<Exception, A> f) {
         return f.apply(error);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Failure<?> failure = (Failure<?>) o;
+        return Objects.equals(error, failure.error);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(Failure.class, error);
     }
 }

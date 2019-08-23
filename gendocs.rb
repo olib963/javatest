@@ -4,7 +4,8 @@ require 'asciidoctor'
 
 docFiles = {
     "javatest/javatest-junit/docs/README.adoc" => "javatest/javatest-junit/README.adoc",
-    "javatest/javatest-eventually/docs/README.adoc" => "javatest/javatest-eventually/README.adoc"
+    "javatest/javatest-eventually/docs/README.adoc" => "javatest/javatest-eventually/README.adoc",
+    "javatest/javatest-fixtures/docs/README.adoc" => "javatest/javatest-fixtures/README.adoc"
 }
 
 docFiles.each {

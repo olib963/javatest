@@ -32,7 +32,6 @@ which covers one minute. You can pass an instance of `EventualConfig` to the `ev
 
 [source, java]
 ----
-import static io.github.olib963.javatest.JavaTest.test;
 import static io.github.olib963.javatest.JavaTest.that;
 import static io.github.olib963.javatest.eventually.Eventually.eventually;
 

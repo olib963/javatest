@@ -1,8 +1,6 @@
 package io.github.olib963.javatest.fixtures;
 
-import io.github.olib963.javatest.JavaTest;
-import io.github.olib963.javatest.Test;
-import io.github.olib963.javatest.TestSuite;
+import io.github.olib963.javatest.Testable;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -13,17 +11,12 @@ import java.util.stream.Stream;
 import static io.github.olib963.javatest.JavaTest.test;
 import static io.github.olib963.javatest.JavaTest.that;
 
-public class IntegrationTests implements TestSuite {
-    private final File testDirectory;
+// tag::tests[]
+public class IntegrationTests {
 
-    public IntegrationTests(File testDirectory) {
-        this.testDirectory = testDirectory;
-    }
-
-    @Override
-    public Stream<Test> tests() {
+    public static Stream<Testable> tests(File testDirectory) {
         return Stream.of(
-                JavaTest.test("Exists", () ->
+                test("Exists", () ->
                         that(testDirectory.isDirectory(), "Expected test file to be a directory")
                                 .and(that(testDirectory.exists(), "Expected test directory to exist"))),
                 test("Writing to test file", () -> {
@@ -36,4 +29,5 @@ public class IntegrationTests implements TestSuite {
                 })
         );
     }
+// end::tests[]
 }
