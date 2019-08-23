@@ -1,0 +1,62 @@
+= Benchmarking
+
+To add a timer to your tests or runners you need to wrap them in a benchmarker. This will add the time taken
+to the logs of your test.
+
+[source, java]
+----
+include::../src/test/java/io/github/olib963/javatest/benchmark/DocumentationTests.java[tags=imports]
+
+public class MyBenchMarks {
+
+include::../src/test/java/io/github/olib963/javatest/benchmark/DocumentationTests.java[tags=simple]
+
+}
+----
+
+== Setting time limits
+
+You can set a time limit on an individual test such that it will fail if it takes any longer
+
+[source, java]
+----
+import java.time.Duration;
+include::../src/test/java/io/github/olib963/javatest/benchmark/DocumentationTests.java[tags=imports]
+
+public class MyLimitedTest {
+
+include::../src/test/java/io/github/olib963/javatest/benchmark/DocumentationTests.java[tags=limit]
+
+}
+----
+
+== Custom duration format
+
+By default test ``Duration``s will be logged as `{seconds}s {millis}ms`. You can override
+this function on any benchmarking by providing your own format.
+
+[source, java]
+----
+import java.time.Duration;
+include::../src/test/java/io/github/olib963/javatest/benchmark/DocumentationTests.java[tags=imports]
+
+public class MyCustomBenchmark {
+
+include::../src/test/java/io/github/olib963/javatest/benchmark/DocumentationTests.java[tags=customFormat]
+
+}
+----
+
+'''
+
+You can include this module with this dependency:
+
+[source, xml]
+----
+<dependency>
+    <groupId>io.github.olib963</groupId>
+    <artifactId>javatest-benchmarking</artifactId>
+    <version>${javatest.version}</version>
+    <scope>test</scope>
+</dependency>
+----
