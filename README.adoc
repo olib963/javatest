@@ -1,18 +1,14 @@
 = JavaTest
 :toc: macro
 :toc-title:
-:tip-caption: :bulb:
 :note-caption: :information_source:
-:important-caption: :heavy_exclamation_mark:
-:caution-caption: :fire:
-:warning-caption: :warning:
 
 --
 image::https://circleci.com/gh/olib963/javatest.svg?style=svg[link="https://circleci.com/gh/olib963/javatest", float="left"]
 image::https://img.shields.io/maven-central/v/io.github.olib963/javatest-core.svg?style=plastic[link="http://mvnrepository.com/artifact/io.github.olib963/javatest-core", float="left"]
 --
 
-CAUTION: *Fair Warning*: The entirety of this project should currently be considered alpha and subject to change. I am sure I have not got the API or library right on the first try so there may be breaking changes in the future.
+NOTE: *Fair Warning*: The entirety of this project should currently be considered alpha and subject to change. I am sure I have not got the API or library right on the first try so there may be breaking changes in the future.
 
 == Overview
 
@@ -212,43 +208,31 @@ If there is something you cannot achieve with the existing functionality please 
 ====
 
 '''
+
 [discrete]
 == Contents
 
 toc::[]
 
-== Module List
-
-JavaTest is built on a simple functional core and functionality is expanded on by several modules found here:
-
-* link:javatest/javatest-matchers[Matchers]
-* link:javatest/javatest-fixtures[Fixtures]
-* link:javatest/javatest-parameterised[Parameterised Testing]
-* link:javatest/javatest-benchmark[Benchmarking]
-* link:javatest/javatest-eventually[Eventual Consistency]
-* link:javatest/javatest-junit[JUnit]
-
 == Core Library
 
-- `JavaTest`: the entrypoint class. It contains the main `run` function as well as factory functions
-- `TestRunner`: implements the running of tests and returns `TestResults`
-- `Testable`: wrapper around one of:
-- `Test`: a named instance of a test, each test must return an `Assertion`
-- `TestSuite`: logical collection of a stream of `Test`s
-- `Assertion`: represents the expected state at the end of a test
-- `TestResult`: represents the result of a single test
-- `TestResults`: represents the combined result of multiple tests
-
-Factory functions to help you define your tests are statically importable from `JavaTest` as these examples will show.
+* `JavaTest`: the entrypoint class. It contains the main `run` function as well as static factory functions to define tests
+* `TestRunner`: implements the running of tests and returns `TestResults`
+* `Testable`: wrapper around one of:
+** `Test`: a named instance of a test, each test must return an `Assertion`
+** `TestSuite`: logical collection of a stream of ``Test``s
+* `Assertion`: represents the expected state at the end of a test
+* `TestResults`: represents the combined result of your tests
 
 === Creating Assertions
 
-The core `Assertion`s are created simply from boolean expressions and a string description. If the boolean condition is `true` then
+The core ``Assertion``s are created simply from boolean expressions and a string description. If the boolean condition is `true` then
 the `Assertion` is said to "hold".
 
 [source, java]
 ----
-import static io.github.olib963.javatest.JavaTest.*;
+import io.github.olib963.javatest.Assertion;
+import static io.github.olib963.javatest.JavaTest.that;
 
 public class MyAssertions {
     Assertion simpleAssertion = that(1 + 1 == 2, "Expected one add one to be two");
@@ -271,6 +255,7 @@ A JavaTest `Test` is defined by:
 
 [source, java]
 ----
+import io.github.olib963.javatest.Test;
 import static io.github.olib963.javatest.JavaTest.*;
 
 public class MyTests {
@@ -278,61 +263,74 @@ public class MyTests {
 }
 ----
 
+The test will fail if the `Supplier` throws any exception at all. Please see <<Notes,Notes>> for information on ``AssertionError``s.
+
 === Composing Assertions
 
-`Assertion`s can be composed using the `and`, `or` and `xor` default methods. These are all examples of composed `Assertion`s
+``Assertion``s can be composed using the `and`, `or` and `xor` default methods. These are all examples of composed ``Assertion``s
 that hold (i.e. will pass tests):
 
 [source, java]
 ----
+import io.github.olib963.javatest.Assertion;
 import static io.github.olib963.javatest.JavaTest.*;
 
-class MyComposedAssertions {
+public class MyComposedAssertions {
     Assertion orAssertion = that(1 + 1 == 3, "Expected one add one to be three")
-        .or(that(2 + 2 == 4, "Expected two add two to be four"));
+            .or(that(2 + 2 == 4, "Expected two add two to be four"));
 
     Assertion andAssertion = that(1 + 1 == 2, "Expected one add one to be two").and(orAssertion);
 
     Assertion xorAssertion = that(true, "Expected to hold").xor(that(false, "Expected not to hold"));
-
 }
 ----
 
 === Test Suites
 
-You can group your `Test`s into logical units using `TestSuite`s
+You can group your ``Test``s into logical units using ``TestSuite``s
 
 [source, java]
 ----
+import io.github.olib963.javatest.*;
+import java.util.stream.Stream;
+
 import static io.github.olib963.javatest.JavaTest.*;
 
-public class MyFirstTests implements TestSuite {
+public class MyFirstTestSuite implements TestSuite {
+
     @Override
-    public Stream<Test> testStream() {
-        return Stream.of(test("Simple Test", () -> that(true, "Expected test to pass")));
+    public Stream<Test> tests() {
+        return Stream.of(
+                test("Simple Test", () -> that(true, "Expected test to pass"))
+        );
     }
+
 }
 ----
 
 ==== Suite Names
 
-By default a `TestSuite` will just use its own class name as the suite name, making `Test`s easier to locate. You can however
+By default a `TestSuite` will just use its own class name as the suite name, making ``Test``s easier to locate. You can however
 change this behaviour if you wish:
 
 [source, java]
 ----
-import static io.github.olib963.javatest.JavaTest.*;
+import io.github.olib963.javatest.Test;
+import io.github.olib963.javatest.TestSuite;
 
-public class AllMyTests implements TestSuite {
+import java.util.stream.Stream;
 
+public class MyCustomTestSuite implements TestSuite {
     @Override
     public String name() {
         return "MySuite";
     }
 
     @Override
-    public Stream<Test> testStream() {
-        // ...
+    public Stream<Test> tests() {
+        return Stream.of(
+                // create tests
+        );
     }
 }
 ----
@@ -340,21 +338,24 @@ public class AllMyTests implements TestSuite {
 === Pending Tests
 
 Sometimes it will be useful to define a bunch of `Test` cases ahead of implementing them, this is where
-pending `Assertion`s come in. They will not fail your build but will logged in a different colour than successes/failures
+pending ``Assertion``s come in. They will not fail your build but will logged in a different colour than successes/failures
 if using the coloured logger. You can optionally provide a reason this `Test` has not yet been written.
 
 [source, java]
 ----
+import io.github.olib963.javatest.*;
+import java.util.stream.Stream;
+
 import static io.github.olib963.javatest.JavaTest.*;
 
-public class MyTests implements TestSuite {
+public class MyPendingTests implements TestSuite {
     @Override
-    public Stream<Test> testStream() {
+    public Stream<Test> tests() {
         return Stream.of(
-            test("Addition", () -> that(1 + 1 == 2, "Expected one add one to be two")),
-            test("Multiplication", () -> pending()),
-            test("Division by Zero",
-                () -> pending("I am not yet sure if this should throw an exception or return a failure value"))
+                test("Addition", () -> that(1 + 1 == 2, "Expected one add one to be two")),
+                test("Multiplication", () -> pending()),
+                test("Division by Zero",
+                        () -> pending("I am not yet sure if this should throw an exception or return a failure value"))
         );
     }
 }
@@ -363,22 +364,26 @@ public class MyTests implements TestSuite {
 === Test Runners
 
 The only `TestRunner` included in the core is created from a `Stream<Testable>`. You can optionally add a collection of
-`TestCompletionObserver`s to the runner, by default a logging observer is passed that logs each test result with a colour
+``TestCompletionObserver``s to the runner, by default a logging observer is passed that logs each test result with a colour
 corresponding to the state of the test (green for passing, red for failing and yellow for pending). If you want to turn off
 logging just pass an empty collection.
 
 [source, java]
 ----
+import io.github.olib963.javatest.TestRunner;
+import java.util.Collections;
+import java.util.stream.Stream;
+
 import static io.github.olib963.javatest.JavaTest.*;
 
 public class MyRunners {
 
-    TestRunner singleTestRunner = testableRunner(Stream.of(
+    public TestRunner singleTestRunner = testableRunner(Stream.of(
             test("Simple test", () -> pending())));
 
-    TestRunner suiteTestsNoLogging = testableRunner(
-            Stream.of(new MyFirstSuite(), new MySecondSuite()),
-            Collections.emptyList()
+    public TestRunner suiteTestsNoLogging = testableRunner(
+            Stream.of(new MyFirstTestSuite(), new MyCustomTestSuite()),
+            Collections.emptyList() // No observers so no logging
     );
 
 }
@@ -405,14 +410,17 @@ result how you see fit. There is a convenience function `runTests` defined to ju
 
 [source, java]
 ----
+import io.github.olib963.javatest.*;
+import java.util.stream.Stream;
+
 import static io.github.olib963.javatest.JavaTest.*;
 
-class MyTests {
+public class MyEntrypoint {
     public static void main(String... args) {
         var results = runTests(Stream.of(
                 test("Addition", () -> that(1 + 1 == 2, "Expected one add one to be two")),
                 test("String lower case", () ->
-                    that("HELLO".toLowerCase().equals("hello"), "Expected lowercase 'HELLO' to be 'hello'"))
+                        that("HELLO".toLowerCase().equals("hello"), "Expected lowercase 'HELLO' to be 'hello'"))
         ));
 
         var customResults = run(new MyCustomRunner());
@@ -427,25 +435,42 @@ class MyTests {
 
 === With JavaFire Maven plugin
 
-If you are using [maven](https://maven.apache.org/) you can add the `JavaFire` maven plugin to your pom to run tests defined
+If you are using https://maven.apache.org/[maven] you can add the `JavaFire` maven plugin to your pom to run tests defined
 by a `TestRunners` class for you during mavens `test` phase. Your `TestRunners` class _must_ have a zero arg constructor.
 
 [source, java]
 ----
 package my.awesome.app;
 
+import io.github.olib963.javatest.*;
+import io.github.olib963.javatest.fixtures.Fixtures;
+
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.stream.Stream;
+
 import static io.github.olib963.javatest.JavaTest.*;
 
-public class MyTests implements TestRunners {
+public class MyRunners implements TestRunners {
+
     @Override
     public Stream<TestRunner> runners() {
-        var unitTests = testableRunner(/* list of suites */.parallelStream());
-        var applicationTests = Fixtures.fixtureRunner(
-                "database connection",
-                 MyFixtures.connectToDb(),
-                 db -> testableRunner(new MyIntegrationTests(db)));
-        return Stream.of(unitTests, applicationTests);
+        // Define a runner for unit tests in parallel
+        List<Testable> tests = List.of(new MyFirstUnitTestSuite(), new MySecondUnitTestSuite());
+        var unitTests = testableRunner(tests.parallelStream());
+
+        // Define integration tests with an executor fixture
+        var executorDefinition = Fixtures.definitionFromThrowingFunctions(
+                Executors::newSingleThreadExecutor, ExecutorService::shutdown);
+
+        var integrationTests = Fixtures.fixtureRunner("executor",
+                executorDefinition,
+                es -> testableRunner(new MyIntegrationTestSuite(es)));
+        // Run both
+        return Stream.of(unitTests, integrationTests);
     }
+
 }
 ----
 
@@ -458,7 +483,7 @@ In `pom.xml`:
     <artifactId>javafire-maven-plugin</artifactId>
     <version>${javatest.version}</version>
     <configuration>
-        <testRunners>my.awesome.app.MyTests</testRunners>
+        <testRunners>my.awesome.app.MyRunners</testRunners>
     </configuration>
     <executions>
         <execution>
@@ -522,6 +547,17 @@ jshell> results.succeeded && results2.succeeded
 $3 ==> true
 ----
 
+== Module List
+
+JavaTest is built on a simple functional core and functionality is expanded on by several modules found here:
+
+* link:javatest/javatest-matchers[Matchers]
+* link:javatest/javatest-fixtures[Fixtures]
+* link:javatest/javatest-parameterised[Parameterised Testing]
+* link:javatest/javatest-benchmark[Benchmarking]
+* link:javatest/javatest-eventually[Eventual Consistency]
+* link:javatest/javatest-junit[JUnit]
+
 == Future Features
 
 Features I would like to look at implementing in the future:
@@ -551,5 +587,9 @@ Any feedback/constructive criticism is appreciated. Please open an issue if you 
 
 == Notes
 
-Documentation is built using https://asciidoctor.org[asciidoctor] such that all documentation snippits can be both compile time checked
+* Documentation is built using https://asciidoctor.org[asciidoctor] such that all documentation snippits can be both compile time checked
 and tested.
+
+* If a test throws an `AssertionError` instead of returning an `Assertion` the library will ignore the error message and instead
+tell you to "return an Assertion". This will stop you from trying to add in extra assertions using something like the JUnit
+`assertX` functions in the middle of your test.
