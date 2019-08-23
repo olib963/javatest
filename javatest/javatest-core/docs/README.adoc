@@ -138,11 +138,11 @@ toc::[]
 JavaTest is built on a simple functional core and functionality is expanded on by several modules found here:
 
 * link:javatest/javatest-matchers[Matchers]
-* <<./javatest/javatest-fixtures/README.adoc,Fixtures>>
-* <<./javatest/javatest-parameterised/README.adoc,Parameterised Testing>>
-* <<./javatest/javatest-benchmark/README.adoc,Benchmarking>>
-* <<./javatest/javatest-eventually/README.adoc,Eventual Consistency>>
-* <<./javatest/javatest-junit/README.adoc,JUnit>>
+* link:javatest/javatest-fixtures[Fixtures]
+* link:javatest/javatest-parameterised[Parameterised Testing]
+* link:javatest/javatest-benchmark[Benchmarking]
+* link:javatest/javatest-eventually[Eventual Consistency]
+* link:javatest/javatest-junit[JUnit]
 
 == Core Library
 
