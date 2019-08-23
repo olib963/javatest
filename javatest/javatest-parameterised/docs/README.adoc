@@ -1,0 +1,44 @@
+= Parameterised Testing
+
+It can be useful to create multiple tests that have the same structure but differ only in the input values. This can be
+done by providing a stream of inputs and a function from the type of that input to a `Test`. This module provides a small
+library of helper functions to let you achieve this.
+
+[source, java]
+----
+include::../src/test/java/io/github/olib963/javatest/parameterised/DocumentationTests.java[tags=import]
+
+public class PalindromeTests {
+
+include::../src/test/java/io/github/olib963/javatest/parameterised/DocumentationTests.java[tags=palindrome]
+
+}
+----
+
+If you need multiple parameters you can make use of some helper `Tuple` classes that run from `Tuple2` to `Tuple10`
+and provide a function with the correct arity and typed arguments to create your tests.
+
+[source, java]
+----
+include::../src/test/java/io/github/olib963/javatest/parameterised/DocumentationTests.java[tags=import]
+
+public class FibonacciTests {
+
+include::../src/test/java/io/github/olib963/javatest/parameterised/DocumentationTests.java[tags=fibonacci]
+
+}
+----
+
+'''
+
+You can include this module with this dependency:
+
+[source, xml]
+----
+<dependency>
+    <groupId>io.github.olib963</groupId>
+    <artifactId>javatest-parameterised</artifactId>
+    <version>${javatest.version}</version>
+    <scope>test</scope>
+</dependency>
+----
