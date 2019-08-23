@@ -1,0 +1,38 @@
+= Fixtures
+
+Some tests (usually integration tests) will require external resources in order to run. You can use a
+`FixtureDefinition<Fixture>` with a `FixtureRunner<Fixture>` to run such tests. For example:
+
+[source, java]
+----
+include::../src/test/java/io/github/olib963/javatest/fixtures/IntegrationTests.java[tags=tests]
+
+include::../src/test/java/io/github/olib963/javatest/fixtures/Tests.java[tags=runner]
+}
+----
+
+== Custom Fixture Definitions
+
+You can create your own ``FixtureDefinition``s by extending the interface or for simple cases using the convenience functions
+to create definitions from functions. You can make use of the `io.github.olib963.javatest.fixtures.Try` static factories to
+create `Success` and `Failure` results for your definition.
+
+[source, java]
+----
+include::../src/test/java/io/github/olib963/javatest/fixtures/CustomDefinitions.java[tags=definitions]
+}
+----
+
+'''
+
+You can include this module with this dependency:
+
+[source, xml]
+----
+<dependency>
+    <groupId>io.github.olib963</groupId>
+    <artifactId>javatest-fixtures</artifactId>
+    <version>${javatest.version}</version>
+    <scope>test</scope>
+</dependency>
+----

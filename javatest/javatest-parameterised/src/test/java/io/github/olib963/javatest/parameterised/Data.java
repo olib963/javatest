@@ -1,7 +1,6 @@
 package io.github.olib963.javatest.parameterised;
 
 import io.github.olib963.javatest.parameterised.tuples.Tuple10;
-import io.github.olib963.javatest.parameterised.tuples.Tuple2;
 import io.github.olib963.javatest.parameterised.tuples.Tuple3;
 
 import java.util.stream.Stream;
@@ -11,50 +10,6 @@ import static io.github.olib963.javatest.parameterised.Parameterised.t;
 public class Data {
     private Data() {
     }
-
-    public static Stream<String> palindromes() {
-        return Stream.of(
-                "Anna",
-                "Aibohphobia",
-                "Civic",
-                "Deified",
-                "Kayak",
-                "Level",
-                "Madam",
-                "Mom",
-                "Noon",
-                "Racecar",
-                "Radar",
-                "Redder",
-                "Refer",
-                "Repaper",
-                "Rotator",
-                "Rotor",
-                "Sagas",
-                "Solos",
-                "Stats",
-                "Tacocat",
-                "Tenet",
-                "Wow"
-        );
-    }
-
-    public static Stream<Tuple2<Integer, Long>> fibonacci() {
-        return Stream.of(
-                t(0, 0L),
-                t(1, 1L),
-                t(2, 1L),
-                t(3, 2L),
-                t(4, 3L),
-                t(5, 5L),
-                t(6, 8L),
-                t(8, 21L),
-                t(10, 55L),
-                t(60, 1548008755920L),
-                t(90, 2880067194370816120L)
-        );
-    }
-
 
     public static Stream<Tuple3<Integer, Integer, Integer>> multiplication() {
         return Stream.of(

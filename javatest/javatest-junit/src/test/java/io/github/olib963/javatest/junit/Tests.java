@@ -1,6 +1,7 @@
 package io.github.olib963.javatest.junit;
 
 import io.github.olib963.javatest.JavaTest;
+import io.github.olib963.javatest.junit.documentation.JUnitRunners;
 
 import java.util.stream.Stream;
 
@@ -24,6 +25,12 @@ public class Tests {
             throw new RuntimeException("Tests failed!");
         }
         System.out.println("Tests passed");
+
+        var docResult = JavaTest.run(JUnitRunners.junitRunners().stream());
+        if (!docResult.succeeded) {
+            throw new RuntimeException("Documentation tests failed!");
+        }
+        System.out.println("Documentation tests passed");
     }
 
 }

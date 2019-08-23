@@ -1,0 +1,372 @@
+= JavaTest
+:toc: macro
+:toc-title:
+:note-caption: :information_source:
+
+--
+image::https://circleci.com/gh/olib963/javatest.svg?style=svg[link="https://circleci.com/gh/olib963/javatest", float="left"]
+image::https://img.shields.io/maven-central/v/io.github.olib963/javatest-core.svg?style=plastic[link="http://mvnrepository.com/artifact/io.github.olib963/javatest-core", float="left"]
+--
+
+NOTE: *Fair Warning*: The entirety of this project should currently be considered alpha and subject to change. I am sure I have not got the API or library right on the first try so there may be breaking changes in the future.
+
+== Overview
+
+An opinionated, functional test framework written in pure Java aiming to leverage newer features of the Java language and give
+power back to the test writer. Based on these ideas:
+
+* If you know how to write a Java application, I think you should automatically know how to write the tests,
+therefore JavaTest only introduces a few new functions and types to the language, there is no new syntax.
+
+* Instead of being *Annotation* and *Exception* driven, JavaTest is *Function* and *Value* driven,
+lending itself to composability of tests and assertions.
+
+* JavaTests contains no reflection magic. A more declarative approach to testing is taken where setting up and customising tests is left
+to the writer.
+
+* A test should ideally only test one thing and should certainly test _at least_ one thing. Since
+all tests must return an assertion value the compiler will enforce that all tests only test one result.
+
+* Tests should be easy to understand and enjoyable to write, after all we all spend a lot of our time working on them :D
+
+== Quick Start
+
+=== I'm new to Java
+
+.Expand
+[%collapsible]
+====
+
+Download the latest jar artifact of JavaTest Core from the https://github.com/olib963/javatest/releases[release page].
+Then create these files in your project directory:
+
+1. `foo/Calculator.java`
++
+This is the System Under Test representing the source code for your application (in this case a calculator that can add integers)
++
+[source, java]
+----
+include::../src/test/java/foo/Calculator.java[]
+----
+
+2. `foo/Tests.java`
++
+This file is a java executable containing tests for our SUT, it exists in the same package so there is no need to
+`import foo.Calculator;`.
++
+This example defines two simple tests, one is testing that `1 + 1 = 2` by
+simply using the java `+` function and the other test checks our calculator gets the same result. We then
+invoke the `runTests` function to run our tests and check if they passed.
++
+[source, java]
+----
+include::../src/test/java/foo/Tests.java[]
+----
++
+Note how for the second test the assertion description includes all the information required to tell is what
+has gone wrong if our tests are failing.
++
+You can then run from the commandline:
++
+[source, bash]
+----
+# Compile both Java classes ensuring JavaTest and the current directory are both on the class path
+javac -cp "/absolute/path/to/javatest/jar:." foo/Calculator.java foo/Tests.java
+
+# Run the "Tests" executable ensuring JavaTest and the current directory are both on the class path
+java -cp "/absolute/path/to/javatest/jar:." foo.Tests
+----
++
+These tests should currently fail with a nice error message. You should be able to fix the calculator and see your tests pass.
+
+Notes:
+
+* You will need to use `;` to separate classpath entries instead of `:` on windows machines
+
+* You will need to include at least the Javatest jar and the current directory (`.`) on the classpath in order for this to work,
+if you are using java classes from any other jars/directories you will need to also ensure they are on the classpath.
+
+You should be able to explore the <<Core Library,Core Library>> and get familiar with testing your code by running them from
+an executable.
+
+====
+
+=== I know Java pretty well
+
+.Expand
+[%collapsible]
+====
+
+An example of a test entry point:
+
+[source, java]
+----
+include::../../javatest-fixtures/src/test/java/io/github/olib963/javatest/fixtures/documentation/MyRunners.java[tags=include]
+----
+
+An example of a test suite:
+
+[source, java]
+----
+include::../../javatest-fixtures/src/test/java/io/github/olib963/javatest/fixtures/documentation/MyFirstUnitTestSuite.java[tags=include]
+----
+
+These tests can be run in a few different ways, look into <<Running JavaTest,Running JavaTest>> to find the way that works
+best for you.
+
+The <<Core library,Core library>> section explains the fundamentals of how these tests are defined. Functionality from
+the Fixtures and Matchers modules are used in this example, explore the <<Module List,Module List>> to see if there are
+any extensions that fit your needs.
+
+If there is something you cannot achieve with the existing functionality please either look at the
+<<Future Features,Future Features>> I have planned or open an issue describing what you want to do :D
+
+====
+
+'''
+
+[discrete]
+== Contents
+
+toc::[]
+
+== Core Library
+
+* `JavaTest`: the entrypoint class. It contains the main `run` function as well as static factory functions to define tests
+* `TestRunner`: implements the running of tests and returns `TestResults`
+* `Testable`: wrapper around one of:
+** `Test`: a named instance of a test, each test must return an `Assertion`
+** `TestSuite`: logical collection of a stream of ``Test``s
+* `Assertion`: represents the expected state at the end of a test
+* `TestResults`: represents the combined result of your tests
+
+=== Creating Assertions
+
+The core ``Assertion``s are created simply from boolean expressions and a string description. If the boolean condition is `true` then
+the `Assertion` is said to "hold".
+
+[source, java]
+----
+include::../src/test/java/io/github/olib963/javatest/documentation/MyAssertions.java[tags=include]
+----
+
+=== Test Definitions
+
+A JavaTest `Test` is defined by:
+- A name
+- A `Supplier` of an `Assertion`
+
+[source, java]
+----
+include::../src/test/java/io/github/olib963/javatest/documentation/MyTests.java[tags=include]
+----
+
+The test will fail if the `Supplier` throws any exception at all. Please see <<Notes,Notes>> for information on ``AssertionError``s.
+
+=== Composing Assertions
+
+``Assertion``s can be composed using the `and`, `or` and `xor` default methods. These are all examples of composed ``Assertion``s
+that hold (i.e. will pass tests):
+
+[source, java]
+----
+include::../src/test/java/io/github/olib963/javatest/documentation/MyComposedAssertions.java[tags=include]
+----
+
+=== Test Suites
+
+You can group your ``Test``s into logical units using ``TestSuite``s
+
+[source, java]
+----
+include::../src/test/java/io/github/olib963/javatest/documentation/MyFirstTestSuite.java[tags=include]
+----
+
+==== Suite Names
+
+By default a `TestSuite` will just use its own class name as the suite name, making ``Test``s easier to locate. You can however
+change this behaviour if you wish:
+
+[source, java]
+----
+include::../src/test/java/io/github/olib963/javatest/documentation/MyCustomTestSuite.java[tags=include]
+----
+
+=== Pending Tests
+
+Sometimes it will be useful to define a bunch of `Test` cases ahead of implementing them, this is where
+pending ``Assertion``s come in. They will not fail your build but will logged in a different colour than successes/failures
+if using the coloured logger. You can optionally provide a reason this `Test` has not yet been written.
+
+[source, java]
+----
+include::../src/test/java/io/github/olib963/javatest/documentation/MyPendingTests.java[tags=include]
+----
+
+=== Test Runners
+
+The only `TestRunner` included in the core is created from a `Stream<Testable>`. You can optionally add a collection of
+``TestCompletionObserver``s to the runner, by default a logging observer is passed that logs each test result with a colour
+corresponding to the state of the test (green for passing, red for failing and yellow for pending). If you want to turn off
+logging just pass an empty collection.
+
+[source, java]
+----
+include::../src/test/java/io/github/olib963/javatest/documentation/MyRunners.java[tags=include]
+----
+
+Other `TestRunner` implementations are available in the other modules.
+
+=== Core library maven dependency
+
+[source, xml]
+----
+<dependency>
+    <groupId>io.github.olib963</groupId>
+    <artifactId>javatest-core</artifactId>
+    <version>${javatest.version}</version>
+    <scope>test</scope>
+</dependency>
+----
+
+== Running JavaTest
+
+To run JavaTest simply pass your `TestRunner` instances to the `JavaTest.run()` function and handle the
+result how you see fit. There is a convenience function `runTests` defined to just run a `Stream<Test>` using the default `StreamRunner`:
+
+[source, java]
+----
+include::../src/test/java/io/github/olib963/javatest/documentation/MyEntrypoint.java[tags=include]
+----
+
+=== With JavaFire Maven plugin
+
+If you are using https://maven.apache.org/[maven] you can add the `JavaFire` maven plugin to your pom to run tests defined
+by a `TestRunners` class for you during mavens `test` phase. Your `TestRunners` class _must_ have a zero arg constructor.
+
+[source, java]
+----
+package my.awesome.app;
+
+include::../../javatest-fixtures/src/test/java/io/github/olib963/javatest/fixtures/documentation/MyRunners.java[tags=include]
+----
+
+In `pom.xml`:
+
+[source, xml]
+----
+<plugin>
+    <groupId>io.github.olib963</groupId>
+    <artifactId>javafire-maven-plugin</artifactId>
+    <version>${javatest.version}</version>
+    <configuration>
+        <testRunners>my.awesome.app.MyRunners</testRunners>
+    </configuration>
+    <executions>
+        <execution>
+            <id>test</id>
+            <goals>
+                <goal>test</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin>
+----
+
+You can override the `testRunners` class being used by setting the maven property e.g. `mvn -Djavafire.testRunners=com.my.app.OtherTests test`.
+
+=== JShell
+
+Since JavaTest is built on pure Java it plays quite nicely with the REPL. This startup script may be useful to you:
+
+[source, jshelllanguage]
+----
+/env -class-path /absolute/path/to/javatest/jar
+import io.github.olib963.javatest.*;
+import static io.github.olib963.javatest.JavaTest.*;
+
+TestResults runTest(CheckedSupplier<Assertion> testFn) {
+    return runTests(Stream.of(test("JShell test", testFn)));
+}
+----
+
+Then you can run:
+
+[source, bash]
+----
+~$ jshell --startup DEFAULT --startup /path/to/startup/script
+|  Welcome to JShell -- Version 11.0.1
+|  For an introduction type: /help intro
+
+jshell> var results = runTest(() -> that(true, "JavaTest works in the shell!"))
+JShell test
+	JavaTest works in the shell!
+
+Ran a total of 1 tests.
+1 succeeded
+0 failed
+0 were pending
+
+results ==> io.github.olib963.javatest.TestResults@4b553d26
+
+jshell> var results2 = runTest(() -> that(1 + 1 == 2, "Addition is working"))
+JShell test
+	Addition is working
+
+Ran a total of 1 tests.
+1 succeeded
+0 failed
+0 were pending
+
+results2 ==> io.github.olib963.javatest.TestResults@3e6fa38a
+
+jshell> results.succeeded && results2.succeeded
+$3 ==> true
+----
+
+== Module List
+
+JavaTest is built on a simple functional core and functionality is expanded on by several modules found here:
+
+* link:javatest/javatest-matchers[Matchers]
+* link:javatest/javatest-fixtures[Fixtures]
+* link:javatest/javatest-parameterised[Parameterised Testing]
+* link:javatest/javatest-benchmark[Benchmarking]
+* link:javatest/javatest-eventually[Eventual Consistency]
+* link:javatest/javatest-junit[JUnit]
+
+== Future Features
+
+Features I would like to look at implementing in the future:
+
+* Add tags back onto tests in such a way that it is easy to filter and split tests. I removed this feature as I felt it didn't
+fit the use cases appropriately.
+* A way to add arbitrary logs to your test cases. (Possibly replacing the `String`s log with a structural log)
+* A module that allows for generative property testing & test specifications e.g. the `Comparable[T]` spec, built on the
+parameterization module.
+* Acceptance tests for the JavaFire maven plugin, this proved too complex and painful to do in the first version.
+* Expand on the matchers for more types and adding the ability to compose and negate them.
+* A Gradle plugin?
+* Wrappers for Scala (ScavaTest), Clojure (ClavaTest) and Kotlin (KavaTest). I feel the APIs in those languages may feel even
+more intuitive and better due to their functional nature.
+* Dependant tests and/or assertions.
+* Support for mocks as assertions. Pseudo-code example with mockito: something like
+`verifyThat(myMock).calledFunction().foo(eq("hello))`. I am still unsure of this one.
+* TestNG Runner?
+* IntelliJ Plugin if possible?
+* Parallelism Options - currently achievable by using `.parallel()` on the streams but that uses the default fork join pool
+otherwise you have to submit the action to a custom thread pool which would be internal to `JavaTest`. This could be provided
+as an option if nothing else works by accepting an `ExecutorService` in the `StreamRunner`.
+
+== Feedback
+
+Any feedback/constructive criticism is appreciated. Please open an issue if you have any suggestions.
+
+== Notes
+
+* Documentation is built using https://asciidoctor.org[asciidoctor] such that all documentation snippits can be both compile time checked
+and tested.
+
+* If a test throws an `AssertionError` instead of returning an `Assertion` the library will ignore the error message and instead
+tell you to "return an Assertion". This will stop you from trying to add in extra assertions using something like the JUnit
+`assertX` functions in the middle of your test.

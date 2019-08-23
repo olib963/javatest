@@ -1,17 +1,18 @@
-# Matchers
+= Matchers
 
-This module contains `Assertion`s that are based on common `Matcher`s, they provide both the check and description for your tests. 
-By statically importing `Matcher` you will inherit a few default `Matcher`s and the ability to create `Matcher` based `Assertion`s. Other `Matcher`s are
-able to be imported into your tests from various classes e.g. `StringMatchers` which contains `String` specific `Matcher`s.
+This module contains ``Assertion``s that are based on common ``Matcher``s, they provide both the check and description for your tests.
+By statically importing `Matcher` you will inherit a few default ``Matcher``s and the ability to create `Matcher` based ``Assertion``s. Other ``Matcher``s are
+able to be imported into your tests from various classes e.g. `StringMatchers` which contains `String` specific ``Matcher``s.
 
-```java
+[source, java]
+----
 import static io.github.olib963.javatest.matchers.Matcher.*;
 import static io.github.olib963.javatest.matchers.StringMatchers.*;
 
-public class MyTests implements TestSuite {
+public class MatcherTests {
     private static final String TEST_STRING = "Hello World";
-    @Override
-    public Stream<Test> testStream() {
+
+    public Stream<Test> matcherTests() {
         return Stream.of(
                 test("Addition", () -> that(1 + 1, isEqualTo(2))),
                 test("Types", () -> that("Hello", hasType(String.class))),
@@ -20,31 +21,31 @@ public class MyTests implements TestSuite {
         );
     }
 }
-```
+----
 
 Existing `Matcher` collections:
 
 * `CollectionMatchers`
 * `ComparableMatchers`
-* `ExceptionMatchers` [see below](#exception-matching)
+* `ExceptionMatchers` <<Exception Matching,see below>>
 * `MapMatchers`
 * `OptionalMatchers`
 * `StringMatchers`
 
-## Exception Matching
+== Exception Matching
 
 While in general I prefer error values to exceptions, I understand there are those that disagree or just have to work with
 exception driven Java APIs so I have added `Matcher` syntax for exceptions. These should still be returned as an assertion and will
 ensure that the test will only pass if the matched exception is thrown from the expected code block.
 
-```java
+[source, java]
+----
 import static io.github.olib963.javatest.matchers.Matcher.*;
 import static io.github.olib963.javatest.matchers.StringMatchers.*;
 import static io.github.olib963.javatest.matchers.ExceptionMatchers.*;
 
-public class MyExceptionTests implements TestSuite {
-    @Override
-    public Stream<Test> testStream() { 
+public class MyExceptionTests {
+    public Stream<Test> exceptionTests() {
         return Stream.of(
                 test("Matching an exception", () -> {
                     // Exceptions can be matched on just like any other object
@@ -56,51 +57,55 @@ public class MyExceptionTests implements TestSuite {
                     // If you want to check an exception is thrown then provide a runnable containing the throwing method
                     var validator = new MyValidator();
                     return that(() -> validator.validate(1),
-                        willThrowExceptionThat(hasType(IllegalArgumentException.class))); 
+                            willThrowExceptionThat(hasType(IllegalArgumentException.class)));
                 }),
                 test("Check Message on cause", () -> {
                     var myObject = new MyThrowingObject();
                     // You can compose matchers together
                     var hasCauseWithMessageContainingFoo = hasCauseThat(hasMessageThat(containsString("Foo")));
-                    return that(() -> myObject.throwingFunction(10), willThrowExceptionThat(hasCauseWithMessageContainingFoo)); 
+                    return that(() -> myObject.throwingFunction(10), willThrowExceptionThat(hasCauseWithMessageContainingFoo));
                 }));
     }
 }
+----
 
-```
+== Custom Matchers
 
-## Custom Matchers
+You can obviously provide your own ``Matcher``s by implementing the interface, but there is a convenience function to allow you
+to create simple ``Matcher``s from functions, for example:
 
-You can obviously provide your own `Matcher`s by implementing the interface, but there is a convenience function to allow you 
-to create simple `Matcher`s from functions, for example:
-
-```java
+[source, java]
+----
 import static io.github.olib963.javatest.matchers.Matcher.*;
 
-public class TestTheUniverse implements TestSuite {
-    
-    private final Matcher<Integer> isFortyTwo =
-        Matcher.fromFunctions(i -> i == 42, "be 42");
-    
-    @Override
-    public Stream<Test> testStream() {
-        return Stream.of(
-                test("Meaning", () -> that(new Universe().meaning(), isFortyTwo))
-        );
-    }
-    
-}
-```
+public class TestTheUniverse {
 
-_______
+    private final Matcher<Integer> isFortyTwo =
+            Matcher.fromFunctions(i -> i == 42, "be 42");
+
+    public Test universeTest() {
+        return test("Meaning", () -> that(new Universe().meaning(), isFortyTwo));
+    }
+
+    private class Universe {
+        public int meaning() {
+            return 42;
+        }
+    }
+
+}
+----
+
+'''
 
 You can include this module with this dependency:
 
-```xml
+[source, xml]
+----
 <dependency>
     <groupId>io.github.olib963</groupId>
     <artifactId>javatest-matchers</artifactId>
     <version>${javatest.version}</version>
     <scope>test</scope>
 </dependency>
-```
+----

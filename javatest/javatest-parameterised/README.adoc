@@ -1,0 +1,80 @@
+= Parameterised Testing
+
+It can be useful to create multiple tests that have the same structure but differ only in the input values. This can be
+done by providing a stream of inputs and a function from the type of that input to a `Test`. This module provides a small
+library of helper functions to let you achieve this.
+
+[source, java]
+----
+import static io.github.olib963.javatest.parameterised.Parameterised.*;
+
+public class PalindromeTests {
+    public Stream<Test> inMemoryPalindromeTests() {
+        // Create parameterised tests from an in memory stream
+        return parameterised(
+                Stream.of("Civic", "Deified", "Kayak", "Level", "Madam"),
+                this::palindromeTest
+        );
+    }
+
+    // Function accepting the word and defining the test
+    private Test palindromeTest(String word) {
+        return test(word + " is a palindrome", () -> {
+            var lowercase = word.toLowerCase();
+            var backwards = new StringBuilder(lowercase).reverse().toString();
+            return that(lowercase.equals(backwards), word + " is the same backwards");
+        });
+    }
+
+    // Stream larger data set from a file instead
+    public Stream<Test> palindromeTestsFromFile() throws IOException {
+        String path = getClass().getClassLoader().getResource("palindromes.txt").getPath();
+        Stream<String> lines = Files.lines(Path.of(path));
+        return parameterised(lines, this::palindromeTest);
+    }
+}
+----
+
+If you need multiple parameters you can make use of some helper `Tuple` classes that run from `Tuple2` to `Tuple10`
+and provide a function with the correct arity and typed arguments to create your tests.
+
+[source, java]
+----
+import static io.github.olib963.javatest.parameterised.Parameterised.*;
+
+public class FibonacciTests {
+    public Stream<Test> fibonacciTests() {
+        return parameterised(
+                Stream.of(
+                        // t() is the tuple constructor and can be applied to up to 10 arguments
+                        t(0, 0L),
+                        t(1, 1L),
+                        t(2, 1L),
+                        t(3, 2L),
+                        t(4, 3L),
+                        t(5, 5L),
+                        t(6, 8L),
+                        t(8, 21L),
+                        t(10, 55L),
+                        t(60, 1548008755920L),
+                        t(90, 2880067194370816120L)),
+                // We then create a function with the same arity and types as our tuples, in this case: (Integer, Long)
+                (n, expectedFib) -> test(n + "th fibonacci number", () ->
+                        that(fibonacci(n) == expectedFib, "The " + n + "th fibonacci number is " + expectedFib)));
+    }
+}
+----
+
+'''
+
+You can include this module with this dependency:
+
+[source, xml]
+----
+<dependency>
+    <groupId>io.github.olib963</groupId>
+    <artifactId>javatest-parameterised</artifactId>
+    <version>${javatest.version}</version>
+    <scope>test</scope>
+</dependency>
+----

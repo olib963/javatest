@@ -1,0 +1,33 @@
+= Eventual Consistency
+
+Sometimes you will need to write an assertion that you cannot guarantee will hold straight away. You can use the `Eventually`
+static imports to write tests that will eventually hold.
+
+[source, java]
+----
+include::../src/test/java/io/github/olib963/javatest/eventually/documentation/EventualTest.java[tags=content]
+----
+
+The `eventually` function will by default wait 5 seconds between each attempt and will attempt to run your assertion 13 times
+which covers one minute. You can pass an instance of `EventualConfig` to the `eventually` function to customise the behaviour:
+
+[source, java]
+----
+include::../src/test/java/io/github/olib963/javatest/eventually/documentation/ConfigDocumentationTests.java[tags=imports]
+
+include::../src/test/java/io/github/olib963/javatest/eventually/documentation/ConfigDocumentationTests.java[tags=config,indent=-]
+----
+
+'''
+
+You can include this module with this dependency:
+
+[source, xml]
+----
+<dependency>
+    <groupId>io.github.olib963</groupId>
+    <artifactId>javatest-eventually</artifactId>
+    <version>${javatest.version}</version>
+    <scope>test</scope>
+</dependency>
+----

@@ -1,5 +1,7 @@
 package io.github.olib963.javatest;
 
+import io.github.olib963.javatest.documentation.*;
+
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -20,6 +22,18 @@ public class AllTests {
                 })));
         if (!result.succeeded) {
             throw new RuntimeException("Tests failed!");
+        }
+
+        var extraDocRunners = new MyRunners();
+        var simpleDocRunner = testableRunner(Stream.of(
+                new AllDocumentationTests(),
+                new MyFirstTestSuite(),
+                new MyCustomTestSuite(),
+                new MyPendingTests()
+        ));
+        var docResult = run(Stream.of(simpleDocRunner, extraDocRunners.singleTestRunner, extraDocRunners.suiteTestsNoLogging));
+        if (!docResult.succeeded) {
+            throw new RuntimeException("Documentation tests failed!");
         }
         System.out.println("Tests passed");
     }

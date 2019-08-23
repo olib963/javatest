@@ -44,13 +44,8 @@ public class InitialDelayTests implements TestSuite {
 
     private class FailIfNotSet {
         private Integer value;
-        private boolean calledEarly = false;
-
         public int getValue() {
-            if (value == null) {
-                calledEarly = true;
-            }
-            if(calledEarly){
+            if(value == null){
                 throw new IllegalStateException("Unacceptable!! The value was not set and get was called too early");
             }
             return value;
