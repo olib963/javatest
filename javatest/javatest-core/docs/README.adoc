@@ -132,12 +132,12 @@ If there is something you cannot achieve with the existing functionality please 
 
 JavaTest is built on a simple functional core and functionality is expanded on by several modules found here:
 
-* <<javatest/javatest-matchers,Matchers>>
-* <<javatest/javatest-fixtures,Fixtures>>
-* <<javatest/javatest-parameterised,Parameterised Testing>>
-* <<javatest/javatest-benchmark,Benchmarking>>
-* <<javatest/javatest-eventually,Eventual Consistency>>
-* <<javatest/javatest-junit,JUnit>>
+* <<./javatest/javatest-matchers/README.adoc,Matchers>>
+* <<./javatest/javatest-fixtures/README.adoc,Fixtures>>
+* <<./javatest/javatest-parameterised/README.adoc,Parameterised Testing>>
+* <<./javatest/javatest-benchmark/README.adoc,Benchmarking>>
+* <<./javatest/javatest-eventually/README.adoc,Eventual Consistency>>
+* <<./javatest/javatest-junit/README.adoc,JUnit>>
 
 == Core Library
 
