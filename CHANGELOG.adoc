@@ -1,0 +1,21 @@
+= Change Log
+All notable changes to this project will be documented in this file.
+
+== [Unreleased]
+
+Here we write upgrading notes for brands. It's a team effort to make them as
+straightforward as possible.
+
+=== Added
+
+* Added the benchmarking module to
+** log the times of tests
+** Allow failing a test if it takes too long
+
+=== Changed
+
+* Allow override of `JavaFire` `testRunners` property at commandline level
+
+== [0.1.0] - 2019-06-09
+
+First version of library
