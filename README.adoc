@@ -247,24 +247,6 @@ public class MyAssertions {
 }
 ----
 
-=== Test Definitions
-
-A JavaTest `Test` is defined by:
-- A name
-- A `Supplier` of an `Assertion`
-
-[source, java]
-----
-import io.github.olib963.javatest.Test;
-import static io.github.olib963.javatest.JavaTest.*;
-
-public class MyTests {
-    Test myFirstTest = test("Simple Test", () -> that(true, "Expected test to pass"));
-}
-----
-
-The test will fail if the `Supplier` throws any exception at all. Please see <<Notes,Notes>> for information on ``AssertionError``s.
-
 === Composing Assertions
 
 ``Assertion``s can be composed using the `and`, `or` and `xor` default methods. These are all examples of composed ``Assertion``s
@@ -284,6 +266,25 @@ public class MyComposedAssertions {
     Assertion xorAssertion = that(true, "Expected to hold").xor(that(false, "Expected not to hold"));
 }
 ----
+
+=== Test Definitions
+
+A JavaTest `Test` is defined by:
+
+* A name
+* A `Supplier` of an `Assertion`
+
+[source, java]
+----
+import io.github.olib963.javatest.Test;
+import static io.github.olib963.javatest.JavaTest.*;
+
+public class MyTests {
+    Test myFirstTest = test("Simple Test", () -> that(true, "Expected test to pass"));
+}
+----
+
+The test will fail if the `Supplier` throws any exception at all. Please see <<Notes,Notes>> for information on ``AssertionError``s.
 
 === Test Suites
 
