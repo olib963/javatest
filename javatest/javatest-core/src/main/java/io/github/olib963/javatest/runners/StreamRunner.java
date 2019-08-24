@@ -1,11 +1,12 @@
 package io.github.olib963.javatest.runners;
 
 import io.github.olib963.javatest.*;
-import io.github.olib963.javatest.logging.LoggingObserver;
 
 import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Stream;
+
+import static io.github.olib963.javatest.logging.RunLoggingObserver.SEPARATOR;
 
 public class StreamRunner implements TestRunner {
     private final Stream<Testable> tests;
@@ -18,11 +19,9 @@ public class StreamRunner implements TestRunner {
 
     @Override
     public TestResults run() {
-        var results = tests
+        return tests
                 .map(this::runTestable)
                 .reduce(TestResults.init(), TestResults::combine);
-        observers.forEach(o -> o.onRunCompletion(results));
-        return results;
     }
 
     private TestResults runTestable(Testable testable) {
@@ -32,7 +31,7 @@ public class StreamRunner implements TestRunner {
 
     private TestResult runTest(Optional<String> suiteName, Test test) {
         var result = safeRunTest(test.test);
-        var log = test.name + LoggingObserver.SEPARATOR + "\t" + result.description;
+        var log = test.name + SEPARATOR + "\t" + result.description;
         var withSuite = suiteName.map(n -> n + ':' + log).orElse(log);
         var testResult = new TestResult(result, withSuite);
         observers.forEach(o -> o.onTestCompletion(testResult));

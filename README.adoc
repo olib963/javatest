@@ -366,7 +366,7 @@ public class MyPendingTests implements TestSuite {
 The only `TestRunner` included in the core is created from a `Stream<Testable>`. You can optionally add a collection of
 ``TestCompletionObserver``s to the runner, by default a logging observer is passed that logs each test result with a colour
 corresponding to the state of the test (green for passing, red for failing and yellow for pending). If you want to turn off
-logging just pass an empty collection.
+logging just pass an empty collection, a `TestCompletionObserver.plainLogger` also exists that uses no colours.
 
 [source, java]
 ----
@@ -405,6 +405,8 @@ Other `TestRunner` implementations are available in the other modules.
 
 == Running JavaTest
 
+=== In Java
+
 To run JavaTest simply pass your `TestRunner` instances to the `JavaTest.run()` function and handle the
 result how you see fit. There is a convenience function `runTests` defined to just run a `Stream<Test>` using the default `StreamRunner`:
 
@@ -432,6 +434,12 @@ public class MyEntrypoint {
     }
 }
 ----
+
+==== Observer
+
+There is an interface `TestRunCompletionObserver` that exists to allow side effects to be invoked after the run has completed.
+By default the total counts of tests run will be logged to `System.out`. If you want to turn off logging simply pass an empty
+collection of observers to the `run` function i.e. `JavaTest.run(runners, Collections.emptyList())`.
 
 === With JavaFire Maven plugin
 

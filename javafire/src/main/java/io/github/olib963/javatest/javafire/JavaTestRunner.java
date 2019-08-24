@@ -23,7 +23,6 @@ class JavaTestRunner {
     }
 
     Result run() {
-
         try {
             Set<String> classPathElements = resolveAllClassPathElements(project);
             Class<?> runnersClass = loadRunnersClass(lookupClassLoader(classPathElements));
@@ -36,7 +35,7 @@ class JavaTestRunner {
                 return new Result(Status.FAILURE, "Tests failed");
             }
         } catch (InternalTestException e) {
-            return e.toResult();
+            return e.result;
         }
     }
 
@@ -114,22 +113,14 @@ class JavaTestRunner {
 
     private static class InternalTestException extends Exception {
 
-        private final Status status;
+        final Result result;
 
-        public InternalTestException(Status executionFailure, String message, Throwable t) {
-            super(message, t);
-            this.status = executionFailure;
+        InternalTestException(Status status, String message, Throwable t) {
+            this.result = new Result(status, message, t);
         }
 
-        public InternalTestException(Status executionFailure, String message) {
-            super(message);
-            this.status = executionFailure;
-        }
-
-        Result toResult() {
-            return Optional.ofNullable(getCause())
-                    .map(c -> new Result(status, getMessage(), c))
-                    .orElseGet(() -> new Result(status, getMessage()));
+        InternalTestException(Status status, String message) {
+            this.result = new Result(status, message);
         }
     }
 

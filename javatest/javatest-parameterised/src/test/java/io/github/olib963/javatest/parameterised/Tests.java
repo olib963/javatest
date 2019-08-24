@@ -13,7 +13,6 @@ public class Tests {
         if (!result.succeeded) {
             throw new RuntimeException("Tests failed!");
         }
-        System.out.println("Tests passed");
 
         var allDocTests = Stream.of(
                 DocumentationTests.palindromes().inMemoryPalindromeTests(),
@@ -24,6 +23,5 @@ public class Tests {
         if (!docResult.succeeded) {
             throw new RuntimeException("Documentation tests failed!");
         }
-        System.out.println("Documentation tests passed");
     }
 }

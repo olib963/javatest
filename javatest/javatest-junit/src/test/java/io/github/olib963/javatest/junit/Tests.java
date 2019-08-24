@@ -24,13 +24,11 @@ public class Tests {
         if (!result.succeeded) {
             throw new RuntimeException("Tests failed!");
         }
-        System.out.println("Tests passed");
 
         var docResult = JavaTest.run(JUnitRunners.junitRunners().stream());
         if (!docResult.succeeded) {
             throw new RuntimeException("Documentation tests failed!");
         }
-        System.out.println("Documentation tests passed");
     }
 
 }

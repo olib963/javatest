@@ -1,9 +1,9 @@
 package io.github.olib963.javatest;
 
-import io.github.olib963.javatest.logging.LoggingObserver;
-
 import java.io.PrintWriter;
 import java.io.StringWriter;
+
+import static io.github.olib963.javatest.logging.RunLoggingObserver.SEPARATOR;
 
 public final class AssertionResult {
 
@@ -20,10 +20,10 @@ public final class AssertionResult {
     public static AssertionResult exception(Exception error) {
         var stringWriter = new StringWriter();
         stringWriter.append("An exception was thrown during your test.");
-        stringWriter.append(LoggingObserver.SEPARATOR);
+        stringWriter.append(SEPARATOR);
         stringWriter.append("Message: ");
         stringWriter.append(error.getMessage());
-        stringWriter.append(LoggingObserver.SEPARATOR);
+        stringWriter.append(SEPARATOR);
         error.printStackTrace(new PrintWriter(stringWriter));
         return new AssertionResult(false, stringWriter.toString(), false);
     }
@@ -46,5 +46,14 @@ public final class AssertionResult {
 
     public static AssertionResult success(String description) {
         return of(true, description);
+    }
+
+    @Override
+    public String toString() {
+        return "AssertionResult{" +
+                "holds=" + holds +
+                ", pending=" + pending +
+                ", description='" + description + '\'' +
+                '}';
     }
 }
