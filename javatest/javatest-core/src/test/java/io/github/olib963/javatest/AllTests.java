@@ -11,18 +11,16 @@ import static io.github.olib963.javatest.JavaTest.*;
 public class AllTests {
 
     public static void main(String... args) {
-        var result = runTests(Stream.of(
-                test("Passing Tests", () -> {
-                    var results = run(testableRunner(SimpleTests.passing()));
-                    return that(results.succeeded, "Expected all 'passing' tests to pass");
-                }),
-                test("Failing Tests", () -> {
-                    var passingTests = SimpleTests.FAILING
-                            .map(t -> run(Stream.of(testableRunner(t)), Collections.emptyList()))
-                            .filter(r -> r.succeeded)
-                            .collect(Collectors.toList());
-                    return that(passingTests.isEmpty(), "Expected all 'failing' tests to fail");
-                })));
+        var simpleTests = SimpleTests.passing();
+        var failingTests = test("Failing Tests", () -> {
+            var passingTests = SimpleTests.FAILING
+                    .map(t -> run(Stream.of(testableRunner(t)), Collections.emptyList()))
+                    .filter(r -> r.succeeded)
+                    .collect(Collectors.toList());
+            return that(passingTests.isEmpty(), "Expected all 'failing' tests to fail");
+        });
+        var loggingTests = new LoggingTests();
+        var result = run(testableRunner(Stream.of(simpleTests, failingTests, loggingTests)));
         if (!result.succeeded) {
             throw new RuntimeException("Tests failed!");
         }
