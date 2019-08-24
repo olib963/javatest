@@ -13,8 +13,17 @@ public class JavaTest {
     private JavaTest() {}
 
     // Main entry point of the library
+    private static final Collection<TestRunCompletionObserver> DEFAULT_RUN_OBSERVER =
+            Collections.singletonList(TestRunCompletionObserver.logger());
+
     public static TestResults run(Stream<TestRunner> runners) {
-        return runners.map(TestRunner::run).reduce(TestResults.init(), TestResults::combine);
+        return run(runners, DEFAULT_RUN_OBSERVER);
+    }
+
+    public static TestResults run(Stream<TestRunner> runners, Collection<TestRunCompletionObserver> observers) {
+        var results = runners.map(TestRunner::run).reduce(TestResults.init(), TestResults::combine);
+        observers.forEach(o -> o.onRunCompletion(results));
+        return results;
     }
 
     // Convenience functions

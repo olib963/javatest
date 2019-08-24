@@ -1,18 +1,17 @@
 package io.github.olib963.javatest;
 
-import io.github.olib963.javatest.logging.LoggingObserver;
+import io.github.olib963.javatest.logging.TestLoggingObserver;
 
+@FunctionalInterface
 public interface TestCompletionObserver {
 
     void onTestCompletion(TestResult result);
 
-    void onRunCompletion(TestResults results);
-
     static TestCompletionObserver plainLogger() {
-        return new LoggingObserver(false);
+        return TestLoggingObserver.PLAIN;
     }
 
     static TestCompletionObserver colourLogger() {
-        return new LoggingObserver(true);
+        return TestLoggingObserver.COLOUR;
     }
 }
