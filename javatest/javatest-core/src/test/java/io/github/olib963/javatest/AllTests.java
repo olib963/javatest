@@ -2,6 +2,7 @@ package io.github.olib963.javatest;
 
 import io.github.olib963.javatest.documentation.*;
 
+import java.util.Collections;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -16,8 +17,10 @@ public class AllTests {
                     return that(results.succeeded, "Expected all 'passing' tests to pass");
                 }),
                 test("Failing Tests", () -> {
-                    var results = SimpleTests.FAILING.map(t -> runTests(Stream.of(t)));
-                    var passingTests = results.filter(r -> r.succeeded).collect(Collectors.toList());
+                    var passingTests = SimpleTests.FAILING
+                            .map(t -> run(Stream.of(testableRunner(t)), Collections.emptyList()))
+                            .filter(r -> r.succeeded)
+                            .collect(Collectors.toList());
                     return that(passingTests.isEmpty(), "Expected all 'failing' tests to fail");
                 })));
         if (!result.succeeded) {
