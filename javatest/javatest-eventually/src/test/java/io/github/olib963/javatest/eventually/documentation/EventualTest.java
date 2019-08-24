@@ -16,8 +16,8 @@ public class EventualTest {
             var map = new HashMap<String, String>();
             // You can imagine this is some asynchronous task in your code base.
             executor.submit(() -> {
-                // Due to this 2 second sleep the assertion will not hold straight away.
-                try { Thread.sleep(2000L); } catch (InterruptedException e) {}
+                // Due to this 1 second sleep the assertion will not hold straight away.
+                try { Thread.sleep(1000L); } catch (InterruptedException e) {}
                 map.put("foo", "bar");
             });
             return eventually(() ->
