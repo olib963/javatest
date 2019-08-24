@@ -9,7 +9,8 @@ import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Stream;
 
-import static io.github.olib963.javatest.JavaTest.*;
+import static io.github.olib963.javatest.JavaTest.test;
+import static io.github.olib963.javatest.JavaTest.that;
 
 public class LoggingTests implements TestSuite {
 
@@ -59,9 +60,18 @@ public class LoggingTests implements TestSuite {
                     var message = String.format("Expected log message to be {%s} and it was {%s}", expectedLog, actualLog);
                     return that(actualLog.equals(expectedLog), message);
                 }),
-                test("Colour for result", JavaTest::pending)
-
+                colourTest("Colour for failure", Colour.RED, AssertionResult.failure("")),
+                colourTest("Colour for success", Colour.GREEN, AssertionResult.success("")),
+                colourTest("Colour for pending", Colour.YELLOW, AssertionResult.pending(""))
         );
+    }
+
+    private Test colourTest(String name, Colour colour, AssertionResult result) {
+        return test(name, () -> {
+            var actualColour = Colour.forResult(result);
+            var message = String.format("Expected %s for a result of %s (got %s)", colour, result, actualColour);
+            return that(actualColour == colour, message);
+        });
     }
 
     private class TestStream {

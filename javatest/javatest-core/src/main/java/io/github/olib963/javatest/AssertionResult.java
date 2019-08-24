@@ -47,4 +47,13 @@ public final class AssertionResult {
     public static AssertionResult success(String description) {
         return of(true, description);
     }
+
+    @Override
+    public String toString() {
+        return "AssertionResult{" +
+                "holds=" + holds +
+                ", pending=" + pending +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }
