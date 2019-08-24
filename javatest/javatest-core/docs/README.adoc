@@ -150,19 +150,6 @@ the `Assertion` is said to "hold".
 include::../src/test/java/io/github/olib963/javatest/documentation/MyAssertions.java[tags=include]
 ----
 
-=== Test Definitions
-
-A JavaTest `Test` is defined by:
-- A name
-- A `Supplier` of an `Assertion`
-
-[source, java]
-----
-include::../src/test/java/io/github/olib963/javatest/documentation/MyTests.java[tags=include]
-----
-
-The test will fail if the `Supplier` throws any exception at all. Please see <<Notes,Notes>> for information on ``AssertionError``s.
-
 === Composing Assertions
 
 ``Assertion``s can be composed using the `and`, `or` and `xor` default methods. These are all examples of composed ``Assertion``s
@@ -172,6 +159,20 @@ that hold (i.e. will pass tests):
 ----
 include::../src/test/java/io/github/olib963/javatest/documentation/MyComposedAssertions.java[tags=include]
 ----
+
+=== Test Definitions
+
+A JavaTest `Test` is defined by:
+
+* A name
+* A `Supplier` of an `Assertion`
+
+[source, java]
+----
+include::../src/test/java/io/github/olib963/javatest/documentation/MyTests.java[tags=include]
+----
+
+The test will fail if the `Supplier` throws any exception at all. Please see <<Notes,Notes>> for information on ``AssertionError``s.
 
 === Test Suites
 
