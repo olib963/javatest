@@ -38,6 +38,5 @@ public class AllTests {
         if (!docResult.succeeded) {
             throw new RuntimeException("Documentation tests failed!");
         }
-        System.out.println("Tests passed");
     }
 }

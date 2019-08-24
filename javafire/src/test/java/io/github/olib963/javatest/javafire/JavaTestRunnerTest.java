@@ -20,7 +20,6 @@ public class JavaTestRunnerTest implements TestSuite {
         if (!JavaTest.runTests(new JavaTestRunnerTest().tests()).succeeded) {
             throw new RuntimeException("Tests failed!");
         }
-        System.out.println("Tests passed");
     }
 
     // SimpleTest definitions

@@ -34,14 +34,12 @@ public class Tests {
             throw new RuntimeException("Unit tests failed!");
         }
 
-
         var delayTests = Fixtures.fixtureRunner("Executor Service", executorFixture,
                 es -> testableRunner(new InitialDelayTests(es)));
 
         if (!run(delayTests).succeeded) {
             throw new RuntimeException("Delay tests failed!");
         }
-        System.out.println("Tests passed");
 
         var documentationTests = Fixtures.fixtureRunner("Executor Service", executorFixture,
                 es -> testableRunner(Stream.of(new ConfigDocumentationTests(), EventualTest.eventualTest(es))));
@@ -49,6 +47,5 @@ public class Tests {
         if (!run(documentationTests).succeeded) {
             throw new RuntimeException("Documentation tests failed!");
         }
-        System.out.println("Tests passed");
     }
 }
