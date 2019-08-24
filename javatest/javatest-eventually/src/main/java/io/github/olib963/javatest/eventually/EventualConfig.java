@@ -13,7 +13,7 @@ public class EventualConfig {
         this.initialDelay = initialDelay;
     }
 
-    public static final EventualConfig DEFAULT_CONFIG = EventualConfig.of(13, Duration.ofSeconds(5));
+    public static final EventualConfig DEFAULT_CONFIG = EventualConfig.of(20, Duration.ofMillis(100));
 
     public static EventualConfig of(int attempts, Duration waitInterval) {
         return new EventualConfig(attempts, waitInterval, Optional.empty());

@@ -17,11 +17,11 @@ import static io.github.olib963.javatest.eventually.Eventually.eventually;
 public class ConfigDocumentationTests implements TestSuite {
 
     // tag::config[]
-    // Configuration of 3 attempts, waiting 2 seconds between each with an initial delay of 3 seconds.
     public class MyCustomEventualAssertions {
+        // Configuration of 3 attempts, waiting 2 seconds between each with an initial delay of 3 seconds.
         private EventualConfig myConfig = EventualConfig.of(3, Duration.ofSeconds(2), Duration.ofSeconds(3));
 
-        private Assertion attempt13TimesAndWait5Seconds = eventually(this::assertion);
+        private Assertion attempt20TimesAndWait100Millis = eventually(this::assertion);
 
         private Assertion attemptUsingCustomConfig = eventually(this::assertion, myConfig);
 
@@ -41,7 +41,7 @@ public class ConfigDocumentationTests implements TestSuite {
     public Stream<Test> tests() {
         var container = new MyCustomEventualAssertions();
         return Stream.of(
-                test("Default config should work", () -> container.attempt13TimesAndWait5Seconds),
+                test("Default config should work", () -> container.attempt20TimesAndWait100Millis),
                 test("Custom config should work", () -> container.attemptUsingCustomConfig),
                 test("Custom config (no delay) should work", () -> container.attemptUsingCustomConfigNoDelay),
                 test("Custom config (overrides) should work", () -> container.attemptUsingCustomConfigWithOverrides)

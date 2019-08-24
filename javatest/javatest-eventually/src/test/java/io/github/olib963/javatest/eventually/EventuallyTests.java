@@ -35,7 +35,7 @@ public class EventuallyTests {
                     int value = integer.getAndIncrement();
                     return that(value == 6, "Atomic integer (" + value + ") is 6");
                 };
-                return eventually(valueBecomes6, DEFAULT_CONFIG.withWaitInterval(Duration.ofMillis(50)));
+                return eventually(valueBecomes6);
             });
         }
     }
@@ -60,7 +60,7 @@ public class EventuallyTests {
                 int value = integer.getAndIncrement();
                 return that(value == 6, "Atomic integer (" + value + ") is 6");
             };
-            return eventually(valueBecomes6, EventualConfig.of(5, Duration.ofMillis(50)));
+            return eventually(valueBecomes6, DEFAULT_CONFIG.withAttempts(5));
         });
     }
 

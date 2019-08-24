@@ -567,6 +567,7 @@ fit the use cases appropriately.
 * A way to add arbitrary logs to your test cases. (Possibly replacing the `String`s log with a structural log)
 * A module that allows for generative property testing & test specifications e.g. the `Comparable[T]` spec, built on the
 parameterization module.
+* Option to set total timeout on eventual consistency rather than number of attempts
 * Acceptance tests for the JavaFire maven plugin, this proved too complex and painful to do in the first version.
 * Expand on the matchers for more types and adding the ability to compose and negate them.
 * A Gradle plugin?
