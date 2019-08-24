@@ -1,6 +1,8 @@
 package io.github.olib963.javatest;
 
+import io.github.olib963.javatest.logging.Colour;
 import io.github.olib963.javatest.logging.RunLoggingObserver;
+import io.github.olib963.javatest.logging.TestLoggingObserver;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -33,11 +35,29 @@ public class LoggingTests implements TestSuite {
                 }),
                 test("Test logging observer", () -> {
                     var stream = new TestStream();
-                    return pending();
+                    var testLog = "My Test has completed!";
+                    var expectedLog = testLog + "\n";
+                    var result = new TestResult(AssertionResult.success(""), testLog);
+
+                    var logger = new TestLoggingObserver(false, stream.printStream());
+                    logger.onTestCompletion(result);
+
+                    var actualLog = stream.string();
+                    var message = String.format("Expected log message to be {%s} and it was {%s}", expectedLog, actualLog);
+                    return that(actualLog.equals(expectedLog), message);
                 }),
                 test("Test logging observer (with colour)", () -> {
                     var stream = new TestStream();
-                    return pending();
+                    var testLog = "My Test has completed!";
+                    var expectedLog = Colour.GREEN.getCode() + testLog + Colour.RESET_CODE +"\n";
+                    var result = new TestResult(AssertionResult.success(""), testLog);
+
+                    var logger = new TestLoggingObserver(true, stream.printStream());
+                    logger.onTestCompletion(result);
+
+                    var actualLog = stream.string();
+                    var message = String.format("Expected log message to be {%s} and it was {%s}", expectedLog, actualLog);
+                    return that(actualLog.equals(expectedLog), message);
                 }),
                 test("Colour for result", JavaTest::pending)
 
