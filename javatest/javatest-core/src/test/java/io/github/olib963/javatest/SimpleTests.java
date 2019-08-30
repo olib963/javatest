@@ -1,7 +1,5 @@
 package io.github.olib963.javatest;
 
-import io.github.olib963.javatest.testable.Test;
-
 import java.util.stream.Stream;
 
 import static io.github.olib963.javatest.JavaTest.*;
@@ -38,7 +36,7 @@ public class SimpleTests {
         }
     }
 
-    public static final Stream<Test> FAILING = Stream.of(
+    public static final Stream<Testable> FAILING = Stream.of(
             test("Simple test (FAIL)", () -> that(false, "Expected false to be true")),
             test("And test 1 (FAIL)", () -> that(false, "Expected false").and(that(false, "Expected false"))),
             test("And test 2 (FAIL)", () -> that(true, "Expected true").and(that(false, "Expected false"))),

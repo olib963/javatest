@@ -1,6 +1,5 @@
 package io.github.olib963.javatest.benchmark;
 
-import io.github.olib963.javatest.testable.Test;
 import io.github.olib963.javatest.TestSuiteClass;
 import io.github.olib963.javatest.Testable;
 

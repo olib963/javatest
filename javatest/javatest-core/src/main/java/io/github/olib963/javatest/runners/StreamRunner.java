@@ -1,8 +1,6 @@
 package io.github.olib963.javatest.runners;
 
 import io.github.olib963.javatest.*;
-import io.github.olib963.javatest.testable.Test;
-import io.github.olib963.javatest.testable.TestSuite;
 
 import java.util.Collection;
 import java.util.stream.Stream;
@@ -26,29 +24,21 @@ public class StreamRunner implements TestRunner {
     }
 
     private TestResults runTestable(Testable testable) {
-        if(testable instanceof Test) {
-            return TestResults.init().addResult(runTest((Test) testable));
-        } else if(testable instanceof TestSuite) {
-            return runSuite((TestSuite) testable);
-        } else if(testable instanceof TestSuiteClass) {
-            return runSuite(((TestSuiteClass) testable).toSuite());
-        }
-        // TODO add failure
-        return TestResults.init();
+        return testable.match(this::runTest, this::runSuite);
     }
 
     // TODO suite results as separate type. We want ${suite name}:all test results
-    private TestResults runSuite(TestSuite suite) {
+    private TestResults runSuite(Testable.TestSuite suite) {
         return suite.testables.map(this::runTestable)
                 .reduce(TestResults.init(), TestResults::combine);
     }
 
-    private TestResult runTest(Test test) {
+    private TestResults runTest(Testable.Test test) {
         var result = safeRunTest(test.test);
         var log = test.name + SEPARATOR + "\t" + result.description;
         var testResult = new TestResult(result, log);
         observers.forEach(o -> o.onTestCompletion(testResult));
-        return testResult;
+        return TestResults.init().addResult(testResult);
     }
 
     private AssertionResult safeRunTest(CheckedSupplier<Assertion> test) {

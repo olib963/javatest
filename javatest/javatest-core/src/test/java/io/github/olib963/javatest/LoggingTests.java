@@ -3,7 +3,6 @@ package io.github.olib963.javatest;
 import io.github.olib963.javatest.logging.Colour;
 import io.github.olib963.javatest.logging.RunLoggingObserver;
 import io.github.olib963.javatest.logging.TestLoggingObserver;
-import io.github.olib963.javatest.testable.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;

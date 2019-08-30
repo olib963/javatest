@@ -1,7 +1,7 @@
 package io.github.olib963.javatest.eventually;
 
 import io.github.olib963.javatest.*;
-import io.github.olib963.javatest.testable.Test;
+import io.github.olib963.javatest.Testable.Test;
 
 import java.time.Duration;
 import java.util.concurrent.atomic.AtomicInteger;

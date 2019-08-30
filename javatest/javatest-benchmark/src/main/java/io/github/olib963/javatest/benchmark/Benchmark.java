@@ -1,7 +1,7 @@
 package io.github.olib963.javatest.benchmark;
 
 import io.github.olib963.javatest.JavaTest;
-import io.github.olib963.javatest.testable.Test;
+import io.github.olib963.javatest.Testable.Test;
 import io.github.olib963.javatest.TestRunner;
 import io.github.olib963.javatest.Testable;
 import io.github.olib963.javatest.benchmark.internal.BenchmarkAssertion;

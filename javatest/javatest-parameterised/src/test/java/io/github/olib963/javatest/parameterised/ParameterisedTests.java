@@ -1,8 +1,7 @@
 package io.github.olib963.javatest.parameterised;
 
-import io.github.olib963.javatest.Testable;
-import io.github.olib963.javatest.testable.Test;
 import io.github.olib963.javatest.TestSuiteClass;
+import io.github.olib963.javatest.Testable;
 
 import java.util.Arrays;
 import java.util.function.Function;

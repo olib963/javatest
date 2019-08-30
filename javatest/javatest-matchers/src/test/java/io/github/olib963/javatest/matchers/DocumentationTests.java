@@ -1,7 +1,6 @@
 package io.github.olib963.javatest.matchers;
 
 import io.github.olib963.javatest.Testable;
-import io.github.olib963.javatest.testable.Test;
 import io.github.olib963.javatest.TestSuiteClass;
 
 import java.util.function.Function;
