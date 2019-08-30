@@ -3,10 +3,9 @@ package io.github.olib963.javatest.runners;
 import io.github.olib963.javatest.*;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static io.github.olib963.javatest.logging.RunLoggingObserver.SEPARATOR;
 
 public class StreamRunner implements TestRunner {
     private final Stream<? extends Testable> tests;
@@ -47,8 +46,7 @@ public class StreamRunner implements TestRunner {
 
     private TestResult runTest(Testable.Test test) {
         var result = safeRunTest(test.test);
-        var log = test.name + SEPARATOR + "\t" + result.description;
-        return new TestResult.SingleTestResult(result, log);
+        return new TestResult.SingleTestResult(result, List.of(test.name + ':', "\t" + result.description));
     }
 
     private AssertionResult safeRunTest(CheckedSupplier<Assertion> test) {

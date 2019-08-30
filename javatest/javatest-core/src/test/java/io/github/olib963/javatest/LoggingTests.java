@@ -7,6 +7,8 @@ import io.github.olib963.javatest.logging.TestLoggingObserver;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static io.github.olib963.javatest.JavaTest.test;
@@ -14,7 +16,7 @@ import static io.github.olib963.javatest.JavaTest.that;
 
 public class LoggingTests implements TestSuiteClass {
 
-    private final TestResult PENDING_TEST_RESULT = new TestResult.SingleTestResult(AssertionResult.pending(""), "");
+    private final TestResult PENDING_TEST_RESULT = new TestResult.SingleTestResult(AssertionResult.pending(""), Collections.emptyList());
 
     @Override
     public Stream<Testable> testables() {
@@ -38,7 +40,7 @@ public class LoggingTests implements TestSuiteClass {
                     var stream = new TestStream();
                     var testLog = "My Test has completed!";
                     var expectedLog = testLog + "\n";
-                    var result = new TestResult.SingleTestResult(AssertionResult.success(""), testLog);
+                    var result = new TestResult.SingleTestResult(AssertionResult.success(""), List.of(testLog));
 
                     var logger = new TestLoggingObserver(false, stream.printStream());
                     logger.onTestCompletion(result);
@@ -50,8 +52,8 @@ public class LoggingTests implements TestSuiteClass {
                 test("Test logging observer (with colour)", () -> {
                     var stream = new TestStream();
                     var testLog = "My Test has completed!";
-                    var expectedLog = Colour.GREEN.getCode() + testLog + Colour.RESET_CODE +"\n";
-                    var result = new TestResult.SingleTestResult(AssertionResult.success(""), testLog);
+                    var expectedLog = Colour.GREEN.getCode() + testLog + "\n" + Colour.RESET_CODE;
+                    var result = new TestResult.SingleTestResult(AssertionResult.success(""), List.of(testLog));
 
                     var logger = new TestLoggingObserver(true, stream.printStream());
                     logger.onTestCompletion(result);

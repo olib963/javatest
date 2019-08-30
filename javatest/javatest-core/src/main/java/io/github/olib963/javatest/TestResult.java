@@ -31,10 +31,15 @@ public abstract class TestResult {
 
     public static class SingleTestResult extends TestResult {
         public final AssertionResult result;
-        public final String testLog;
-        public SingleTestResult(AssertionResult result, String testLog) {
+        private final Collection<String> testLogs;
+        public SingleTestResult(AssertionResult result, Collection<String> testLogs) {
             this.result = result;
-            this.testLog = testLog;
+            this.testLogs = testLogs;
+        }
+
+        // Java streams are mutable and use once, we need to regenerate a stream on each invocation.
+        public Stream<String> logs() {
+            return testLogs.stream();
         }
 
         @Override

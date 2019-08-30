@@ -2,6 +2,7 @@ package io.github.olib963.javatest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public final class TestResults {
     public final boolean succeeded;
@@ -32,7 +33,7 @@ public final class TestResults {
                 suiteResult -> suiteResult.results().reduce(TestResults.init(), TestResults::addResult, TestResults::combine),
                 testResult -> {
                     var logs = new ArrayList<>(testLogs);
-                    logs.add(testResult.testLog);
+                    logs.addAll(testResult.logs().collect(Collectors.toList()));
                     var assertionResult = testResult.result;
                     if (assertionResult.pending) {
                         return new TestResults(succeeded, successCount, failureCount, pendingCount + 1, logs);
