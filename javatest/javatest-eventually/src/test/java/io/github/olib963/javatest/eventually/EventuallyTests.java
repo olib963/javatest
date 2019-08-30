@@ -1,6 +1,7 @@
 package io.github.olib963.javatest.eventually;
 
 import io.github.olib963.javatest.*;
+import io.github.olib963.javatest.testable.Test;
 
 import java.time.Duration;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -12,13 +13,13 @@ import static io.github.olib963.javatest.eventually.Eventually.eventually;
 
 public class EventuallyTests {
 
-    public static TestSuite passing() {
+    public static TestSuiteClass passing() {
         return new PassingTests();
     }
 
-    static class PassingTests implements TestSuite {
+    static class PassingTests implements TestSuiteClass {
         @Override
-        public Stream<Test> tests() {
+        public Stream<Testable> testables() {
             var simpleTests = Stream.of(
                     JavaTest.test("Simple pass", () -> eventually(() -> that(true, "should pass"))),
                     test("Eventually pending", () -> eventually(() -> pending("have not yet written eventual condition")))

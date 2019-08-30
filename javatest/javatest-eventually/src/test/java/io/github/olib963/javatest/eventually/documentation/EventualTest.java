@@ -1,6 +1,6 @@
 package io.github.olib963.javatest.eventually.documentation;
 
-import io.github.olib963.javatest.Test;
+import io.github.olib963.javatest.testable.Test;
 
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;

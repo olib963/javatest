@@ -1,7 +1,7 @@
 package io.github.olib963.javatest.benchmark;
 
-import io.github.olib963.javatest.Test;
-import io.github.olib963.javatest.TestSuite;
+import io.github.olib963.javatest.testable.Test;
+import io.github.olib963.javatest.TestSuiteClass;
 import io.github.olib963.javatest.Testable;
 
 import java.time.Duration;
@@ -13,7 +13,7 @@ import static io.github.olib963.javatest.JavaTest.*;
 import static io.github.olib963.javatest.benchmark.Benchmark.*;
 // end::imports[]
 
-public class DocumentationTests implements TestSuite {
+public class DocumentationTests implements TestSuiteClass {
 
     // tag::simple[]
     public class MyBenchMarks {
@@ -52,13 +52,13 @@ public class DocumentationTests implements TestSuite {
     // end::customFormat[]
 
     @Override
-    public Stream<Test> tests() {
+    public Stream<Testable> testables() {
         var bM = new MyBenchMarks();
         return Stream.of(
-                test("Passing tests pass", () -> {
+                test("Passing testables pass", () -> {
                     var singleTimedTests = Stream.of(bM.timedTest, new MyCustomBenchmark().timedTestCustomFormat);
                     var results = run(testableRunner(Stream.concat(bM.bunchOfTimedTests, singleTimedTests)));
-                    return that(results.succeeded, "All tests passed");
+                    return that(results.succeeded, "All testables passed");
                 }),
                 test("Failing test fails", () -> {
                     var results = runTests(Stream.of(new MyLimitedTest().failingTest));

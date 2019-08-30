@@ -1,6 +1,6 @@
 package io.github.olib963.javatest.matchers;
 
-import io.github.olib963.javatest.TestSuite;
+import io.github.olib963.javatest.TestSuiteClass;
 import io.github.olib963.javatest.Testable;
 
 import java.util.stream.Collectors;
@@ -22,7 +22,7 @@ public class Tests {
                             CollectionMatcherTests.passing(),
                             MapMatcherTests.passing());
                     var results = run(testableRunner(tests));
-                    return that(results.succeeded, "Expected all 'passing' tests to pass");
+                    return that(results.succeeded, "Expected all 'passing' testables to pass");
                 }),
                 test("Failing Tests", () -> {
                     var tests = Stream.of(
@@ -33,9 +33,9 @@ public class Tests {
                             ComparableMatcherTests.failing(),
                             CollectionMatcherTests.failing(),
                             MapMatcherTests.failing());
-                    var results = tests.flatMap(TestSuite::tests).map(t -> runTests(Stream.of(t)));
+                    var results = tests.flatMap(TestSuiteClass::testables).map(t -> runTests(Stream.of(t)));
                     var passingTests = results.filter(r -> r.succeeded).collect(Collectors.toList());
-                    return that(passingTests.isEmpty(), "Expected all 'failing' tests to fail");
+                    return that(passingTests.isEmpty(), "Expected all 'failing' testables to fail");
                 })
         ));
         if(!result.succeeded) {
@@ -44,7 +44,7 @@ public class Tests {
 
         var docResult = run(testableRunner(new DocumentationTests()));
         if(!docResult.succeeded) {
-            throw new RuntimeException("Documentation tests failed!");
+            throw new RuntimeException("Documentation testables failed!");
         }
     }
 

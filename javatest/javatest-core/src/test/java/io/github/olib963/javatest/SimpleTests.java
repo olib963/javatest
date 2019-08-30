@@ -1,5 +1,7 @@
 package io.github.olib963.javatest;
 
+import io.github.olib963.javatest.testable.Test;
+
 import java.util.stream.Stream;
 
 import static io.github.olib963.javatest.JavaTest.*;
@@ -10,10 +12,10 @@ public class SimpleTests {
         return new PassingTests();
     }
 
-    static class PassingTests implements TestSuite {
+    static class PassingTests implements TestSuiteClass {
 
         @Override
-        public Stream<Test> tests() {
+        public Stream<Testable> testables() {
             return Stream.of(
                     test("Simple test", () -> that(true, "Expected true to be true")),
                     test("Pending test that has yet to be written", JavaTest::pending),

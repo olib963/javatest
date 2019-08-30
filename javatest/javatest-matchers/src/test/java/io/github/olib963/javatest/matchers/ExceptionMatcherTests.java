@@ -1,8 +1,8 @@
 package io.github.olib963.javatest.matchers;
 
 import io.github.olib963.javatest.JavaTest;
-import io.github.olib963.javatest.Test;
-import io.github.olib963.javatest.TestSuite;
+import io.github.olib963.javatest.TestSuiteClass;
+import io.github.olib963.javatest.Testable;
 
 import java.util.stream.Stream;
 
@@ -14,16 +14,16 @@ import static io.github.olib963.javatest.matchers.StringMatchers.containsString;
 import static io.github.olib963.javatest.matchers.StringMatchers.hasLength;
 
 public class ExceptionMatcherTests {
-    public static TestSuite passing() {
+    public static TestSuiteClass passing() {
         return new PassingTests();
     }
-    public static TestSuite failing() {
+    public static TestSuiteClass failing() {
         return new FailingTests();
     }
 
-    static class PassingTests implements TestSuite {
+    static class PassingTests implements TestSuiteClass {
         @Override
-        public Stream<Test> tests() {
+        public Stream<Testable> testables() {
             return Stream.of(
                     JavaTest.test("Exception of correct type is thrown", () ->
                             that(() -> { throw new RuntimeException("whoopsie"); }, willThrowExceptionThat(hasType(RuntimeException.class)))),
@@ -51,9 +51,9 @@ public class ExceptionMatcherTests {
         }
     }
 
-    static class FailingTests implements TestSuite {
+    static class FailingTests implements TestSuiteClass {
         @Override
-        public Stream<Test> tests() {
+        public Stream<Testable> testables() {
             return Stream.of(
                     test("Exception is thrown (FAIL)", () ->
                             that(() -> {}, willThrowExceptionThat(hasType(IllegalStateException.class)))),

@@ -15,11 +15,11 @@ public class MyRunners implements TestRunners {
 
     @Override
     public Stream<TestRunner> runners() {
-        // Define a runner for unit tests in parallel
+        // Define a runner for unit testables in parallel
         List<Testable> tests = List.of(new MyFirstUnitTestSuite(), new MySecondUnitTestSuite());
         var unitTests = testableRunner(tests.parallelStream());
 
-        // Define integration tests with an executor fixture
+        // Define integration testables with an executor fixture
         var executorDefinition = Fixtures.definitionFromThrowingFunctions(
                 Executors::newSingleThreadExecutor, ExecutorService::shutdown);
 

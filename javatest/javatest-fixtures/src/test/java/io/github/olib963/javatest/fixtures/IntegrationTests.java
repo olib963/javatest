@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 import static io.github.olib963.javatest.JavaTest.test;
 import static io.github.olib963.javatest.JavaTest.that;
 
-// tag::tests[]
+// tag::testables[]
 public class IntegrationTests {
 
     public static Stream<Testable> tests(File testDirectory) {
@@ -29,5 +29,5 @@ public class IntegrationTests {
                 })
         );
     }
-// end::tests[]
+// end::testables[]
 }

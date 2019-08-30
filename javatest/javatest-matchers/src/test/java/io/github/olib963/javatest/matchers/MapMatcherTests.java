@@ -1,8 +1,8 @@
 package io.github.olib963.javatest.matchers;
 
 import io.github.olib963.javatest.JavaTest;
-import io.github.olib963.javatest.Test;
-import io.github.olib963.javatest.TestSuite;
+import io.github.olib963.javatest.TestSuiteClass;
+import io.github.olib963.javatest.Testable;
 
 import java.util.Map;
 import java.util.stream.Stream;
@@ -18,17 +18,17 @@ import static io.github.olib963.javatest.matchers.StringMatchers.startsWith;
 public class MapMatcherTests {
     private static final Map<Integer, String> SIMPLE_MAP = Map.of(1, "hello");
 
-    public static TestSuite passing() {
+    public static TestSuiteClass passing() {
         return new PassingTests();
     }
 
-    public static TestSuite failing() {
+    public static TestSuiteClass failing() {
         return new FailingTests();
     }
 
-    static class PassingTests implements TestSuite {
+    static class PassingTests implements TestSuiteClass {
         @Override
-        public Stream<Test> tests() {
+        public Stream<Testable> testables() {
             return Stream.of(
                     JavaTest.test("Empty", () -> that(Map.of(), isEmptyMap())),
                     test("Size", () -> that(SIMPLE_MAP, hasMapSize(1))),
@@ -42,9 +42,9 @@ public class MapMatcherTests {
         }
     }
 
-    static class FailingTests implements TestSuite {
+    static class FailingTests implements TestSuiteClass {
         @Override
-        public Stream<Test> tests() {
+        public Stream<Testable> testables() {
             return Stream.of(
                     test("Empty (FAIL)", () -> that(SIMPLE_MAP, isEmptyMap())),
                     test("Size (FAIL)", () -> that(SIMPLE_MAP, hasMapSize(2))),

@@ -1,8 +1,8 @@
 package io.github.olib963.javatest.matchers;
 
 import io.github.olib963.javatest.JavaTest;
-import io.github.olib963.javatest.Test;
-import io.github.olib963.javatest.TestSuite;
+import io.github.olib963.javatest.TestSuiteClass;
+import io.github.olib963.javatest.Testable;
 
 import java.util.stream.Stream;
 
@@ -13,17 +13,17 @@ import static io.github.olib963.javatest.matchers.Matcher.that;
 
 public class ComparableMatcherTests {
 
-    public static TestSuite passing() {
+    public static TestSuiteClass passing() {
         return new PassingTests();
     }
 
-    public static TestSuite failing() {
+    public static TestSuiteClass failing() {
         return new FailingTests();
     }
 
-    static class PassingTests implements TestSuite {
+    static class PassingTests implements TestSuiteClass {
         @Override
-        public Stream<Test> tests() {
+        public Stream<Testable> testables() {
             return Stream.of(
                     JavaTest.test("Comparably Equal", () -> that(wrap(10), isComparablyEqualTo(wrap(10)))),
                     test("Less than", () -> that(wrap(10), isLessThan(wrap(11)))),
@@ -36,9 +36,9 @@ public class ComparableMatcherTests {
         }
     }
 
-    static class FailingTests implements TestSuite {
+    static class FailingTests implements TestSuiteClass {
         @Override
-        public Stream<Test> tests() {
+        public Stream<Testable> testables() {
             return Stream.of(
                     test("Comparably Equal (FAIL)", () -> that(wrap(10), isComparablyEqualTo(wrap(11)))),
                     test("Less than (FAIL - equal)", () -> that(wrap(10), isLessThan(wrap(10)))),
@@ -67,7 +67,7 @@ public class ComparableMatcherTests {
 
         @Override
         public boolean equals(Object o) {
-            throw new RuntimeException("We don't want equality tests on this class, just comparable tests");
+            throw new RuntimeException("We don't want equality testables on this class, just comparable testables");
         }
 
         @Override

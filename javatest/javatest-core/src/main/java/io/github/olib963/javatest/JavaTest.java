@@ -3,6 +3,8 @@ package io.github.olib963.javatest;
 import io.github.olib963.javatest.assertions.BooleanAssertion;
 import io.github.olib963.javatest.assertions.PendingAssertion;
 import io.github.olib963.javatest.runners.StreamRunner;
+import io.github.olib963.javatest.testable.Test;
+import io.github.olib963.javatest.testable.TestSuite;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -31,11 +33,11 @@ public class JavaTest {
         return run(Stream.concat(Stream.of(firstRunner), Arrays.stream(moreRunners)));
     }
 
-    public static TestResults runTests(Stream<Test> tests) {
-        return run(testableRunner(tests.map(t -> t)));
+    public static TestResults runTests(Stream<? extends Testable> tests) {
+        return run(testableRunner(tests));
     }
 
-    public static TestResults runSuite(TestSuite suite) {
+    public static TestResults runSuite(TestSuiteClass suite) {
         return run(testableRunner(Stream.of(suite)));
     }
 
@@ -47,17 +49,21 @@ public class JavaTest {
         return testableRunner(Stream.of(testable));
     }
 
-    public static TestRunner testableRunner(Stream<Testable> tests) {
+    public static TestRunner testableRunner(Stream<? extends Testable> tests) {
         return testableRunner(tests, DEFAULT_OBSERVER);
     }
 
-    public static TestRunner testableRunner(Stream<Testable> tests, Collection<TestCompletionObserver> observers) {
+    public static TestRunner testableRunner(Stream<? extends Testable> tests, Collection<TestCompletionObserver> observers) {
         return new StreamRunner(tests, observers);
     }
 
     // Test factory methods
     public static Test test(String name, CheckedSupplier<Assertion> testFunction) {
         return new Test(name, testFunction);
+    }
+
+    public static TestSuite suite(String name, Stream<Testable> testables) {
+        return new TestSuite(name, testables);
     }
 
     public static Assertion that(boolean asserted, String description) {

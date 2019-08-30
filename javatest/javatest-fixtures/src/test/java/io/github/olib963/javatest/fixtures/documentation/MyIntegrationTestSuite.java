@@ -1,18 +1,18 @@
 package io.github.olib963.javatest.fixtures.documentation;
 
-import io.github.olib963.javatest.Test;
-import io.github.olib963.javatest.TestSuite;
+import io.github.olib963.javatest.TestSuiteClass;
+import io.github.olib963.javatest.Testable;
 
 import java.util.concurrent.ExecutorService;
 import java.util.stream.Stream;
 
 // Just used for documentation
-public class MyIntegrationTestSuite implements TestSuite {
+public class MyIntegrationTestSuite implements TestSuiteClass {
 
     public MyIntegrationTestSuite(ExecutorService executorService) {}
 
     @Override
-    public Stream<Test> tests() {
+    public Stream<Testable> testables() {
         return Stream.of();
     }
 }

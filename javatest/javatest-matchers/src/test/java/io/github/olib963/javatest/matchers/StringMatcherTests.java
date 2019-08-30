@@ -1,8 +1,8 @@
 package io.github.olib963.javatest.matchers;
 
 import io.github.olib963.javatest.JavaTest;
-import io.github.olib963.javatest.Test;
-import io.github.olib963.javatest.TestSuite;
+import io.github.olib963.javatest.TestSuiteClass;
+import io.github.olib963.javatest.Testable;
 
 import java.util.stream.Stream;
 
@@ -11,16 +11,16 @@ import static io.github.olib963.javatest.matchers.Matcher.that;
 import static io.github.olib963.javatest.matchers.StringMatchers.*;
 
 public class StringMatcherTests {
-    public static TestSuite passing() {
+    public static TestSuiteClass passing() {
         return new PassingTests();
     }
-    public static TestSuite failing() {
+    public static TestSuiteClass failing() {
         return new FailingTests();
     }
 
-    static class PassingTests implements TestSuite {
+    static class PassingTests implements TestSuiteClass {
         @Override
-        public Stream<Test> tests() {
+        public Stream<Testable> testables() {
             return Stream.of(
                     JavaTest.test("String Prefix", () -> that("Hello World", startsWith("Hello"))),
                     test("String Suffix", () -> that("Hello World", endsWith("World"))),
@@ -33,9 +33,9 @@ public class StringMatcherTests {
         }
     }
 
-    static class FailingTests implements TestSuite {
+    static class FailingTests implements TestSuiteClass {
         @Override
-        public Stream<Test> tests() {
+        public Stream<Testable> testables() {
             return Stream.of(
                     test("String Prefix (FAIL)", () -> that("Hello World", startsWith("World"))),
                     test("String Suffix (FAIL)", () -> that("Hello World", endsWith("Hello"))),

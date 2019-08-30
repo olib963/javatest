@@ -1,16 +1,17 @@
 package io.github.olib963.javatest.eventually;
 
-import io.github.olib963.javatest.Test;
-import io.github.olib963.javatest.TestSuite;
+import io.github.olib963.javatest.TestSuiteClass;
+import io.github.olib963.javatest.Testable;
 
 import java.time.Duration;
 import java.util.concurrent.ExecutorService;
 import java.util.stream.Stream;
 
-import static io.github.olib963.javatest.JavaTest.*;
-import static io.github.olib963.javatest.eventually.Eventually.*;
+import static io.github.olib963.javatest.JavaTest.test;
+import static io.github.olib963.javatest.JavaTest.that;
+import static io.github.olib963.javatest.eventually.Eventually.eventually;
 
-public class InitialDelayTests implements TestSuite {
+public class InitialDelayTests implements TestSuiteClass {
     private final ExecutorService executorService;
 
     public InitialDelayTests(ExecutorService executorService) {
@@ -18,7 +19,7 @@ public class InitialDelayTests implements TestSuite {
     }
 
     @Override
-    public Stream<Test> tests() {
+    public Stream<Testable> testables() {
         return Stream.of(
                 test("Initial delay", () -> {
                     var failer = new FailIfNotSet();

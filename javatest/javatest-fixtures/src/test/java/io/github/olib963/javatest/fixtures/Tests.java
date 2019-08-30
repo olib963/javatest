@@ -26,23 +26,23 @@ public class Tests {
     public static void main(String... args) {
         var result = JavaTest.run(testableRunner(new SimpleTests()));
         if (!result.succeeded) {
-            throw new RuntimeException("Unit tests failed!");
+            throw new RuntimeException("Unit testables failed!");
         }
 
         var integrationResult = run(integrationTestRunner);
         if (!integrationResult.succeeded) {
-            throw new RuntimeException("Integration tests failed!");
+            throw new RuntimeException("Integration testables failed!");
         }
 
         var docResult = JavaTest.run(testableRunner(CustomDefinitions.tests()));
         if (!docResult.succeeded) {
-            throw new RuntimeException("Documentation tests failed!");
+            throw new RuntimeException("Documentation testables failed!");
         }
 
         // Main README documentation makes use of Fixtures so the documentation file is here.
         var quickStartResult = JavaTest.run(new MyRunners().runners());
         if (!quickStartResult.succeeded) {
-            throw new RuntimeException("Quickstart documentation tests failed!");
+            throw new RuntimeException("Quickstart documentation testables failed!");
         }
     }
 

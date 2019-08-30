@@ -11,16 +11,16 @@ import java.util.stream.Stream;
 
 import static io.github.olib963.javatest.JavaTest.test;
 import static io.github.olib963.javatest.JavaTest.that;
+import static io.github.olib963.javatest.matchers.CollectionMatchers.contains;
 import static io.github.olib963.javatest.matchers.Matcher.that;
 import static io.github.olib963.javatest.matchers.StringMatchers.containsString;
-import static io.github.olib963.javatest.matchers.CollectionMatchers.contains;
 
-public class BenchmarkingTests implements TestSuite {
+public class BenchmarkingTests implements TestSuiteClass {
 
     private static final Assertion PASS = that(true, "Assertion passes");
 
     @Override
-    public Stream<Test> tests() {
+    public Stream<Testable> testables() {
         return Stream.of(
                 test("Formatted duration", () -> {
                     Supplier<Duration> timeFunction = () -> Duration.ofMillis(12345);

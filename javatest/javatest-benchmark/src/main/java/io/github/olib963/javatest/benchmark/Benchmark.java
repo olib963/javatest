@@ -1,7 +1,7 @@
 package io.github.olib963.javatest.benchmark;
 
 import io.github.olib963.javatest.JavaTest;
-import io.github.olib963.javatest.Test;
+import io.github.olib963.javatest.testable.Test;
 import io.github.olib963.javatest.TestRunner;
 import io.github.olib963.javatest.Testable;
 import io.github.olib963.javatest.benchmark.internal.BenchmarkAssertion;
@@ -53,17 +53,19 @@ public class Benchmark {
     }
 
     public static Stream<Testable> benchmarkAllTests(Stream<Testable> testables, Function<Duration, String> formatter) {
-        return testables.map(t -> new Testable() {
-            @Override
-            public Optional<String> suiteName() {
-                return t.suiteName();
-            }
-
-            @Override
-            public Stream<Test> tests() {
-                return t.tests().map(test -> benchmark(test, formatter));
-            }
-        });
+        // TODO need to implement this one
+//        return testables.map(t -> new Testable() {
+//            @Override
+//            public Optional<String> suiteName() {
+//                return t.suiteName();
+//            }
+//
+//            @Override
+//            public Stream<Test> tests() {
+//                return t.tests().map(test -> benchmark(test, formatter));
+//            }
+//        });
+        return testables;
     }
 
     public static TestRunner benchmark(Stream<TestRunner> runners) {

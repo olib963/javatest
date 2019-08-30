@@ -1,7 +1,8 @@
 package io.github.olib963.javatest.parameterised;
 
-import io.github.olib963.javatest.Test;
-import io.github.olib963.javatest.TestSuite;
+import io.github.olib963.javatest.Testable;
+import io.github.olib963.javatest.testable.Test;
+import io.github.olib963.javatest.TestSuiteClass;
 
 import java.util.Arrays;
 import java.util.function.Function;
@@ -11,9 +12,9 @@ import static io.github.olib963.javatest.JavaTest.test;
 import static io.github.olib963.javatest.JavaTest.that;
 import static io.github.olib963.javatest.parameterised.Parameterised.parameterised;
 
-public class ParameterisedTests implements TestSuite {
+public class ParameterisedTests implements TestSuiteClass {
     @Override
-    public Stream<Test> tests() {
+    public Stream<Testable> testables() {
         return Stream.of(
                 parameterised(Data.multiplication(), this::multiplicationTest),
                 parameterised(Data.madAddition(), this::additionTest)

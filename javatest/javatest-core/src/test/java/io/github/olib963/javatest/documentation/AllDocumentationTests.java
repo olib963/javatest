@@ -1,15 +1,15 @@
 package io.github.olib963.javatest.documentation;
 
-import io.github.olib963.javatest.Test;
-import io.github.olib963.javatest.TestSuite;
+import io.github.olib963.javatest.TestSuiteClass;
+import io.github.olib963.javatest.Testable;
 
 import java.util.stream.Stream;
 
 import static io.github.olib963.javatest.JavaTest.test;
 
-public class AllDocumentationTests implements TestSuite {
+public class AllDocumentationTests implements TestSuiteClass {
     @Override
-    public Stream<Test> tests() {
+    public Stream<Testable> testables() {
         var assertions = new MyAssertions();
         var composed = new MyComposedAssertions();
         return Stream.of(

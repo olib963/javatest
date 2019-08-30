@@ -1,8 +1,8 @@
 package io.github.olib963.javatest.fixtures;
 
 import io.github.olib963.javatest.JavaTest;
-import io.github.olib963.javatest.Test;
-import io.github.olib963.javatest.TestSuite;
+import io.github.olib963.javatest.TestSuiteClass;
+import io.github.olib963.javatest.Testable;
 
 import java.util.stream.Stream;
 
@@ -11,10 +11,10 @@ import static io.github.olib963.javatest.fixtures.Fixtures.*;
 import static io.github.olib963.javatest.fixtures.Try.Failure;
 import static io.github.olib963.javatest.fixtures.Try.Success;
 
-public class SimpleTests implements TestSuite {
+public class SimpleTests implements TestSuiteClass {
 
     @Override
-    public Stream<Test> tests() {
+    public Stream<Testable> testables() {
         return Stream.of(
                 JavaTest.test("Tests using fixture", () -> {
                     var result = run(fixtureRunner(
@@ -24,7 +24,7 @@ public class SimpleTests implements TestSuite {
                                     test("Testing with " + s, () -> that(true, "this test should pass"))
                             ))
                     ));
-                    return that(result.succeeded, "Expected tests to pass using fixture");
+                    return that(result.succeeded, "Expected testables to pass using fixture");
                 }),
                 test("Failure to create fixture", () -> {
                     var result = run(fixtureRunner(
@@ -34,7 +34,7 @@ public class SimpleTests implements TestSuite {
                                     test("Testing with " + s, () -> that(true, "this test should pass"))
                             ))
                     ));
-                    return that(!result.succeeded, "Expected tests to fail if the fixture cannot be created");
+                    return that(!result.succeeded, "Expected testables to fail if the fixture cannot be created");
                 }),
                 test("Failure to destroy fixture", () -> {
                     var result = run(fixtureRunner(
@@ -44,9 +44,9 @@ public class SimpleTests implements TestSuite {
                                     test("Testing with " + s, () -> that(true, "this test should pass"))
                             ))
                     ));
-                    return that(!result.succeeded, "Expected tests to fail if the fixture cannot be destroyed");
+                    return that(!result.succeeded, "Expected testables to fail if the fixture cannot be destroyed");
                 }),
-                test("FixtureDefinition is fine but tests fail", () -> {
+                test("FixtureDefinition is fine but testables fail", () -> {
                     var result = run(fixtureRunner(
                             "test failures",
                             definitionFromFunction(() -> Success("fixture")),
@@ -54,7 +54,7 @@ public class SimpleTests implements TestSuite {
                                     test("Testing with " + s, () -> that(false, "this test should fail"))
                             ))
                     ));
-                    return that(!result.succeeded, "Expected tests to fail when the fixture is fine but internal tests fail");
+                    return that(!result.succeeded, "Expected testables to fail when the fixture is fine but internal testables fail");
                 })
         );
     }

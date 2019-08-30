@@ -1,14 +1,14 @@
 package io.github.olib963.javatest.fixtures.documentation;
 
-import io.github.olib963.javatest.Test;
-import io.github.olib963.javatest.TestSuite;
+import io.github.olib963.javatest.TestSuiteClass;
+import io.github.olib963.javatest.Testable;
 
 import java.util.stream.Stream;
 
 // Just used for documentation
-public class MySecondUnitTestSuite implements TestSuite {
+public class MySecondUnitTestSuite implements TestSuiteClass {
     @Override
-    public Stream<Test> tests() {
+    public Stream<Testable> testables() {
         return Stream.of();
     }
 }

@@ -1,21 +1,21 @@
 package io.github.olib963.javatest.documentation;
 
 // tag::include[]
-import io.github.olib963.javatest.Test;
-import io.github.olib963.javatest.TestSuite;
+import io.github.olib963.javatest.TestSuiteClass;
+import io.github.olib963.javatest.Testable;
 
 import java.util.stream.Stream;
 
-public class MyCustomTestSuite implements TestSuite {
-    @Override
-    public String name() {
-        return "MySuite";
-    }
+public class MyCustomTestSuite implements TestSuiteClass {
+//    @Override
+//    public String name() {
+//        return "MySuite";
+//    }
 
     @Override
-    public Stream<Test> tests() {
+    public Stream<Testable> testables() {
         return Stream.of(
-                // create tests
+                // create testables
         );
     }
 }

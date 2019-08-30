@@ -16,9 +16,9 @@ public class MyEntrypoint {
 
         var customResults = run(new MyCustomRunner());
         if(results.succeeded && customResults.succeeded) {
-            System.out.println("Yay tests passed! :)");
+            System.out.println("Yay testables passed! :)");
         } else {
-            throw new RuntimeException("Boo tests failed! :(");
+            throw new RuntimeException("Boo testables failed! :(");
         }
     }
 }

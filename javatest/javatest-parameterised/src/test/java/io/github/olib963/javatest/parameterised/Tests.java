@@ -21,7 +21,7 @@ public class Tests {
         ).flatMap(Function.identity());
         var docResult = runTests(allDocTests);
         if (!docResult.succeeded) {
-            throw new RuntimeException("Documentation tests failed!");
+            throw new RuntimeException("Documentation testables failed!");
         }
     }
 }

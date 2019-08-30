@@ -1,7 +1,7 @@
 package io.github.olib963.javatest.matchers;
 
-import io.github.olib963.javatest.Test;
-import io.github.olib963.javatest.TestSuite;
+import io.github.olib963.javatest.TestSuiteClass;
+import io.github.olib963.javatest.Testable;
 
 import java.util.Collection;
 import java.util.List;
@@ -14,17 +14,17 @@ import static io.github.olib963.javatest.matchers.Matcher.that;
 
 public class CollectionMatcherTests {
 
-    public static TestSuite passing() {
+    public static TestSuiteClass passing() {
         return new PassingTests();
     }
 
-    public static TestSuite failing() {
+    public static TestSuiteClass failing() {
         return new FailingTests();
     }
 
-    static class PassingTests implements TestSuite {
+    static class PassingTests implements TestSuiteClass {
         @Override
-        public Stream<Test> tests() {
+        public Stream<Testable> testables() {
             return Stream.of(
                     test("Size", () -> that(List.of(1, 2), hasSize(2))),
                     test("Empty", () -> that(List.of(), isEmpty())),
@@ -35,9 +35,9 @@ public class CollectionMatcherTests {
         }
     }
 
-    static class FailingTests implements TestSuite {
+    static class FailingTests implements TestSuiteClass {
         @Override
-        public Stream<Test> tests() {
+        public Stream<Testable> testables() {
             return Stream.of(
                     test("Size (FAIL - bigger)", () -> that(List.of(1, 2), hasSize(1))),
                     test("Size (FAIL - smaller)", () -> that(List.of(1, 2), hasSize(3))),

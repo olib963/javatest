@@ -28,7 +28,7 @@ public class BenchmarkAssertion implements Assertion {
     public AssertionResult run() {
         var result = assertion.run();
         var timeTaken = timeFunction.get();
-        // TODO it would be nice to have more structured logs in tests rather than \n\t etc.
+        // TODO it would be nice to have more structured logs in testables rather than \n\t etc.
         // Maybe even somehow extensible with types like some heterogeneous context? This may make aggregating easier
         var timeLog = "Test took " + formatter.apply(timeTaken);
         var wrappedAssertion = AssertionResult.of(result.holds, result.description + "\n\t" + timeLog);

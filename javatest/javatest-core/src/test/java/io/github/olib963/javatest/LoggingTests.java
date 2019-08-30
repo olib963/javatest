@@ -3,6 +3,7 @@ package io.github.olib963.javatest;
 import io.github.olib963.javatest.logging.Colour;
 import io.github.olib963.javatest.logging.RunLoggingObserver;
 import io.github.olib963.javatest.logging.TestLoggingObserver;
+import io.github.olib963.javatest.testable.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -12,12 +13,12 @@ import java.util.stream.Stream;
 import static io.github.olib963.javatest.JavaTest.test;
 import static io.github.olib963.javatest.JavaTest.that;
 
-public class LoggingTests implements TestSuite {
+public class LoggingTests implements TestSuiteClass {
 
     private final TestResult PENDING_TEST_RESULT = new TestResult(AssertionResult.pending(""), "");
 
     @Override
-    public Stream<Test> tests() {
+    public Stream<Testable> testables() {
         return Stream.of(
                 test("Run logging observer", () -> {
                     var stream = new TestStream();
@@ -25,7 +26,7 @@ public class LoggingTests implements TestSuite {
                     var results = TestResults.from(10, 20)
                             .addResult(PENDING_TEST_RESULT)
                             .addResult(PENDING_TEST_RESULT);
-                    var expectedLog = "Ran a total of 32 tests.\n20 succeeded\n10 failed\n2 were pending\n";
+                    var expectedLog = "Ran a total of 32 testables.\n20 succeeded\n10 failed\n2 were pending\n";
 
                     var logger = new RunLoggingObserver(stream.printStream());
                     logger.onRunCompletion(results);

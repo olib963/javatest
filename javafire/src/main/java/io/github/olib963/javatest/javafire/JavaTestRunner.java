@@ -30,7 +30,7 @@ class JavaTestRunner {
             var results = JavaTest.run(r.runners());
 
             if (results.succeeded) {
-                return new Result(Status.SUCCESS, "All tests passed");
+                return new Result(Status.SUCCESS, "All testables passed");
             } else {
                 return new Result(Status.FAILURE, "Tests failed");
             }
