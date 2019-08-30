@@ -39,7 +39,7 @@ public class FixtureRunner<Fixture> implements TestRunner {
     }
 
     private TestResult exceptionToResult(Exception e) {
-        return new TestResult(AssertionResult.exception(e), flattenMessages(e));
+        return new TestResult.SingleTestResult(AssertionResult.exception(e), flattenMessages(e));
     }
 
     private String flattenMessages(Throwable t) {

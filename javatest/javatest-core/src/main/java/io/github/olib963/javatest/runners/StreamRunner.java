@@ -3,6 +3,7 @@ package io.github.olib963.javatest.runners;
 import io.github.olib963.javatest.*;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static io.github.olib963.javatest.logging.RunLoggingObserver.SEPARATOR;
@@ -20,25 +21,34 @@ public class StreamRunner implements TestRunner {
     public TestResults run() {
         return tests
                 .map(this::runTestable)
-                .reduce(TestResults.init(), TestResults::combine);
+                .reduce(TestResults.init(), TestResults::addResult, TestResults::combine);
     }
 
-    private TestResults runTestable(Testable testable) {
-        return testable.match(this::runTest, this::runSuite);
+    private TestResult runTestable(Testable testable) {
+        return testable.match(
+                test -> {
+                    var result = runTest(test);
+                    observers.forEach(o -> o.onTestCompletion(result));
+                    return result;
+                },
+                suite -> {
+                    var result = runSuite(suite);
+                    observers.forEach(o -> o.onTestCompletion(result));
+                    return result;
+                }
+        );
     }
 
-    // TODO suite results as separate type. We want ${suite name}:all test results
-    private TestResults runSuite(Testable.TestSuite suite) {
-        return suite.testables.map(this::runTestable)
-                .reduce(TestResults.init(), TestResults::combine);
+    private TestResult runSuite(Testable.TestSuite suite) {
+        var results = suite.testables.map(t -> t.match(this::runTest, this::runSuite));
+        return new TestResult.SuiteResult(suite.name, results.collect(Collectors.toList()));
+
     }
 
-    private TestResults runTest(Testable.Test test) {
+    private TestResult runTest(Testable.Test test) {
         var result = safeRunTest(test.test);
         var log = test.name + SEPARATOR + "\t" + result.description;
-        var testResult = new TestResult(result, log);
-        observers.forEach(o -> o.onTestCompletion(testResult));
-        return TestResults.init().addResult(testResult);
+        return new TestResult.SingleTestResult(result, log);
     }
 
     private AssertionResult safeRunTest(CheckedSupplier<Assertion> test) {

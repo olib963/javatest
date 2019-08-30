@@ -4,6 +4,8 @@ import io.github.olib963.javatest.TestCompletionObserver;
 import io.github.olib963.javatest.TestResult;
 
 import java.io.PrintStream;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class TestLoggingObserver implements TestCompletionObserver {
 
@@ -20,11 +22,24 @@ public class TestLoggingObserver implements TestCompletionObserver {
 
     @Override
     public void onTestCompletion(TestResult result) {
-        if (useColour) {
-            stream.println(Colour.forResult(result.result).getCode() + result.testLog + Colour.RESET_CODE);
-        } else {
-            stream.println(result.testLog);
-        }
+        stream.println(toLogMessages(result).collect(Collectors.joining("\n")));
+    }
+
+    // TODO change tests to use this function instead.
+    Stream<String> toLogMessages(TestResult result) {
+        return result.match(
+                suiteResult -> Stream.concat(
+                        Stream.of(suiteResult.suiteName + ':'),
+                        suiteResult.results().flatMap(this::toLogMessages).map(s -> "\t" + s)
+                    ),
+                singleTestResult -> {
+                    if (useColour) {
+                       return Stream.of(Colour.forResult(singleTestResult.result).getCode() + singleTestResult.testLog + Colour.RESET_CODE);
+                    } else {
+                        return Stream.of(singleTestResult.testLog);
+                    }
+                }
+        );
     }
 
 }
