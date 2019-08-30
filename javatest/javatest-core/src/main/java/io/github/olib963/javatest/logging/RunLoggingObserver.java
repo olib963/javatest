@@ -18,7 +18,7 @@ public class RunLoggingObserver implements TestRunCompletionObserver {
 
     @Override
     public void onRunCompletion(TestResults results) {
-        stream.println("Ran a total of " + results.testCount() + " testables." + SEPARATOR
+        stream.println("Ran a total of " + results.testCount() + " tests." + SEPARATOR
                 + results.successCount + " succeeded" + SEPARATOR
                 + results.failureCount + " failed" + SEPARATOR
                 + results.pendingCount + " were pending");

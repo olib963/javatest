@@ -18,7 +18,7 @@ public class DocumentationTests {
     // tag::palindrome[]
     public class PalindromeTests {
         public Stream<Test> inMemoryPalindromeTests() {
-            // Create parameterised testables from an in memory stream
+            // Create parameterised tests from an in memory stream
             return parameterised(
                     Stream.of("Civic", "Deified", "Kayak", "Level", "Madam"),
                     this::palindromeTest

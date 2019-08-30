@@ -26,7 +26,7 @@ public class LoggingTests implements TestSuiteClass {
                     var results = TestResults.from(10, 20)
                             .addResult(PENDING_TEST_RESULT)
                             .addResult(PENDING_TEST_RESULT);
-                    var expectedLog = "Ran a total of 32 testables.\n20 succeeded\n10 failed\n2 were pending\n";
+                    var expectedLog = "Ran a total of 32 tests.\n20 succeeded\n10 failed\n2 were pending\n";
 
                     var logger = new RunLoggingObserver(stream.printStream());
                     logger.onRunCompletion(results);

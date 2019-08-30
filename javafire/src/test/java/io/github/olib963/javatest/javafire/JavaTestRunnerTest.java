@@ -16,9 +16,8 @@ import static org.mockito.Mockito.*;
 
 public class JavaTestRunnerTest implements TestSuiteClass {
 
-    // Running testables
     public static void main(String... args) {
-        if (!JavaTest.runTests(new JavaTestRunnerTest().testables()).succeeded) {
+        if (!JavaTest.runTests(new JavaTestRunnerTest()).succeeded) {
             throw new RuntimeException("Tests failed!");
         }
     }
@@ -104,7 +103,7 @@ public class JavaTestRunnerTest implements TestSuiteClass {
                     var result = runWithRunners(RunnersWithFailingTest.class);
                     return that(result.status == JavaTestRunner.Status.FAILURE, "Should return a failure");
                 }),
-                test("Test when all testables from runners pass", () -> {
+                test("Test when all tests from runners pass", () -> {
                     var result = runWithRunners(RunnersWithPassingTests.class);
                     return that(result.status == JavaTestRunner.Status.SUCCESS, "Should return a success");
                 })

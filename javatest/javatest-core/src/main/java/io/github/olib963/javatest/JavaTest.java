@@ -33,6 +33,10 @@ public class JavaTest {
         return run(Stream.concat(Stream.of(firstRunner), Arrays.stream(moreRunners)));
     }
 
+    public static TestResults runTests(Testable tests) {
+        return runTests(Stream.of(tests));
+    }
+
     public static TestResults runTests(Stream<? extends Testable> tests) {
         return run(testableRunner(tests));
     }

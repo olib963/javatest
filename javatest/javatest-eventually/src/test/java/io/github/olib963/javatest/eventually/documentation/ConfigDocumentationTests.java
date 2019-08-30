@@ -9,10 +9,9 @@ import java.time.Duration;
 import java.util.stream.Stream;
 
 import static io.github.olib963.javatest.JavaTest.test;
+// tag::imports[]
 import static io.github.olib963.javatest.JavaTest.that;
 import static io.github.olib963.javatest.eventually.Eventually.eventually;
-
-// tag::imports[]
 // end::imports[]
 
 public class ConfigDocumentationTests implements TestSuiteClass {

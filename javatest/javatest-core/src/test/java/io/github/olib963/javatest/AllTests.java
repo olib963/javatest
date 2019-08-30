@@ -17,7 +17,7 @@ public class AllTests {
                     .map(t -> run(Stream.of(testableRunner(t)), Collections.emptyList()))
                     .filter(r -> r.succeeded)
                     .collect(Collectors.toList());
-            return that(passingTests.isEmpty(), "Expected all 'failing' testables to fail");
+            return that(passingTests.isEmpty(), "Expected all 'failing' tests to fail");
         });
         var loggingTests = new LoggingTests();
         var result = run(testableRunner(Stream.of(simpleTests, failingTests, loggingTests)));
@@ -34,7 +34,7 @@ public class AllTests {
         ));
         var docResult = run(Stream.of(simpleDocRunner, extraDocRunners.singleTestRunner, extraDocRunners.suiteTestsNoLogging));
         if (!docResult.succeeded) {
-            throw new RuntimeException("Documentation testables failed!");
+            throw new RuntimeException("Documentation tests failed!");
         }
     }
 }

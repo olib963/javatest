@@ -67,7 +67,7 @@ public class ComparableMatcherTests {
 
         @Override
         public boolean equals(Object o) {
-            throw new RuntimeException("We don't want equality testables on this class, just comparable testables");
+            throw new RuntimeException("We don't want equality tests on this class, just comparable tests");
         }
 
         @Override

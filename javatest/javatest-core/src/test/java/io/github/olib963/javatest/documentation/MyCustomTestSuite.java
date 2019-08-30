@@ -15,7 +15,7 @@ public class MyCustomTestSuite implements TestSuiteClass {
     @Override
     public Stream<Testable> testables() {
         return Stream.of(
-                // create testables
+                // create tests
         );
     }
 }

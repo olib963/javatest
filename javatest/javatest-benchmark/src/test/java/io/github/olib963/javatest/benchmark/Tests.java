@@ -12,7 +12,7 @@ public class Tests {
 
         var docResult = runSuite(new DocumentationTests());
         if (!docResult.succeeded) {
-            throw new RuntimeException("Documentation testables failed!");
+            throw new RuntimeException("Documentation tests failed!");
         }
     }
 }

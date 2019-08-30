@@ -55,10 +55,10 @@ public class DocumentationTests implements TestSuiteClass {
     public Stream<Testable> testables() {
         var bM = new MyBenchMarks();
         return Stream.of(
-                test("Passing testables pass", () -> {
+                test("Passing tests pass", () -> {
                     var singleTimedTests = Stream.of(bM.timedTest, new MyCustomBenchmark().timedTestCustomFormat);
                     var results = run(testableRunner(Stream.concat(bM.bunchOfTimedTests, singleTimedTests)));
-                    return that(results.succeeded, "All testables passed");
+                    return that(results.succeeded, "All tests passed");
                 }),
                 test("Failing test fails", () -> {
                     var results = runTests(Stream.of(new MyLimitedTest().failingTest));
