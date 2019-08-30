@@ -276,7 +276,7 @@ A JavaTest `Test` is defined by:
 
 [source, java]
 ----
-import io.github.olib963.javatest.testable.Test;
+import io.github.olib963.javatest.Testable.Test;
 import static io.github.olib963.javatest.JavaTest.*;
 
 public class MyTests {

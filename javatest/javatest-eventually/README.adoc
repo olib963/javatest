@@ -5,8 +5,7 @@ static imports to write tests that will eventually hold.
 
 [source, java]
 ----
-import static io.github.olib963.javatest.JavaTest.test;
-import static io.github.olib963.javatest.JavaTest.that;
+import static io.github.olib963.javatest.JavaTest.*;
 import static io.github.olib963.javatest.eventually.Eventually.eventually;
 
 public class EventualTest {
