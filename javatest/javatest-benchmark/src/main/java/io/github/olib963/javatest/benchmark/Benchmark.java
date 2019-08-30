@@ -53,19 +53,10 @@ public class Benchmark {
     }
 
     public static Stream<Testable> benchmarkAllTests(Stream<Testable> testables, Function<Duration, String> formatter) {
-        // TODO need to implement this one
-//        return testables.map(t -> new Testable() {
-//            @Override
-//            public Optional<String> suiteName() {
-//                return t.suiteName();
-//            }
-//
-//            @Override
-//            public Stream<Test> tests() {
-//                return t.tests().map(test -> benchmark(test, formatter));
-//            }
-//        });
-        return testables;
+        return testables.map(t -> t.match(
+                test -> benchmark(test, formatter),
+                testSuite -> JavaTest.suite(testSuite.name, benchmarkAllTests(testSuite.testables, formatter))
+        ));
     }
 
     public static TestRunner benchmark(Stream<TestRunner> runners) {
