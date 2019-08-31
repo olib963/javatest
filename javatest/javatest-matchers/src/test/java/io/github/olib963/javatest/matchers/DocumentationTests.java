@@ -6,6 +6,7 @@ import io.github.olib963.javatest.TestSuiteClass;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import static io.github.olib963.javatest.JavaTest.suite;
 import static io.github.olib963.javatest.JavaTest.test;
 
 // tag::import[]
@@ -95,8 +96,10 @@ public class DocumentationTests implements TestSuiteClass {
     @Override
     public Stream<Testable> testables() {
         return Stream.of(
-            new MatcherTests().matcherTests(), new MyExceptionTests().exceptionTests(), Stream.of(new TestTheUniverse().universeTest())
-        ).flatMap(Function.identity());
+                suite("Matcher Documentation tests", new MatcherTests().matcherTests()),
+                suite("Exception Documentation Tests", new MyExceptionTests().exceptionTests()),
+                suite("Custom Matcher Documentation Tests", Stream.of(new TestTheUniverse().universeTest()))
+        );
     }
 
 }
