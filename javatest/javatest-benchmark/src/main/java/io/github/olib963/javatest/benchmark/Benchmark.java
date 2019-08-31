@@ -52,7 +52,7 @@ public class Benchmark {
         return benchmarkAllTests(testables, DEFAULT_FORMAT);
     }
 
-    public static Stream<Testable> benchmarkAllTests(Stream<Testable> testables, Function<Duration, String> formatter) {
+    public static Stream<Testable> benchmarkAllTests(Stream<? extends Testable> testables, Function<Duration, String> formatter) {
         return testables.map(t -> t.match(
                 test -> benchmark(test, formatter),
                 testSuite -> JavaTest.suite(testSuite.name, benchmarkAllTests(testSuite.testables, formatter))
