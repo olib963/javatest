@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 * Extracted `onTestCompletion` and `onRunCompletion` to their own separate functional interfaces
 * Altered eventual consistency defaults to be quicker and more reasonable
 * `TestSuite` interface to `TestSuiteClass`
+* Handle suite results and single test results separately
 
 === Removed
 

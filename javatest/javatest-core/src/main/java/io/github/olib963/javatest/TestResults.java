@@ -29,7 +29,7 @@ public final class TestResults {
 
     public TestResults addResult(TestResult result) {
         return result.match(
-                // TODO this will not make use of the suite name in the logs. Perhaps changling the type structure sooner rather than later will help here.
+                // TODO this will not make use of the suite name in the logs. Perhaps changing the type structure sooner rather than later will help here.
                 suiteResult -> suiteResult.results().reduce(TestResults.init(), TestResults::addResult, TestResults::combine),
                 testResult -> {
                     var logs = new ArrayList<>(testLogs);

@@ -28,8 +28,9 @@ public class AllTests {
         var extraDocRunners = new MyRunners();
         var simpleDocRunner = testableRunner(Stream.of(
                 new AllDocumentationTests(),
-                new MyFirstTestSuite(),
-                new MyCustomTestSuite(),
+                MyFirstTestSuite.mySuite(),
+                new ClassAsSuite(),
+                SuiteOfSuites.compositeSuite(),
                 new MyPendingTests()
         ));
         var docResult = run(Stream.of(simpleDocRunner, extraDocRunners.singleTestRunner, extraDocRunners.suiteTestsNoLogging));
