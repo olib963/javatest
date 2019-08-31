@@ -14,12 +14,12 @@ public class Tests {
             throw new RuntimeException("Tests failed!");
         }
 
-        var allDocTests = Stream.of(
+        var palindromes = suite("Palindrome Tests", Stream.concat(
                 DocumentationTests.palindromes().inMemoryPalindromeTests(),
-                DocumentationTests.palindromes().palindromeTestsFromFile(),
-                DocumentationTests.fibonacci().fibonacciTests()
-        ).flatMap(Function.identity());
-        var docResult = runTests(allDocTests);
+                DocumentationTests.palindromes().palindromeTestsFromFile()
+        ));
+        var fibonacci = suite("Finonacci Tests", DocumentationTests.fibonacci().fibonacciTests());
+        var docResult = runTests(palindromes, fibonacci);
         if (!docResult.succeeded) {
             throw new RuntimeException("Documentation tests failed!");
         }

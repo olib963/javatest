@@ -1,38 +1,27 @@
 package io.github.olib963.javatest.eventually;
 
-import io.github.olib963.javatest.TestSuiteClass;
 import io.github.olib963.javatest.Testable;
 
 import java.time.Duration;
 import java.util.concurrent.ExecutorService;
-import java.util.stream.Stream;
 
 import static io.github.olib963.javatest.JavaTest.test;
 import static io.github.olib963.javatest.JavaTest.that;
 import static io.github.olib963.javatest.eventually.Eventually.eventually;
 
-public class InitialDelayTests implements TestSuiteClass {
-    private final ExecutorService executorService;
+public class InitialDelayTests {
 
-    public InitialDelayTests(ExecutorService executorService) {
-        this.executorService = executorService;
-    }
-
-    @Override
-    public Stream<Testable> testables() {
-        return Stream.of(
-                test("Initial delay", () -> {
-                    var failer = new FailIfNotSet();
-                    executorService.submit(() -> incrementTo3(failer));
-                    return eventually(() ->
+    public static Testable.Test delayTest(ExecutorService executorService) {
+        return test("Initial delay", () -> {
+            var failer = new FailIfNotSet();
+            executorService.submit(() -> incrementTo3(failer));
+            return eventually(() ->
                             that(failer.getValue() == 3, String.format("Expected %s to have value 3 set", failer)),
-                            EventualConfig.of(4, Duration.ofSeconds(1), Duration.ofSeconds(2))
-                    );
-                })
-        );
+                            EventualConfig.of(4, Duration.ofSeconds(1), Duration.ofSeconds(2)));
+            });
     }
 
-    private void incrementTo3(FailIfNotSet failer) {
+    private static void incrementTo3(FailIfNotSet failer) {
         for(int i = 1; i <=3; i++){
             try {
                 Thread.sleep(1000L);
@@ -43,7 +32,7 @@ public class InitialDelayTests implements TestSuiteClass {
         }
     }
 
-    private class FailIfNotSet {
+    private static class FailIfNotSet {
         private Integer value;
         public int getValue() {
             if(value == null){

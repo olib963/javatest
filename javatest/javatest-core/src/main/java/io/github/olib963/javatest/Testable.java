@@ -25,8 +25,8 @@ public interface Testable {
 
     final class TestSuite implements Testable {
         public final String name;
-        public final Stream<Testable> testables;
-        TestSuite(String name, Stream<Testable> testables) {
+        public final Stream<? extends Testable> testables;
+        TestSuite(String name, Stream<? extends Testable> testables) {
             this.name = name;
             this.testables = testables;
         }

@@ -1,7 +1,7 @@
 package io.github.olib963.javatest.benchmark;
 
-import io.github.olib963.javatest.TestSuiteClass;
 import io.github.olib963.javatest.Testable;
+import io.github.olib963.javatest.Testable.*;
 
 import java.time.Duration;
 import java.util.function.Function;
@@ -12,7 +12,7 @@ import static io.github.olib963.javatest.JavaTest.*;
 import static io.github.olib963.javatest.benchmark.Benchmark.*;
 // end::imports[]
 
-public class DocumentationTests implements TestSuiteClass {
+public class DocumentationTests {
 
     // tag::simple[]
     public class MyBenchMarks {
@@ -50,10 +50,9 @@ public class DocumentationTests implements TestSuiteClass {
     }
     // end::customFormat[]
 
-    @Override
-    public Stream<Testable> testables() {
+    public Testable testSuite() {
         var bM = new MyBenchMarks();
-        return Stream.of(
+        return suite("Documentation", Stream.of(
                 test("Passing tests pass", () -> {
                     var singleTimedTests = Stream.of(bM.timedTest, new MyCustomBenchmark().timedTestCustomFormat);
                     var results = run(testableRunner(Stream.concat(bM.bunchOfTimedTests, singleTimedTests)));
@@ -63,7 +62,7 @@ public class DocumentationTests implements TestSuiteClass {
                     var results = runTests(Stream.of(new MyLimitedTest().failingTest));
                     return that(!results.succeeded, "Test failed");
                 })
-        );
+        ));
     }
 
 }

@@ -30,14 +30,9 @@ public class EventuallyTests {
         }
 
         private Test atomicIntegerTest() {
-            return test("Atomic integer increment", () -> {
-                var integer = new AtomicInteger(1);
-                CheckedSupplier<Assertion> valueBecomes6 = () -> {
-                    int value = integer.getAndIncrement();
-                    return that(value == 6, "Atomic integer (" + value + ") is 6");
-                };
-                return eventually(valueBecomes6);
-            });
+            return test("Atomic integer increment", () ->
+                eventually(valueBecomes6(new AtomicInteger(1)))
+            );
         }
     }
 
@@ -55,14 +50,16 @@ public class EventuallyTests {
 
 
     private static Test atomicIntegerTest() {
-        return test("Atomic integer increment", () -> {
-            var integer = new AtomicInteger(1);
-            CheckedSupplier<Assertion> valueBecomes6 = () -> {
-                int value = integer.getAndIncrement();
-                return that(value == 6, "Atomic integer (" + value + ") is 6");
-            };
-            return eventually(valueBecomes6, DEFAULT_CONFIG.withAttempts(5));
-        });
+        return test("Atomic integer increment", () ->
+            eventually(valueBecomes6(new AtomicInteger(1)), DEFAULT_CONFIG.withAttempts(5))
+        );
+    }
+
+    private static CheckedSupplier<Assertion> valueBecomes6(AtomicInteger integer) {
+        return () -> {
+            int value = integer.getAndIncrement();
+            return that(value == 6, "Atomic integer (" + value + ") is 6");
+        };
     }
 
 }

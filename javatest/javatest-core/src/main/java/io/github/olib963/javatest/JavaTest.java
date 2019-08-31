@@ -34,13 +34,12 @@ public class JavaTest {
     public static TestResults runTests(Testable tests) {
         return runTests(Stream.of(tests));
     }
+    public static TestResults runTests(Testable firstTest, Testable... tests) {
+        return runTests(Stream.concat(Stream.of(firstTest), Arrays.stream(tests)));
+    }
 
     public static TestResults runTests(Stream<? extends Testable> tests) {
         return run(testableRunner(tests));
-    }
-
-    public static TestResults runSuite(TestSuiteClass suite) {
-        return run(testableRunner(Stream.of(suite)));
     }
 
     // Stream Runner factory methods
@@ -64,7 +63,7 @@ public class JavaTest {
         return new Testable.Test(name, testFunction);
     }
 
-    public static Testable.TestSuite suite(String name, Stream<Testable> testables) {
+    public static Testable.TestSuite suite(String name, Stream<? extends Testable> testables) {
         return new Testable.TestSuite(name, testables);
     }
 
