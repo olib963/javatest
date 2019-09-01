@@ -354,6 +354,34 @@ JavaTest is built on a simple functional core and functionality is expanded on b
 * link:javatest/javatest-eventually[Eventual Consistency]
 * link:javatest/javatest-junit[JUnit]
 
+== Functional Interfaces
+
+Where possible interfaces are ``@FunctionalInterface``s so can be replaced with lambdas when you feel it fits. This is true for:
+
+* ``Assertion``s
+
+[source, java]
+----
+include::../src/test/java/io/github/olib963/javatest/documentation/functions/FunctionalAssertions.java[tags=include]
+----
+
+* ``TestRunner``s
+
+[source, java]
+----
+include::../src/test/java/io/github/olib963/javatest/documentation/functions/FunctionalRunners.java[tags=include]
+----
+
+* ``TestCompletionObserver``s and ``TestRunCompletionObserver``s
+
+[source, java]
+----
+include::../src/test/java/io/github/olib963/javatest/documentation/functions/FunctionalObservers.java[tags=include]
+----
+
+In the cases where this is not possible (e.g. ``Matcher``s or ``FixtureDefinition``s) static factories will be
+provided to construct an instance of the interface from appropriate functions.
+
 == Future Features
 
 Features I would like to look at implementing in the future:

@@ -30,9 +30,11 @@ public abstract class TestResult {
     }
 
     public static class SingleTestResult extends TestResult {
+        public final String name;
         public final AssertionResult result;
         private final Collection<String> testLogs;
-        public SingleTestResult(AssertionResult result, Collection<String> testLogs) {
+        public SingleTestResult(String name, AssertionResult result, Collection<String> testLogs) {
+            this.name = name;
             this.result = result;
             this.testLogs = testLogs;
         }

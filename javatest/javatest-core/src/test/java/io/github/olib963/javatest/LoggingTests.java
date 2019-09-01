@@ -16,7 +16,7 @@ import static io.github.olib963.javatest.JavaTest.that;
 
 public class LoggingTests implements TestSuiteClass {
 
-    private final TestResult PENDING_TEST_RESULT = new TestResult.SingleTestResult(AssertionResult.pending(""), Collections.emptyList());
+    private final TestResult PENDING_TEST_RESULT = new TestResult.SingleTestResult("Pending", AssertionResult.pending(""), Collections.emptyList());
 
     @Override
     public Stream<Testable> testables() {
@@ -39,8 +39,8 @@ public class LoggingTests implements TestSuiteClass {
                 test("Test logging observer", () -> {
                     var stream = new TestStream();
                     var testLog = "My Test has completed!";
-                    var expectedLog = testLog + "\\n";
-                    var result = new TestResult.SingleTestResult(AssertionResult.success(""), List.of(testLog));
+                    var expectedLog = "My Test:\\n\\t" + testLog + "\\n";
+                    var result = new TestResult.SingleTestResult("My Test", AssertionResult.success(""), List.of(testLog));
 
                     var logger = new TestLoggingObserver(false, stream.printStream());
                     logger.onTestCompletion(result);
@@ -52,8 +52,8 @@ public class LoggingTests implements TestSuiteClass {
                 test("Test logging observer (with colour)", () -> {
                     var stream = new TestStream();
                     var testLog = "My Test has completed!";
-                    var expectedLog = ESCAPED_GREEN_CODE + testLog + "\\n" + ESCAPED_RESET_CODE;
-                    var result = new TestResult.SingleTestResult(AssertionResult.success(""), List.of(testLog));
+                    var expectedLog = ESCAPED_GREEN_CODE + "My Test:\\n\\t" + testLog + "\\n" + ESCAPED_RESET_CODE;
+                    var result = new TestResult.SingleTestResult("My Test", AssertionResult.success(""), List.of(testLog));
 
                     var logger = new TestLoggingObserver(true, stream.printStream());
                     logger.onTestCompletion(result);
@@ -93,6 +93,7 @@ public class LoggingTests implements TestSuiteClass {
         return input
                 .replace(Colour.RESET_CODE, ESCAPED_RESET_CODE)
                 .replace(Colour.GREEN.getCode(), ESCAPED_GREEN_CODE)
+                .replace("\t", "\\t")
                 .replace("\n", "\\n");
     }
 

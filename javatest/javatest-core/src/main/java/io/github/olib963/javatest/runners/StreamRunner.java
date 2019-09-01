@@ -46,14 +46,8 @@ public class StreamRunner implements TestRunner {
 
     private TestResult runTest(Testable.Test test) {
         var result = safeRunTest(test.test);
-        var logs = Stream.concat(
-                Stream.of(test.name + ':'),
-                Stream.concat(
-                        Stream.of("\t" + result.description),
-                        result.logs().map(s -> "\t" + s)
-                )
-        );
-        return new TestResult.SingleTestResult(result, logs.collect(Collectors.toList()));
+        var logs = Stream.concat(Stream.of(result.description), result.logs());
+        return new TestResult.SingleTestResult(test.name, result, logs.collect(Collectors.toList()));
     }
 
     private AssertionResult safeRunTest(CheckedSupplier<Assertion> test) {
