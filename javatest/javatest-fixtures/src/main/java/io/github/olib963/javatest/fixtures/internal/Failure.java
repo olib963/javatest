@@ -18,14 +18,14 @@ public class Failure<A> implements Try<A> {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked") // Failure can be a Try of any type safely
     public <B> Try<B> map(Function<A, B> f) {
         return (Try<B>) this;
     }
 
 
     @Override
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked") // Failure can be a Try of any type safely
     public <B> Try<B> flatMap(Function<A, Try<B>> f) {
         return (Try<B>) this;
     }
