@@ -8,6 +8,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static io.github.olib963.javatest.logging.RunLoggingObserver.SEPARATOR;
+
 public class TestLoggingObserver implements TestCompletionObserver {
 
     public static final TestCompletionObserver COLOUR = new TestLoggingObserver(true, System.out);
@@ -25,7 +27,7 @@ public class TestLoggingObserver implements TestCompletionObserver {
     public void onTestCompletion(TestResult result) {
         toLogMessages(result).forEach(logMessage -> {
             logMessage.colour.ifPresent(c -> stream.print(c.getCode()));
-            stream.println(logMessage.logs.collect(Collectors.joining("\n")));
+            stream.println(logMessage.logs.collect(Collectors.joining(SEPARATOR)));
             logMessage.colour.ifPresent(c -> stream.print(Colour.RESET_CODE));
         });
     }
@@ -34,21 +36,23 @@ public class TestLoggingObserver implements TestCompletionObserver {
     Stream<LogMessage> toLogMessages(TestResult result) {
         return result.match(
                 suiteResult -> Stream.concat(
-                        // TODO colour for suites
                         Stream.of(new LogMessage(Stream.of(suiteResult.suiteName + ':'))),
                         suiteResult.results().flatMap(this::toLogMessages).map(LogMessage::indent)
                     ),
                 singleTestResult -> {
+                    var logs = Stream.concat(
+                            Stream.of(singleTestResult.name + ':'),
+                            LogMessage.indent(singleTestResult.logs()));
                     if (useColour) {
-                       return Stream.of(new LogMessage(singleTestResult.logs(), Colour.forResult(singleTestResult.result)));
+                       return Stream.of(new LogMessage(logs, Colour.forResult(singleTestResult.result)));
                     } else {
-                        return Stream.of(new LogMessage(singleTestResult.logs()));
+                        return Stream.of(new LogMessage(logs));
                     }
                 }
         );
     }
 
-    private class LogMessage {
+    private static class LogMessage {
         final Stream<String> logs;
         final Optional<Colour> colour;
 
@@ -63,7 +67,11 @@ public class TestLoggingObserver implements TestCompletionObserver {
             this(logs, Optional.empty());
         }
         private LogMessage indent() {
-            return new LogMessage(logs.map(s -> "\t" + s), colour);
+            return new LogMessage(indent(logs), colour);
+        }
+
+        private static Stream<String> indent(Stream<String> logs) {
+            return logs.map(s -> "\t" + s);
         }
     }
 
