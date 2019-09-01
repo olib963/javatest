@@ -68,9 +68,16 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.8.0</version>
+                    <version>3.8.1</version>
                     <configuration>
                         <release>11</release>
+                        <compilerArgs>
+                            <!-- Error on any compiler warnings -->
+                            <arg>-Xlint:all</arg>
+                            <arg>-Xlint:-processing</arg>
+                            <arg>-Xlint:-serial</arg>
+                            <arg>-Werror</arg>
+                        </compilerArgs>
                     </configuration>
                 </plugin>
             </plugins>
