@@ -2,6 +2,7 @@ package io.github.olib963.javatest;
 
 import io.github.olib963.javatest.assertions.CompositeAssertion;
 
+@FunctionalInterface
 public interface Assertion {
     AssertionResult run();
 
