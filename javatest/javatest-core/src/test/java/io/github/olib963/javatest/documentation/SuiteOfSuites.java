@@ -9,7 +9,7 @@ import static io.github.olib963.javatest.JavaTest.*;
 
 public class SuiteOfSuites {
 
-    // A suite composed of one test and one suite
+    // A suite composed of one test and two suites
     public static TestSuite compositeSuite() {
         return suite("MyComposedTests",
                 Stream.of(

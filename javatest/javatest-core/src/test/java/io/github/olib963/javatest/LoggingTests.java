@@ -91,7 +91,6 @@ public class LoggingTests implements TestSuiteClass {
 
     private String escapeSpecial(String input) {
         return input
-                .replace("\\", "\\\\")
                 .replace(Colour.RESET_CODE, ESCAPED_RESET_CODE)
                 .replace(Colour.GREEN.getCode(), ESCAPED_GREEN_CODE)
                 .replace("\n", "\\n");

@@ -32,9 +32,10 @@ public class BenchmarkAssertion implements Assertion {
         var result = assertion.run();
         var timeTaken = timeFunction.get();
         // TODO it would be nice to have more structured logs in tests rather than Strings
-        // Maybe even somehow extensible with types like some heterogeneous context? This may make aggregating easier since the types would be corrects
+        // Maybe even somehow extensible with types like some heterogeneous context? This may make aggregating easier since the types would be correct
         var timeLog = "Test took " + formatter.apply(timeTaken);
-        var wrappedAssertion = AssertionResult.of(result.holds, result.description, Collections.singletonList(timeLog));
+        var newLogs = Stream.concat(result.logs(), Stream.of(timeLog)).collect(Collectors.toList());
+        var wrappedAssertion = AssertionResult.of(result.holds, result.description, newLogs);
         return testLimit
                 .map(limit -> compareTimeToLimit(limit, timeTaken, wrappedAssertion))
                 .orElse(wrappedAssertion);
