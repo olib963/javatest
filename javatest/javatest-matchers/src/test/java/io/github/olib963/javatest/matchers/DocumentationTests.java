@@ -1,11 +1,12 @@
 package io.github.olib963.javatest.matchers;
 
-import io.github.olib963.javatest.Test;
-import io.github.olib963.javatest.TestSuite;
+import io.github.olib963.javatest.Testable;
+import io.github.olib963.javatest.TestSuiteClass;
 
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import static io.github.olib963.javatest.JavaTest.suite;
 import static io.github.olib963.javatest.JavaTest.test;
 
 // tag::import[]
@@ -18,7 +19,7 @@ import static io.github.olib963.javatest.matchers.StringMatchers.*;
 import static io.github.olib963.javatest.matchers.ExceptionMatchers.*;
 // end::exceptionImport[]
 
-public class DocumentationTests implements TestSuite {
+public class DocumentationTests implements TestSuiteClass {
 
     // tag::simpleTests[]
     public class MatcherTests {
@@ -93,10 +94,12 @@ public class DocumentationTests implements TestSuite {
     // end::customMatcher[]
 
     @Override
-    public Stream<Test> tests() {
+    public Stream<Testable> testables() {
         return Stream.of(
-            new MatcherTests().matcherTests(), new MyExceptionTests().exceptionTests(), Stream.of(new TestTheUniverse().universeTest())
-        ).flatMap(Function.identity());
+                suite("Matcher Documentation tests", new MatcherTests().matcherTests()),
+                suite("Exception Documentation Tests", new MyExceptionTests().exceptionTests()),
+                suite("Custom Matcher Documentation Tests", Stream.of(new TestTheUniverse().universeTest()))
+        );
     }
 
 }

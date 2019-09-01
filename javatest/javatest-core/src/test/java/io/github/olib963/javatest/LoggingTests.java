@@ -7,17 +7,19 @@ import io.github.olib963.javatest.logging.TestLoggingObserver;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static io.github.olib963.javatest.JavaTest.test;
 import static io.github.olib963.javatest.JavaTest.that;
 
-public class LoggingTests implements TestSuite {
+public class LoggingTests implements TestSuiteClass {
 
-    private final TestResult PENDING_TEST_RESULT = new TestResult(AssertionResult.pending(""), "");
+    private final TestResult PENDING_TEST_RESULT = new TestResult.SingleTestResult(AssertionResult.pending(""), Collections.emptyList());
 
     @Override
-    public Stream<Test> tests() {
+    public Stream<Testable> testables() {
         return Stream.of(
                 test("Run logging observer", () -> {
                     var stream = new TestStream();
@@ -25,38 +27,38 @@ public class LoggingTests implements TestSuite {
                     var results = TestResults.from(10, 20)
                             .addResult(PENDING_TEST_RESULT)
                             .addResult(PENDING_TEST_RESULT);
-                    var expectedLog = "Ran a total of 32 tests.\n20 succeeded\n10 failed\n2 were pending\n";
+                    var expectedLog = "Ran a total of 32 tests.\\n20 succeeded\\n10 failed\\n2 were pending\\n";
 
                     var logger = new RunLoggingObserver(stream.printStream());
                     logger.onRunCompletion(results);
 
-                    var actualLog = stream.string();
+                    var actualLog = escapeSpecial(stream.string());
                     var message = String.format("Expected log message to be {%s} and it was {%s}", expectedLog, actualLog);
                     return that(actualLog.equals(expectedLog), message);
                 }),
                 test("Test logging observer", () -> {
                     var stream = new TestStream();
                     var testLog = "My Test has completed!";
-                    var expectedLog = testLog + "\n";
-                    var result = new TestResult(AssertionResult.success(""), testLog);
+                    var expectedLog = testLog + "\\n";
+                    var result = new TestResult.SingleTestResult(AssertionResult.success(""), List.of(testLog));
 
                     var logger = new TestLoggingObserver(false, stream.printStream());
                     logger.onTestCompletion(result);
 
-                    var actualLog = stream.string();
+                    var actualLog = escapeSpecial(stream.string());
                     var message = String.format("Expected log message to be {%s} and it was {%s}", expectedLog, actualLog);
                     return that(actualLog.equals(expectedLog), message);
                 }),
                 test("Test logging observer (with colour)", () -> {
                     var stream = new TestStream();
                     var testLog = "My Test has completed!";
-                    var expectedLog = Colour.GREEN.getCode() + testLog + Colour.RESET_CODE +"\n";
-                    var result = new TestResult(AssertionResult.success(""), testLog);
+                    var expectedLog = ESCAPED_GREEN_CODE + testLog + "\\n" + ESCAPED_RESET_CODE;
+                    var result = new TestResult.SingleTestResult(AssertionResult.success(""), List.of(testLog));
 
                     var logger = new TestLoggingObserver(true, stream.printStream());
                     logger.onTestCompletion(result);
 
-                    var actualLog = stream.string();
+                    var actualLog = escapeSpecial(stream.string());
                     var message = String.format("Expected log message to be {%s} and it was {%s}", expectedLog, actualLog);
                     return that(actualLog.equals(expectedLog), message);
                 }),
@@ -82,6 +84,16 @@ public class LoggingTests implements TestSuite {
         private String string() {
             return new String(baos.toByteArray(), StandardCharsets.UTF_8);
         }
+    }
+
+    private static final String ESCAPED_RESET_CODE = "\\u001B[0m";
+    private static final String ESCAPED_GREEN_CODE = "\\u001B[32m";
+
+    private String escapeSpecial(String input) {
+        return input
+                .replace(Colour.RESET_CODE, ESCAPED_RESET_CODE)
+                .replace(Colour.GREEN.getCode(), ESCAPED_GREEN_CODE)
+                .replace("\n", "\\n");
     }
 
 }

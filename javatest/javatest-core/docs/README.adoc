@@ -136,7 +136,7 @@ toc::[]
 * `TestRunner`: implements the running of tests and returns `TestResults`
 * `Testable`: wrapper around one of:
 ** `Test`: a named instance of a test, each test must return an `Assertion`
-** `TestSuite`: logical collection of a stream of ``Test``s
+** `TestSuite`: logical collection of a stream of ``Testable``s
 * `Assertion`: represents the expected state at the end of a test
 * `TestResults`: represents the combined result of your tests
 
@@ -176,21 +176,31 @@ The test will fail if the `Supplier` throws any exception at all. Please see <<N
 
 === Test Suites
 
-You can group your ``Test``s into logical units using ``TestSuite``s
+You can group your ``Test``s into logical units using ``TestSuite``s.
 
 [source, java]
 ----
 include::../src/test/java/io/github/olib963/javatest/documentation/MyFirstTestSuite.java[tags=include]
 ----
 
-==== Suite Names
+==== Suite Classes
 
-By default a `TestSuite` will just use its own class name as the suite name, making ``Test``s easier to locate. You can however
-change this behaviour if you wish:
+A common use case will be to use a class to store your tests, to do this simply implement `TestSuiteClass`. Your class
+will then be able to be used anywhere you would use a `Testable` e.g. adding to another `TestSuite` or passing
+to JavaTests run functions. The name of the suite will be the name of the class.
 
 [source, java]
 ----
-include::../src/test/java/io/github/olib963/javatest/documentation/MyCustomTestSuite.java[tags=include]
+include::../src/test/java/io/github/olib963/javatest/documentation/ClassAsSuite.java[tags=include]
+----
+
+==== Suite Nesting
+
+``TestSuite``s contain ``Testable``s not ``Test``s and thus can even be contain other ``TestSuite``s.
+
+[source, java]
+----
+include::../src/test/java/io/github/olib963/javatest/documentation/SuiteOfSuites.java[tags=include]
 ----
 
 === Pending Tests
@@ -295,7 +305,7 @@ import io.github.olib963.javatest.*;
 import static io.github.olib963.javatest.JavaTest.*;
 
 TestResults runTest(CheckedSupplier<Assertion> testFn) {
-    return runTests(Stream.of(test("JShell test", testFn)));
+    return runTests(test("JShell test", testFn));
 }
 ----
 

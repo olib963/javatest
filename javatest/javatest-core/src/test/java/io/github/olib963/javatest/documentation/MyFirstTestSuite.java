@@ -1,19 +1,18 @@
 package io.github.olib963.javatest.documentation;
 
 // tag::include[]
-import io.github.olib963.javatest.*;
+import io.github.olib963.javatest.Testable.TestSuite;
+
 import java.util.stream.Stream;
 
 import static io.github.olib963.javatest.JavaTest.*;
 
-public class MyFirstTestSuite implements TestSuite {
+public class MyFirstTestSuite {
 
-    @Override
-    public Stream<Test> tests() {
-        return Stream.of(
+    public static TestSuite mySuite() {
+        return suite("MyTests", Stream.of(
                 test("Simple Test", () -> that(true, "Expected test to pass"))
-        );
+        ));
     }
-
 }
 // end::include[]

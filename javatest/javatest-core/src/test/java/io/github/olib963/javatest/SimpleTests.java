@@ -10,10 +10,10 @@ public class SimpleTests {
         return new PassingTests();
     }
 
-    static class PassingTests implements TestSuite {
+    static class PassingTests implements TestSuiteClass {
 
         @Override
-        public Stream<Test> tests() {
+        public Stream<Testable> testables() {
             return Stream.of(
                     test("Simple test", () -> that(true, "Expected true to be true")),
                     test("Pending test that has yet to be written", JavaTest::pending),
@@ -36,7 +36,7 @@ public class SimpleTests {
         }
     }
 
-    public static final Stream<Test> FAILING = Stream.of(
+    public static final Stream<Testable.Test> FAILING = Stream.of(
             test("Simple test (FAIL)", () -> that(false, "Expected false to be true")),
             test("And test 1 (FAIL)", () -> that(false, "Expected false").and(that(false, "Expected false"))),
             test("And test 2 (FAIL)", () -> that(true, "Expected true").and(that(false, "Expected false"))),

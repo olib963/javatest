@@ -1,8 +1,8 @@
 package io.github.olib963.javatest.eventually.documentation;
 
 import io.github.olib963.javatest.Assertion;
-import io.github.olib963.javatest.Test;
-import io.github.olib963.javatest.TestSuite;
+import io.github.olib963.javatest.TestSuiteClass;
+import io.github.olib963.javatest.Testable;
 import io.github.olib963.javatest.eventually.EventualConfig;
 
 import java.time.Duration;
@@ -14,7 +14,7 @@ import static io.github.olib963.javatest.JavaTest.that;
 import static io.github.olib963.javatest.eventually.Eventually.eventually;
 // end::imports[]
 
-public class ConfigDocumentationTests implements TestSuite {
+public class ConfigDocumentationTests implements TestSuiteClass {
 
     // tag::config[]
     public class MyCustomEventualAssertions {
@@ -38,7 +38,7 @@ public class ConfigDocumentationTests implements TestSuite {
     // end::config[]
 
     @Override
-    public Stream<Test> tests() {
+    public Stream<Testable> testables() {
         var container = new MyCustomEventualAssertions();
         return Stream.of(
                 test("Default config should work", () -> container.attempt20TimesAndWait100Millis),

@@ -6,6 +6,7 @@ import io.github.olib963.javatest.TestResults;
 import io.github.olib963.javatest.TestRunner;
 import io.github.olib963.javatest.fixtures.FixtureDefinition;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -39,7 +40,7 @@ public class FixtureRunner<Fixture> implements TestRunner {
     }
 
     private TestResult exceptionToResult(Exception e) {
-        return new TestResult(AssertionResult.exception(e), flattenMessages(e));
+        return new TestResult.SingleTestResult(AssertionResult.exception(e), List.of(flattenMessages(e)));
     }
 
     private String flattenMessages(Throwable t) {

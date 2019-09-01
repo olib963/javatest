@@ -12,13 +12,11 @@ public class AllTests {
 
     public static void main(String... args) {
         var simpleTests = SimpleTests.passing();
-        var failingTests = test("Failing Tests", () -> {
-            var passingTests = SimpleTests.FAILING
-                    .map(t -> run(Stream.of(testableRunner(t)), Collections.emptyList()))
-                    .filter(r -> r.succeeded)
-                    .collect(Collectors.toList());
-            return that(passingTests.isEmpty(), "Expected all 'failing' tests to fail");
-        });
+        var failingTests = suite("Failing Tests", SimpleTests.FAILING.map(t ->
+                test(t.name, () -> {
+                    var results = run(Stream.of(testableRunner(t)), Collections.emptyList());
+                    return that(!results.succeeded, t.name + " should fail");
+                })));
         var loggingTests = new LoggingTests();
         var result = run(testableRunner(Stream.of(simpleTests, failingTests, loggingTests)));
         if (!result.succeeded) {
@@ -28,8 +26,9 @@ public class AllTests {
         var extraDocRunners = new MyRunners();
         var simpleDocRunner = testableRunner(Stream.of(
                 new AllDocumentationTests(),
-                new MyFirstTestSuite(),
-                new MyCustomTestSuite(),
+                MyFirstTestSuite.mySuite(),
+                new ClassAsSuite(),
+                SuiteOfSuites.compositeSuite(),
                 new MyPendingTests()
         ));
         var docResult = run(Stream.of(simpleDocRunner, extraDocRunners.singleTestRunner, extraDocRunners.suiteTestsNoLogging));

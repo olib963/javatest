@@ -2,6 +2,7 @@ package io.github.olib963.javatest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public final class TestResults {
     public final boolean succeeded;
@@ -27,15 +28,21 @@ public final class TestResults {
     }
 
     public TestResults addResult(TestResult result) {
-        var logs = new ArrayList<>(testLogs);
-        logs.add(result.testLog);
-        var assertionResult = result.result;
-        if (assertionResult.pending) {
-            return new TestResults(succeeded, successCount, failureCount, pendingCount + 1, logs);
-        } else if (assertionResult.holds) {
-            return new TestResults(succeeded, successCount + 1, failureCount, pendingCount, logs);
-        }
-        return new TestResults(false, successCount, failureCount + 1, pendingCount, logs);
+        return result.match(
+                // TODO this will not make use of the suite name in the logs. Perhaps changing the type structure sooner rather than later will help here.
+                suiteResult -> suiteResult.results().reduce(TestResults.init(), TestResults::addResult, TestResults::combine),
+                testResult -> {
+                    var logs = new ArrayList<>(testLogs);
+                    logs.addAll(testResult.logs().collect(Collectors.toList()));
+                    var assertionResult = testResult.result;
+                    if (assertionResult.pending) {
+                        return new TestResults(succeeded, successCount, failureCount, pendingCount + 1, logs);
+                    } else if (assertionResult.holds) {
+                        return new TestResults(succeeded, successCount + 1, failureCount, pendingCount, logs);
+                    }
+                    return new TestResults(false, successCount, failureCount + 1, pendingCount, logs);
+                }
+        );
     }
 
     public TestResults combine(TestResults results) {

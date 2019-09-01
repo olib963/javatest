@@ -1,6 +1,6 @@
 package io.github.olib963.javatest.parameterised;
 
-import io.github.olib963.javatest.Test;
+import io.github.olib963.javatest.Testable.Test;
 import io.github.olib963.javatest.parameterised.functions.*;
 import io.github.olib963.javatest.parameterised.tuples.*;
 

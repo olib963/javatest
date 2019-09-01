@@ -31,12 +31,15 @@ public class JavaTest {
         return run(Stream.concat(Stream.of(firstRunner), Arrays.stream(moreRunners)));
     }
 
-    public static TestResults runTests(Stream<Test> tests) {
-        return run(testableRunner(tests.map(t -> t)));
+    public static TestResults runTests(Testable tests) {
+        return runTests(Stream.of(tests));
+    }
+    public static TestResults runTests(Testable firstTest, Testable... tests) {
+        return runTests(Stream.concat(Stream.of(firstTest), Arrays.stream(tests)));
     }
 
-    public static TestResults runSuite(TestSuite suite) {
-        return run(testableRunner(Stream.of(suite)));
+    public static TestResults runTests(Stream<? extends Testable> tests) {
+        return run(testableRunner(tests));
     }
 
     // Stream Runner factory methods
@@ -47,17 +50,21 @@ public class JavaTest {
         return testableRunner(Stream.of(testable));
     }
 
-    public static TestRunner testableRunner(Stream<Testable> tests) {
+    public static TestRunner testableRunner(Stream<? extends Testable> tests) {
         return testableRunner(tests, DEFAULT_OBSERVER);
     }
 
-    public static TestRunner testableRunner(Stream<Testable> tests, Collection<TestCompletionObserver> observers) {
+    public static TestRunner testableRunner(Stream<? extends Testable> tests, Collection<TestCompletionObserver> observers) {
         return new StreamRunner(tests, observers);
     }
 
     // Test factory methods
-    public static Test test(String name, CheckedSupplier<Assertion> testFunction) {
-        return new Test(name, testFunction);
+    public static Testable.Test test(String name, CheckedSupplier<Assertion> testFunction) {
+        return new Testable.Test(name, testFunction);
+    }
+
+    public static Testable.TestSuite suite(String name, Stream<? extends Testable> testables) {
+        return new Testable.TestSuite(name, testables);
     }
 
     public static Assertion that(boolean asserted, String description) {

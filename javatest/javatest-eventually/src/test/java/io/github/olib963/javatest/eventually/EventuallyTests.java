@@ -1,6 +1,7 @@
 package io.github.olib963.javatest.eventually;
 
 import io.github.olib963.javatest.*;
+import io.github.olib963.javatest.Testable.Test;
 
 import java.time.Duration;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -12,13 +13,13 @@ import static io.github.olib963.javatest.eventually.Eventually.eventually;
 
 public class EventuallyTests {
 
-    public static TestSuite passing() {
+    public static TestSuiteClass passing() {
         return new PassingTests();
     }
 
-    static class PassingTests implements TestSuite {
+    static class PassingTests implements TestSuiteClass {
         @Override
-        public Stream<Test> tests() {
+        public Stream<Testable> testables() {
             var simpleTests = Stream.of(
                     JavaTest.test("Simple pass", () -> eventually(() -> that(true, "should pass"))),
                     test("Eventually pending", () -> eventually(() -> pending("have not yet written eventual condition")))
@@ -29,14 +30,9 @@ public class EventuallyTests {
         }
 
         private Test atomicIntegerTest() {
-            return test("Atomic integer increment", () -> {
-                var integer = new AtomicInteger(1);
-                CheckedSupplier<Assertion> valueBecomes6 = () -> {
-                    int value = integer.getAndIncrement();
-                    return that(value == 6, "Atomic integer (" + value + ") is 6");
-                };
-                return eventually(valueBecomes6);
-            });
+            return test("Atomic integer increment", () ->
+                eventually(valueBecomes6(new AtomicInteger(1)))
+            );
         }
     }
 
@@ -54,14 +50,16 @@ public class EventuallyTests {
 
 
     private static Test atomicIntegerTest() {
-        return test("Atomic integer increment", () -> {
-            var integer = new AtomicInteger(1);
-            CheckedSupplier<Assertion> valueBecomes6 = () -> {
-                int value = integer.getAndIncrement();
-                return that(value == 6, "Atomic integer (" + value + ") is 6");
-            };
-            return eventually(valueBecomes6, DEFAULT_CONFIG.withAttempts(5));
-        });
+        return test("Atomic integer increment", () ->
+            eventually(valueBecomes6(new AtomicInteger(1)), DEFAULT_CONFIG.withAttempts(5))
+        );
+    }
+
+    private static CheckedSupplier<Assertion> valueBecomes6(AtomicInteger integer) {
+        return () -> {
+            int value = integer.getAndIncrement();
+            return that(value == 6, "Atomic integer (" + value + ") is 6");
+        };
     }
 
 }

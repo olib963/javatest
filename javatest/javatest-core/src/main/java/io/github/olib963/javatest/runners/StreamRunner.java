@@ -3,16 +3,15 @@ package io.github.olib963.javatest.runners;
 import io.github.olib963.javatest.*;
 
 import java.util.Collection;
-import java.util.Optional;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.github.olib963.javatest.logging.RunLoggingObserver.SEPARATOR;
-
 public class StreamRunner implements TestRunner {
-    private final Stream<Testable> tests;
+    private final Stream<? extends Testable> tests;
     private final Collection<TestCompletionObserver> observers;
 
-    public StreamRunner(Stream<Testable> tests, Collection<TestCompletionObserver> observers) {
+    public StreamRunner(Stream<? extends Testable> tests, Collection<TestCompletionObserver> observers) {
         this.tests = tests;
         this.observers = observers;
     }
@@ -21,21 +20,40 @@ public class StreamRunner implements TestRunner {
     public TestResults run() {
         return tests
                 .map(this::runTestable)
-                .reduce(TestResults.init(), TestResults::combine);
-    }
-
-    private TestResults runTestable(Testable testable) {
-        return testable.tests().map(test -> runTest(testable.suiteName(), test))
                 .reduce(TestResults.init(), TestResults::addResult, TestResults::combine);
     }
 
-    private TestResult runTest(Optional<String> suiteName, Test test) {
+    private TestResult runTestable(Testable testable) {
+        return testable.match(
+                test -> {
+                    var result = runTest(test);
+                    observers.forEach(o -> o.onTestCompletion(result));
+                    return result;
+                },
+                suite -> {
+                    var result = runSuite(suite);
+                    observers.forEach(o -> o.onTestCompletion(result));
+                    return result;
+                }
+        );
+    }
+
+    private TestResult runSuite(Testable.TestSuite suite) {
+        var results = suite.testables.map(t -> t.match(this::runTest, this::runSuite));
+        return new TestResult.SuiteResult(suite.name, results.collect(Collectors.toList()));
+
+    }
+
+    private TestResult runTest(Testable.Test test) {
         var result = safeRunTest(test.test);
-        var log = test.name + SEPARATOR + "\t" + result.description;
-        var withSuite = suiteName.map(n -> n + ':' + log).orElse(log);
-        var testResult = new TestResult(result, withSuite);
-        observers.forEach(o -> o.onTestCompletion(testResult));
-        return testResult;
+        var logs = Stream.concat(
+                Stream.of(test.name + ':'),
+                Stream.concat(
+                        Stream.of("\t" + result.description),
+                        result.logs().map(s -> "\t" + s)
+                )
+        );
+        return new TestResult.SingleTestResult(result, logs.collect(Collectors.toList()));
     }
 
     private AssertionResult safeRunTest(CheckedSupplier<Assertion> test) {

@@ -1,12 +1,11 @@
 package io.github.olib963.javatest.eventually.documentation;
 
-import io.github.olib963.javatest.Test;
+import io.github.olib963.javatest.Testable.Test;
 
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 // tag::content[]
-import static io.github.olib963.javatest.JavaTest.test;
-import static io.github.olib963.javatest.JavaTest.that;
+import static io.github.olib963.javatest.JavaTest.*;
 import static io.github.olib963.javatest.eventually.Eventually.eventually;
 
 public class EventualTest {

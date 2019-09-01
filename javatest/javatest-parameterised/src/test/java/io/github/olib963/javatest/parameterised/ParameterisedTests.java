@@ -1,23 +1,21 @@
 package io.github.olib963.javatest.parameterised;
 
-import io.github.olib963.javatest.Test;
-import io.github.olib963.javatest.TestSuite;
+import io.github.olib963.javatest.TestSuiteClass;
+import io.github.olib963.javatest.Testable;
 
 import java.util.Arrays;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
-import static io.github.olib963.javatest.JavaTest.test;
-import static io.github.olib963.javatest.JavaTest.that;
+import static io.github.olib963.javatest.JavaTest.*;
 import static io.github.olib963.javatest.parameterised.Parameterised.parameterised;
 
-public class ParameterisedTests implements TestSuite {
+public class ParameterisedTests implements TestSuiteClass {
     @Override
-    public Stream<Test> tests() {
+    public Stream<Testable> testables() {
         return Stream.of(
-                parameterised(Data.multiplication(), this::multiplicationTest),
-                parameterised(Data.madAddition(), this::additionTest)
-        ).flatMap(Function.identity());
+                suite("Multiplication", parameterised(Data.multiplication(), this::multiplicationTest)),
+                suite("Mad addition Tests", parameterised(Data.madAddition(), this::additionTest))
+        );
     }
 
     private Test multiplicationTest(int m1, int m2, int eq) {

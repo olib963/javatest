@@ -169,20 +169,20 @@ An example of a test suite:
 
 [source, java]
 ----
-import io.github.olib963.javatest.Test;
-import io.github.olib963.javatest.TestSuite;
+import io.github.olib963.javatest.TestSuiteClass;
+import io.github.olib963.javatest.Testable;
 
 import java.util.List;
 import java.util.stream.Stream;
 
 import static io.github.olib963.javatest.JavaTest.test;
+import static io.github.olib963.javatest.matchers.CollectionMatchers.contains;
 import static io.github.olib963.javatest.matchers.Matcher.that;
-import static io.github.olib963.javatest.matchers.CollectionMatchers.*;
-import static io.github.olib963.javatest.matchers.StringMatchers.*;
+import static io.github.olib963.javatest.matchers.StringMatchers.containsString;
 
-public class MyFirstUnitTestSuite implements TestSuite {
+public class MyFirstUnitTestSuite implements TestSuiteClass {
     @Override
-    public Stream<Test> tests() {
+    public Stream<Testable> testables() {
         return Stream.of(
                 test("List contains", () -> that(List.of(1,2,3), contains(2))),
                 test("Messaging", () -> {
@@ -220,7 +220,7 @@ toc::[]
 * `TestRunner`: implements the running of tests and returns `TestResults`
 * `Testable`: wrapper around one of:
 ** `Test`: a named instance of a test, each test must return an `Assertion`
-** `TestSuite`: logical collection of a stream of ``Test``s
+** `TestSuite`: logical collection of a stream of ``Testable``s
 * `Assertion`: represents the expected state at the end of a test
 * `TestResults`: represents the combined result of your tests
 
@@ -276,7 +276,7 @@ A JavaTest `Test` is defined by:
 
 [source, java]
 ----
-import io.github.olib963.javatest.Test;
+import io.github.olib963.javatest.Testable.Test;
 import static io.github.olib963.javatest.JavaTest.*;
 
 public class MyTests {
@@ -288,19 +288,45 @@ The test will fail if the `Supplier` throws any exception at all. Please see <<N
 
 === Test Suites
 
-You can group your ``Test``s into logical units using ``TestSuite``s
+You can group your ``Test``s into logical units using ``TestSuite``s.
 
 [source, java]
 ----
-import io.github.olib963.javatest.*;
+import io.github.olib963.javatest.Testable.TestSuite;
+
 import java.util.stream.Stream;
 
 import static io.github.olib963.javatest.JavaTest.*;
 
-public class MyFirstTestSuite implements TestSuite {
+public class MyFirstTestSuite {
+
+    public static TestSuite mySuite() {
+        return suite("MyTests", Stream.of(
+                test("Simple Test", () -> that(true, "Expected test to pass"))
+        ));
+    }
+}
+----
+
+==== Suite Classes
+
+A common use case will be to use a class to store your tests, to do this simply implement `TestSuiteClass`. Your class
+will then be able to be used anywhere you would use a `Testable` e.g. adding to another `TestSuite` or passing
+to JavaTests run functions. The name of the suite will be the name of the class.
+
+[source, java]
+----
+import io.github.olib963.javatest.TestSuiteClass;
+import io.github.olib963.javatest.Testable;
+
+import java.util.stream.Stream;
+
+import static io.github.olib963.javatest.JavaTest.*;
+
+public class ClassAsSuite implements TestSuiteClass {
 
     @Override
-    public Stream<Test> tests() {
+    public Stream<Testable> testables() {
         return Stream.of(
                 test("Simple Test", () -> that(true, "Expected test to pass"))
         );
@@ -309,29 +335,29 @@ public class MyFirstTestSuite implements TestSuite {
 }
 ----
 
-==== Suite Names
+==== Suite Nesting
 
-By default a `TestSuite` will just use its own class name as the suite name, making ``Test``s easier to locate. You can however
-change this behaviour if you wish:
+``TestSuite``s contain ``Testable``s not ``Test``s and thus can even be contain other ``TestSuite``s.
 
 [source, java]
 ----
-import io.github.olib963.javatest.Test;
-import io.github.olib963.javatest.TestSuite;
+
+import io.github.olib963.javatest.Testable.TestSuite;
 
 import java.util.stream.Stream;
 
-public class MyCustomTestSuite implements TestSuite {
-    @Override
-    public String name() {
-        return "MySuite";
-    }
+import static io.github.olib963.javatest.JavaTest.*;
 
-    @Override
-    public Stream<Test> tests() {
-        return Stream.of(
-                // create tests
-        );
+public class SuiteOfSuites {
+
+    // A suite composed of one test and two suites
+    public static TestSuite compositeSuite() {
+        return suite("MyComposedTests",
+                Stream.of(
+                        test("Simple Test", () -> that(true, "Expected test to pass")),
+                        MyFirstTestSuite.mySuite(),
+                        new ClassAsSuite()
+                ));
     }
 }
 ----
@@ -344,14 +370,16 @@ if using the coloured logger. You can optionally provide a reason this `Test` ha
 
 [source, java]
 ----
-import io.github.olib963.javatest.*;
+import io.github.olib963.javatest.TestSuiteClass;
+import io.github.olib963.javatest.Testable;
+
 import java.util.stream.Stream;
 
 import static io.github.olib963.javatest.JavaTest.*;
 
-public class MyPendingTests implements TestSuite {
+public class MyPendingTests implements TestSuiteClass {
     @Override
-    public Stream<Test> tests() {
+    public Stream<Testable> testables() {
         return Stream.of(
                 test("Addition", () -> that(1 + 1 == 2, "Expected one add one to be two")),
                 test("Multiplication", () -> pending()),
@@ -383,7 +411,7 @@ public class MyRunners {
             test("Simple test", () -> pending())));
 
     public TestRunner suiteTestsNoLogging = testableRunner(
-            Stream.of(new MyFirstTestSuite(), new MyCustomTestSuite()),
+            Stream.of(MyFirstTestSuite.mySuite(), new ClassAsSuite()),
             Collections.emptyList() // No observers so no logging
     );
 
@@ -518,7 +546,7 @@ import io.github.olib963.javatest.*;
 import static io.github.olib963.javatest.JavaTest.*;
 
 TestResults runTest(CheckedSupplier<Assertion> testFn) {
-    return runTests(Stream.of(test("JShell test", testFn)));
+    return runTests(test("JShell test", testFn));
 }
 ----
 

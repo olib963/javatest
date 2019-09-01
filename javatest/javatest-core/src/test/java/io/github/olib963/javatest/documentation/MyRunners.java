@@ -13,7 +13,7 @@ public class MyRunners {
             test("Simple test", () -> pending())));
 
     public TestRunner suiteTestsNoLogging = testableRunner(
-            Stream.of(new MyFirstTestSuite(), new MyCustomTestSuite()),
+            Stream.of(MyFirstTestSuite.mySuite(), new ClassAsSuite()),
             Collections.emptyList() // No observers so no logging
     );
 

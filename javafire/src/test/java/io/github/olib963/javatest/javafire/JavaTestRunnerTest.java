@@ -10,14 +10,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import static io.github.olib963.javatest.JavaTest.*;
+import static io.github.olib963.javatest.JavaTest.test;
+import static io.github.olib963.javatest.JavaTest.that;
 import static org.mockito.Mockito.*;
 
-public class JavaTestRunnerTest implements TestSuite {
+public class JavaTestRunnerTest implements TestSuiteClass {
 
-    // Running tests
     public static void main(String... args) {
-        if (!JavaTest.runTests(new JavaTestRunnerTest().tests()).succeeded) {
+        if (!JavaTest.runTests(new JavaTestRunnerTest()).succeeded) {
             throw new RuntimeException("Tests failed!");
         }
     }
@@ -61,7 +61,7 @@ public class JavaTestRunnerTest implements TestSuite {
     }
 
     @Override
-    public Stream<Test> tests() {
+    public Stream<Testable> testables() {
         return Stream.of(
                 test("Test failure to get runtime classpath elements", () -> {
                     var mavenProject = mock(MavenProject.class);
