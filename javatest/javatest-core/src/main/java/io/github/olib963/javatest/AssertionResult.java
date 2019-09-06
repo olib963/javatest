@@ -65,7 +65,8 @@ public final class AssertionResult {
         return "AssertionResult{" +
                 "holds=" + holds +
                 ", pending=" + pending +
-                ", description='" + description + '\'' +
+                ", description='" + description +
+                ", logs=" + logs +'\'' +
                 '}';
     }
 }

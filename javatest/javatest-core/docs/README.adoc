@@ -118,8 +118,7 @@ The <<Core library,Core library>> section explains the fundamentals of how these
 the Fixtures and Matchers modules are used in this example, explore the <<Module List,Module List>> to see if there are
 any extensions that fit your needs.
 
-If there is something you cannot achieve with the existing functionality please either look at the
-<<Future Features,Future Features>> I have planned or open an issue describing what you want to do :D
+If there is something you cannot achieve with the existing functionality please open an issue describing what you want to do :D
 
 ====
 
@@ -382,30 +381,6 @@ include::../src/test/java/io/github/olib963/javatest/documentation/functions/Fun
 In the cases where this is not possible (e.g. ``Matcher``s or ``FixtureDefinition``s) static factories will be
 provided to construct an instance of the interface from appropriate functions.
 
-== Future Features
-
-Features I would like to look at implementing in the future:
-
-* Add tags back onto tests in such a way that it is easy to filter and split tests. I removed this feature as I felt it didn't
-fit the use cases appropriately.
-* A way to add arbitrary logs to your test cases. (Possibly replacing the `String`s log with a structural log)
-* A module that allows for generative property testing & test specifications e.g. the `Comparable[T]` spec, built on the
-parameterization module.
-* Option to set total timeout on eventual consistency rather than number of attempts
-* Acceptance tests for the JavaFire maven plugin, this proved too complex and painful to do in the first version.
-* Expand on the matchers for more types and adding the ability to compose and negate them.
-* A Gradle plugin?
-* Wrappers for Scala (ScavaTest), Clojure (ClavaTest) and Kotlin (KavaTest). I feel the APIs in those languages may feel even
-more intuitive and better due to their functional nature.
-* Dependant tests and/or assertions.
-* Support for mocks as assertions. Pseudo-code example with mockito: something like
-`verifyThat(myMock).calledFunction().foo(eq("hello))`. I am still unsure of this one.
-* TestNG Runner?
-* IntelliJ Plugin if possible?
-* Parallelism Options - currently achievable by using `.parallel()` on the streams but that uses the default fork join pool
-otherwise you have to submit the action to a custom thread pool which would be internal to `JavaTest`. This could be provided
-as an option if nothing else works by accepting an `ExecutorService` in the `StreamRunner`.
-
 == Feedback
 
 Any feedback/constructive criticism is appreciated. Please open an issue if you have any suggestions.
@@ -418,3 +393,6 @@ and tested.
 * If a test throws an `AssertionError` instead of returning an `Assertion` the library will ignore the error message and instead
 tell you to "return an Assertion". This will stop you from trying to add in extra assertions using something like the JUnit
 `assertX` functions in the middle of your test.
+
+* Currently there is no way to programmatically find the source location of a test/suite. This is a challenge I am going to attempt to
+tackle once I implement an IDE plugin.
