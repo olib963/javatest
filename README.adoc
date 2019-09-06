@@ -692,3 +692,6 @@ and tested.
 * If a test throws an `AssertionError` instead of returning an `Assertion` the library will ignore the error message and instead
 tell you to "return an Assertion". This will stop you from trying to add in extra assertions using something like the JUnit
 `assertX` functions in the middle of your test.
+
+* Currently there is no way to programmatically find the source location of a test/suite. This is a challenge I am going to attempt to
+tackle once I implement an IDE plugin.
