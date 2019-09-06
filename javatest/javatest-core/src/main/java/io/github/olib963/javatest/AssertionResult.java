@@ -6,8 +6,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.stream.Stream;
 
-import static io.github.olib963.javatest.logging.RunLoggingObserver.SEPARATOR;
-
 public final class AssertionResult {
 
     public final boolean holds;
@@ -25,6 +23,8 @@ public final class AssertionResult {
     public Stream<String> logs() {
         return logs.stream();
     }
+
+    private static final String SEPARATOR = System.lineSeparator();
 
     public static AssertionResult exception(Exception error) {
         var stringWriter = new StringWriter();

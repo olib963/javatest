@@ -5,10 +5,7 @@ import io.github.olib963.javatest.TestResult;
 
 import java.io.PrintStream;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static io.github.olib963.javatest.logging.RunLoggingObserver.SEPARATOR;
 
 public class TestLoggingObserver implements TestCompletionObserver {
 
@@ -27,7 +24,7 @@ public class TestLoggingObserver implements TestCompletionObserver {
     public void onTestCompletion(TestResult result) {
         toLogMessages(result).forEach(logMessage -> {
             logMessage.colour.ifPresent(c -> stream.print(c.getCode()));
-            stream.println(logMessage.logs.collect(Collectors.joining(SEPARATOR)));
+            logMessage.logs.forEach(stream::println);
             logMessage.colour.ifPresent(c -> stream.print(Colour.RESET_CODE));
         });
     }

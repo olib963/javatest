@@ -3,6 +3,7 @@ package io.github.olib963.javatest;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 public final class TestResults {
     public final boolean succeeded;
@@ -106,8 +107,8 @@ public final class TestResults {
         return successCount + failureCount + pendingCount;
     }
 
-    public List<String> allLogs() {
-        return new ArrayList<>(runLogs);
+    public Stream<String> allLogs() {
+        return runLogs.stream();
     }
 
     public TestResults addLog(String log) {
