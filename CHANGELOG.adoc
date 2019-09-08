@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 * Ability to contain a test suite within another suite
 * Ability to prefix `MatcherAssertion` descriptions with custom messaging.
 * Ability to fail a `TestResults` object at run level not just test level.
+* Module to wrap JavaTest in more scala-usable syntax
 
 === Changed
 

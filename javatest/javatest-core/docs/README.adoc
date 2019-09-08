@@ -352,6 +352,7 @@ JavaTest is built on a simple functional core and functionality is expanded on b
 * link:javatest/javatest-benchmark[Benchmarking]
 * link:javatest/javatest-eventually[Eventual Consistency]
 * link:javatest/javatest-junit[JUnit]
+* link:scala[Scala]
 
 == Functional Interfaces
 

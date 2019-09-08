@@ -15,6 +15,9 @@ jobs:
       - restore_cache:
           keys:
           - *dependency-cache
+      - restore_cache:
+          keys:
+          - *scala-cache
       - run:
           name: Test Java and Install
           command: mvn -P local-install install
@@ -22,9 +25,6 @@ jobs:
           paths:
             - ~/.m2
           key: *dependency-cache
-      - restore_cache:
-          keys:
-          - *scala-cache
       - run:
           # TODO why can't we have an image with this pre-installed??
           name: Install sbt
