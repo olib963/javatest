@@ -3,7 +3,6 @@ package io.github.olib963.javatest.runners;
 import io.github.olib963.javatest.*;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -20,7 +19,7 @@ public class StreamRunner implements TestRunner {
     public TestResults run() {
         return tests
                 .map(this::runTestable)
-                .reduce(TestResults.init(), TestResults::addResult, TestResults::combine);
+                .reduce(TestResults.empty(), TestResults::addResult, TestResults::combine);
     }
 
     private TestResult runTestable(Testable testable) {

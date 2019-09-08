@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 * Test suites as a data object
 * Ability to contain a test suite within another suite
 * Ability to prefix `MatcherAssertion` descriptions with custom messaging.
+* Ability to fail a `TestResults` object at run level not just test level.
 
 === Changed
 
@@ -21,10 +22,15 @@ All notable changes to this project will be documented in this file.
 * `TestSuite` interface to `TestSuiteClass`
 * Handle suite results and single test results separately
 * `TestResults` aggregation - split logs for the run into their own list.
+* Rename `TestResults.init` to `TestResults.empty`
 
 === Removed
 
 * Custom suite names on `TestSuiteClass`, this is no longer necessary since you can directly create a suite.
+
+=== Fixed
+
+* Fixture runner no longer increments the test count on failure
 
 == [0.1.0] - 2019-06-09
 

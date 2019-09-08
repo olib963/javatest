@@ -24,7 +24,9 @@ public class SimpleTests implements TestSuiteClass {
                                     test("Testing with " + s, () -> that(true, "this test should pass"))
                             ))
                     ));
-                    return that(result.succeeded, "Expected tests to pass using fixture");
+                    var testCount = result.testCount();
+                    return that(result.succeeded, "Expected tests to pass using fixture")
+                            .and(that(testCount == 1, "Correct number of tests were run (expected 1, got " + testCount +")"));
                 }),
                 test("Failure to create fixture", () -> {
                     var result = run(fixtureRunner(
@@ -34,7 +36,9 @@ public class SimpleTests implements TestSuiteClass {
                                     test("Testing with " + s, () -> that(true, "this test should pass"))
                             ))
                     ));
-                    return that(!result.succeeded, "Expected tests to fail if the fixture cannot be created");
+                    var testCount = result.testCount();
+                    return that(!result.succeeded, "Expected tests to fail if the fixture cannot be created")
+                            .and(that(testCount == 0, "Correct number of tests were run (expected 0, got " + testCount +")"));
                 }),
                 test("Failure to destroy fixture", () -> {
                     var result = run(fixtureRunner(
@@ -44,7 +48,9 @@ public class SimpleTests implements TestSuiteClass {
                                     test("Testing with " + s, () -> that(true, "this test should pass"))
                             ))
                     ));
-                    return that(!result.succeeded, "Expected tests to fail if the fixture cannot be destroyed");
+                    var testCount = result.testCount();
+                    return that(!result.succeeded, "Expected tests to fail if the fixture cannot be destroyed")
+                            .and(that(testCount == 1, "Correct number of tests were run (expected 1, got " + testCount +")"));
                 }),
                 test("FixtureDefinition is fine but tests fail", () -> {
                     var result = run(fixtureRunner(
@@ -54,7 +60,9 @@ public class SimpleTests implements TestSuiteClass {
                                     test("Testing with " + s, () -> that(false, "this test should fail"))
                             ))
                     ));
-                    return that(!result.succeeded, "Expected tests to fail when the fixture is fine but internal tests fail");
+                    var testCount = result.testCount();
+                    return that(!result.succeeded, "Expected tests to fail when the fixture is fine but internal tests fail")
+                            .and(that(testCount == 1, "Correct number of tests were run (expected 1, got " + testCount +")"));
                 })
         );
     }

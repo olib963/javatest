@@ -637,7 +637,7 @@ import java.util.Set;
 
 public class FunctionalRunners {
     // The simplest test runner: runs nothing and returns no results
-    public static final TestRunner EMPTY_RUNNER = TestResults::init;
+    public static final TestRunner EMPTY_RUNNER = TestResults::empty;
 
     private static final Set<DayOfWeek> WEEKEND =
             Set.of(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
