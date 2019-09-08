@@ -4,6 +4,7 @@ import io.github.olib963.javatest.Assertion;
 import io.github.olib963.javatest.matchers.internal.MatcherAssertion;
 import io.github.olib963.javatest.matchers.internal.PredicateMatcher;
 
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -20,7 +21,11 @@ public interface Matcher<A> {
     }
 
     static <A> Assertion that(A value, Matcher<A> matcher) {
-        return new MatcherAssertion<>(value, matcher);
+        return new MatcherAssertion<>(Optional.empty(), value, matcher);
+    }
+
+    static <A> Assertion that(String messagePrefix, A value, Matcher<A> matcher) {
+        return new MatcherAssertion<>(Optional.of(messagePrefix), value, matcher);
     }
 
     static <A> Matcher<A> isEqualTo(A expected) {

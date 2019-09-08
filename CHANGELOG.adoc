@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 ** Allow failing a test if it takes too long
 * Test suites as a data object
 * Ability to contain a test suite within another suite
+* Ability to prefix `MatcherAssertion` descriptions with custom messaging.
 
 === Changed
 

@@ -48,6 +48,17 @@ include::../src/test/java/io/github/olib963/javatest/matchers/DocumentationTests
 include::../src/test/java/io/github/olib963/javatest/matchers/DocumentationTests.java[tags=customMatcher, indent=-]
 ----
 
+== Extra Messaging
+
+You can add extra messaging to your matcher assertion in the case you want to be more descriptive. The message will be
+prepended to the description.
+
+[source, java]
+----
+include::../src/test/java/io/github/olib963/javatest/matchers/DocumentationTests.java[tags=extraMessage, indent=-]
+----
+
+
 '''
 
 You can include this module with this dependency:

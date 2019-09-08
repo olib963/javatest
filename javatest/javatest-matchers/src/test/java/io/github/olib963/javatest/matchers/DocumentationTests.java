@@ -93,12 +93,34 @@ public class DocumentationTests implements TestSuiteClass {
     }
     // end::customMatcher[]
 
+    // tag::extraMessage[]
+    public class ExtraMessaging {
+
+        public Test messagingTest = test("Validation Test", () -> {
+                var validator = new MyValidator();
+                var toValidate = 1;
+                return that(
+                        "Because we are validating a number below 10",
+                        () -> validator.validate(toValidate),
+                        willThrowExceptionThat(hasType(IllegalArgumentException.class)));
+            });
+
+        /* Description of test is:
+         *
+         * Because we are validating a number below 10: Expected {runnable} to
+         * throw an exception that was expected to be an instance of {java.lang.IllegalArgumentException}
+         */
+
+    }
+    // end::extraMessage[]
+
     @Override
     public Stream<Testable> testables() {
         return Stream.of(
                 suite("Matcher Documentation tests", new MatcherTests().matcherTests()),
                 suite("Exception Documentation Tests", new MyExceptionTests().exceptionTests()),
-                suite("Custom Matcher Documentation Tests", Stream.of(new TestTheUniverse().universeTest()))
+                suite("Custom Matcher Documentation Tests", Stream.of(new TestTheUniverse().universeTest())),
+                new ExtraMessaging().messagingTest
         );
     }
 
