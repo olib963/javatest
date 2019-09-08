@@ -3,7 +3,6 @@ organization := "io.github.olib963"
 
 // TODO auto increment this as part of the release process
 // TODO add sbt publish to script with corresponding repo information
-// TODO include in CI pipeline: build java lib and install then use in here.
 val javaTestVersion = "0.2.0-SNAPSHOT"
 
 version := javaTestVersion

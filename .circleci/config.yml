@@ -1,26 +1,52 @@
 aliases:
   - &dependency-cache v1-dependencies-{{ checksum "pom.xml" }}
-  - &ruby-cache v1-ruby-test-dependencies-{{ checksum "gendocs.rb" }}
+  - &ruby-cache v1-ruby-dependencies-{{ checksum "gendocs.rb" }}
+  - &scala-cache v1-scala-test-dependencies-{{ checksum "scala/build.sbt" }}
 version: 2
 jobs:
   test:
     docker:
       - image: circleci/openjdk:11-jdk
     working_directory: ~/javatest
+    environment:
+      SBT_VERSION: 1.3.0
     steps:
       - checkout
       - restore_cache:
           keys:
           - *dependency-cache
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
       # compile is required to get dependencies due to inter module dependencies (mvn dependency:go-offline alone will fail)
       - run: mvn compile dependency:go-offline
       - save_cache:
           paths:
             - ~/.m2
           key: *dependency-cache
-      - run: mvn test
+      # Use the local-install profile to skip gpg signing for local publishing
+      - run: mvn -P local-install install
+      - restore_cache:
+          keys:
+          - *scala-cache
+      - run:
+          # TODO why can't we have an image with this pre-installed??
+          name: Install sbt
+          command: |
+            curl -L -o sbt-${SBT_VERSION}.deb https://dl.bintray.com/sbt/debian/sbt-${SBT_VERSION}.deb && \
+            sudo dpkg -i sbt-${SBT_VERSION}.deb && \
+            rm sbt-${SBT_VERSION}.deb && \
+            sudo apt-get install sbt
+      - run:
+          name: Compile
+          command: sbt compile
+      - save_cache:
+          paths:
+            - ~/.m2
+            - ~/.ivy2/cache
+            - ~/.sbt # Cache SBT Compiler interface
+          key: *scala-cache
+      - run:
+          name: Run tests
+          command: sbt test:run
+
   docTest:
     docker:
       - image: circleci/ruby:2.6.0
@@ -49,7 +75,6 @@ jobs:
               echo "Documentation has changed, please rerun 'ruby gendocs.rb' and commit the changes"
               exit 1
             fi
-
 
 workflows:
   version: 2

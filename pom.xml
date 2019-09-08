@@ -19,6 +19,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
+        <localInstall>false</localInstall>
         <!-- Define property for which main class to run tests from -->
         <javatest.testClass />
     </properties>
@@ -184,6 +185,10 @@
                                 <goals>
                                     <goal>jar</goal>
                                 </goals>
+                                <configuration>
+                                    <!-- javadoc on maven plugin causes errors on CI... No clue why though. -->
+                                    <skip>${localInstall}</skip>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
@@ -199,6 +204,9 @@
                                 <goals>
                                     <goal>sign</goal>
                                 </goals>
+                                <configuration>
+                                    <skip>${localInstall}</skip>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
@@ -216,6 +224,12 @@
                     </plugin>
                 </plugins>
             </build>
+        </profile>
+        <profile>
+            <id>local-install</id>
+            <properties>
+                <localInstall>true</localInstall>
+            </properties>
         </profile>
     </profiles>
 
