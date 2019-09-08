@@ -16,15 +16,12 @@ jobs:
           keys:
           - *dependency-cache
       - run:
-          name: Compile Java
-          command: mvn compile
+          name: Test Java and Install
+          command: mvn -P local-install install
       - save_cache:
           paths:
             - ~/.m2
           key: *dependency-cache
-      - run:
-          name: Test Java and Install
-          command: mvn -P local-install install
       - restore_cache:
           keys:
           - *scala-cache
