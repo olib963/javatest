@@ -1,4 +1,4 @@
-package io.github.olib963.scavatest
+package io.github.olib963.javatest_scala
 
 import io.github.olib963.javatest.{TestSuiteClass, Testable}
 import scala.collection.JavaConverters._

@@ -26,4 +26,4 @@ libraryDependencies ++= Seq(
 scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature", "-Xfatal-warnings")
 
 // sbt test:run
-mainClass in Test := Some("io.github.olib963.scavatest.MyTests")
+mainClass in Test := Some("io.github.olib963.javatest_scala.MyTests")

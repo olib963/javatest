@@ -1,7 +1,7 @@
-package io.github.olib963.scavatest
+package io.github.olib963.javatest_scala
 import io.github.olib963.javatest.Testable
 
-object SimpleTestSuite extends Suite with JavaTestSyntax {
+object SimpleTests extends Suite with JavaTestSyntax {
   override def tests: Seq[Testable] = Seq(
     suite("Simple Suite")(
       suiteSeq("Pending Suite")(Seq(

@@ -1,6 +1,7 @@
-package io.github.olib963.scavatest
+package io.github.olib963.javatest_scala
 
 import io.github.olib963.javatest._
+import io.github.olib963.javatest.matchers.Matcher
 
 import scala.collection.JavaConverters._
 import scala.language.implicitConversions
@@ -17,6 +18,8 @@ trait JavaTestSyntax {
   def pending(name: String, message: String): Testable.Test = test(name)(JavaTest.pending(message))
 
   def that(condition: Boolean, description: String): Assertion = JavaTest.that(condition, description)
+  // This function apparently cannot be in a separate trait because it causes scalac to get confused about the overloading from different traits
+  def that[A](value: A, matcher: Matcher[A]): Assertion = Matcher.that(value, matcher)
 
   implicit def runnerFromTestable(testable: Testable): TestRunner = JavaTest.testableRunner(testable)
   implicit def runnerFromTestables(testables: Seq[Testable]): TestRunner = JavaTest.testableRunner(testables.asJava.stream())
