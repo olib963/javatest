@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 * Altered eventual consistency defaults to be quicker and more reasonable
 * `TestSuite` interface to `TestSuiteClass`
 * Handle suite results and single test results separately
+* `TestResults` aggregation - split logs for the run into their own list.
 
 === Removed
 

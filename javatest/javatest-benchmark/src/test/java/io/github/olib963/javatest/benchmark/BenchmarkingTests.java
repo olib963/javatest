@@ -48,7 +48,7 @@ public class BenchmarkingTests implements TestSuiteClass {
                     TestRunner mockRunner = TestResults::init;
                     var benchmarked = new BenchmarkRunner(Stream.of(mockRunner), Benchmark.DEFAULT_FORMAT, () -> 0L, t -> Duration.ofMillis(987654321));
                     var results = benchmarked.run();
-                    return that(results.allLogs(), contains("Test run took 987654s 321ms"));
+                    return that(results.allLogs().collect(Collectors.toList()), contains("Test run took 987654s 321ms"));
                 })
         );
     }
