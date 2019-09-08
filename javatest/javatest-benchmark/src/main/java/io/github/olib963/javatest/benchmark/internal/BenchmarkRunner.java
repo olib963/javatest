@@ -1,6 +1,5 @@
 package io.github.olib963.javatest.benchmark.internal;
 
-import io.github.olib963.javatest.JavaTest;
 import io.github.olib963.javatest.TestResults;
 import io.github.olib963.javatest.TestRunner;
 
@@ -25,7 +24,7 @@ public class BenchmarkRunner implements TestRunner {
     @Override
     public TestResults run() {
         var startMillis = startMillisSupplier.get();
-        var results = JavaTest.run(runners);
+        var results = runners.map(TestRunner::run).reduce(TestResults.empty(), TestResults::combine);
         var timeTaken = timerFunction.apply(startMillis);
         return results.addLog("Test run took " + formatter.apply(timeTaken));
     }
