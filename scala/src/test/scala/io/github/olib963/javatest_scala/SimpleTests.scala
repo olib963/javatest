@@ -6,7 +6,7 @@ object SimpleTests extends Suite with JavaTestSyntax {
     suite("Simple Suite")(
       suiteSeq("Pending Suite")(Seq(
         pending("My first pending test"),
-        pending("My second pending test", "because I haven't implement it yet")
+        pending("My second pending test", "because I haven't implemented it yet")
       )),
       test("Passing test")(that(true, "passing")),
       test("Passing function test"){

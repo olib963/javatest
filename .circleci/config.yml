@@ -15,14 +15,16 @@ jobs:
       - restore_cache:
           keys:
           - *dependency-cache
-      # compile is required to get dependencies due to inter module dependencies (mvn dependency:go-offline alone will fail)
-      - run: mvn compile dependency:go-offline
+      - run:
+          name: Compile Java
+          command: mvn compile
       - save_cache:
           paths:
             - ~/.m2
           key: *dependency-cache
-      # Use the local-install profile to skip gpg signing for local publishing
-      - run: mvn -P local-install install
+      - run:
+          name: Test Java and Install
+          command: mvn -P local-install install
       - restore_cache:
           keys:
           - *scala-cache
@@ -35,7 +37,7 @@ jobs:
             rm sbt-${SBT_VERSION}.deb && \
             sudo apt-get install sbt
       - run:
-          name: Compile
+          name: Compile Scala
           command: cd scala && sbt compile
       - save_cache:
           paths:
@@ -44,7 +46,7 @@ jobs:
             - ~/.sbt # Cache SBT Compiler interface
           key: *scala-cache
       - run:
-          name: Run tests
+          name: Test Scala
           command: cd scala && sbt test:run
 
   docTest:

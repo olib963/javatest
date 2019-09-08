@@ -226,6 +226,7 @@
             </build>
         </profile>
         <profile>
+            <!-- We don't want to sign jars locally -->
             <id>local-install</id>
             <properties>
                 <localInstall>true</localInstall>
