@@ -12,7 +12,7 @@ trait FixtureSyntax {
   def destructibleFixture[Fixture](create: => Try[Fixture])(destroy: Fixture => Try[Unit]): FixtureDefinition[Fixture] =
     Fixtures.definitionFromFunctions(() => toInternalTry(create), (f: Fixture) => toInternalTry[Void](destroy(f).map(_ => null)))
 
-  def fixtureRunner[Fixture](name: String)(fixtureDefinition: FixtureDefinition[Fixture])(runnerFn: Fixture => TestRunner): TestRunner =
+  def fixtureRunner[Fixture](name: String, fixtureDefinition: FixtureDefinition[Fixture])(runnerFn: Fixture => TestRunner): TestRunner =
     Fixtures.fixtureRunner(name, fixtureDefinition, f => runnerFn(f))
 
   private def toInternalTry[A](scala: Try[A]): JTry[A] = scala match {

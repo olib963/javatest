@@ -1,1 +1,129 @@
 = JavaTest Scala
+
+This module provides a wrapper around the underlying java framework that provides a more idiomatic Scala interface. Syntax
+can be selectively imported by mixing the appropriate trait e.g. `FixtureSyntax`, however, if you want all functions to be in scope
+simply `import io.github.olib963.javatest_scala._`.
+
+NOTE: Currently knowledge and understanding of the Java library is assumed. I will expand on these docs to be self-explanitory
+at a later date.
+
+== Core functionality
+
+=== Assertions
+
+=== Tests
+
+=== Suites
+
+=== Runners
+
+== Matchers
+
+``Matcher``s can be used in this module the same way as in Java. Only a few matchers are available by default.
+
+[source, scala]
+----
+import io.github.olib963.javatest.Testable
+
+object MatcherTests extends Suite with JavaTestSyntax with MatcherSyntax {
+  override def tests: Seq[Testable] = Seq(
+    test("Equal")(that(List(1, 2, 3), isEqualTo(List(1, 2, 3)))),
+    test("Type")(that("foo", hasType[String])),
+    test("Instance"){
+      val javaObject = new Object()
+      that(javaObject, isTheSameInstanceAs(javaObject))
+    },
+    test("String starts with")(that("hello world", startsWith("hello"))),
+    test("String ends with")(that("hello world", endsWith("world"))),
+    test("String contains string")(that("hello world", containsString("o w"))),
+    test("String empty")(that("", isEmptyString)),
+    test("String whitespace")(that("\t\n", isBlankString)),
+    test("String equal ignore case")(that("HeLlO WoRlD", isEqualToIgnoringCase("hElLo wOrLd"))),
+    test("String length")(that("hello world", hasLength(11))),
+    test("With custom message")(that("Because my string is empty", "", isBlankString))
+  )
+}
+----
+
+I will be adding many Scala specific matchers in the future.
+
+== Eventual Consistency
+
+The eventual consistency assertions in this module take an implicit configuration and uses scala ``Duration``s instead of java ``Duration``s.
+The default configuration is also supplied implicitly in the case you do not provide one.
+
+[source, scala]
+----
+import scala.concurrent.duration._
+implicit val config: EventuallyConfig = EventuallyConfig(attempts = 5, waitInterval = 500.millis)
+val atomicInt = new AtomicInteger(0)
+executorService.submit(() => {
+  Thread.sleep(1000)
+  atomicInt.getAndIncrement()
+})
+eventually(that(atomicInt.get(), isEqualTo(1)))
+----
+
+== Fixtures
+
+Fixtures in this module make use of `scala.util.Try` and creating a runner is a multi-parameter list function.
+
+[source, scala]
+----
+val mySimpleFixture: FixtureDefinition[String] = fixture(Success("Hello"))
+
+val runnerUsingSimpleFixture = fixtureRunner("sting fixture", mySimpleFixture)(word =>
+  test("Simple fixture")(that(word, isEqualTo("Hello")))
+)
+----
+
+You can create fixtures with a tear down method and curry common fixtures you want to create multiple instances of:
+
+[source, scala]
+----
+val myComplexFixture: FixtureDefinition[FileReader] =
+  destructibleFixture(Try(new FileReader("myTestFile.txt")))(r => Try(r.close()))
+
+// You can reuse fixture runners then later apply the function to create your tests
+val reusableFixture: (FileReader => TestRunner) => TestRunner =
+  fixtureRunner("test file reader", myComplexFixture)
+
+val runner1 = reusableFixture { fileReader =>
+  test("Content reading"){
+    val builder = new StringBuilder
+    var c = fileReader.read()
+    while (c != -1) {
+      builder.append(c.toChar)
+      c = fileReader.read()
+    }
+    that("Contents read from test file", builder.toString, isEqualTo("Hello, test!"))
+  }
+}
+
+val runner2 = reusableFixture { aDifferentReader =>
+  test("Character reading")(
+    that("First character read from file", aDifferentReader.read().toChar, isEqualTo('H')))
+}
+----
+
+== Benchmarking
+
+Benchmarking in this module accepts an implicit `DurationFormat` function that accepts scala ``Duration``s. The
+`failIfLongerThan` function also accepts scala ``Duration``s. The functionality remains the same as the java module.
+
+[source, scala]
+----
+val passingAssertion = that(true, "always passes")
+
+val customFormattedTest = {
+  implicit val customFormatter: DurationFormat = d => s"${d.toMillis}ms"
+  benchmark(test("Benchmarked Test")(passingAssertion))
+}
+
+val timedTest = failIfLongerThan(2.seconds)(
+  test("Test with time limit") {
+    Thread.sleep(1.second.toMillis)
+    passingAssertion
+  }
+)
+----

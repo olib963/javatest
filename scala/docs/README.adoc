@@ -1,3 +1,65 @@
 = JavaTest Scala
 
+This module provides a wrapper around the underlying java framework that provides a more idiomatic Scala interface. Syntax
+can be selectively imported by mixing the appropriate trait e.g. `FixtureSyntax`, however, if you want all functions to be in scope
+simply `import io.github.olib963.javatest_scala._`.
 
+NOTE: Currently knowledge and understanding of the Java library is assumed. I will expand on these docs to be self-explanitory
+at a later date.
+
+== Core functionality
+
+=== Assertions
+
+=== Tests
+
+=== Suites
+
+=== Runners
+
+== Matchers
+
+``Matcher``s can be used in this module the same way as in Java. Only a few matchers are available by default.
+
+[source, scala]
+----
+include::../src/test/scala/io/github/olib963/javatest_scala/MatcherTests.scala[tags=include]
+----
+
+I will be adding many Scala specific matchers in the future.
+
+== Eventual Consistency
+
+The eventual consistency assertions in this module take an implicit configuration and uses scala ``Duration``s instead of java ``Duration``s.
+The default configuration is also supplied implicitly in the case you do not provide one.
+
+[source, scala]
+----
+include::../src/test/scala/io/github/olib963/javatest_scala/EventualTests.scala[tags=assertion, indent=-]
+----
+
+== Fixtures
+
+Fixtures in this module make use of `scala.util.Try` and creating a runner is a multi-parameter list function.
+
+[source, scala]
+----
+include::../src/test/scala/io/github/olib963/javatest_scala/documentation/FixtureDocumentation.scala[tags=simple, indent=-]
+----
+
+You can create fixtures with a tear down method and curry common fixtures you want to create multiple instances of:
+
+[source, scala]
+----
+include::../src/test/scala/io/github/olib963/javatest_scala/documentation/FixtureDocumentation.scala[tags=complex, indent=-]
+----
+
+== Benchmarking
+
+Benchmarking in this module accepts an implicit `DurationFormat` function that accepts scala ``Duration``s. The
+`failIfLongerThan` function also accepts scala ``Duration``s. The functionality remains the same as the java module.
+
+[source, scala]
+----
+include::../src/test/scala/io/github/olib963/javatest_scala/documentation/BenchmarkDocumentation.scala[tags=include, indent=-]
+----

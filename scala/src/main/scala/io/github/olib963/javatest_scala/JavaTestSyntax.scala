@@ -20,6 +20,7 @@ trait JavaTestSyntax {
   def that(condition: Boolean, description: String): Assertion = JavaTest.that(condition, description)
   // This function apparently cannot be in a separate trait because it causes scalac to get confused about the overloading from different traits
   def that[A](value: A, matcher: Matcher[A]): Assertion = Matcher.that(value, matcher)
+  def that[A](messagePrefix: String, value: A, matcher: Matcher[A]): Assertion = Matcher.that(messagePrefix, value, matcher)
 
   implicit def runnerFromTestable(testable: Testable): TestRunner = JavaTest.testableRunner(testable)
   implicit def runnerFromTestables(testables: Seq[Testable]): TestRunner = JavaTest.testableRunner(testables.asJava.stream())

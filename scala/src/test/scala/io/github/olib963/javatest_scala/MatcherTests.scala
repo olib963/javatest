@@ -1,4 +1,5 @@
 package io.github.olib963.javatest_scala
+// tag::include[]
 import io.github.olib963.javatest.Testable
 
 object MatcherTests extends Suite with JavaTestSyntax with MatcherSyntax {
@@ -15,6 +16,8 @@ object MatcherTests extends Suite with JavaTestSyntax with MatcherSyntax {
     test("String empty")(that("", isEmptyString)),
     test("String whitespace")(that("\t\n", isBlankString)),
     test("String equal ignore case")(that("HeLlO WoRlD", isEqualToIgnoringCase("hElLo wOrLd"))),
-    test("String length")(that("hello world", hasLength(11)))
+    test("String length")(that("hello world", hasLength(11))),
+    test("With custom message")(that("Because my string is empty", "", isBlankString))
   )
 }
+// end::include[]
