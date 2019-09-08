@@ -1,12 +1,9 @@
 package io.github.olib963.javatest.fixtures.internal;
 
-import io.github.olib963.javatest.AssertionResult;
-import io.github.olib963.javatest.TestResult;
 import io.github.olib963.javatest.TestResults;
 import io.github.olib963.javatest.TestRunner;
 import io.github.olib963.javatest.fixtures.FixtureDefinition;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -27,7 +24,7 @@ public class FixtureRunner<Fixture> implements TestRunner {
         return fixtureDefinition.create()
                 .mapError(e -> new Exception("Could not create fixture \"" + fixtureName + '"', e))
                 .map(this::runWithFixture)
-                .recoverWith(e -> TestResults.init().addResult(exceptionToResult(e)));
+                .recoverWith(e -> TestResults.empty().failBecause(flattenMessages(e)));
 
     }
 
@@ -35,12 +32,8 @@ public class FixtureRunner<Fixture> implements TestRunner {
         var results = testFunction.apply(fixture).run();
         return fixtureDefinition.destroy(fixture)
                 .map(unit -> results)
-                .recoverWith(e -> results.addResult(
-                        exceptionToResult(new Exception("Could not destroy fixture \"" + fixtureName + '"', e))));
-    }
-
-    private TestResult exceptionToResult(Exception e) {
-        return new TestResult.SingleTestResult("", AssertionResult.exception(e), List.of(flattenMessages(e)));
+                .recoverWith(e -> results.failBecause(
+                        flattenMessages(new Exception("Could not destroy fixture \"" + fixtureName + '"', e))));
     }
 
     private String flattenMessages(Throwable t) {

@@ -21,7 +21,7 @@ public class JavaTest {
     }
 
     public static TestResults run(Stream<TestRunner> runners, Collection<TestRunCompletionObserver> observers) {
-        var results = runners.map(TestRunner::run).reduce(TestResults.init(), TestResults::combine);
+        var results = runners.map(TestRunner::run).reduce(TestResults.empty(), TestResults::combine);
         observers.forEach(o -> o.onRunCompletion(results));
         return results;
     }

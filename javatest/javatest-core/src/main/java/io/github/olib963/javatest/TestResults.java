@@ -27,7 +27,7 @@ public final class TestResults {
         this.results = results;
     }
 
-    public static TestResults init() {
+    public static TestResults empty() {
         return new TestResults(true, 0, 0, 0,
                 Collections.emptyList(), Collections.emptyList());
     }
@@ -113,8 +113,12 @@ public final class TestResults {
 
     public TestResults addLog(String log) {
         var logs = new ArrayList<>(runLogs);
-        logs.add(log); // TODO enforce immutability
+        logs.add(log);
         return new TestResults(succeeded, successCount, failureCount, pendingCount, logs, results);
+    }
+
+    public TestResults failBecause(String reason){
+        return new TestResults(false, successCount, failureCount, pendingCount, runLogs, results).addLog(reason);
     }
 
 }

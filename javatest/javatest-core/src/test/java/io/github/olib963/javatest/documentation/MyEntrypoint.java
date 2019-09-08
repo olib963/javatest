@@ -28,6 +28,6 @@ class MyCustomRunner implements TestRunner {
 
     @Override
     public TestResults run() {
-        return TestResults.init();
+        return TestResults.empty();
     }
 }
