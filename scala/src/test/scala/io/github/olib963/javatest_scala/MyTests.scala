@@ -2,7 +2,7 @@ package io.github.olib963.javatest_scala
 
 import java.util.concurrent.Executors
 
-import io.github.olib963.javatest_scala.documentation.{BenchmarkDocumentation, FixtureDocumentation}
+import io.github.olib963.javatest_scala.documentation._
 
 import scala.util.Try
 
@@ -26,7 +26,8 @@ object MyTests {
       FixtureDocumentation.runnerUsingSimpleFixture,
       FixtureDocumentation.runner1,
       FixtureDocumentation.runner2,
-      BenchmarkDocumentation
+      BenchmarkDocumentation,
+      SuiteDocs
     )
 
     if (!documentationResults.succeeded) {

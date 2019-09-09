@@ -1,4 +1,5 @@
 = JavaTest Scala
+:note-caption: :information_source:
 
 This module provides a wrapper around the underlying java framework that provides a more idiomatic Scala interface. Syntax
 can be selectively imported by mixing the appropriate trait e.g. `FixtureSyntax`, however, if you want all functions to be in scope
@@ -9,13 +10,52 @@ at a later date.
 
 == Core functionality
 
-=== Assertions
+All core functionality remains essentially unchanged from the Java framework but has new syntax
 
-=== Tests
+Assertions and tests are defined the same as the Java syntax with the addition that the test function is now in a separate parameter list
+
+[source, scala]
+----
+include::../src/test/scala/io/github/olib963/javatest_scala/SimpleTests.scala[tags=include, indent=-]
+----
 
 === Suites
 
+Suites can be constructed from:
+
+- Varags:
+
+[source, scala]
+----
+include::../src/test/scala/io/github/olib963/javatest_scala/documentation/SuiteDocs.scala[tags=varargs, indent=-]
+----
+
+- `Seq[Testable]` (this is useful for programmatically generated tests):
+
+[source, scala]
+----
+include::../src/test/scala/io/github/olib963/javatest_scala/documentation/SuiteDocs.scala[tags=seq, indent=-]
+----
+
+- Traits:
+
+[source, scala]
+----
+include::../src/test/scala/io/github/olib963/javatest_scala/documentation/SuiteDocs.scala[tags=trait, indent=-]
+----
+
 === Runners
+
+Runners can be generated the same way as in the java framework but an implicit transformation exists to turn
+a `Seq[Testable]` into a `TestRunner`.
+
+[source, scala]
+----
+include::../src/test/scala/io/github/olib963/javatest_scala/documentation/RunnerDocs.scala[tags=definition, indent=-]
+
+// Or to run directly
+include::../src/test/scala/io/github/olib963/javatest_scala/documentation/RunnerDocs.scala[tags=running, indent=-]
+----
 
 == Matchers
 

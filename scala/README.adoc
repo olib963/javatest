@@ -1,4 +1,5 @@
 = JavaTest Scala
+:note-caption: :information_source:
 
 This module provides a wrapper around the underlying java framework that provides a more idiomatic Scala interface. Syntax
 can be selectively imported by mixing the appropriate trait e.g. `FixtureSyntax`, however, if you want all functions to be in scope
@@ -9,13 +10,93 @@ at a later date.
 
 == Core functionality
 
-=== Assertions
+All core functionality remains essentially unchanged from the Java framework but has new syntax
 
-=== Tests
+Assertions and tests are defined the same as the Java syntax with the addition that the test function is now in a separate parameter list
+
+[source, scala]
+----
+test("Passing multiline test"){
+  val word = "HELLO WORLD"
+  val expected = "hello world"
+  val actual = word.toLowerCase()
+  that(actual == expected, s"Expected $word to lower case to be $expected (was $actual)")
+}
+----
 
 === Suites
 
+Suites can be constructed from:
+
+- Varags:
+
+[source, scala]
+----
+val suiteFromVarargs = suite("My Vararg Suite")(
+  test("simple test")(that(true, "passing")),
+  test("addition test")(that(1 + 1 == 2, "One add one is two"))
+)
+----
+
+- `Seq[Testable]` (this is useful for programmatically generated tests):
+
+[source, scala]
+----
+val multiplesOf9 = Map(
+  1 -> 9,
+  2 -> 18,
+  7 -> 63,
+  456 -> 4104)
+
+val suiteFromSeq = suiteSeq("Multiples of 9 suite")(
+  multiplesOf9.map {
+    case (multiple, expected) =>
+      test(s"The ${multiple}th multiple of 9") {
+        val result = multiple * 9
+        that(result == expected, s"Should be $expected (was $result)")
+      }
+  }.toSeq
+)
+----
+
+- Traits:
+
+[source, scala]
+----
+object MySuite extends Suite with JavaTestSyntax {
+  override def tests: Seq[Testable] = Seq(
+    suite("Nested Suite")(
+      test("simple test")(that(true, "passing"))
+    ),
+    test("addition test")(that(1 + 1 == 2, "One add one is two"))
+  )
+}
+----
+
 === Runners
+
+Runners can be generated the same way as in the java framework but an implicit transformation exists to turn
+a `Seq[Testable]` into a `TestRunner`.
+
+[source, scala]
+----
+val runner: TestRunner = Seq(
+  suite("My Suite")(
+    test("test1")(that(true, "passes")),
+    test("test2")(that(true, "passes"))
+  )
+)
+
+// Or to run directly
+run(
+  Seq(
+    suite("My Suite")(
+      test("test1")(that(true, "passes")),
+      test("test2")(that(true, "passes"))
+    )
+  )
+)
+----
 
 == Matchers
 

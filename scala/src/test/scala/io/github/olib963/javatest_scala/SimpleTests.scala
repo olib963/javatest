@@ -5,16 +5,18 @@ object SimpleTests extends Suite with JavaTestSyntax {
   override def tests: Seq[Testable] = Seq(
     suite("Simple Suite")(
       suiteSeq("Pending Suite")(Seq(
-        pending("My first pending test"),
-        pending("My second pending test", "because I haven't implemented it yet")
+        test("My first pending test")(pending()),
+        test("My second pending test")(pending("because I haven't implemented it yet"))
       )),
       test("Passing test")(that(true, "passing")),
-      test("Passing function test"){
+      // tag::include[]
+      test("Passing multiline test"){
         val word = "HELLO WORLD"
         val expected = "hello world"
         val actual = word.toLowerCase()
         that(actual == expected, s"Expected $word to lower case to be $expected (was $actual)")
       }
+      // end::include[]
     )
   )
 }

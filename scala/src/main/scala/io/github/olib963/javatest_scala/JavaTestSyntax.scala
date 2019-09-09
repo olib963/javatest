@@ -13,9 +13,9 @@ trait JavaTestSyntax {
   def suite(name: String)(tests: Testable*): Testable.TestSuite = suiteSeq(name)(tests.toSeq)
   def suiteSeq(name: String)(tests: Seq[Testable]): Testable.TestSuite = JavaTest.suite(name, tests.asJava.stream())
 
-  def test(name: String)(test: => Assertion ): Testable.Test = JavaTest.test(name, () => test)
-  def pending(name: String): Testable.Test = test(name)(JavaTest.pending())
-  def pending(name: String, message: String): Testable.Test = test(name)(JavaTest.pending(message))
+  def test(name: String)(test: => Assertion): Testable.Test = JavaTest.test(name, () => test)
+  def pending(): Assertion = JavaTest.pending()
+  def pending(message: String): Assertion = JavaTest.pending(message)
 
   def that(condition: Boolean, description: String): Assertion = JavaTest.that(condition, description)
   // This function apparently cannot be in a separate trait because it causes scalac to get confused about the overloading from different traits
