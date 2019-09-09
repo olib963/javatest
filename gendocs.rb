@@ -9,7 +9,8 @@ docFiles = {
     "javatest/javatest-parameterised/docs/README.adoc" => "javatest/javatest-parameterised/README.adoc",
     "javatest/javatest-benchmark/docs/README.adoc" => "javatest/javatest-benchmark/README.adoc",
     "javatest/javatest-matchers/docs/README.adoc" => "javatest/javatest-matchers/README.adoc",
-    "javatest/javatest-core/docs/README.adoc" => "README.adoc"
+    "javatest/javatest-core/docs/README.adoc" => "README.adoc",
+    "scala/docs/README.adoc" => "scala/README.adoc"
 }
 
 # For each documentation file, process all of the 'include' macros upfront since this is not supported by GitHub
