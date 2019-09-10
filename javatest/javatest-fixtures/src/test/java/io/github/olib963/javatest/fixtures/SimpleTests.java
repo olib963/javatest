@@ -4,8 +4,8 @@ import io.github.olib963.javatest.JavaTest;
 import io.github.olib963.javatest.TestSuiteClass;
 import io.github.olib963.javatest.Testable;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.stream.Stream;
 
 import static io.github.olib963.javatest.JavaTest.*;
 import static io.github.olib963.javatest.fixtures.Fixtures.*;
@@ -15,8 +15,8 @@ import static io.github.olib963.javatest.fixtures.Try.Success;
 public class SimpleTests implements TestSuiteClass {
 
     @Override
-    public Stream<Testable> testables() {
-        return Stream.of(
+    public Collection<Testable> testables() {
+        return List.of(
                 JavaTest.test("Tests using fixture", () -> {
                     var result = run(fixtureRunner(
                             "string fixture",

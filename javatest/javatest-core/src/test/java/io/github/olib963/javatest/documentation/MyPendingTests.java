@@ -4,14 +4,15 @@ package io.github.olib963.javatest.documentation;
 import io.github.olib963.javatest.TestSuiteClass;
 import io.github.olib963.javatest.Testable;
 
-import java.util.stream.Stream;
+import java.util.Collection;
+import java.util.List;
 
 import static io.github.olib963.javatest.JavaTest.*;
 
 public class MyPendingTests implements TestSuiteClass {
     @Override
-    public Stream<Testable> testables() {
-        return Stream.of(
+    public Collection<Testable> testables() {
+        return List.of(
                 test("Addition", () -> that(1 + 1 == 2, "Expected one add one to be two")),
                 test("Multiplication", () -> pending()),
                 test("Division by Zero",

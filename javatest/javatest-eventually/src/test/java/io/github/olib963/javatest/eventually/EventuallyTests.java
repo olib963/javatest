@@ -4,7 +4,9 @@ import io.github.olib963.javatest.*;
 import io.github.olib963.javatest.Testable.Test;
 
 import java.time.Duration;
+import java.util.Collection;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static io.github.olib963.javatest.JavaTest.*;
@@ -19,14 +21,14 @@ public class EventuallyTests {
 
     static class PassingTests implements TestSuiteClass {
         @Override
-        public Stream<Testable> testables() {
+        public Collection<Testable> testables() {
             var simpleTests = Stream.of(
                     JavaTest.test("Simple pass", () -> eventually(() -> that(true, "should pass"))),
                     test("Eventually pending", () -> eventually(() -> pending("have not yet written eventual condition")))
             );
             // Run the atomic integer 10 times. Repeat might be a good use case for extraction to common function.
             var atomicIntTests = Stream.generate(this::atomicIntegerTest).limit(10);
-            return Stream.concat(simpleTests, atomicIntTests);
+            return Stream.concat(simpleTests, atomicIntTests).collect(Collectors.toList());
         }
 
         private Test atomicIntegerTest() {

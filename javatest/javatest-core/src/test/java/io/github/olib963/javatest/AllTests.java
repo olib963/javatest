@@ -4,6 +4,7 @@ import io.github.olib963.javatest.documentation.*;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static io.github.olib963.javatest.JavaTest.*;
@@ -16,7 +17,7 @@ public class AllTests {
                 test(t.name, () -> {
                     var results = run(Stream.of(testableRunner(t)), Collections.emptyList());
                     return that(!results.succeeded, t.name + " should fail");
-                })));
+                })).collect(Collectors.toList()));
         var loggingTests = new LoggingTests();
         var result = run(testableRunner(List.of(simpleTests, failingTests, loggingTests)));
         if (!result.succeeded) {

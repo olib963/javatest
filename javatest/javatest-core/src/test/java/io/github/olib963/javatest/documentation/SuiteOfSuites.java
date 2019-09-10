@@ -3,7 +3,7 @@ package io.github.olib963.javatest.documentation;
 
 import io.github.olib963.javatest.Testable.TestSuite;
 
-import java.util.stream.Stream;
+import java.util.List;
 
 import static io.github.olib963.javatest.JavaTest.*;
 
@@ -12,7 +12,7 @@ public class SuiteOfSuites {
     // A suite composed of one test and two suites
     public static TestSuite compositeSuite() {
         return suite("MyComposedTests",
-                Stream.of(
+                List.of(
                         test("Simple Test", () -> that(true, "Expected test to pass")),
                         MyFirstTestSuite.mySuite(),
                         new ClassAsSuite()

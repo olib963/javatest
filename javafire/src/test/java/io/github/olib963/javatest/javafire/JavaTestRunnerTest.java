@@ -4,10 +4,7 @@ import io.github.olib963.javatest.*;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.project.MavenProject;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static io.github.olib963.javatest.JavaTest.test;
@@ -61,8 +58,8 @@ public class JavaTestRunnerTest implements TestSuiteClass {
     }
 
     @Override
-    public Stream<Testable> testables() {
-        return Stream.of(
+    public Collection<Testable> testables() {
+        return List.of(
                 test("Test failure to get runtime classpath elements", () -> {
                     var mavenProject = mock(MavenProject.class);
                     doThrow(DependencyResolutionRequiredException.class).when(mavenProject).getRuntimeClasspathElements();

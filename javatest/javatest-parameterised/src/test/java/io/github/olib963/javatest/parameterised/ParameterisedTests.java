@@ -4,17 +4,19 @@ import io.github.olib963.javatest.TestSuiteClass;
 import io.github.olib963.javatest.Testable;
 
 import java.util.Arrays;
-import java.util.stream.Stream;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static io.github.olib963.javatest.JavaTest.*;
 import static io.github.olib963.javatest.parameterised.Parameterised.parameterised;
 
 public class ParameterisedTests implements TestSuiteClass {
     @Override
-    public Stream<Testable> testables() {
-        return Stream.of(
-                suite("Multiplication", parameterised(Data.multiplication(), this::multiplicationTest)),
-                suite("Mad addition Tests", parameterised(Data.madAddition(), this::additionTest))
+    public Collection<Testable> testables() {
+        return List.of(
+                suite("Multiplication", parameterised(Data.multiplication(), this::multiplicationTest).collect(Collectors.toList())),
+                suite("Mad addition Tests", parameterised(Data.madAddition(), this::additionTest).collect(Collectors.toList()))
         );
     }
 

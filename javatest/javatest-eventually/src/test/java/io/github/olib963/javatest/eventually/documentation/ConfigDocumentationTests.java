@@ -6,7 +6,8 @@ import io.github.olib963.javatest.Testable;
 import io.github.olib963.javatest.eventually.EventualConfig;
 
 import java.time.Duration;
-import java.util.stream.Stream;
+import java.util.Collection;
+import java.util.List;
 
 import static io.github.olib963.javatest.JavaTest.test;
 // tag::imports[]
@@ -38,9 +39,9 @@ public class ConfigDocumentationTests implements TestSuiteClass {
     // end::config[]
 
     @Override
-    public Stream<Testable> testables() {
+    public Collection<Testable> testables() {
         var container = new MyCustomEventualAssertions();
-        return Stream.of(
+        return List.of(
                 test("Default config should work", () -> container.attempt20TimesAndWait100Millis),
                 test("Custom config should work", () -> container.attemptUsingCustomConfig),
                 test("Custom config (no delay) should work", () -> container.attemptUsingCustomConfigNoDelay),

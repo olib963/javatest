@@ -73,7 +73,7 @@ public class JavaTest {
         return new Testable.Test(name, testFunction);
     }
 
-    public static Testable.TestSuite suite(String name, Stream<? extends Testable> testables) {
+    public static Testable.TestSuite suite(String name, Collection<? extends Testable> testables) {
         return new Testable.TestSuite(name, testables);
     }
 

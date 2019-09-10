@@ -7,6 +7,6 @@ trait Suite extends TestSuiteClass {
 
   def tests: Seq[Testable]
 
-  override def testables() = tests.asJava.stream()
+  override def testables() = tests.asJava
 
 }

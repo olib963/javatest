@@ -1,8 +1,8 @@
 package io.github.olib963.javatest;
 
 
+import java.util.Collection;
 import java.util.function.Function;
-import java.util.stream.Stream;
 
 import static io.github.olib963.javatest.JavaTest.suite;
 
@@ -13,5 +13,5 @@ public interface TestSuiteClass extends Testable {
         return suiteFn.apply(suite(getClass().getSimpleName(), testables()));
     }
 
-    Stream<Testable> testables();
+    Collection<Testable> testables();
 }

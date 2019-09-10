@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 * `TestResults` aggregation - split logs for the run into their own list.
 * Rename `TestResults.init` to `TestResults.empty`
 * Default runner to be eager runner
+* Where possible ``Stream``s to ``List``s since ``Stream``s are mutable
 
 === Removed
 
