@@ -6,7 +6,6 @@ import java.io.File;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static io.github.olib963.javatest.JavaTest.test;
 import static io.github.olib963.javatest.JavaTest.that;
@@ -14,8 +13,8 @@ import static io.github.olib963.javatest.JavaTest.that;
 // tag::tests[]
 public class IntegrationTests {
 
-    public static Stream<Testable> tests(File testDirectory) {
-        return Stream.of(
+    public static List<Testable> tests(File testDirectory) {
+        return List.of(
                 test("Exists", () ->
                         that(testDirectory.isDirectory(), "Expected test file to be a directory")
                                 .and(that(testDirectory.exists(), "Expected test directory to exist"))),

@@ -3,10 +3,10 @@ package io.github.olib963.javatest.fixtures;
 import io.github.olib963.javatest.Testable;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.stream.Stream;
 
 import static io.github.olib963.javatest.JavaTest.test;
 import static io.github.olib963.javatest.JavaTest.that;
@@ -39,9 +39,9 @@ public class CustomDefinitions {
 
     // end::definitions[]
 
-    public static Stream<Testable> tests() {
+    public static List<Testable> tests() {
         var container = new CustomDefinitions();
-        return Stream.of(
+        return List.of(
                 test("String fixture works", () ->
                         that(container.stringDefinition.create().equals(Success("Hello")),
                                 "String should create a successful 'Hello'")),

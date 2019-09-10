@@ -1,4 +1,5 @@
 package io.github.olib963.javatest.matchers;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static io.github.olib963.javatest.JavaTest.*;
@@ -6,7 +7,7 @@ import static io.github.olib963.javatest.JavaTest.*;
 public class Tests {
 
     public static void main(String... args) {
-        var result = runTests(Stream.of(
+        var result = runTests(List.of(
                 SimpleMatcherTests.suite(),
                 StringMatcherTests.suite(),
                 ExceptionMatcherTests.suite(),

@@ -3,7 +3,7 @@ package io.github.olib963.javatest;
 import io.github.olib963.javatest.documentation.*;
 
 import java.util.Collections;
-import java.util.stream.Collectors;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static io.github.olib963.javatest.JavaTest.*;
@@ -18,13 +18,13 @@ public class AllTests {
                     return that(!results.succeeded, t.name + " should fail");
                 })));
         var loggingTests = new LoggingTests();
-        var result = run(testableRunner(Stream.of(simpleTests, failingTests, loggingTests)));
+        var result = run(testableRunner(List.of(simpleTests, failingTests, loggingTests)));
         if (!result.succeeded) {
             throw new RuntimeException("Tests failed!");
         }
 
         var extraDocRunners = new MyRunners();
-        var simpleDocRunner = testableRunner(Stream.of(
+        var simpleDocRunner = testableRunner(List.of(
                 new AllDocumentationTests(),
                 MyFirstTestSuite.mySuite(),
                 new ClassAsSuite(),

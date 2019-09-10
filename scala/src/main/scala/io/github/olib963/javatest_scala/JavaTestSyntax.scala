@@ -23,6 +23,6 @@ trait JavaTestSyntax {
   def that[A](messagePrefix: String, value: A, matcher: Matcher[A]): Assertion = Matcher.that(messagePrefix, value, matcher)
 
   implicit def runnerFromTestable(testable: Testable): TestRunner = JavaTest.testableRunner(testable)
-  implicit def runnerFromTestables(testables: Seq[Testable]): TestRunner = JavaTest.testableRunner(testables.asJava.stream())
+  implicit def runnerFromTestables(testables: Seq[Testable]): TestRunner = JavaTest.testableRunner(testables.asJava)
 
 }

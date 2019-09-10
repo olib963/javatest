@@ -17,7 +17,7 @@ public class MyRunners implements TestRunners {
     public Stream<TestRunner> runners() {
         // Define a runner for unit tests in parallel
         List<Testable> tests = List.of(new MyFirstUnitTestSuite(), new MySecondUnitTestSuite());
-        var unitTests = testableRunner(tests.parallelStream());
+        var unitTests = lazyTestableRunner(tests.parallelStream());
 
         // Define integration tests with an executor fixture
         var executorDefinition = Fixtures.definitionFromThrowingFunctions(

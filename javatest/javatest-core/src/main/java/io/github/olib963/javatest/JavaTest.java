@@ -2,11 +2,10 @@ package io.github.olib963.javatest;
 
 import io.github.olib963.javatest.assertions.BooleanAssertion;
 import io.github.olib963.javatest.assertions.PendingAssertion;
+import io.github.olib963.javatest.runners.CollectionRunner;
 import io.github.olib963.javatest.runners.StreamRunner;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.*;
 import java.util.stream.Stream;
 
 public class JavaTest {
@@ -32,13 +31,16 @@ public class JavaTest {
     }
 
     public static TestResults runTests(Testable tests) {
-        return runTests(Stream.of(tests));
+        return runTests(List.of(tests));
     }
     public static TestResults runTests(Testable firstTest, Testable... tests) {
-        return runTests(Stream.concat(Stream.of(firstTest), Arrays.stream(tests)));
+        var testables = new ArrayList<Testable>(tests.length + 1);
+        testables.add(firstTest);
+        testables.addAll(Arrays.asList(tests));
+        return runTests(testables);
     }
 
-    public static TestResults runTests(Stream<? extends Testable> tests) {
+    public static TestResults runTests(Collection<? extends Testable> tests) {
         return run(testableRunner(tests));
     }
 
@@ -47,14 +49,22 @@ public class JavaTest {
             Collections.singletonList(TestCompletionObserver.colourLogger());
 
     public static TestRunner testableRunner(Testable testable) {
-        return testableRunner(Stream.of(testable));
+        return testableRunner(List.of(testable));
     }
 
-    public static TestRunner testableRunner(Stream<? extends Testable> tests) {
+    public static TestRunner testableRunner(Collection<? extends Testable> tests) {
         return testableRunner(tests, DEFAULT_OBSERVER);
     }
 
-    public static TestRunner testableRunner(Stream<? extends Testable> tests, Collection<TestCompletionObserver> observers) {
+    public static TestRunner testableRunner(Collection<? extends Testable> tests, Collection<TestCompletionObserver> observers) {
+        return new CollectionRunner(tests, observers);
+    }
+
+    public static TestRunner lazyTestableRunner(Stream<? extends Testable> tests) {
+        return lazyTestableRunner(tests, DEFAULT_OBSERVER);
+    }
+
+    public static TestRunner lazyTestableRunner(Stream<? extends Testable> tests, Collection<TestCompletionObserver> observers) {
         return new StreamRunner(tests, observers);
     }
 

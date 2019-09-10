@@ -70,14 +70,14 @@ invoke the `runTests` function to run our tests and check if they passed.
 ----
 package foo;
 
-import java.util.stream.Stream;
+import java.util.List;
 
 import static io.github.olib963.javatest.JavaTest.*;
 
 public class Tests {
 
     public static void main(String... args) {
-        var result = runTests(Stream.of(
+        var result = runTests(List.of(
                 test("Addition", () -> that(1 + 1 == 2, "Math still works, one add one is still two")),
                 test("Calculator Addition", () -> {
                     var one = 1;
@@ -149,7 +149,7 @@ public class MyRunners implements TestRunners {
     public Stream<TestRunner> runners() {
         // Define a runner for unit tests in parallel
         List<Testable> tests = List.of(new MyFirstUnitTestSuite(), new MySecondUnitTestSuite());
-        var unitTests = testableRunner(tests.parallelStream());
+        var unitTests = lazyTestableRunner(tests.parallelStream());
 
         // Define integration tests with an executor fixture
         var executorDefinition = Fixtures.definitionFromThrowingFunctions(
@@ -400,17 +400,18 @@ logging just pass an empty collection, a `TestCompletionObserver.plainLogger` al
 ----
 import io.github.olib963.javatest.TestRunner;
 import java.util.Collections;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static io.github.olib963.javatest.JavaTest.*;
 
 public class MyRunners {
 
-    public TestRunner singleTestRunner = testableRunner(Stream.of(
+    public TestRunner singleTestRunner = testableRunner(List.of(
             test("Simple test", () -> pending())));
 
     public TestRunner suiteTestsNoLogging = testableRunner(
-            Stream.of(MyFirstTestSuite.mySuite(), new ClassAsSuite()),
+            List.of(MyFirstTestSuite.mySuite(), new ClassAsSuite()),
             Collections.emptyList() // No observers so no logging
     );
 
@@ -441,13 +442,14 @@ result how you see fit. There is a convenience function `runTests` defined to ju
 [source, java]
 ----
 import io.github.olib963.javatest.*;
-import java.util.stream.Stream;
+
+import java.util.List;
 
 import static io.github.olib963.javatest.JavaTest.*;
 
 public class MyEntrypoint {
     public static void main(String... args) {
-        var results = runTests(Stream.of(
+        var results = runTests(List.of(
                 test("Addition", () -> that(1 + 1 == 2, "Expected one add one to be two")),
                 test("String lower case", () ->
                         that("HELLO".toLowerCase().equals("hello"), "Expected lowercase 'HELLO' to be 'hello'"))
@@ -494,7 +496,7 @@ public class MyRunners implements TestRunners {
     public Stream<TestRunner> runners() {
         // Define a runner for unit tests in parallel
         List<Testable> tests = List.of(new MyFirstUnitTestSuite(), new MySecondUnitTestSuite());
-        var unitTests = testableRunner(tests.parallelStream());
+        var unitTests = lazyTestableRunner(tests.parallelStream());
 
         // Define integration tests with an executor fixture
         var executorDefinition = Fixtures.definitionFromThrowingFunctions(

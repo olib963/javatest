@@ -125,7 +125,7 @@ public class JavaTestRunnerTest implements TestSuiteClass {
         @Override
         public Stream<TestRunner> runners() {
             return Stream.of(JavaTest.testableRunner(
-                    Stream.of(test("Failure", () -> that(false, "Expected false"))),
+                    List.of(test("Failure", () -> that(false, "Expected false"))),
                     Collections.emptyList()
             ));
         }
@@ -134,7 +134,7 @@ public class JavaTestRunnerTest implements TestSuiteClass {
         @Override
         public Stream<TestRunner> runners() {
             return Stream.of(JavaTest.testableRunner(
-                    Stream.of(test("Success", () -> that(true, "Expected true"))),
+                    List.of(test("Success", () -> that(true, "Expected true"))),
                     Collections.emptyList()
             ));
         }

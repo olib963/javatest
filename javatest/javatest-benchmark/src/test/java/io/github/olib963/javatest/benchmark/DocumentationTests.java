@@ -4,6 +4,7 @@ import io.github.olib963.javatest.Testable;
 import io.github.olib963.javatest.Testable.*;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -55,11 +56,11 @@ public class DocumentationTests {
         return suite("Documentation", Stream.of(
                 test("Passing tests pass", () -> {
                     var singleTimedTests = Stream.of(bM.timedTest, new MyCustomBenchmark().timedTestCustomFormat);
-                    var results = run(testableRunner(Stream.concat(bM.bunchOfTimedTests, singleTimedTests)));
+                    var results = run(lazyTestableRunner(Stream.concat(bM.bunchOfTimedTests, singleTimedTests)));
                     return that(results.succeeded, "All tests passed");
                 }),
                 test("Failing test fails", () -> {
-                    var results = runTests(Stream.of(new MyLimitedTest().failingTest));
+                    var results = runTests(List.of(new MyLimitedTest().failingTest));
                     return that(!results.succeeded, "Test failed");
                 })
         ));

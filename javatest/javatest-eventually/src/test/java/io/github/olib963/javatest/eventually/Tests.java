@@ -1,12 +1,12 @@
 package io.github.olib963.javatest.eventually;
 
-import io.github.olib963.javatest.TestResults;
 import io.github.olib963.javatest.eventually.documentation.ConfigDocumentationTests;
 import io.github.olib963.javatest.eventually.documentation.EventualTest;
 import io.github.olib963.javatest.fixtures.FixtureDefinition;
 import io.github.olib963.javatest.fixtures.Fixtures;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Stream;
@@ -19,7 +19,7 @@ public class Tests {
             Fixtures.definitionFromThrowingFunctions(Executors::newSingleThreadExecutor, ExecutorService::shutdown);
 
     public static void main(String... args) {
-        var result = runTests(Stream.of(
+        var result = runTests(List.of(
                 EventuallyTests.passing(),
                 suite("Failing Tests",  EventuallyTests.FAILING.map(t ->
                         test(t.name, () -> {
@@ -40,7 +40,7 @@ public class Tests {
         }
 
         var documentationTests = Fixtures.fixtureRunner("Executor Service", executorFixture,
-                es -> testableRunner(Stream.of(new ConfigDocumentationTests(), EventualTest.eventualTest(es))));
+                es -> testableRunner(List.of(new ConfigDocumentationTests(), EventualTest.eventualTest(es))));
 
         if (!run(documentationTests).succeeded) {
             throw new RuntimeException("Documentation tests failed!");
