@@ -23,6 +23,9 @@ jobs:
           keys:
           - *clojure-cache
       - run:
+          name: Install Maven
+          command: sudo apt-get install maven
+      - run:
           name: Test Java and Install
           command: mvn -P local-install install
       - save_cache:
