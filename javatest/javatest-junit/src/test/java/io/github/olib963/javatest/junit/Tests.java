@@ -25,7 +25,7 @@ public class Tests {
             throw new RuntimeException("Tests failed!");
         }
 
-        var docResult = JavaTest.run(JUnitRunners.junitRunners().stream());
+        var docResult = JavaTest.run(JUnitRunners.junitRunners());
         if (!docResult.succeeded) {
             throw new RuntimeException("Documentation tests failed!");
         }

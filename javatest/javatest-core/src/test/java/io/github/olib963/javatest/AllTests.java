@@ -5,7 +5,6 @@ import io.github.olib963.javatest.documentation.*;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static io.github.olib963.javatest.JavaTest.*;
 
@@ -15,7 +14,7 @@ public class AllTests {
         var simpleTests = SimpleTests.passing();
         var failingTests = suite("Failing Tests", SimpleTests.FAILING.map(t ->
                 test(t.name, () -> {
-                    var results = run(Stream.of(testableRunner(t)), Collections.emptyList());
+                    var results = run(List.of(testableRunner(t)), Collections.emptyList());
                     return that(!results.succeeded, t.name + " should fail");
                 })).collect(Collectors.toList()));
         var loggingTests = new LoggingTests();
@@ -32,7 +31,7 @@ public class AllTests {
                 SuiteOfSuites.compositeSuite(),
                 new MyPendingTests()
         ));
-        var docResult = run(Stream.of(simpleDocRunner, extraDocRunners.singleTestRunner, extraDocRunners.suiteTestsNoLogging));
+        var docResult = run(List.of(simpleDocRunner, extraDocRunners.singleTestRunner, extraDocRunners.suiteTestsNoLogging));
         if (!docResult.succeeded) {
             throw new RuntimeException("Documentation tests failed!");
         }

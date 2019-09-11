@@ -15,19 +15,22 @@ public class JavaTest {
     private static final Collection<TestRunCompletionObserver> DEFAULT_RUN_OBSERVER =
             Collections.singletonList(TestRunCompletionObserver.logger());
 
-    public static TestResults run(Stream<TestRunner> runners) {
+    public static TestResults run(Collection<TestRunner> runners) {
         return run(runners, DEFAULT_RUN_OBSERVER);
     }
 
-    public static TestResults run(Stream<TestRunner> runners, Collection<TestRunCompletionObserver> observers) {
-        var results = runners.map(TestRunner::run).reduce(TestResults.empty(), TestResults::combine);
+    public static TestResults run(Collection<TestRunner> runners, Collection<TestRunCompletionObserver> observers) {
+        var results = runners.stream().map(TestRunner::run).reduce(TestResults.empty(), TestResults::combine);
         observers.forEach(o -> o.onRunCompletion(results));
         return results;
     }
 
     // Convenience functions
     public static TestResults run(TestRunner firstRunner, TestRunner... moreRunners) {
-        return run(Stream.concat(Stream.of(firstRunner), Arrays.stream(moreRunners)));
+        var runners = new ArrayList<TestRunner>(moreRunners.length + 1);
+        runners.add(firstRunner);
+        runners.addAll(Arrays.asList(moreRunners));
+        return run(runners);
     }
 
     public static TestResults runTests(Testable tests) {

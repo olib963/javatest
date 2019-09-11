@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static io.github.olib963.javatest.JavaTest.*;
 
@@ -24,7 +23,7 @@ public class Tests {
                 EventuallyTests.passing(),
                 suite("Failing Tests",  EventuallyTests.FAILING.map(t ->
                         test(t.name, () -> {
-                            var results = run(Stream.of(testableRunner(t)), Collections.emptyList());
+                            var results = run(List.of(testableRunner(t)), Collections.emptyList());
                             return that(!results.succeeded, t.name + " should fail");
                         })
                 ).collect(Collectors.toList()))

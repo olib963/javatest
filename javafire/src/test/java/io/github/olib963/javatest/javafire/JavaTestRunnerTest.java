@@ -5,7 +5,6 @@ import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.project.MavenProject;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 import static io.github.olib963.javatest.JavaTest.test;
 import static io.github.olib963.javatest.JavaTest.that;
@@ -113,15 +112,15 @@ public class JavaTestRunnerTest implements TestSuiteClass {
         private RunnersWithNoDefaultConstructor() {}
 
         @Override
-        public Stream<TestRunner> runners() {
-            return Stream.empty();
+        public Collection<TestRunner> runners() {
+            return Collections.emptyList();
         }
     }
 
     public static class RunnersWithFailingTest implements TestRunners {
         @Override
-        public Stream<TestRunner> runners() {
-            return Stream.of(JavaTest.testableRunner(
+        public Collection<TestRunner> runners() {
+            return List.of(JavaTest.testableRunner(
                     List.of(test("Failure", () -> that(false, "Expected false"))),
                     Collections.emptyList()
             ));
@@ -129,8 +128,8 @@ public class JavaTestRunnerTest implements TestSuiteClass {
     }
     public static class RunnersWithPassingTests implements TestRunners {
         @Override
-        public Stream<TestRunner> runners() {
-            return Stream.of(JavaTest.testableRunner(
+        public Collection<TestRunner> runners() {
+            return List.of(JavaTest.testableRunner(
                     List.of(test("Success", () -> that(true, "Expected true"))),
                     Collections.emptyList()
             ));
