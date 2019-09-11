@@ -10,8 +10,8 @@ trait JavaTestSyntax {
 
   def run(runners: TestRunner*): TestResults = JavaTest.run(runners.asJava.stream())
 
-  def suite(name: String)(tests: Testable*): Testable.TestSuite = suiteSeq(name)(tests.toSeq)
-  def suiteSeq(name: String)(tests: Seq[Testable]): Testable.TestSuite = JavaTest.suite(name, tests.asJava)
+  def suite(name: String, firstTest: Testable, tests: Testable*): Testable.TestSuite = suite(name, firstTest +: tests.toSeq)
+  def suite(name: String, tests: Seq[Testable]): Testable.TestSuite = JavaTest.suite(name, tests.asJava)
 
   def test(name: String)(test: => Assertion): Testable.Test = JavaTest.test(name, () => test)
   def pending(): Assertion = JavaTest.pending()

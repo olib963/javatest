@@ -3,8 +3,8 @@ import io.github.olib963.javatest.Testable
 
 object SimpleTests extends Suite with JavaTestSyntax {
   override def tests: Seq[Testable] = Seq(
-    suite("Simple Suite")(
-      suiteSeq("Pending Suite")(Seq(
+    suite("Simple Suite",
+      suite("Pending Suite", Seq(
         test("My first pending test")(pending()),
         test("My second pending test")(pending("because I haven't implemented it yet"))
       )),
