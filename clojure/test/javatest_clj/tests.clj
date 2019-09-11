@@ -1,13 +1,15 @@
 (ns javatest-clj.tests
-  (:import io.github.olib963.javatest.JavaTest
-           io.github.olib963.javatest.CheckedSupplier)
+  (:require [javatest-clj.core :refer :all])
   (:gen-class))
 
 ; lein run -m javatest-clj.tests
 (defn -main []
-  (let [simple-test (JavaTest/test "Simple test" (reify CheckedSupplier
-                                                   (get [this] (JavaTest/that true "passes"))))
-        results (JavaTest/runTests simple-test)]
-    (if (.succeeded results)
-      (println "yay")
+  (let [simple-test (Test "Simple test"
+                          (that true "passes"))
+        suite (Suite "My suite"
+                     [(Suite "Nested suite" [simple-test])
+                      (Test "another test"
+                            (that (= 2 (+ 1 1))))])
+        results (run-tests suite)]
+    (when-not (:succeeded results)
       (throw (Exception. "BOO TESTS FAILED")))))
