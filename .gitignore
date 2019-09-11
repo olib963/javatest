@@ -1,2 +1,3 @@
 **/target
 javatest/integration-test
+.lein-failures
