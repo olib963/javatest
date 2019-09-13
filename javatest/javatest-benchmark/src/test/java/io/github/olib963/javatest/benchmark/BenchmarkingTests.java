@@ -5,6 +5,8 @@ import io.github.olib963.javatest.benchmark.internal.BenchmarkAssertion;
 import io.github.olib963.javatest.benchmark.internal.BenchmarkRunner;
 
 import java.time.Duration;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -20,8 +22,8 @@ public class BenchmarkingTests implements TestSuiteClass {
     private static final Assertion PASS = that(true, "Assertion passes");
 
     @Override
-    public Stream<Testable> testables() {
-        return Stream.of(
+    public Collection<Testable> testables() {
+        return List.of(
                 test("Formatted duration", () -> {
                     Supplier<Duration> timeFunction = () -> Duration.ofMillis(12345);
                     var benchmarked = new BenchmarkAssertion(PASS, timeFunction, Benchmark.DEFAULT_FORMAT, Optional.empty());

@@ -1,6 +1,7 @@
 package io.github.olib963.javatest;
 
 
+import java.util.Collection;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -25,10 +26,14 @@ public interface Testable {
 
     final class TestSuite implements Testable {
         public final String name;
-        public final Stream<? extends Testable> testables;
-        TestSuite(String name, Stream<? extends Testable> testables) {
+        private final Collection<? extends Testable> testables;
+        TestSuite(String name, Collection<? extends Testable> testables) {
             this.name = name;
             this.testables = testables;
+        }
+
+        public Stream<? extends Testable> testables() {
+            return testables.stream();
         }
 
         @Override

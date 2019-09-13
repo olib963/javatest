@@ -4,20 +4,20 @@ package io.github.olib963.javatest.fixtures.documentation;
 import io.github.olib963.javatest.*;
 import io.github.olib963.javatest.fixtures.Fixtures;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.stream.Stream;
 
 import static io.github.olib963.javatest.JavaTest.*;
 
 public class MyRunners implements TestRunners {
 
     @Override
-    public Stream<TestRunner> runners() {
+    public Collection<TestRunner> runners() {
         // Define a runner for unit tests in parallel
         List<Testable> tests = List.of(new MyFirstUnitTestSuite(), new MySecondUnitTestSuite());
-        var unitTests = testableRunner(tests.parallelStream());
+        var unitTests = lazyTestableRunner(tests.parallelStream());
 
         // Define integration tests with an executor fixture
         var executorDefinition = Fixtures.definitionFromThrowingFunctions(
@@ -27,7 +27,7 @@ public class MyRunners implements TestRunners {
                 executorDefinition,
                 es -> testableRunner(new MyIntegrationTestSuite(es)));
         // Run both
-        return Stream.of(unitTests, integrationTests);
+        return List.of(unitTests, integrationTests);
     }
 
 }

@@ -4,8 +4,9 @@ import io.github.olib963.javatest.Testable;
 import io.github.olib963.javatest.Testable.*;
 
 import java.time.Duration;
+import java.util.Collection;
+import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Stream;
 
 // tag::imports[]
 import static io.github.olib963.javatest.JavaTest.*;
@@ -19,8 +20,8 @@ public class DocumentationTests {
         private Test simpleTest = test("Some test I have", () -> that(true, "Passing test"));
         public Test timedTest = benchmark(simpleTest);
 
-        public Stream<Testable> bunchOfTimedTests = benchmarkAllTests(
-                Stream.of(new MyFirstSuite(), new MySecondSuite(), simpleTest)
+        public Collection<Testable> bunchOfTimedTests = benchmarkAllTests(
+                List.of(new MyFirstSuite(), new MySecondSuite(), simpleTest)
         );
     }
     // end::simple[]
@@ -35,7 +36,7 @@ public class DocumentationTests {
             return that(true, "Ordinarily this would pass.");
         });
 
-        public Test failingTest = failIfLongerThan(longTest, Duration.ofSeconds(4));
+        public Test failingTest = failIfLongerThan(Duration.ofSeconds(4), longTest);
     }
     // end::limit[]
 
@@ -52,14 +53,16 @@ public class DocumentationTests {
 
     public Testable testSuite() {
         var bM = new MyBenchMarks();
-        return suite("Documentation", Stream.of(
+        return suite("Documentation", List.of(
                 test("Passing tests pass", () -> {
-                    var singleTimedTests = Stream.of(bM.timedTest, new MyCustomBenchmark().timedTestCustomFormat);
-                    var results = run(testableRunner(Stream.concat(bM.bunchOfTimedTests, singleTimedTests)));
+                    var timedTests = bM.bunchOfTimedTests;
+                    timedTests.add(bM.timedTest);
+                    timedTests.add(new MyCustomBenchmark().timedTestCustomFormat);
+                    var results = run(testableRunner(timedTests));
                     return that(results.succeeded, "All tests passed");
                 }),
                 test("Failing test fails", () -> {
-                    var results = runTests(Stream.of(new MyLimitedTest().failingTest));
+                    var results = runTests(List.of(new MyLimitedTest().failingTest));
                     return that(!results.succeeded, "Test failed");
                 })
         ));

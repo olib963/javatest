@@ -2,6 +2,7 @@ package io.github.olib963.javatest.parameterised;
 
 import java.io.IOException;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static io.github.olib963.javatest.JavaTest.*;
@@ -15,9 +16,9 @@ public class Tests {
         }
 
         var palindromes = suite("Palindrome Tests", Stream.concat(
-                DocumentationTests.palindromes().inMemoryPalindromeTests(),
+                DocumentationTests.palindromes().inMemoryPalindromeTests().stream(),
                 DocumentationTests.palindromes().palindromeTestsFromFile()
-        ));
+        ).collect(Collectors.toList()));
         var fibonacci = suite("Finonacci Tests", DocumentationTests.fibonacci().fibonacciTests());
         var docResult = runTests(palindromes, fibonacci);
         if (!docResult.succeeded) {

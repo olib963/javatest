@@ -1,13 +1,13 @@
 package foo;
 
-import java.util.stream.Stream;
+import java.util.List;
 
 import static io.github.olib963.javatest.JavaTest.*;
 
 public class Tests {
 
     public static void main(String... args) {
-        var result = runTests(Stream.of(
+        var result = runTests(List.of(
                 test("Addition", () -> that(1 + 1 == 2, "Math still works, one add one is still two")),
                 test("Calculator Addition", () -> {
                     var one = 1;

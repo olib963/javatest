@@ -7,7 +7,7 @@ object RunnerDocs extends JavaTestSyntax {
 
   // tag::definition[]
   val runner: TestRunner = Seq(
-    suite("My Suite")(
+    suite("My Suite",
       test("test1")(that(true, "passes")),
       test("test2")(that(true, "passes"))
     )
@@ -18,7 +18,7 @@ object RunnerDocs extends JavaTestSyntax {
     // tag::running[]
     run(
       Seq(
-        suite("My Suite")(
+        suite("My Suite",
           test("test1")(that(true, "passes")),
           test("test2")(that(true, "passes"))
         )

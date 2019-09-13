@@ -7,8 +7,8 @@ Some tests (usually integration tests) will require external resources in order 
 ----
 public class IntegrationTests {
 
-    public static Stream<Testable> tests(File testDirectory) {
-        return Stream.of(
+    public static List<Testable> tests(File testDirectory) {
+        return List.of(
                 test("Exists", () ->
                         that(testDirectory.isDirectory(), "Expected test file to be a directory")
                                 .and(that(testDirectory.exists(), "Expected test directory to exist"))),

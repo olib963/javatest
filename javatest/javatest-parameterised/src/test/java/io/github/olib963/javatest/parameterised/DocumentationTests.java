@@ -5,11 +5,12 @@ import io.github.olib963.javatest.Testable.Test;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collection;
+import java.util.List;
 import java.util.stream.Stream;
 
-import static io.github.olib963.javatest.JavaTest.test;
-import static io.github.olib963.javatest.JavaTest.that;
 // tag::import[]
+import static io.github.olib963.javatest.JavaTest.*;
 import static io.github.olib963.javatest.parameterised.Parameterised.*;
 // end::import[]
 
@@ -17,10 +18,10 @@ public class DocumentationTests {
 
     // tag::palindrome[]
     public class PalindromeTests {
-        public Stream<Test> inMemoryPalindromeTests() {
+        public Collection<Test> inMemoryPalindromeTests() {
             // Create parameterised tests from an in memory stream
             return parameterised(
-                    Stream.of("Civic", "Deified", "Kayak", "Level", "Madam"),
+                    List.of("Civic", "Deified", "Kayak", "Level", "Madam"),
                     this::palindromeTest
             );
         }
@@ -58,9 +59,9 @@ public class DocumentationTests {
 
     // tag::fibonacci[]
     public class FibonacciTests {
-        public Stream<Test> fibonacciTests() {
+        public Collection<Test> fibonacciTests() {
             return parameterised(
-                    Stream.of(
+                    List.of(
                             // t() is the tuple constructor and can be applied to up to 10 arguments
                             t(0, 0L),
                             t(1, 1L),

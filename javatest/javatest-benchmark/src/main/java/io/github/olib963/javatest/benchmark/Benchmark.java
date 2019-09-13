@@ -8,9 +8,11 @@ import io.github.olib963.javatest.benchmark.internal.BenchmarkAssertion;
 import io.github.olib963.javatest.benchmark.internal.BenchmarkRunner;
 
 import java.time.Duration;
+import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Benchmark {
@@ -24,11 +26,11 @@ public class Benchmark {
         return benchmark(test, DEFAULT_FORMAT);
     }
 
-    public static Test failIfLongerThan(Test test, Duration limit) {
-        return failIfLongerThan(test, limit, DEFAULT_FORMAT);
+    public static Test failIfLongerThan(Duration limit, Test test) {
+        return failIfLongerThan(limit, test, DEFAULT_FORMAT);
     }
 
-    public static Test failIfLongerThan(Test test, Duration limit, Function<Duration, String> formatter) {
+    public static Test failIfLongerThan(Duration limit, Test test, Function<Duration, String> formatter) {
         return benchmarkTest(test, formatter, Optional.of(limit));
     }
 
@@ -48,15 +50,15 @@ public class Benchmark {
         return () -> Duration.ofMillis(System.currentTimeMillis() - startMillis);
     }
 
-    public static Stream<Testable> benchmarkAllTests(Stream<Testable> testables) {
+    public static Collection<Testable> benchmarkAllTests(Collection<Testable> testables) {
         return benchmarkAllTests(testables, DEFAULT_FORMAT);
     }
 
-    public static Stream<Testable> benchmarkAllTests(Stream<? extends Testable> testables, Function<Duration, String> formatter) {
-        return testables.map(t -> t.match(
+    public static Collection<Testable> benchmarkAllTests(Collection<? extends Testable> testables, Function<Duration, String> formatter) {
+        return testables.stream().map(t -> t.match(
                 test -> benchmark(test, formatter),
-                testSuite -> JavaTest.suite(testSuite.name, benchmarkAllTests(testSuite.testables, formatter))
-        ));
+                testSuite -> JavaTest.suite(testSuite.name, benchmarkAllTests(testSuite.testables().collect(Collectors.toList()), formatter))
+        )).collect(Collectors.toList());
     }
 
     public static TestRunner benchmark(Stream<TestRunner> runners) {

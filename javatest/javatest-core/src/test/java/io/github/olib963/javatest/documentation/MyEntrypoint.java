@@ -2,13 +2,14 @@ package io.github.olib963.javatest.documentation;
 
 // tag::include[]
 import io.github.olib963.javatest.*;
-import java.util.stream.Stream;
+
+import java.util.List;
 
 import static io.github.olib963.javatest.JavaTest.*;
 
 public class MyEntrypoint {
     public static void main(String... args) {
-        var results = runTests(Stream.of(
+        var results = runTests(List.of(
                 test("Addition", () -> that(1 + 1 == 2, "Expected one add one to be two")),
                 test("String lower case", () ->
                         that("HELLO".toLowerCase().equals("hello"), "Expected lowercase 'HELLO' to be 'hello'"))

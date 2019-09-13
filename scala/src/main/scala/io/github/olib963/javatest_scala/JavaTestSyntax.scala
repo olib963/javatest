@@ -8,10 +8,10 @@ import scala.language.implicitConversions
 
 trait JavaTestSyntax {
 
-  def run(runners: TestRunner*): TestResults = JavaTest.run(runners.asJava.stream())
+  def run(runners: TestRunner*): TestResults = JavaTest.run(runners.asJava)
 
-  def suite(name: String)(tests: Testable*): Testable.TestSuite = suiteSeq(name)(tests.toSeq)
-  def suiteSeq(name: String)(tests: Seq[Testable]): Testable.TestSuite = JavaTest.suite(name, tests.asJava.stream())
+  def suite(name: String, firstTest: Testable, tests: Testable*): Testable.TestSuite = suite(name, firstTest +: tests.toSeq)
+  def suite(name: String, tests: Seq[Testable]): Testable.TestSuite = JavaTest.suite(name, tests.asJava)
 
   def test(name: String)(test: => Assertion): Testable.Test = JavaTest.test(name, () => test)
   def pending(): Assertion = JavaTest.pending()
@@ -23,6 +23,6 @@ trait JavaTestSyntax {
   def that[A](messagePrefix: String, value: A, matcher: Matcher[A]): Assertion = Matcher.that(messagePrefix, value, matcher)
 
   implicit def runnerFromTestable(testable: Testable): TestRunner = JavaTest.testableRunner(testable)
-  implicit def runnerFromTestables(testables: Seq[Testable]): TestRunner = JavaTest.testableRunner(testables.asJava.stream())
+  implicit def runnerFromTestables(testables: Seq[Testable]): TestRunner = JavaTest.testableRunner(testables.asJava)
 
 }

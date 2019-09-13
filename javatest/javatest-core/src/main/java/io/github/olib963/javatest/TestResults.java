@@ -111,6 +111,10 @@ public final class TestResults {
         return runLogs.stream();
     }
 
+    public Stream<TestResult> allResults() {
+        return results.stream();
+    }
+
     public TestResults addLog(String log) {
         var logs = new ArrayList<>(runLogs);
         logs.add(log);

@@ -7,9 +7,9 @@ import io.github.olib963.javatest.logging.TestLoggingObserver;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Stream;
 
 import static io.github.olib963.javatest.JavaTest.test;
 import static io.github.olib963.javatest.JavaTest.that;
@@ -19,8 +19,8 @@ public class LoggingTests implements TestSuiteClass {
     private final TestResult PENDING_TEST_RESULT = new TestResult.SingleTestResult("Pending", AssertionResult.pending(""), Collections.emptyList());
 
     @Override
-    public Stream<Testable> testables() {
-        return Stream.of(
+    public Collection<Testable> testables() {
+        return List.of(
                 test("Run logging observer", () -> {
                     var stream = new TestStream();
 

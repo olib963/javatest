@@ -32,7 +32,7 @@ Suites can be constructed from:
 
 [source, scala]
 ----
-val suiteFromVarargs = suite("My Vararg Suite")(
+val suiteFromVarargs = suite("My Vararg Suite",
   test("simple test")(that(true, "passing")),
   test("addition test")(that(1 + 1 == 2, "One add one is two"))
 )
@@ -48,7 +48,7 @@ val multiplesOf9 = Map(
   7 -> 63,
   456 -> 4104)
 
-val suiteFromSeq = suiteSeq("Multiples of 9 suite")(
+val suiteFromSeq = suite("Multiples of 9 suite",
   multiplesOf9.map {
     case (multiple, expected) =>
       test(s"The ${multiple}th multiple of 9") {
@@ -65,7 +65,7 @@ val suiteFromSeq = suiteSeq("Multiples of 9 suite")(
 ----
 object MySuite extends Suite with JavaTestSyntax {
   override def tests: Seq[Testable] = Seq(
-    suite("Nested Suite")(
+    suite("Nested Suite",
       test("simple test")(that(true, "passing"))
     ),
     test("addition test")(that(1 + 1 == 2, "One add one is two"))
@@ -81,7 +81,7 @@ a `Seq[Testable]` into a `TestRunner`.
 [source, scala]
 ----
 val runner: TestRunner = Seq(
-  suite("My Suite")(
+  suite("My Suite",
     test("test1")(that(true, "passes")),
     test("test2")(that(true, "passes"))
   )
@@ -90,7 +90,7 @@ val runner: TestRunner = Seq(
 // Or to run directly
 run(
   Seq(
-    suite("My Suite")(
+    suite("My Suite",
       test("test1")(that(true, "passes")),
       test("test2")(that(true, "passes"))
     )

@@ -3,8 +3,8 @@ package io.github.olib963.javatest.matchers;
 import io.github.olib963.javatest.Testable;
 import io.github.olib963.javatest.TestSuiteClass;
 
-import java.util.function.Function;
-import java.util.stream.Stream;
+import java.util.Collection;
+import java.util.List;
 
 import static io.github.olib963.javatest.JavaTest.suite;
 import static io.github.olib963.javatest.JavaTest.test;
@@ -25,8 +25,8 @@ public class DocumentationTests implements TestSuiteClass {
     public class MatcherTests {
         private static final String TEST_STRING = "Hello World";
 
-        public Stream<Test> matcherTests() {
-            return Stream.of(
+        public Collection<Test> matcherTests() {
+            return List.of(
                     test("Addition", () -> that(1 + 1, isEqualTo(2))),
                     test("Types", () -> that("Hello", hasType(String.class))),
                     test("String Prefix", () -> that(TEST_STRING, startsWith("Hello"))),
@@ -38,8 +38,8 @@ public class DocumentationTests implements TestSuiteClass {
 
     // tag::exceptionTests[]
     public class MyExceptionTests {
-        public Stream<Test> exceptionTests() {
-            return Stream.of(
+        public Collection<Test> exceptionTests() {
+            return List.of(
                     test("Matching an exception", () -> {
                         // Exceptions can be matched on just like any other object
                         var message = "NOT ALLOWED";
@@ -115,11 +115,11 @@ public class DocumentationTests implements TestSuiteClass {
     // end::extraMessage[]
 
     @Override
-    public Stream<Testable> testables() {
-        return Stream.of(
+    public Collection<Testable> testables() {
+        return List.of(
                 suite("Matcher Documentation tests", new MatcherTests().matcherTests()),
                 suite("Exception Documentation Tests", new MyExceptionTests().exceptionTests()),
-                suite("Custom Matcher Documentation Tests", Stream.of(new TestTheUniverse().universeTest())),
+                suite("Custom Matcher Documentation Tests", List.of(new TestTheUniverse().universeTest())),
                 new ExtraMessaging().messagingTest
         );
     }

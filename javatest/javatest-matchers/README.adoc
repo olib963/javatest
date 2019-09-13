@@ -12,8 +12,8 @@ import static io.github.olib963.javatest.matchers.StringMatchers.*;
 public class MatcherTests {
     private static final String TEST_STRING = "Hello World";
 
-    public Stream<Test> matcherTests() {
-        return Stream.of(
+    public Collection<Test> matcherTests() {
+        return List.of(
                 test("Addition", () -> that(1 + 1, isEqualTo(2))),
                 test("Types", () -> that("Hello", hasType(String.class))),
                 test("String Prefix", () -> that(TEST_STRING, startsWith("Hello"))),
@@ -45,8 +45,8 @@ import static io.github.olib963.javatest.matchers.StringMatchers.*;
 import static io.github.olib963.javatest.matchers.ExceptionMatchers.*;
 
 public class MyExceptionTests {
-    public Stream<Test> exceptionTests() {
-        return Stream.of(
+    public Collection<Test> exceptionTests() {
+        return List.of(
                 test("Matching an exception", () -> {
                     // Exceptions can be matched on just like any other object
                     var message = "NOT ALLOWED";

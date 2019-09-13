@@ -38,7 +38,7 @@ public class StreamRunner implements TestRunner {
     }
 
     private TestResult runSuite(Testable.TestSuite suite) {
-        var results = suite.testables.map(t -> t.match(this::runTest, this::runSuite));
+        var results = suite.testables().map(t -> t.match(this::runTest, this::runSuite));
         return new TestResult.SuiteResult(suite.name, results.collect(Collectors.toList()));
 
     }

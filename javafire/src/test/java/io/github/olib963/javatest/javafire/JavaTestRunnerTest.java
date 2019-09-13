@@ -4,11 +4,7 @@ import io.github.olib963.javatest.*;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.project.MavenProject;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Stream;
+import java.util.*;
 
 import static io.github.olib963.javatest.JavaTest.test;
 import static io.github.olib963.javatest.JavaTest.that;
@@ -61,8 +57,8 @@ public class JavaTestRunnerTest implements TestSuiteClass {
     }
 
     @Override
-    public Stream<Testable> testables() {
-        return Stream.of(
+    public Collection<Testable> testables() {
+        return List.of(
                 test("Test failure to get runtime classpath elements", () -> {
                     var mavenProject = mock(MavenProject.class);
                     doThrow(DependencyResolutionRequiredException.class).when(mavenProject).getRuntimeClasspathElements();
@@ -116,25 +112,25 @@ public class JavaTestRunnerTest implements TestSuiteClass {
         private RunnersWithNoDefaultConstructor() {}
 
         @Override
-        public Stream<TestRunner> runners() {
-            return Stream.empty();
+        public Collection<TestRunner> runners() {
+            return Collections.emptyList();
         }
     }
 
     public static class RunnersWithFailingTest implements TestRunners {
         @Override
-        public Stream<TestRunner> runners() {
-            return Stream.of(JavaTest.testableRunner(
-                    Stream.of(test("Failure", () -> that(false, "Expected false"))),
+        public Collection<TestRunner> runners() {
+            return List.of(JavaTest.testableRunner(
+                    List.of(test("Failure", () -> that(false, "Expected false"))),
                     Collections.emptyList()
             ));
         }
     }
     public static class RunnersWithPassingTests implements TestRunners {
         @Override
-        public Stream<TestRunner> runners() {
-            return Stream.of(JavaTest.testableRunner(
-                    Stream.of(test("Success", () -> that(true, "Expected true"))),
+        public Collection<TestRunner> runners() {
+            return List.of(JavaTest.testableRunner(
+                    List.of(test("Success", () -> that(true, "Expected true"))),
                     Collections.emptyList()
             ));
         }
