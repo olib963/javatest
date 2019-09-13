@@ -1,12 +1,13 @@
 aliases:
   - &dependency-cache v1-dependencies-{{ checksum "pom.xml" }}
   - &ruby-cache v1-ruby-dependencies-{{ checksum "gendocs.rb" }}
-  - &scala-cache v1-scala-test-dependencies-{{ checksum "scala/build.sbt" }}
+  - &scala-cache v1-scala-dependencies-{{ checksum "scala/build.sbt" }}
+  - &clojure-cache v1-clojure-test-dependencies-{{ checksum "clojure/project.clj" }}
 version: 2
 jobs:
   test:
     docker:
-      - image: circleci/openjdk:11-jdk
+      - image: circleci/clojure:openjdk-11-lein-2.9.1
     working_directory: ~/javatest
     environment:
       SBT_VERSION: 1.3.0
@@ -18,6 +19,12 @@ jobs:
       - restore_cache:
           keys:
           - *scala-cache
+      - restore_cache:
+          keys:
+          - *clojure-cache
+      - run:
+          name: Install Maven
+          command: sudo apt-get install maven
       - run:
           name: Test Java and Install
           command: mvn -P local-install install
@@ -45,6 +52,13 @@ jobs:
       - run:
           name: Test Scala
           command: cd scala && sbt test:run
+      - run:
+          name: Test Clojure
+          command: cd clojure && lein run -m javatest-clj.tests
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: *clojure-cache
 
   docTest:
     docker:
