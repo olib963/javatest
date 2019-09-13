@@ -1,18 +1,19 @@
 = Parameterised Testing
 
 It can be useful to create multiple tests that have the same structure but differ only in the input values. This can be
-done by providing a stream of inputs and a function from the type of that input to a `Test`. This module provides a small
+done by providing a stream or collection of inputs and a function from the type of that input to a `Test`. This module provides a small
 library of helper functions to let you achieve this.
 
 [source, java]
 ----
+import static io.github.olib963.javatest.JavaTest.*;
 import static io.github.olib963.javatest.parameterised.Parameterised.*;
 
 public class PalindromeTests {
-    public Stream<Test> inMemoryPalindromeTests() {
+    public Collection<Test> inMemoryPalindromeTests() {
         // Create parameterised tests from an in memory stream
         return parameterised(
-                Stream.of("Civic", "Deified", "Kayak", "Level", "Madam"),
+                List.of("Civic", "Deified", "Kayak", "Level", "Madam"),
                 this::palindromeTest
         );
     }
@@ -40,12 +41,13 @@ and provide a function with the correct arity and typed arguments to create your
 
 [source, java]
 ----
+import static io.github.olib963.javatest.JavaTest.*;
 import static io.github.olib963.javatest.parameterised.Parameterised.*;
 
 public class FibonacciTests {
-    public Stream<Test> fibonacciTests() {
+    public Collection<Test> fibonacciTests() {
         return parameterised(
-                Stream.of(
+                List.of(
                         // t() is the tuple constructor and can be applied to up to 10 arguments
                         t(0, 0L),
                         t(1, 1L),

@@ -4,8 +4,10 @@ import io.github.olib963.javatest.Testable.Test;
 import io.github.olib963.javatest.parameterised.functions.*;
 import io.github.olib963.javatest.parameterised.tuples.*;
 
+import java.util.Collection;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Parameterised {
@@ -51,6 +53,46 @@ public class Parameterised {
 
     public static <A, B, C, D, E, F, G, H, I, J> Stream<Test> parameterised(Stream<Tuple10<A, B, C, D, E, F, G, H, I, J>> inputs, Function10<A, B, C, D, E, F, G, H, I, J, Test> testFunction) {
         return inputs.map(t -> testFunction.apply(t._1, t._2, t._3, t._4, t._5, t._6, t._7, t._8, t._9, t._10));
+    }
+
+    public static <A> Collection<Test> parameterised(Collection<A> inputs, Function<A, Test> testFunction) {
+        return parameterised(inputs.stream(), testFunction).collect(Collectors.toList());
+    }
+
+    public static <A, B> Collection<Test> parameterised(Collection<Tuple2<A, B>> inputs, BiFunction<A, B, Test> testFunction) {
+        return parameterised(inputs.stream(), testFunction).collect(Collectors.toList());
+    }
+
+    public static <A, B, C> Collection<Test> parameterised(Collection<Tuple3<A, B, C>> inputs, Function3<A, B, C, Test> testFunction) {
+        return parameterised(inputs.stream(), testFunction).collect(Collectors.toList());
+    }
+
+    public static <A, B, C, D> Collection<Test> parameterised(Collection<Tuple4<A, B, C, D>> inputs, Function4<A, B, C, D, Test> testFunction) {
+        return parameterised(inputs.stream(), testFunction).collect(Collectors.toList());
+    }
+
+    public static <A, B, C, D, E> Collection<Test> parameterised(Collection<Tuple5<A, B, C, D, E>> inputs, Function5<A, B, C, D, E, Test> testFunction) {
+        return parameterised(inputs.stream(), testFunction).collect(Collectors.toList());
+    }
+
+    public static <A, B, C, D, E, F> Collection<Test> parameterised(Collection<Tuple6<A, B, C, D, E, F>> inputs, Function6<A, B, C, D, E, F, Test> testFunction) {
+        return parameterised(inputs.stream(), testFunction).collect(Collectors.toList());
+    }
+
+    public static <A, B, C, D, E, F, G> Collection<Test> parameterised(Collection<Tuple7<A, B, C, D, E, F, G>> inputs, Function7<A, B, C, D, E, F, G, Test> testFunction) {
+        return parameterised(inputs.stream(), testFunction).collect(Collectors.toList());
+    }
+
+    public static <A, B, C, D, E, F, G, H> Collection<Test> parameterised(Collection<Tuple8<A, B, C, D, E, F, G, H>> inputs, Function8<A, B, C, D, E, F, G, H, Test> testFunction) {
+        return parameterised(inputs.stream(), testFunction).collect(Collectors.toList());
+    }
+
+    public static <A, B, C, D, E, F, G, H, I> Collection<Test> parameterised(Collection<Tuple9<A, B, C, D, E, F, G, H, I>> inputs, Function9<A, B, C, D, E, F, G, H, I, Test> testFunction) {
+        return parameterised(inputs.stream(), testFunction).collect(Collectors.toList());
+    }
+
+    public static <A, B, C, D, E, F, G, H, I, J> Collection<Test> parameterised(Collection<Tuple10<A, B, C, D, E, F, G, H, I, J>> inputs, Function10<A, B, C, D, E, F, G, H, I, J, Test> testFunction) {
+        return parameterised(inputs.stream(), testFunction).collect(Collectors.toList());
     }
 
     public static <A, B> Tuple2<A, B> t(A _1, B _2) {

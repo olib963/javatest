@@ -1,7 +1,7 @@
 = Parameterised Testing
 
 It can be useful to create multiple tests that have the same structure but differ only in the input values. This can be
-done by providing a stream of inputs and a function from the type of that input to a `Test`. This module provides a small
+done by providing a stream or collection of inputs and a function from the type of that input to a `Test`. This module provides a small
 library of helper functions to let you achieve this.
 
 [source, java]

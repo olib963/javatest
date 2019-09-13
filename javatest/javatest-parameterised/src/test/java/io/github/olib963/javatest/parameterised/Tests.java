@@ -16,10 +16,10 @@ public class Tests {
         }
 
         var palindromes = suite("Palindrome Tests", Stream.concat(
-                DocumentationTests.palindromes().inMemoryPalindromeTests(),
+                DocumentationTests.palindromes().inMemoryPalindromeTests().stream(),
                 DocumentationTests.palindromes().palindromeTestsFromFile()
         ).collect(Collectors.toList()));
-        var fibonacci = suite("Finonacci Tests", DocumentationTests.fibonacci().fibonacciTests().collect(Collectors.toList()));
+        var fibonacci = suite("Finonacci Tests", DocumentationTests.fibonacci().fibonacciTests());
         var docResult = runTests(palindromes, fibonacci);
         if (!docResult.succeeded) {
             throw new RuntimeException("Documentation tests failed!");

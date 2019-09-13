@@ -16,7 +16,7 @@ public class ParameterisedTests implements TestSuiteClass {
     public Collection<Testable> testables() {
         return List.of(
                 suite("Multiplication", parameterised(Data.multiplication(), this::multiplicationTest).collect(Collectors.toList())),
-                suite("Mad addition Tests", parameterised(Data.madAddition(), this::additionTest).collect(Collectors.toList()))
+                suite("Mad addition Tests", parameterised(Data.madAddition(), this::additionTest))
         );
     }
 
