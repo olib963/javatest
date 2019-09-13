@@ -14,7 +14,7 @@ trait BenchmarkSyntax {
     Benchmark.benchmark(test, (j: JavaDuration) => formatter(toScala(j)))
 
   def failIfLongerThan(duration: Duration)(test: Testable.Test)(implicit formatter: DurationFormat): Testable.Test =
-    Benchmark.failIfLongerThan(test, toJava(duration), (j: JavaDuration) => formatter(toScala(j)))
+    Benchmark.failIfLongerThan(toJava(duration), test, (j: JavaDuration) => formatter(toScala(j)))
 
 //  def benchmark(all: Seq[Testable])(implicit formatter: Duration => String) =
   // all.map(benchmark) // TODO need to allow benchmarking of a Testable such that we can easily wrap the scala collection
