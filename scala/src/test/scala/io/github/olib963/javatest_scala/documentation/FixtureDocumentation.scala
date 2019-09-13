@@ -27,20 +27,20 @@ object FixtureDocumentation extends FixtureSyntax with JavaTestSyntax {
     fixtureRunner("test file reader", myComplexFixture)
 
   val runner1 = reusableFixture { fileReader =>
-    test("Content reading"){
-      val builder = new StringBuilder
-      var c = fileReader.read()
-      while (c != -1) {
-        builder.append(c.toChar)
-        c = fileReader.read()
-      }
-      that("Contents read from test file", builder.toString, isEqualTo("Hello, test!"))
-    }
+    test("Character reading")(
+      that("First character read from file", fileReader.read().toChar, isEqualTo('H')))
   }
 
   val runner2 = reusableFixture { aDifferentReader =>
-    test("Character reading")(
-      that("First character read from file", aDifferentReader.read().toChar, isEqualTo('H')))
+    test("Content reading"){
+      val builder = new StringBuilder
+      var c = aDifferentReader.read()
+      while (c != -1) {
+        builder.append(c.toChar)
+        c = aDifferentReader.read()
+      }
+      that("Contents read from test file", builder.toString, isEqualTo("Hello, test!"))
+    }
   }
   // end::complex[]
 }
