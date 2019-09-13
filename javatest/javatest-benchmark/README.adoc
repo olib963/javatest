@@ -12,8 +12,8 @@ public class MyBenchMarks {
     private Test simpleTest = test("Some test I have", () -> that(true, "Passing test"));
     public Test timedTest = benchmark(simpleTest);
 
-    public Stream<Testable> bunchOfTimedTests = benchmarkAllTests(
-            Stream.of(new MyFirstSuite(), new MySecondSuite(), simpleTest)
+    public Collection<Testable> bunchOfTimedTests = benchmarkAllTests(
+            List.of(new MyFirstSuite(), new MySecondSuite(), simpleTest)
     );
 }
 ----
@@ -34,7 +34,7 @@ public class MyLimitedTest {
         return that(true, "Ordinarily this would pass.");
     });
 
-    public Test failingTest = failIfLongerThan(longTest, Duration.ofSeconds(4));
+    public Test failingTest = failIfLongerThan(Duration.ofSeconds(4), longTest);
 }
 ----
 

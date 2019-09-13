@@ -26,11 +26,11 @@ public class Benchmark {
         return benchmark(test, DEFAULT_FORMAT);
     }
 
-    public static Test failIfLongerThan(Test test, Duration limit) {
-        return failIfLongerThan(test, limit, DEFAULT_FORMAT);
+    public static Test failIfLongerThan(Duration limit, Test test) {
+        return failIfLongerThan(limit, test, DEFAULT_FORMAT);
     }
 
-    public static Test failIfLongerThan(Test test, Duration limit, Function<Duration, String> formatter) {
+    public static Test failIfLongerThan(Duration limit, Test test, Function<Duration, String> formatter) {
         return benchmarkTest(test, formatter, Optional.of(limit));
     }
 

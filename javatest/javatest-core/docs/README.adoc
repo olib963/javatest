@@ -83,7 +83,7 @@ Notes:
 
 * You will need to use `;` to separate classpath entries instead of `:` on windows machines
 
-* You will need to include at least the Javatest jar and the current directory (`.`) on the classpath in order for this to work,
+* You will need to include at least the JavaTest jar and the current directory (`.`) on the classpath in order for this to work,
 if you are using java classes from any other jars/directories you will need to also ensure they are on the classpath.
 
 You should be able to explore the <<Core Library,Core Library>> and get familiar with testing your code by running them from
@@ -135,7 +135,7 @@ toc::[]
 * `TestRunner`: implements the running of tests and returns `TestResults`
 * `Testable`: wrapper around one of:
 ** `Test`: a named instance of a test, each test must return an `Assertion`
-** `TestSuite`: logical collection of a stream of ``Testable``s
+** `TestSuite`: a named logical collection of ``Testable``s
 * `Assertion`: represents the expected state at the end of a test
 * `TestResults`: represents the combined result of your tests
 
@@ -215,17 +215,34 @@ include::../src/test/java/io/github/olib963/javatest/documentation/MyPendingTest
 
 === Test Runners
 
-The only `TestRunner` included in the core is created from a `Stream<Testable>`. You can optionally add a collection of
+The main `TestRunner` included in the core is created from a `Collection<Testable>`. You can optionally add a collection of
 ``TestCompletionObserver``s to the runner, by default a logging observer is passed that logs each test result with a colour
 corresponding to the state of the test (green for passing, red for failing and yellow for pending). If you want to turn off
 logging just pass an empty collection, a `TestCompletionObserver.plainLogger` also exists that uses no colours.
 
 [source, java]
 ----
-include::../src/test/java/io/github/olib963/javatest/documentation/MyRunners.java[tags=include]
+include::../src/test/java/io/github/olib963/javatest/documentation/RunnerDocumentation.java[tags=normal-imports]
+include::../src/test/java/io/github/olib963/javatest/documentation/RunnerDocumentation.java[tags=imports]
+
+include::../src/test/java/io/github/olib963/javatest/documentation/RunnerDocumentation.java[tags=normal, indent=-]
 ----
 
 Other `TestRunner` implementations are available in the other modules.
+
+==== Laziness
+
+It is possible to create a lazy test runner from a `Stream<Testable>` also with optional collection of ``TestCompletionObserver``s.
+This runner however is not referentially transparent or reusable so must be used with care. This might be useful if you have
+a very large collection of tests and you want to lazily instantiate the different suites.
+
+[source, java]
+----
+include::../src/test/java/io/github/olib963/javatest/documentation/RunnerDocumentation.java[tags=lazy-imports]
+include::../src/test/java/io/github/olib963/javatest/documentation/RunnerDocumentation.java[tags=imports]
+
+include::../src/test/java/io/github/olib963/javatest/documentation/RunnerDocumentation.java[tags=lazy, indent=-]
+----
 
 === Core library maven dependency
 
@@ -244,7 +261,7 @@ Other `TestRunner` implementations are available in the other modules.
 === In Java
 
 To run JavaTest simply pass your `TestRunner` instances to the `JavaTest.run()` function and handle the
-result how you see fit. There is a convenience function `runTests` defined to just run a `Stream<Test>` using the default `StreamRunner`:
+result how you see fit. There is a convenience function `runTests` defined to just run a `Collection<Testable>` using the default `CollectionRunner`:
 
 [source, java]
 ----

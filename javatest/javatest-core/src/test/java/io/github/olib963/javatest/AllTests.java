@@ -23,7 +23,8 @@ public class AllTests {
             throw new RuntimeException("Tests failed!");
         }
 
-        var extraDocRunners = new MyRunners();
+        var extraDocRunners = new RunnerDocumentation().new MyRunners();
+        var lazyDocRunners = new RunnerDocumentation().new LazyRunners();
         var simpleDocRunner = testableRunner(List.of(
                 new AllDocumentationTests(),
                 MyFirstTestSuite.mySuite(),
@@ -31,7 +32,7 @@ public class AllTests {
                 SuiteOfSuites.compositeSuite(),
                 new MyPendingTests()
         ));
-        var docResult = run(List.of(simpleDocRunner, extraDocRunners.singleTestRunner, extraDocRunners.suiteTestsNoLogging));
+        var docResult = run(List.of(simpleDocRunner, extraDocRunners.singleTestRunner, extraDocRunners.suiteTestsNoLogging, lazyDocRunners.lazyRunner));
         if (!docResult.succeeded) {
             throw new RuntimeException("Documentation tests failed!");
         }

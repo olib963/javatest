@@ -36,7 +36,7 @@ public class DocumentationTests {
             return that(true, "Ordinarily this would pass.");
         });
 
-        public Test failingTest = failIfLongerThan(longTest, Duration.ofSeconds(4));
+        public Test failingTest = failIfLongerThan(Duration.ofSeconds(4), longTest);
     }
     // end::limit[]
 
