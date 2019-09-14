@@ -47,6 +47,17 @@ include::../src/test/java/io/github/olib963/javatest/matchers/DocumentationTests
 include::../src/test/java/io/github/olib963/javatest/matchers/DocumentationTests.java[tags=composite, indent=-]
 ----
 
+== Negated Matchers
+
+You can negate a `Matcher` by wrapping it in `not`.
+
+[source, java]
+----
+include::../src/test/java/io/github/olib963/javatest/matchers/DocumentationTests.java[tags=import]
+include::../src/test/java/io/github/olib963/javatest/matchers/DocumentationTests.java[tags=compositeImport]
+
+include::../src/test/java/io/github/olib963/javatest/matchers/DocumentationTests.java[tags=negation, indent=-]
+----
 
 == Custom Matchers
 

@@ -67,7 +67,9 @@ public class DocumentationTests implements TestSuiteClass {
 
     private class MyValidator {
         public void validate(int value) {
-            throw new IllegalArgumentException();
+            if(value == 1) {
+                throw new IllegalArgumentException();
+            }
         }
     }
 
@@ -127,13 +129,23 @@ public class DocumentationTests implements TestSuiteClass {
     }
     // end::composite[]
 
+    // tag::negation[]
+    public class MyNegationTest {
+        public Test negatedMatcherTest =
+                test("Not Empty", () ->
+                        that(List.of(1), not(isEmpty())));
+    }
+    // end::negation[]
+
     @Override
     public Collection<Testable> testables() {
         return List.of(
                 suite("Matcher Documentation tests", new MatcherTests().matcherTests()),
                 suite("Exception Documentation Tests", new MyExceptionTests().exceptionTests()),
                 suite("Custom Matcher Documentation Tests", List.of(new TestTheUniverse().universeTest())),
-                new ExtraMessaging().messagingTest
+                new ExtraMessaging().messagingTest,
+                new MyCompositeTest().compositeTest,
+                new MyNegationTest().negatedMatcherTest
         );
     }
 

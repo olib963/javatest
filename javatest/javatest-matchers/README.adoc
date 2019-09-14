@@ -86,6 +86,21 @@ public class MyCompositeTest {
 }
 ----
 
+== Negated Matchers
+
+You can negate a `Matcher` by wrapping it in `not`.
+
+[source, java]
+----
+import static io.github.olib963.javatest.matchers.Matcher.*;
+import static io.github.olib963.javatest.matchers.CollectionMatchers.*;
+
+public class MyNegationTest {
+    public Test negatedMatcherTest =
+            test("Not Empty", () ->
+                    that(List.of(1), not(isEmpty())));
+}
+----
 
 == Custom Matchers
 
