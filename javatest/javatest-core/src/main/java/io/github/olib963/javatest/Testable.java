@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 // Tagging interface for the Test | TestSuite ADT. This should not be implemented externally except through TestSuiteClass
 public interface Testable {
 
-    <A> A match(Function<Test, A> testFn, Function<TestSuite, A> suiteFn);
+    <A> A match(Function<TestSuite, A> suiteFn, Function<Test, A> testFn);
 
     final class Test implements Testable {
         public final String name;
@@ -19,7 +19,7 @@ public interface Testable {
         }
 
         @Override
-        public <A> A match(Function<Test, A> testFn, Function<TestSuite, A> suiteFn) {
+        public <A> A match(Function<TestSuite, A> suiteFn, Function<Test, A> testFn) {
             return testFn.apply(this);
         }
     }
@@ -37,7 +37,7 @@ public interface Testable {
         }
 
         @Override
-        public <A> A match(Function<Test, A> testFn, Function<TestSuite, A> suiteFn) {
+        public <A> A match(Function<TestSuite, A> suiteFn, Function<Test, A> testFn) {
             return suiteFn.apply(this);
         }
     }

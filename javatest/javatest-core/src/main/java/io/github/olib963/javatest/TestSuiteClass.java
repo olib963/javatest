@@ -9,7 +9,7 @@ import static io.github.olib963.javatest.JavaTest.suite;
 public interface TestSuiteClass extends Testable {
 
     @Override
-    default <A> A match(Function<Test, A> testFn, Function<TestSuite, A> suiteFn){
+    default <A> A match(Function<TestSuite, A> suiteFn, Function<Test, A> testFn){
         return suiteFn.apply(suite(getClass().getSimpleName(), testables()));
     }
 
