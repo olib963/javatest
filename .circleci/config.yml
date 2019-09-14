@@ -29,10 +29,16 @@ jobs:
           # TODO why can't we have an image with this pre-installed??
           name: Install sbt
           command: |
-            curl -L -o sbt-${SBT_VERSION}.deb https://dl.bintray.com/sbt/debian/sbt-${SBT_VERSION}.deb && \
-            sudo dpkg -i sbt-${SBT_VERSION}.deb && \
-            rm sbt-${SBT_VERSION}.deb && \
+            curl -L -o sbt-${SBT_VERSION}.deb https://dl.bintray.com/sbt/debian/sbt-${SBT_VERSION}.deb
+            sudo dpkg -i sbt-${SBT_VERSION}.deb
+            rm sbt-${SBT_VERSION}.deb
             sudo apt-get install sbt
+      - run:
+          name: Add local maven repository to SBT
+          command: |
+            mkdir -p ~/.sbt/1.0/
+            touch ~/.sbt/1.0/global.sbt
+            echo "resolvers += \"Local Maven\" at Path.userHome.asFile.toURI.toURL + \".m2/repository\"" >> ~/.sbt/1.0/global.sbt
       - run:
           name: Compile Scala
           command: cd scala && sbt compile
@@ -44,7 +50,7 @@ jobs:
           key: *scala-cache
       - run:
           name: Test Scala
-          command: cd scala && sbt test:run
+          command: cd scala && sbt core/test:run
 
   docTest:
     docker:
