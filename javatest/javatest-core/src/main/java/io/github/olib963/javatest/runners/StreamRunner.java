@@ -3,6 +3,7 @@ package io.github.olib963.javatest.runners;
 import io.github.olib963.javatest.*;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -45,8 +46,8 @@ public class StreamRunner implements TestRunner {
 
     private TestResult runTest(Testable.Test test) {
         var result = safeRunTest(test.test);
-        var logs = Stream.concat(Stream.of(result.description), result.logs());
-        return new TestResult.SingleTestResult(test.name, result, logs.collect(Collectors.toList()));
+        // A future feature will allow custom test logging client side.
+        return new TestResult.SingleTestResult(test.name, result, Collections.emptyList());
     }
 
     private AssertionResult safeRunTest(CheckedSupplier<Assertion> test) {

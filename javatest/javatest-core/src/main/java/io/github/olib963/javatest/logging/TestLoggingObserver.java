@@ -29,8 +29,7 @@ public class TestLoggingObserver implements TestCompletionObserver {
         });
     }
 
-    // TODO change tests to use this function instead.
-    Stream<LogMessage> toLogMessages(TestResult result) {
+    private Stream<LogMessage> toLogMessages(TestResult result) {
         return result.match(
                 suiteResult -> Stream.concat(
                         Stream.of(new LogMessage(Stream.of(suiteResult.suiteName + ':'))),
@@ -39,7 +38,9 @@ public class TestLoggingObserver implements TestCompletionObserver {
                 singleTestResult -> {
                     var logs = Stream.concat(
                             Stream.of(singleTestResult.name + ':'),
-                            LogMessage.indent(singleTestResult.logs()));
+                            Stream.concat(
+                                    LogMessage.indent(Stream.of(singleTestResult.result.description)),
+                                    LogMessage.indent(singleTestResult.logs())));
                     if (useColour) {
                        return Stream.of(new LogMessage(logs, Colour.forResult(singleTestResult.result)));
                     } else {

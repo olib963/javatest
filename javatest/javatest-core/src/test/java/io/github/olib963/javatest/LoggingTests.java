@@ -41,8 +41,8 @@ public class LoggingTests implements TestSuiteClass {
                 test("Test logging observer", () -> {
                     var stream = new TestStream();
                     var testLog = "My Test has completed!";
-                    var expectedLog = "My Test:\\n\\t" + testLog + "\\n";
-                    var result = new TestResult.SingleTestResult("My Test", AssertionResult.success(""), List.of(testLog));
+                    var expectedLog = "My Test:\\n\\tDescription of test\\n\\t" + testLog + "\\n";
+                    var result = new TestResult.SingleTestResult("My Test", AssertionResult.success("Description of test"), List.of(testLog));
 
                     var logger = new TestLoggingObserver(false, stream.printStream());
                     logger.onTestCompletion(result);
@@ -54,8 +54,8 @@ public class LoggingTests implements TestSuiteClass {
                 test("Test logging observer (with colour)", () -> {
                     var stream = new TestStream();
                     var testLog = "My Test has completed!";
-                    var expectedLog = ESCAPED_GREEN_CODE + "My Test:\\n\\t" + testLog + "\\n" + ESCAPED_RESET_CODE;
-                    var result = new TestResult.SingleTestResult("My Test", AssertionResult.success(""), List.of(testLog));
+                    var expectedLog = ESCAPED_GREEN_CODE + "My Test:\\n\\tDescription of test\\n\\t" + testLog + "\\n" + ESCAPED_RESET_CODE;
+                    var result = new TestResult.SingleTestResult("My Test", AssertionResult.success("Description of test"), List.of(testLog));
 
                     var logger = new TestLoggingObserver(true, stream.printStream());
                     logger.onTestCompletion(result);
