@@ -1,1 +1,1 @@
-mvn -P local-install install && cd scala && sbt test:run
+mvn -P local-install install && cd scala && sbt core/test:run

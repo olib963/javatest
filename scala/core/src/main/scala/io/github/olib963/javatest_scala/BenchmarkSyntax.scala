@@ -13,14 +13,19 @@ trait BenchmarkSyntax {
   def benchmark(test: Testable.Test)(implicit formatter: DurationFormat): Testable.Test =
     Benchmark.benchmark(test, (j: JavaDuration) => formatter(toScala(j)))
 
-  def failIfLongerThan(duration: Duration)(test: Testable.Test)(implicit formatter: DurationFormat): Testable.Test =
-    Benchmark.failIfLongerThan(toJava(duration), test, (j: JavaDuration) => formatter(toScala(j)))
+  def benchmark(test: Testable.TestSuite)(implicit formatter: DurationFormat): Testable.TestSuite =
+    Benchmark.benchmark(test, (j: JavaDuration) => formatter(toScala(j)))
 
-//  def benchmark(all: Seq[Testable])(implicit formatter: Duration => String) =
-  // all.map(benchmark) // TODO need to allow benchmarking of a Testable such that we can easily wrap the scala collection
+  def benchmark(test: Testable)(implicit formatter: DurationFormat): Testable =
+    Benchmark.benchmark(test, (j: JavaDuration) => formatter(toScala(j)))
+
+  def benchmark(all: Seq[Testable])(implicit formatter: Duration => String): Seq[Testable] = all.map(benchmark)
 
   def benchmark(runners: TestRunner*)(implicit formatter: DurationFormat): TestRunner =
     Benchmark.benchmark(runners.asJava.stream(), (j: JavaDuration) => formatter(toScala(j)))
+
+  def failIfLongerThan(duration: Duration)(test: Testable.Test)(implicit formatter: DurationFormat): Testable.Test =
+    Benchmark.failIfLongerThan(toJava(duration), test, (j: JavaDuration) => formatter(toScala(j)))
 
   private def toScala(duration: JavaDuration) = Duration.fromNanos(duration.toNanos)
   private def toJava(duration: Duration) = JavaDuration.ofNanos(duration.toNanos)
