@@ -24,10 +24,18 @@ val core = (project in file("core"))
     mainClass in Test := Some("io.github.olib963.javatest_scala.MyTests"),
   )
 
-val sbtIntegration = (project in file("sbt"))
+val sbtInterface = (project in file("sbt-interface"))
   .dependsOn(core)
   .settings(CommonSettings: _*)
   .settings(
-    name := "javatest-sbt",
+    name := "javatest-sbt-interface",
     libraryDependencies += "org.scala-sbt" % "test-interface" % "1.0"
+  )
+
+val sbtPlugin = (project in file("sbt-plugin"))
+  .settings(CommonSettings: _*)
+  .dependsOn(sbtInterface)
+  .enablePlugins(SbtPlugin)
+  .settings(
+    name := "javatest-sbt"
   )
