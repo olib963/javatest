@@ -1,6 +1,7 @@
 package io.github.olib963.javatest.matchers;
 
 import io.github.olib963.javatest.Assertion;
+import io.github.olib963.javatest.matchers.internal.CompositeMatcher;
 import io.github.olib963.javatest.matchers.internal.MatcherAssertion;
 import io.github.olib963.javatest.matchers.internal.PredicateMatcher;
 
@@ -11,6 +12,10 @@ import java.util.function.Predicate;
 public interface Matcher<A> {
     MatchResult matches(A value);
     String describeExpected();
+
+    default Matcher<A> and(Matcher<A> that) {
+        return new CompositeMatcher<>(this, that);
+    }
 
     static <T> Matcher<T> fromFunctions(Predicate<T> predicate, String expected) {
         return PredicateMatcher.of(predicate, expected);

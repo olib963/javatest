@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 * Ability to fail a `TestResults` object at run level not just test level.
 * Module to wrap JavaTest in more scala-usable syntax
 * Lazy and eager test runners
+* Composite `and` `Matcher`
 
 === Changed
 
