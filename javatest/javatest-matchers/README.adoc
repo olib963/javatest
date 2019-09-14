@@ -69,6 +69,24 @@ public class MyExceptionTests {
 }
 ----
 
+== Composing Matchers
+
+You can compose ``Matcher``s in a similar way to composing ``Assertion``s but only the `and` composition exists.
+[source, java]
+----
+import static io.github.olib963.javatest.matchers.Matcher.*;
+import static io.github.olib963.javatest.matchers.CollectionMatchers.*;
+
+public class MyCompositeTest {
+
+    private Matcher<Collection<Integer>> containsOne = contains(1);
+
+    public Test compositeTest = test("Testing composite matchers", () ->
+            that(List.of(1, 2, 3), containsOne.and(hasSize(3))));
+}
+----
+
+
 == Custom Matchers
 
 You can obviously provide your own ``Matcher``s by implementing the interface, but there is a convenience function to allow you

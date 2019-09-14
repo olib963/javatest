@@ -36,6 +36,18 @@ include::../src/test/java/io/github/olib963/javatest/matchers/DocumentationTests
 include::../src/test/java/io/github/olib963/javatest/matchers/DocumentationTests.java[tags=exceptionTests, indent=-]
 ----
 
+== Composing Matchers
+
+You can compose ``Matcher``s in a similar way to composing ``Assertion``s but only the `and` composition exists.
+[source, java]
+----
+include::../src/test/java/io/github/olib963/javatest/matchers/DocumentationTests.java[tags=import]
+include::../src/test/java/io/github/olib963/javatest/matchers/DocumentationTests.java[tags=compositeImport]
+
+include::../src/test/java/io/github/olib963/javatest/matchers/DocumentationTests.java[tags=composite, indent=-]
+----
+
+
 == Custom Matchers
 
 You can obviously provide your own ``Matcher``s by implementing the interface, but there is a convenience function to allow you

@@ -18,6 +18,9 @@ import static io.github.olib963.javatest.matchers.StringMatchers.*;
 // tag::exceptionImport[]
 import static io.github.olib963.javatest.matchers.ExceptionMatchers.*;
 // end::exceptionImport[]
+// tag::compositeImport[]
+import static io.github.olib963.javatest.matchers.CollectionMatchers.*;
+// end::compositeImport[]
 
 public class DocumentationTests implements TestSuiteClass {
 
@@ -113,6 +116,16 @@ public class DocumentationTests implements TestSuiteClass {
 
     }
     // end::extraMessage[]
+
+    // tag::composite[]
+    public class MyCompositeTest {
+
+        private Matcher<Collection<Integer>> containsOne = contains(1);
+
+        public Test compositeTest = test("Testing composite matchers", () ->
+                that(List.of(1, 2, 3), containsOne.and(hasSize(3))));
+    }
+    // end::composite[]
 
     @Override
     public Collection<Testable> testables() {
