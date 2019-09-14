@@ -3,6 +3,7 @@ package io.github.olib963.javatest.matchers;
 import io.github.olib963.javatest.Assertion;
 import io.github.olib963.javatest.matchers.internal.CompositeMatcher;
 import io.github.olib963.javatest.matchers.internal.MatcherAssertion;
+import io.github.olib963.javatest.matchers.internal.NegatedMatcher;
 import io.github.olib963.javatest.matchers.internal.PredicateMatcher;
 
 import java.util.Optional;
@@ -17,11 +18,15 @@ public interface Matcher<A> {
         return new CompositeMatcher<>(this, that);
     }
 
-    static <T> Matcher<T> fromFunctions(Predicate<T> predicate, String expected) {
+    static <A> Matcher<A> not(Matcher<A> matcher) {
+        return new NegatedMatcher<>(matcher);
+    }
+
+    static <A> Matcher<A> fromFunctions(Predicate<A> predicate, String expected) {
         return PredicateMatcher.of(predicate, expected);
     }
 
-    static <T> Matcher<T> fromFunctions(Predicate<T> predicate, String expected, Function<T, String> mismatchDescriptionFunction) {
+    static <A> Matcher<A> fromFunctions(Predicate<A> predicate, String expected, Function<A, String> mismatchDescriptionFunction) {
         return PredicateMatcher.of(predicate, expected, mismatchDescriptionFunction);
     }
 
