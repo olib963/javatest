@@ -25,13 +25,13 @@ public class StreamRunner implements TestRunner {
 
     private TestResult runTestable(Testable testable) {
         return testable.match(
-                test -> {
-                    var result = runTest(test);
+                suite -> {
+                    var result = runSuite(suite);
                     observers.forEach(o -> o.onTestCompletion(result));
                     return result;
                 },
-                suite -> {
-                    var result = runSuite(suite);
+                test -> {
+                    var result = runTest(test);
                     observers.forEach(o -> o.onTestCompletion(result));
                     return result;
                 }
@@ -39,7 +39,7 @@ public class StreamRunner implements TestRunner {
     }
 
     private TestResult runSuite(Testable.TestSuite suite) {
-        var results = suite.testables().map(t -> t.match(this::runTest, this::runSuite));
+        var results = suite.testables().map(t -> t.match(this::runSuite, this::runTest));
         return new TestResult.SuiteResult(suite.name, results.collect(Collectors.toList()));
 
     }

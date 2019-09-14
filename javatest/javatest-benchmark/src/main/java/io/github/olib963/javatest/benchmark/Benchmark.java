@@ -57,7 +57,7 @@ public class Benchmark {
     // TODO failIfLongerThan for suites
 
     private static Testable benchmarkTestable(Testable test, Function<Duration, String> formatter, Optional<Duration> limit) {
-        return test.match(t -> benchmarkTest(t, formatter, limit), s -> benchmarkSuite(s, formatter, limit));
+        return test.match(t -> benchmarkSuite(t, formatter, limit), s -> benchmarkTest(s, formatter, limit));
     }
 
     private static TestSuite benchmarkSuite(TestSuite suite, Function<Duration, String> formatter, Optional<Duration> limit) {
@@ -81,10 +81,7 @@ public class Benchmark {
     }
 
     public static Collection<Testable> benchmarkAllTests(Collection<? extends Testable> testables, Function<Duration, String> formatter) {
-        return testables.stream().map(t -> t.match(
-                test -> benchmark(test, formatter),
-                testSuite -> JavaTest.suite(testSuite.name, benchmarkAllTests(testSuite.testables().collect(Collectors.toList()), formatter))
-        )).collect(Collectors.toList());
+        return testables.stream().map(t -> benchmark(t, formatter)).collect(Collectors.toList());
     }
 
     public static TestRunner benchmark(Stream<TestRunner> runners) {
