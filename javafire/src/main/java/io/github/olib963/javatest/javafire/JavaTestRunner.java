@@ -1,22 +1,25 @@
 package io.github.olib963.javatest.javafire;
 
+import io.github.olib963.javatest.reflection.ReflectionRunners;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.project.MavenProject;
 import io.github.olib963.javatest.JavaTest;
 import io.github.olib963.javatest.TestRunners;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 class JavaTestRunner {
-    private final String testRunners;
+    private final Optional<String> testRunners;
     private final ClassLoaderProvider classLoaderProvider;
     private final MavenProject project;
 
-    JavaTestRunner(String testRunners, ClassLoaderProvider classLoaderProvider, MavenProject project) {
+    JavaTestRunner(Optional<String> testRunners, ClassLoaderProvider classLoaderProvider, MavenProject project) {
         this.testRunners = testRunners;
         this.classLoaderProvider = classLoaderProvider;
         this.project = project;
@@ -24,9 +27,9 @@ class JavaTestRunner {
 
     Result run() {
         try {
-            Set<String> classPathElements = resolveAllClassPathElements(project);
-            Class<?> runnersClass = loadRunnersClass(lookupClassLoader(classPathElements));
-            TestRunners r = instantiateTestRunners(runnersClass);
+            var classPathElements = resolveAllClassPathElements(project);
+            var classLoader = lookupClassLoader(classPathElements);
+            TestRunners r = testRunners.map(c -> instantiateTestRunners(loadRunnersClass(classLoader, c))).orElse(defaultRunners(classLoader));
             var results = JavaTest.run(r.runners());
 
             if (results.succeeded) {
@@ -39,7 +42,7 @@ class JavaTestRunner {
         }
     }
 
-    private Set<String> resolveAllClassPathElements(MavenProject project) throws InternalTestException {
+    private Set<String> resolveAllClassPathElements(MavenProject project) {
         try {
             return Stream
                     .concat(project.getTestClasspathElements().stream(), project.getRuntimeClasspathElements().stream())
@@ -51,7 +54,7 @@ class JavaTestRunner {
         }
     }
 
-    private ClassLoader lookupClassLoader(Set<String> classPathElements) throws InternalTestException {
+    private ClassLoader lookupClassLoader(Set<String> classPathElements) {
         try {
             return classLoaderProvider.classLoaderFor(classPathElements);
         } catch (ClassLoaderProvider.ClassLoadingException e) {
@@ -59,7 +62,7 @@ class JavaTestRunner {
         }
     }
 
-    private Class<?> loadRunnersClass(ClassLoader loader) throws InternalTestException {
+    private Class<?> loadRunnersClass(ClassLoader loader, String testRunners) {
         try {
             Class<?> runnersClass = loader.loadClass(testRunners);
 
@@ -76,7 +79,7 @@ class JavaTestRunner {
         }
     }
 
-    private TestRunners instantiateTestRunners(Class<?> runnersClass) throws InternalTestException {
+    private TestRunners instantiateTestRunners(Class<?> runnersClass) {
         try {
             return (TestRunners) runnersClass.getConstructor(null).newInstance();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException
@@ -84,6 +87,11 @@ class JavaTestRunner {
             throw new InternalTestException(Status.FAILURE,
                     "Given class (" + runnersClass.getName() + ") could not be instantiated", e);
         }
+    }
+
+    private TestRunners defaultRunners(ClassLoader classLoader) {
+        var testCompileSourceRoots = project.getTestCompileSourceRoots().stream().map(File::new).collect(Collectors.toList());
+        return ReflectionRunners.forTestSourceRoots(testCompileSourceRoots, classLoader);
     }
 
     static class Result {
@@ -111,7 +119,7 @@ class JavaTestRunner {
         }
     }
 
-    private static class InternalTestException extends Exception {
+    private static class InternalTestException extends RuntimeException {
 
         final Result result;
 

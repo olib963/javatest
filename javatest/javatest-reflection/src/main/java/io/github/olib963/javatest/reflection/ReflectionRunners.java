@@ -21,30 +21,34 @@ import java.util.stream.Stream;
 import static io.github.olib963.javatest.JavaTest.testableRunner;
 
 public class ReflectionRunners implements TestRunners {
-    private final File rootDirectory;
+    private final Collection<File> rootDirectories;
     private final ClassLoader classLoader;
     // TODO it may be useful to provider a richer wrapper type e.g. Class(Package, Name), Package(Parent, Name)
     private final Collection<Predicate<String>> classNameFilters;
 
-    private ReflectionRunners(File rootDirectory, ClassLoader classLoader, Collection<Predicate<String>> classNameFilters) {
-        this.rootDirectory = rootDirectory;
+    private ReflectionRunners(Collection<File> rootDirectories, ClassLoader classLoader, Collection<Predicate<String>> classNameFilters) {
+        this.rootDirectories = rootDirectories;
         this.classLoader = classLoader;
         this.classNameFilters = classNameFilters;
     }
 
+    public static ReflectionRunners forTestSourceRoots(Collection<File> rootDirectories, ClassLoader classLoader) {
+        return new ReflectionRunners(rootDirectories, classLoader, Collections.emptyList());
+    }
+
     public static ReflectionRunners forTestSourceRoot(File rootDirectory, ClassLoader classLoader) {
-        return new ReflectionRunners(rootDirectory, classLoader, Collections.emptyList());
+        return new ReflectionRunners(Collections.singletonList(rootDirectory), classLoader, Collections.emptyList());
     }
 
     public ReflectionRunners filterClasses(Predicate<String> classFilter) {
         var newFilters = new ArrayList<>(classNameFilters);
         newFilters.add(classFilter);
-        return new ReflectionRunners(rootDirectory, classLoader, newFilters);
+        return new ReflectionRunners(rootDirectories, classLoader, newFilters);
     }
 
     @Override
     public Collection<TestRunner> runners() {
-        var classes = Package.allPackagesUnderSource(rootDirectory).flatMap(Package::classes);
+        var classes = rootDirectories.stream().flatMap(Package::allPackagesUnderSource).flatMap(Package::classes);
         var aggregated = classes
                 .filter(className -> classNameFilters.stream().allMatch(p -> p.test(className)))
                 .reduce(Aggregate.empty(), this::aggregate, Aggregate::compose);
