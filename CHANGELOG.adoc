@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 * Module to wrap JavaTest in more scala-usable syntax
 * Lazy and eager test runners
 * Composite `and` `Matcher`
+* Reflection `TestRunners` instance that will recursively search a directory for classes to run
 
 === Changed
 

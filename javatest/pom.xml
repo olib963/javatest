@@ -21,5 +21,6 @@
         <module>javatest-junit</module>
         <module>javatest-matchers</module>
         <module>javatest-parameterised</module>
+        <module>javatest-reflection</module>
     </modules>
 </project>
