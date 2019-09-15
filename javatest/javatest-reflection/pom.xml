@@ -11,7 +11,7 @@
 
     <artifactId>javatest-reflection</artifactId>
     <name>JavaTest Reflection Module</name>
-    <description>A runner that reflectively finds all classes that can be run in a package</description>
+    <description>A runner that reflectively finds all classes that can be run in a directory</description>
 
     <properties>
         <javatest.testClass>io.github.olib963.javatest.reflection.Tests</javatest.testClass>
