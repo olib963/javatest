@@ -4,10 +4,12 @@ import io.github.olib963.javatest.TestResults;
 import io.github.olib963.javatest.TestRunner;
 import io.github.olib963.javatest.TestRunners;
 import io.github.olib963.javatest.TestSuiteClass;
+import io.github.olib963.javatest.reflection.internal.Aggregate;
 import io.github.olib963.javatest.reflection.internal.Utils;
 import io.github.olib963.javatest.reflection.internal.Package;
 
 import java.io.File;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -42,99 +44,53 @@ public class ReflectionRunners implements TestRunners {
 
     @Override
     public Collection<TestRunner> runners() {
-        var classes = Utils.allFilesIn(rootDirectory)
-                .flatMap(f -> allPackages(f, ""))
-                .flatMap(Package::classes);
-
+        var classes = Package.allPackagesUnderSource(rootDirectory).flatMap(Package::classes);
         var aggregated = classes
                 .filter(className -> classNameFilters.stream().allMatch(p -> p.test(className)))
-                .reduce(Aggregate.empty(), (aggregate, className) -> {
-                    try {
-                        var testClass = classLoader.loadClass(className);
-                        var zeroArgConstructor = testClass.getConstructor(null);
-                        if (TestSuiteClass.class.isAssignableFrom(testClass)) {
-                            return aggregate.withSuite((TestSuiteClass) zeroArgConstructor.newInstance());
-                        } else if (TestRunners.class.isAssignableFrom(testClass)) {
-                            return aggregate.withRunners((TestRunners) zeroArgConstructor.newInstance());
-                        } else {
-                            return aggregate;
-                        }
-                    } catch (ClassNotFoundException e) {
-                        var message = "Could not load " + className + " because:\n" + Utils.flattenMessages(e);
-                        return aggregate.withClassFailure(message);
-                    } catch (NoSuchMethodException e) {
-                        // No zero argument constructor - move on to next class.
-                        return aggregate;
-                    } catch (InstantiationException | InvocationTargetException | IllegalAccessException e) {
-                        var message = "Could not create instance of " + className + " because:\n" + Utils.flattenMessages(e);
-                        return aggregate.withClassFailure(message);
-                    }
-                }, Aggregate::compose);
+                .reduce(Aggregate.empty(), this::aggregate, Aggregate::compose);
 
-        var singleRunner = testableRunner(aggregated.classes);
+        var suiteRunner = testableRunner(aggregated.suites);
 
-        TestRunner failingRunner = () -> aggregated.failedClasses.stream()
+        // If there were any failures loading/creating the classes create a failed result.
+        TestRunner failingRunner = () -> aggregated.classFailures.stream()
                 .reduce(TestResults.empty(), TestResults::failBecause, TestResults::combine);
 
         return Stream.concat(
-                Stream.of(singleRunner, failingRunner),
+                Stream.of(suiteRunner, failingRunner),
                 aggregated.runners.stream().flatMap(r -> r.runners().stream())
         ).collect(Collectors.toList());
     }
 
-    private Stream<Package> allPackages(File file, String currentPackage) {
-        if (file.isDirectory()) {
-            var files = Utils.allFilesIn(file);
-            var packageName = currentPackage + file.getName() + '.';
-            return Stream.concat(
-                    Stream.of(new Package(packageName, file)),
-                    files.flatMap(f -> allPackages(f, packageName))
-            );
+    private Aggregate aggregate(Aggregate aggregate, String className) {
+        try {
+            return instantiateIfZeroArgConstructorExists(aggregate, className, classLoader.loadClass(className));
+        } catch (ClassNotFoundException e) {
+            var message = "Could not load " + className + " because:\n" + Utils.flattenMessages(e);
+            return aggregate.withClassFailure(message);
         }
-        return Stream.empty();
     }
 
-    private static class Aggregate {
-        private final Collection<TestSuiteClass> classes;
-        private final Collection<TestRunners> runners;
-        private final Collection<String> failedClasses;
-
-        private Aggregate(Collection<TestSuiteClass> classes, Collection<TestRunners> runners, Collection<String> failedClasses) {
-            this.classes = classes;
-            this.runners = runners;
-            this.failedClasses = failedClasses;
+    private Aggregate instantiateIfZeroArgConstructorExists(Aggregate aggregate, String className, Class<?> testClass) {
+        try {
+            return instantiateIfPossible(aggregate, className, testClass, testClass.getConstructor(null));
+        } catch (NoSuchMethodException e) {
+            // No zero argument constructor - move on to next class.
+            return aggregate;
         }
+    }
 
-        private static Aggregate empty() {
-            return new Aggregate(Collections.emptyList(), Collections.emptyList(), Collections.emptyList());
-        }
-
-        private Aggregate withSuite(TestSuiteClass suiteClass) {
-            var newClasses = new ArrayList<>(classes);
-            newClasses.add(suiteClass);
-            return new Aggregate(newClasses, runners, failedClasses);
-        }
-
-        private Aggregate withRunners(TestRunners newRunner) {
-            var newRunners = new ArrayList<>(runners);
-            newRunners.add(newRunner);
-            return new Aggregate(classes, newRunners, failedClasses);
-        }
-
-        private Aggregate withClassFailure(String classFailure) {
-            var newFailedClasses = new ArrayList<>(failedClasses);
-            newFailedClasses.add(classFailure);
-            return new Aggregate(classes, runners, newFailedClasses);
-        }
-
-        private Aggregate compose(Aggregate other) {
-            var newClasses = new ArrayList<>(classes);
-            newClasses.addAll(other.classes);
-            var newRunners = new ArrayList<>(runners);
-            newRunners.addAll(other.runners);
-            var newFailedClasses = new ArrayList<>(failedClasses);
-            newFailedClasses.addAll(other.failedClasses);
-            return new Aggregate(newClasses, newRunners, newFailedClasses);
+    private Aggregate instantiateIfPossible(Aggregate aggregate, String className, Class<?> testClass, Constructor<?> constructor) {
+        try{
+            if (TestSuiteClass.class.isAssignableFrom(testClass)) {
+                return aggregate.withSuite((TestSuiteClass) constructor.newInstance());
+            } else if (TestRunners.class.isAssignableFrom(testClass)) {
+                return aggregate.withRunners((TestRunners) constructor.newInstance());
+            } else {
+                return aggregate;
+            }
+        } catch (InstantiationException | InvocationTargetException | IllegalAccessException e) {
+            var message = "Could not create instance of " + className + " because:\n" + Utils.flattenMessages(e);
+            return aggregate.withClassFailure(message);
         }
     }
 

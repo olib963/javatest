@@ -4,9 +4,9 @@ import java.io.File;
 import java.util.stream.Stream;
 
 public class Package {
-    public final String packageName;
-    public final File directory;
-    public Package(String packageName, File directory) {
+    private final String packageName;
+    private final File directory;
+    private Package(String packageName, File directory) {
         this.packageName = packageName;
         this.directory = directory;
     }
@@ -17,6 +17,22 @@ public class Package {
                 "packageName='" + packageName + '\'' +
                 ", directory=" + directory +
                 '}';
+    }
+
+    public static Stream<Package> allPackagesUnderSource(File file) {
+        return Utils.allFilesIn(file).flatMap(f -> allPackages(f, ""));
+    }
+
+    private static Stream<Package> allPackages(File file, String currentPackage) {
+        if (file.isDirectory()) {
+            var files = Utils.allFilesIn(file);
+            var packageName = currentPackage + file.getName() + '.';
+            return Stream.concat(
+                    Stream.of(new Package(packageName, file)),
+                    files.flatMap(f -> allPackages(f, packageName))
+            );
+        }
+        return Stream.empty();
     }
 
     public static Stream<String> classes(Package Package) {
