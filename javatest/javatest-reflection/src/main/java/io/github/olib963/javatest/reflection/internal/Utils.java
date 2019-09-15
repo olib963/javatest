@@ -16,7 +16,7 @@ public class Utils {
     }
 
     public static String flattenMessages(Throwable error) {
-        return Optional.ofNullable(error.getMessage()).orElse(error.getClass().getName())+ "\n"
+        return error.getClass().getName() + Optional.ofNullable(error.getMessage()).map(m -> ": " + m).orElse("") + "\n"
                 + Optional.ofNullable(error.getCause()).map(Utils::flattenMessages).orElse("");
     }
 
