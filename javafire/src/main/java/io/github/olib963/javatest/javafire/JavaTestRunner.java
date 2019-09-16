@@ -8,6 +8,7 @@ import io.github.olib963.javatest.TestRunners;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -44,10 +45,7 @@ class JavaTestRunner {
 
     private Set<String> resolveAllClassPathElements(MavenProject project) {
         try {
-            return Stream
-                    .concat(project.getTestClasspathElements().stream(), project.getRuntimeClasspathElements().stream())
-                    .collect(Collectors.toSet());
-
+            return new HashSet<>(project.getTestClasspathElements());
         } catch (DependencyResolutionRequiredException e) {
             throw new InternalTestException(Status.EXECUTION_FAILURE,
                     "Could not resolve dependencies for maven project", e);

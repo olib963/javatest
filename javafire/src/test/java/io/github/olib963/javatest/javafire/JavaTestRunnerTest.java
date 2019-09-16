@@ -19,19 +19,11 @@ public class JavaTestRunnerTest implements TestSuiteClass {
     }
 
     // SimpleTest definitions
-    private static final List<String> RUNTIME_ELEMENTS = List.of("Runtime dependency");
     private static final List<String> TEST_ELEMENTS = List.of("SimpleTest dependency");
-    private static final Set<String> ALL_ELEMENTS = union(RUNTIME_ELEMENTS, TEST_ELEMENTS);
-
-    private static Set<String> union(List<String> a, List<String> b) {
-        Set<String> all = new HashSet<>(a);
-        all.addAll(b);
-        return all;
-    }
+    private static final Set<String> ALL_ELEMENTS = new HashSet<>(TEST_ELEMENTS);
 
     private MavenProject projectWithExpectedClasspathDependencies() throws DependencyResolutionRequiredException {
         var project = mock(MavenProject.class);
-        when(project.getRuntimeClasspathElements()).thenReturn(RUNTIME_ELEMENTS);
         when(project.getTestClasspathElements()).thenReturn(TEST_ELEMENTS);
         return project;
     }
@@ -59,12 +51,6 @@ public class JavaTestRunnerTest implements TestSuiteClass {
     @Override
     public Collection<Testable> testables() {
         return List.of(
-                test("Test failure to get runtime classpath elements", () -> {
-                    var mavenProject = mock(MavenProject.class);
-                    doThrow(DependencyResolutionRequiredException.class).when(mavenProject).getRuntimeClasspathElements();
-                    var result = new JavaTestRunner(null, null, mavenProject).run();
-                    return that(result.status == JavaTestRunner.Status.EXECUTION_FAILURE, "Should return an execution failure");
-                }),
                 test("Test failure to get test classpath elements", () -> {
                     var mavenProject = mock(MavenProject.class);
                     doThrow(DependencyResolutionRequiredException.class).when(mavenProject).getTestClasspathElements();
