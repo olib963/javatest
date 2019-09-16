@@ -14,15 +14,20 @@
     <name>JavaTest Parameterised Testing Module</name>
     <description>Utilities for creating parameterised test cases</description>
 
-    <properties>
-        <javatest.testClass>io.github.olib963.javatest.parameterised.Tests</javatest.testClass>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>javatest-core</artifactId>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>io.github.olib963</groupId>
+                <artifactId>javafire-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

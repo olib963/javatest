@@ -1,0 +1,32 @@
+= Reflection Runner
+
+A runner that will recursively walk a given collection of test source directories (or directory) using the given classloader
+to load any instance of:
+
+- `TestSuiteClass` with a *public zero argument constructor*. All of which are run in a single test runner
+- `TestRunners` with a *public zero argument constructor* flattened into the underlying ``TestRunner``s it returns.
+
+You can filter on the class names of the `TestSuiteClass` or `TestRunners`.
+
+[source,java]
+----
+public class Tests {
+include::../src/test/java/io/github/olib963/javatest/reflection/Tests.java[tags=include, indent=4]
+}
+----
+
+This module mainly exists to serve as the default implementation of the JavaFire maven plugin.
+
+'''
+
+You can include this module with this dependency:
+
+[source, xml]
+----
+<dependency>
+    <groupId>io.github.olib963</groupId>
+    <artifactId>javatest-reflection</artifactId>
+    <version>${javatest.version}</version>
+    <scope>test</scope>
+</dependency>
+----

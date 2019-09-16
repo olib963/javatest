@@ -10,6 +10,8 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 import io.github.olib963.javatest.javafire.JavaTestRunner.Result;
 
+import java.util.Optional;
+
 /**
  * Run all of the JavaTest tests from the given test runners
  */
@@ -19,12 +21,12 @@ public class JavaTestMojo extends AbstractMojo {
 	/**
 	 * The name of the class that implements TestRunners, providing the runners for testing
 	 */
-	@Parameter(required = true, property = "javafire.testRunners")
+	@Parameter(property = "javafire.testRunners")
 	private String testRunners;
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
-		var testRunner = new JavaTestRunner(testRunners, new ThreadLocalClassLoaderProvider(), lookupProject());
+		var testRunner = new JavaTestRunner(Optional.ofNullable(testRunners), new ThreadLocalClassLoaderProvider(), lookupProject());
 		validateResult(testRunner.run());
 	}
 

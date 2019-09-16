@@ -13,10 +13,6 @@
     <name>JavaTest Benchmark Module</name>
     <description>Functionality to time individual tests and whole runs with failures if a time limit is set</description>
 
-    <properties>
-        <javatest.testClass>io.github.olib963.javatest.benchmark.Tests</javatest.testClass>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -29,5 +25,13 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>io.github.olib963</groupId>
+                <artifactId>javafire-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
