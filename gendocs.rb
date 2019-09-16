@@ -9,6 +9,7 @@ docFiles = {
     "javatest/javatest-parameterised/docs/README.adoc" => "javatest/javatest-parameterised/README.adoc",
     "javatest/javatest-benchmark/docs/README.adoc" => "javatest/javatest-benchmark/README.adoc",
     "javatest/javatest-matchers/docs/README.adoc" => "javatest/javatest-matchers/README.adoc",
+    "javatest/javatest-reflection/docs/README.adoc" => "javatest/javatest-reflection/README.adoc",
     "javatest/javatest-core/docs/README.adoc" => "README.adoc",
     "scala/docs/README.adoc" => "scala/README.adoc"
 }

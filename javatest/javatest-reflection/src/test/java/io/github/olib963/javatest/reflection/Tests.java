@@ -1,18 +1,26 @@
 package io.github.olib963.javatest.reflection;
 
+import io.github.olib963.javatest.TestRunner;
+
 import static io.github.olib963.javatest.JavaTest.*;
 import static io.github.olib963.javatest.matchers.Matcher.*;
 
 import java.io.File;
+import java.util.Collection;
 
 public class Tests {
 
     public static void main(String... args) {
-        var testSourceRoot = new File("javatest/javatest-reflection/src/test/java");
         var standardTest = test("Reflection runner finds all classes on classpath", () -> {
-            var reflectivelyRunThisPackage = ReflectionRunners.forTestSourceRoot(testSourceRoot, Tests.class.getClassLoader())
-                    .filterClasses(c -> c.startsWith("io.github.olib963.javatest.reflection"));
-            var results = run(reflectivelyRunThisPackage.runners());
+            // tag::include[]
+            File testSourceRoot = new File("javatest/javatest-reflection/src/test/java");
+
+            Collection<TestRunner> reflectivelyRunThisPackage =
+                    ReflectionRunners.forTestSourceRoot(testSourceRoot, Tests.class.getClassLoader())
+                            .filterClasses(c -> c.startsWith("io.github.olib963.javatest.reflection"))
+                            .runners();
+            // end::include[]
+            var results = run(reflectivelyRunThisPackage);
             return that(!results.succeeded, "Tests should have failed overall")
                     .and(that("Total test count is correct", results.testCount(), isEqualTo(6L)))
                     .and(that("Passing test count is correct", results.successCount, isEqualTo(2L)))
@@ -20,7 +28,7 @@ public class Tests {
                     .and(that("Pending test count is correct", results.pendingCount, isEqualTo(3L)))
                     .and(that("There should be a run log for the failed fixture", results.allLogs().count(), isEqualTo(1L)));
         });
-
+        var testSourceRoot = new File("javatest/javatest-reflection/src/test/java");
         var instantiationFailTest = test("Failure to instantiate a class returns a failed result", () -> {
             var reflectivelyRunTheFailingPackage = ReflectionRunners.forTestSourceRoot(testSourceRoot, Tests.class.getClassLoader())
                     .filterClasses(c -> c.startsWith("failing"));

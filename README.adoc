@@ -496,8 +496,29 @@ collection of observers to the `run` function i.e. `JavaTest.run(runners, Collec
 
 === With JavaFire Maven plugin
 
-If you are using https://maven.apache.org/[maven] you can add the `JavaFire` maven plugin to your pom to run tests defined
-by a `TestRunners` class for you during mavens `test` phase. Your `TestRunners` class _must_ have a zero arg constructor.
+If you are using https://maven.apache.org/[maven] you can add the `JavaFire` maven plugin to your pom
+to run your tests during mavens `test` phase. By default this will use the link:javatest/javatest-reflection[Reflection Module]
+to run any instances of `TestSuiteClass` or `TestRunners` in your test source directory that have a *public zero argument constructor*.
+
+[source, xml]
+----
+<plugin>
+    <groupId>io.github.olib963</groupId>
+    <artifactId>javafire-maven-plugin</artifactId>
+    <version>${javatest.version}</version>
+    <executions>
+        <execution>
+            <id>test</id>
+            <goals>
+                <goal>test</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin>
+----
+
+Alternatively you can run tests defined by a single `TestRunners` class. Your `TestRunners` class _must_ have a *public zero argument constructor*.
+This is achieved by passing the class name to the plugin configuration for example:
 
 [source, java]
 ----
@@ -618,6 +639,7 @@ JavaTest is built on a simple functional core and functionality is expanded on b
 * link:javatest/javatest-benchmark[Benchmarking]
 * link:javatest/javatest-eventually[Eventual Consistency]
 * link:javatest/javatest-junit[JUnit]
+* link:javatest/javatest-reflection[Reflection]
 * link:scala[Scala]
 
 == Functional Interfaces
