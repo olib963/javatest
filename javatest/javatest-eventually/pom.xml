@@ -13,10 +13,6 @@
     <name>JavaTest Eventual Consistency Module</name>
     <description>Assertion wrapper for eventual consistency in tests</description>
 
-    <properties>
-        <javatest.testClass>io.github.olib963.javatest.eventually.Tests</javatest.testClass>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -29,5 +25,13 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>io.github.olib963</groupId>
+                <artifactId>javafire-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

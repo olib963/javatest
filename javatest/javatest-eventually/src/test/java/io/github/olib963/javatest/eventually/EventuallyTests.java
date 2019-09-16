@@ -5,6 +5,8 @@ import io.github.olib963.javatest.Testable.Test;
 
 import java.time.Duration;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -13,10 +15,19 @@ import static io.github.olib963.javatest.JavaTest.*;
 import static io.github.olib963.javatest.eventually.EventualConfig.DEFAULT_CONFIG;
 import static io.github.olib963.javatest.eventually.Eventually.eventually;
 
-public class EventuallyTests {
+public class EventuallyTests implements TestSuiteClass {
 
-    public static TestSuiteClass passing() {
-        return new PassingTests();
+    @Override
+    public Collection<Testable> testables() {
+        return List.of(
+                new PassingTests(),
+                suite("Failing Tests",  EventuallyTests.FAILING.map(t ->
+                        test(t.name, () -> {
+                            var results = run(List.of(testableRunner(t)), Collections.emptyList());
+                            return that(!results.succeeded, t.name + " should fail");
+                        })
+                ).collect(Collectors.toList()))
+        );
     }
 
     static class PassingTests implements TestSuiteClass {
@@ -38,7 +49,7 @@ public class EventuallyTests {
         }
     }
 
-    public static final Stream<Test> FAILING = Stream.of(
+    private static final Stream<Test> FAILING = Stream.of(
             test("Simple fail", () -> eventually(() -> that(false, "should fail"), DEFAULT_CONFIG.withAttempts(1))),
             test("Exception fail", () -> eventually(() -> {
                 throw new Exception("Test failure");

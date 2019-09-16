@@ -1,5 +1,7 @@
 package io.github.olib963.javatest.parameterised;
 
+import io.github.olib963.javatest.TestSuiteClass;
+import io.github.olib963.javatest.Testable;
 import io.github.olib963.javatest.Testable.Test;
 
 import java.io.IOException;
@@ -7,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 // tag::import[]
@@ -14,7 +17,22 @@ import static io.github.olib963.javatest.JavaTest.*;
 import static io.github.olib963.javatest.parameterised.Parameterised.*;
 // end::import[]
 
-public class DocumentationTests {
+public class DocumentationTests implements TestSuiteClass {
+
+    @Override
+    public Collection<Testable> testables() {
+        try {
+            var palindromes = suite("Palindrome Tests", Stream.concat(
+                    DocumentationTests.palindromes().inMemoryPalindromeTests().stream(),
+                    DocumentationTests.palindromes().palindromeTestsFromFile()
+            ).collect(Collectors.toList()));
+            var fibonacci = suite("Finonacci Tests", DocumentationTests.fibonacci().fibonacciTests());
+            return List.of(palindromes, fibonacci);
+        } catch (IOException e) {
+            // TODO this should probably be a fixture instead.
+            throw  new RuntimeException(e);
+        }
+    }
 
     // tag::palindrome[]
     public class PalindromeTests {

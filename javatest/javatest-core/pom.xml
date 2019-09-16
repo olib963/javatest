@@ -16,4 +16,12 @@
     <properties>
         <javatest.testClass>io.github.olib963.javatest.AllTests</javatest.testClass>
     </properties>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>

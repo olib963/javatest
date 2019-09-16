@@ -37,4 +37,18 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <!-- TODO JavaFire currently throwing exception since a "TestEngine is not on the classpath" yet it works in exec :/ -->
+<!--            <plugin>-->
+<!--                <groupId>io.github.olib963</groupId>-->
+<!--                <artifactId>javafire-maven-plugin</artifactId>-->
+<!--            </plugin>-->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>
