@@ -45,10 +45,8 @@ case class JTRunner(args: Array[String], remoteArgs: Array[String], testClassLoa
   // TODO error handling etc.
   override def tasks(taskDefs: Array[TaskDef]): Array[Task] = {
     val testsCases = taskDefs.flatMap { t => t.fingerprint() match {
-      case JavaTestScalaFramework.SuiteFingerprint =>
-        Some(Left(moduleOrInstance[Suite](t.fullyQualifiedName())))
-      case JavaTestScalaFramework.RunnerFingerprint =>
-        Some(Right(moduleOrInstance[Runners](t.fullyQualifiedName())))
+      case JavaTestScalaFramework.SuiteFingerprint => Some(Left(moduleOrInstance[Suite](t.fullyQualifiedName())))
+      case JavaTestScalaFramework.RunnerFingerprint => Some(Right(moduleOrInstance[Runners](t.fullyQualifiedName())))
       case other => None
     }}
 
@@ -66,7 +64,7 @@ case class JTRunner(args: Array[String], remoteArgs: Array[String], testClassLoa
     )
 }
 
-// This task does not actually seem to be invoked by SBT. TODO 
+// This task does not actually seem to be invoked by SBT. TODO Fix the fingerprints and try to return the results for each test?
 case class JTTask(results: TestResults) extends Task {
   val fakeFingerprint = new Fingerprint {
   }
