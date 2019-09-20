@@ -380,6 +380,38 @@ jshell> results.succeeded && results2.succeeded
 $3 ==> true
 ----
 
+== Maven Integration
+
+If you are using maven there is a bill of materials you can import to manage the versions of dependencies. You can
+add this to your pom by doing the following?
+
+.pom.xml
+[source, xml]
+----
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>io.github.olib963</groupId>
+            <artifactId>javatest-bom</artifactId>
+            <version>${javatest.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+<dependencies>
+    <dependency>
+        <groupId>io.github.olib963</groupId>
+        <artifactId>javatest-core</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>io.github.olib963</groupId>
+        <artifactId>javatest-matchers</artifactId>
+    </dependency>
+    <!-- ... More dependencies -->
+</dependencies>
+----
+
 == Module List
 
 JavaTest is built on a simple functional core and functionality is expanded on by several modules found here:
