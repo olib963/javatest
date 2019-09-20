@@ -38,7 +38,7 @@ jobs:
           command: |
             mkdir -p ~/.sbt/1.0/
             touch ~/.sbt/1.0/global.sbt
-            echo "resolvers += \"Local Maven\" at Path.userHome.asFile.toURI.toURL + \".m2/repository\"" >> ~/.sbt/1.0/global.sbt
+            echo "resolvers += Resolver.mavenLocal" >> ~/.sbt/1.0/global.sbt
       - run:
           name: Compile Scala
           command: cd scala && sbt compile
@@ -50,7 +50,7 @@ jobs:
           key: *scala-cache
       - run:
           name: Test Scala
-          command: cd scala && sbt core/test:run
+          command: cd scala && sbt ";core/test:run;publishLocal" && cd sbt-test && sbt test
 
   docTest:
     docker:

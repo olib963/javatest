@@ -36,6 +36,10 @@ val sbtPlugin = (project in file("sbt-plugin"))
   .settings(CommonSettings: _*)
   .dependsOn(sbtInterface)
   .enablePlugins(SbtPlugin)
+  .enablePlugins(BuildInfoPlugin)
   .settings(
-    name := "javatest-sbt"
+    name := "javatest-sbt",
+    // The build info plugin generates an object javatest_sbt.BuildInfo that contains the version defined in build.sbt
+    buildInfoKeys := Seq[BuildInfoKey]("javaTestVersion" -> javaTestVersion),
+    buildInfoPackage := "javatest_sbt"
   )

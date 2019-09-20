@@ -1,6 +1,6 @@
 package io.github.olib963.javatest_sbt_interface
 
-import io.github.olib963.javatest.{JavaTest, TestRunner}
+import io.github.olib963.javatest.{JavaTest, TestResults, TestRunner}
 import io.github.olib963.javatest_scala.{Runners, Suite}
 import sbt.testing.{Event, EventHandler, Fingerprint, Framework, Logger, OptionalThrowable, Runner, Selector, Status, SubclassFingerprint, Task, TaskDef}
 
@@ -31,6 +31,7 @@ object JavaTestScalaFramework {
         classBased.isModule && classBased.requireNoArgConstructor() && classBased.superclassName() == this.superclassName()
       case _ => false
     }
+    override def toString: String = s"Fingerprint for ${superclassName()}"
   }
   val SuiteFingerprint = new ScalaFingerPrint[Suite]
   val RunnerFingerprint = new ScalaFingerPrint[Runners]
@@ -44,16 +45,16 @@ case class JTRunner(args: Array[String], remoteArgs: Array[String], testClassLoa
   // TODO error handling etc.
   override def tasks(taskDefs: Array[TaskDef]): Array[Task] = {
     val testsCases = taskDefs.flatMap { t => t.fingerprint() match {
-      case JavaTestScalaFramework.SuiteFingerprint =>
-        Some(Left(moduleOrInstance[Suite](t.fullyQualifiedName())))
-      case JavaTestScalaFramework.RunnerFingerprint =>
-        Some(Right(moduleOrInstance[Runners](t.fullyQualifiedName())))
+      case JavaTestScalaFramework.SuiteFingerprint => Some(Left(moduleOrInstance[Suite](t.fullyQualifiedName())))
+      case JavaTestScalaFramework.RunnerFingerprint => Some(Right(moduleOrInstance[Runners](t.fullyQualifiedName())))
       case other => None
     }}
 
     val singleTestRunner: TestRunner = testsCases.collect{ case Left(suite) => suite}.toSeq
     val runners = singleTestRunner +: testsCases.collect{ case Right(runner) => runner}.flatMap(_.Runners()).toSeq
-    Array(JTTask(runners))
+    import scala.collection.JavaConverters._
+    val results = JavaTest.run(runners.asJava)
+    Array(JTTask(results))
   }
 
   private def moduleOrInstance[A](classToLoad: String): A =
@@ -63,15 +64,13 @@ case class JTRunner(args: Array[String], remoteArgs: Array[String], testClassLoa
     )
 }
 
-case class JTTask(runners: Seq[TestRunner]) extends Task {
+// This task does not actually seem to be invoked by SBT. TODO Fix the fingerprints and try to return the results for each test?
+case class JTTask(results: TestResults) extends Task {
   val fakeFingerprint = new Fingerprint {
-
   }
   override def tags(): Array[String] = Array()
 
-  import scala.collection.JavaConverters._
   override def execute(eventHandler: EventHandler, loggers: Array[Logger]): Array[Task] = {
-    val results = JavaTest.run(runners.asJava)
     if(!results.succeeded){
       eventHandler.handle(new Event{
         override def fullyQualifiedName(): String = "Failure"

@@ -8,11 +8,9 @@ import sbt.{AutoPlugin, Setting, TestFramework}
 object EnableJavaTestPlugin extends AutoPlugin with LibraryManagementSyntax {
 
   override def trigger = allRequirements
-  // TODO ensure version is "this" version.
-  val version = "0.2.0-SNAPSHOT"
 
   override def projectSettings: Seq[Setting[_]] = Seq(
-    libraryDependencies += "io.github.olib963" %% "javatest-sbt-interface" % version % Test,
+    libraryDependencies += "io.github.olib963" %% "javatest-sbt-interface" % BuildInfo.javaTestVersion % Test,
     testFrameworks += new TestFramework(classOf[JavaTestScalaFramework].getName),
   )
 
