@@ -1,18 +1,16 @@
 = JavaTest Scala
 :note-caption: :information_source:
 
-This module provides a wrapper around the underlying java framework that provides a more idiomatic Scala interface. Syntax
-can be selectively imported by mixing the appropriate trait e.g. `FixtureSyntax`, however, if you want all functions to be in scope
-simply `import io.github.olib963.javatest_scala._`.
-
-NOTE: Currently knowledge and understanding of the Java library is assumed. I will expand on these docs to be self-explanitory
-at a later date.
+JavaTest is an opinionated, functional test framework written in pure Java, this module provides a wrapper around the underlying
+java framework that provides a more idiomatic Scala interface. Syntax can be selectively imported by mixing the appropriate
+trait e.g. `FixtureSyntax`, however, if you want all functions to be in scope simply `import io.github.olib963.javatest_scala._`.
 
 == Core functionality
 
-All core functionality remains essentially unchanged from the Java framework but has new syntax
+A `Test` in JavaTest is defined by a string name and a function of type `() => Assertion`. You can create
 
-Assertions and tests are defined the same as the Java syntax with the addition that the test function is now in a separate parameter list
+* a simple `Assertion` from a `Boolean` and a `String`
+* a `Matcher` based assertion (see <<Matchers,Matchers>>)
 
 [source, scala]
 ----
@@ -21,7 +19,7 @@ include::../core/src/test/scala/io/github/olib963/javatest_scala/SimpleTests.sca
 
 === Suites
 
-Suites can be constructed from:
+Test suites are constructed from a `String` name and a `Seq` of ``Test``s or nested ``Suite``s. ``Suite``s can be constructed from:
 
 - Varags:
 
@@ -44,10 +42,10 @@ include::../core/src/test/scala/io/github/olib963/javatest_scala/documentation/S
 include::../core/src/test/scala/io/github/olib963/javatest_scala/documentation/SuiteDocs.scala[tags=trait, indent=-]
 ----
 
-=== Runners
+=== Test Runners
 
-Runners can be generated the same way as in the java framework but an implicit transformation exists to turn
-a `Seq[Testable]` into a `TestRunner`.
+An implicit transformation exists to turn a `Seq[Testable]` into a `TestRunner`. Alternatively you can customise the test
+runner by overriding the default test observer.
 
 [source, scala]
 ----
@@ -55,23 +53,31 @@ include::../core/src/test/scala/io/github/olib963/javatest_scala/documentation/R
 
 // Or to run directly
 include::../core/src/test/scala/io/github/olib963/javatest_scala/documentation/RunnerDocs.scala[tags=running, indent=-]
+
+// Custom Runner
+include::../core/src/test/scala/io/github/olib963/javatest_scala/documentation/RunnerDocs.scala[tags=customDefinition, indent=-]
 ----
 
 == Matchers
 
-``Matcher``s can be used in this module the same way as in Java. Only a few matchers are available by default.
+``Matcher``s can be used in this module the same way as in Java. They provide the descrption and predicate check required for
+an ``Assertion``. Only a few matchers are available by default. I hope to expand on this functionality in the future.
 
 [source, scala]
 ----
 include::../core/src/test/scala/io/github/olib963/javatest_scala/MatcherTests.scala[tags=include]
-----
 
-I will be adding many Scala specific matchers in the future.
+include::../core/src/test/scala/io/github/olib963/javatest_scala/MatcherTests.scala[tags=scala]
+----
 
 == Eventual Consistency
 
-The eventual consistency assertions in this module take an implicit configuration and uses scala ``Duration``s instead of java ``Duration``s.
-The default configuration is also supplied implicitly in the case you do not provide one.
+You can provide an `Assertion` that won't hold straight away to the `eventually` function. It accepts an implicit
+`EventuallyConfig` that contains:
+
+* The number of attempts to make before the assertion fails
+* The `Duration` to wait between each attempt
+* An optional initial `Duration` to wait before the first attempt
 
 [source, scala]
 ----
@@ -80,14 +86,15 @@ include::../core/src/test/scala/io/github/olib963/javatest_scala/EventualTests.s
 
 == Fixtures
 
-Fixtures in this module make use of `scala.util.Try` and creating a runner is a multi-parameter list function.
+You can create a `FixtureDefinition[A]` from a function `() => Try[A]` with optional tear down function `A => Try[Unit]`.
+You can then use this definition to create a test runner that makes use of the fixture.
 
 [source, scala]
 ----
 include::../core/src/test/scala/io/github/olib963/javatest_scala/documentation/FixtureDocumentation.scala[tags=simple, indent=-]
 ----
 
-You can create fixtures with a tear down method and curry common fixtures you want to create multiple instances of:
+You can curry common fixtures you want to create multiple instances of:
 
 [source, scala]
 ----
@@ -96,8 +103,10 @@ include::../core/src/test/scala/io/github/olib963/javatest_scala/documentation/F
 
 == Benchmarking
 
-Benchmarking in this module accepts an implicit `DurationFormat` function that accepts scala ``Duration``s. The
-`failIfLongerThan` function also accepts scala ``Duration``s. The functionality remains the same as the java module.
+To benchmark a `Test` or a `TestRunner` call the `benchmark` function, this will add the time of the test/run to the logs.
+All benchmark functions accepts an implicit `DurationFormat` function that accepts scala ``Duration``s and return a `String`.
+
+You can also set a time limit on a `Test` by using the `failIfLongerThan` function.
 
 [source, scala]
 ----

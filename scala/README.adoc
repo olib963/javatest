@@ -1,18 +1,16 @@
 = JavaTest Scala
 :note-caption: :information_source:
 
-This module provides a wrapper around the underlying java framework that provides a more idiomatic Scala interface. Syntax
-can be selectively imported by mixing the appropriate trait e.g. `FixtureSyntax`, however, if you want all functions to be in scope
-simply `import io.github.olib963.javatest_scala._`.
-
-NOTE: Currently knowledge and understanding of the Java library is assumed. I will expand on these docs to be self-explanitory
-at a later date.
+JavaTest is an opinionated, functional test framework written in pure Java, this module provides a wrapper around the underlying
+java framework that provides a more idiomatic Scala interface. Syntax can be selectively imported by mixing the appropriate
+trait e.g. `FixtureSyntax`, however, if you want all functions to be in scope simply `import io.github.olib963.javatest_scala._`.
 
 == Core functionality
 
-All core functionality remains essentially unchanged from the Java framework but has new syntax
+A `Test` in JavaTest is defined by a string name and a function of type `() => Assertion`. You can create
 
-Assertions and tests are defined the same as the Java syntax with the addition that the test function is now in a separate parameter list
+* a simple `Assertion` from a `Boolean` and a `String`
+* a `Matcher` based assertion (see <<Matchers,Matchers>>)
 
 [source, scala]
 ----
@@ -26,7 +24,7 @@ test("Passing multiline test"){
 
 === Suites
 
-Suites can be constructed from:
+Test suites are constructed from a `String` name and a `Seq` of ``Test``s or nested ``Suite``s. ``Suite``s can be constructed from:
 
 - Varags:
 
@@ -73,10 +71,10 @@ object MySuite extends Suite with JavaTestSyntax {
 }
 ----
 
-=== Runners
+=== Test Runners
 
-Runners can be generated the same way as in the java framework but an implicit transformation exists to turn
-a `Seq[Testable]` into a `TestRunner`.
+An implicit transformation exists to turn a `Seq[Testable]` into a `TestRunner`. Alternatively you can customise the test
+runner by overriding the default test observer.
 
 [source, scala]
 ----
@@ -96,21 +94,37 @@ run(
     )
   )
 )
+
+// Custom Runner
+val customRunner = testableRunner(
+  Seq(
+    suite("My Suite",
+      test("test1")(that(true, "passes")),
+      test("test2")(that(true, "passes"))
+    )
+  ),
+  // Observer function: (TestResult => Unit)
+  result => println(result)
+)
 ----
 
 == Matchers
 
-``Matcher``s can be used in this module the same way as in Java. Only a few matchers are available by default.
+``Matcher``s can be used in this module the same way as in Java. They provide the descrption and predicate check required for
+an ``Assertion``. Only a few matchers are available by default. I hope to expand on this functionality in the future.
 
 [source, scala]
 ----
+
 import io.github.olib963.javatest.Testable
+
+import scala.util.{Failure, Success}
 
 object MatcherTests extends Suite with JavaTestSyntax with MatcherSyntax {
   override def tests: Seq[Testable] = Seq(
     test("Equal")(that(List(1, 2, 3), isEqualTo(List(1, 2, 3)))),
     test("Type")(that("foo", hasType[String])),
-    test("Instance"){
+    test("Instance") {
       val javaObject = new Object()
       that(javaObject, isTheSameInstanceAs(javaObject))
     },
@@ -124,14 +138,61 @@ object MatcherTests extends Suite with JavaTestSyntax with MatcherSyntax {
     test("With custom message")(that("Because my string is empty", "", isBlankString))
   )
 }
-----
 
-I will be adding many Scala specific matchers in the future.
+
+object ScalaSpecificMatcherTests extends Suite with JavaTestSyntax with MatcherSyntax {
+  override def tests: Seq[Testable] = Seq(
+    suite("Option tests",
+      suite("defined tests",
+        // TODO it should not need the type hint. Probably some variance changes in the java API would fix it.
+        test("isDefined")(that(Some(1), isDefined[Int])),
+        test("isDefined (empty)")(that(None, not(isDefined)))
+      ),
+      suite("empty tests",
+        test("isEmpty")(that(None, isEmptyOption)),
+        test("isEmpty (not empty)")(that(Some(1), not(isEmptyOption[Int]))),
+      ),
+      suite("contains tests",
+        test("Contains")(that(Some(2), optionContains(2))),
+        test("Contains (missing element)")(that(None, not(optionContains(4)))),
+      )
+    ),
+    suite("Collection tests",
+      suite("empty tests",
+        test("isEmpty")(that(Seq(), isEmpty)),
+        test("isEmpty (not empty)")(that(Seq(1, 2, 3), not(isEmpty[Int]))),
+      ),
+      suite("contains tests",
+        test("contains")(that(Seq(1, 2, 3), contains(2))),
+        test("contains (missing element)")(that(Seq(1, 2, 3), not(contains(4)))),
+      ),
+      suite("hasSize tests",
+        test("has size")(that(Seq(1, 2, 3), hasSize[Int](3))),
+        test("has size (wrong size)")(that(Seq(1, 2, 3), not(hasSize[Int](4)))),
+      )
+    ),
+    suite("Try tests",
+      suite("success tests",
+        test("isSuccess")(that(Success(10), isSuccess[Int])),
+        test("isSuccess (with failure)")(that(Failure(new Exception()), not(isSuccess)))
+      ),
+      suite("failure tests",
+        test("isSuccess")(that(Failure(new Exception()), isFailure)),
+        test("isSuccess (with success)")(that(Success(10), not(isFailure[Int])))
+      )
+    )
+  )
+}
+----
 
 == Eventual Consistency
 
-The eventual consistency assertions in this module take an implicit configuration and uses scala ``Duration``s instead of java ``Duration``s.
-The default configuration is also supplied implicitly in the case you do not provide one.
+You can provide an `Assertion` that won't hold straight away to the `eventually` function. It accepts an implicit
+`EventuallyConfig` that contains:
+
+* The number of attempts to make before the assertion fails
+* The `Duration` to wait between each attempt
+* An optional initial `Duration` to wait before the first attempt
 
 [source, scala]
 ----
@@ -147,7 +208,8 @@ eventually(that(atomicInt.get(), isEqualTo(1)))
 
 == Fixtures
 
-Fixtures in this module make use of `scala.util.Try` and creating a runner is a multi-parameter list function.
+You can create a `FixtureDefinition[A]` from a function `() => Try[A]` with optional tear down function `A => Try[Unit]`.
+You can then use this definition to create a test runner that makes use of the fixture.
 
 [source, scala]
 ----
@@ -158,7 +220,7 @@ val runnerUsingSimpleFixture = fixtureRunner("sting fixture", mySimpleFixture)(w
 )
 ----
 
-You can create fixtures with a tear down method and curry common fixtures you want to create multiple instances of:
+You can curry common fixtures you want to create multiple instances of:
 
 [source, scala]
 ----
@@ -189,8 +251,10 @@ val runner2 = reusableFixture { aDifferentReader =>
 
 == Benchmarking
 
-Benchmarking in this module accepts an implicit `DurationFormat` function that accepts scala ``Duration``s. The
-`failIfLongerThan` function also accepts scala ``Duration``s. The functionality remains the same as the java module.
+To benchmark a `Test` or a `TestRunner` call the `benchmark` function, this will add the time of the test/run to the logs.
+All benchmark functions accepts an implicit `DurationFormat` function that accepts scala ``Duration``s and return a `String`.
+
+You can also set a time limit on a `Test` by using the `failIfLongerThan` function.
 
 [source, scala]
 ----

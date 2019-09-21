@@ -16,7 +16,7 @@ object MyTests {
   def main(args: Array[String]): Unit = {
     val results = run(benchmark(
       fixtureRunner("executor", executorServiceFixture)(
-        executor => Seq(SimpleTests, MatcherTests, EventualTests(executor)))))
+        executor => Seq(SimpleTests, MatcherTests, ScalaSpecificMatcherTests, EventualTests(executor)))))
 
     if (!results.succeeded) {
       sys.error("Scala tests failed")
