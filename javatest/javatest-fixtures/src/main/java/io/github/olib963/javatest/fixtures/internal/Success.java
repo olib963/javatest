@@ -43,4 +43,9 @@ public class Success<A> implements Try<A> {
     public int hashCode() {
         return Objects.hash(Success.class, value);
     }
+
+    @Override
+    public String toString() {
+        return "Success(" + value + ')';
+    }
 }

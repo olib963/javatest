@@ -1,6 +1,7 @@
 package io.github.olib963.javatest;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -27,6 +28,28 @@ public abstract class TestResult {
         public <A> A match(Function<SuiteResult, A> suiteFn, Function<SingleTestResult, A> singleFn) {
             return suiteFn.apply(this);
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            SuiteResult that = (SuiteResult) o;
+            return suiteName.equals(that.suiteName) &&
+                    results.equals(that.results);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(suiteName, results);
+        }
+
+        @Override
+        public String toString() {
+            return "SuiteResult{" +
+                    "suiteName='" + suiteName + '\'' +
+                    ", results=" + results +
+                    '}';
+        }
     }
 
     public static class SingleTestResult extends TestResult {
@@ -47,6 +70,30 @@ public abstract class TestResult {
         @Override
         public <A> A match(Function<SuiteResult, A> suiteFn, Function<SingleTestResult, A> singleFn) {
             return singleFn.apply(this);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            SingleTestResult that = (SingleTestResult) o;
+            return name.equals(that.name) &&
+                    result.equals(that.result) &&
+                    testLogs.equals(that.testLogs);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(name, result, testLogs);
+        }
+
+        @Override
+        public String toString() {
+            return "SingleTestResult{" +
+                    "name='" + name + '\'' +
+                    ", result=" + result +
+                    ", testLogs=" + testLogs +
+                    '}';
         }
     }
 }

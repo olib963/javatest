@@ -3,6 +3,7 @@ package io.github.olib963.javatest;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 public final class TestResults {
@@ -125,4 +126,33 @@ public final class TestResults {
         return new TestResults(false, successCount, failureCount, pendingCount, runLogs, results).addLog(reason);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TestResults that = (TestResults) o;
+        return succeeded == that.succeeded &&
+                successCount == that.successCount &&
+                failureCount == that.failureCount &&
+                pendingCount == that.pendingCount &&
+                runLogs.equals(that.runLogs) &&
+                results.equals(that.results);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(succeeded, successCount, failureCount, pendingCount, runLogs, results);
+    }
+
+    @Override
+    public String toString() {
+        return "TestResults{" +
+                "succeeded=" + succeeded +
+                ", successCount=" + successCount +
+                ", failureCount=" + failureCount +
+                ", pendingCount=" + pendingCount +
+                ", runLogs=" + runLogs +
+                ", results=" + results +
+                '}';
+    }
 }
