@@ -29,13 +29,14 @@ trait MatcherSyntax {
   // Scala matchers
   // TODO covariance issues. It would be great if we could just do "val isEmpty: Matcher[Option[Nothing]]"
   // TODO need nested matchers e.g. isSuccessThat(containsString("foo"))
-  def isDefined[A]: Matcher[Option[A]] = Matcher.fromFunctions(o => o.isDefined, "be defined")
-  def isEmptyOption[A]: Matcher[Option[A]] = Matcher.fromFunctions(o => o.isEmpty, "be empty")
-  def optionContains[A](element: A): Matcher[Option[A]] = Matcher.fromFunctions(c => c.contains(element), s"contain {$element}")
-  def isEmpty[A]: Matcher[GenTraversableOnce[A]] = Matcher.fromFunctions(o => o.isEmpty, "be empty")
-  def contains[A](element: A): Matcher[SeqLike[A, _]] = Matcher.fromFunctions(c => c.contains(element), s"contain {$element}")
-  def hasSize[A](size: Int): Matcher[Iterable[A]] = Matcher.fromFunctions(c => c.size == size, s"have size {$size}")
-  def isSuccess[A]: Matcher[Try[A]] = Matcher.fromFunctions(t => t.isSuccess, s"ba a success")
-  def isFailure[A]: Matcher[Try[A]] = Matcher.fromFunctions(t => t.isFailure, s"be a failure")
+  def matcher[A](expected: String)(predicate: A => Boolean): Matcher[A] = Matcher.fromFunctions(a => predicate(a), expected)
+  def isDefined[A]: Matcher[Option[A]] = matcher("be defined")(_.isDefined)
+  def isEmptyOption[A]: Matcher[Option[A]] = matcher("be empty")(_.isEmpty)
+  def optionContains[A](element: A): Matcher[Option[A]] = matcher(s"contain {$element}")(_.contains(element))
+  def isEmpty[A]: Matcher[GenTraversableOnce[A]] = matcher("be empty")(_.isEmpty)
+  def contains[A](element: A): Matcher[SeqLike[A, _]] = matcher(s"contain {$element}")(_.contains(element))
+  def hasSize[A](size: Int): Matcher[Iterable[A]] = matcher(s"have size {$size}")(_.size == size)
+  def isSuccess[A]: Matcher[Try[A]] = matcher("be a success")(_.isSuccess)
+  def isFailure[A]: Matcher[Try[A]] = matcher("be a failure")(_.isFailure)
 
 }
