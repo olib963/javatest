@@ -604,29 +604,34 @@ Then you can run:
 |  For an introduction type: /help intro
 
 jshell> var results = runTest(() -> that(true, "JavaTest works in the shell!"))
-JShell test
+JShell test:
 	JavaTest works in the shell!
-
 Ran a total of 1 tests.
 1 succeeded
 0 failed
 0 were pending
+results ==> TestResults{succeeded=true, successCount=1, failu ...  logs=[]'}, testLogs=[]}]}
 
-results ==> io.github.olib963.javatest.TestResults@4b553d26
-
-jshell> var results2 = runTest(() -> that(1 + 1 == 2, "Addition is working"))
-JShell test
-	Addition is working
-
+jshell> var results2 = runTest(() -> that(1 + 1 == 3, "One add One is Three"))
+JShell test:
+	One add One is Three
 Ran a total of 1 tests.
-1 succeeded
-0 failed
+0 succeeded
+1 failed
 0 were pending
+results2 ==> TestResults{succeeded=false, successCount=0, fail ...  logs=[]'}, testLogs=[]}]}
 
-results2 ==> io.github.olib963.javatest.TestResults@3e6fa38a
+jshell> var allResults = results.combine(results2)
+allResults ==> TestResults{succeeded=false, successCount=1, fail ...  logs=[]'}, testLogs=[]}]}
 
-jshell> results.succeeded && results2.succeeded
-$3 ==> true
+jshell> allResults.succeeded
+$4 ==> false
+
+jshell> allResults.failureCount
+$5 ==> 1
+
+jshell> allResults.allResults().collect(java.util.stream.Collectors.toList())
+$6 ==> [SingleTestResult{name='JShell test', result=AssertionResult{holds=true, pending=false, description='JavaTest works in the shell!, logs=[]'}, testLogs=[]}, SingleTestResult{name='JShell test', result=AssertionResult{holds=false, pending=false, description='One add One is Three, logs=[]'}, testLogs=[]}]
 ----
 
 == Maven Integration
