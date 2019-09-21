@@ -26,7 +26,7 @@ object MatcherTests extends Suite with JavaTestSyntax with MatcherSyntax {
 }
 
 // end::include[]
-
+// tag::scala[]
 object ScalaSpecificMatcherTests extends Suite with JavaTestSyntax with MatcherSyntax {
   override def tests: Seq[Testable] = Seq(
     suite("Option tests",
@@ -70,3 +70,4 @@ object ScalaSpecificMatcherTests extends Suite with JavaTestSyntax with MatcherS
     )
   )
 }
+// end::scala[]

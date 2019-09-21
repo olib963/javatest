@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 * Ability to prefix `MatcherAssertion` descriptions with custom messaging.
 * Ability to fail a `TestResults` object at run level not just test level.
 * Module to wrap JavaTest in more scala-usable syntax
+* Simple SBT Integration
 * Lazy and eager test runners
 * Composite `and` `Matcher`
 * Reflection `TestRunners` instance that will recursively search a directory for classes to run

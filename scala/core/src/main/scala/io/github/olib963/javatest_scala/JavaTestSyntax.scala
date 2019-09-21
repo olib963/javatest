@@ -24,5 +24,7 @@ trait JavaTestSyntax {
 
   implicit def runnerFromTestable(testable: Testable): TestRunner = JavaTest.testableRunner(testable)
   implicit def runnerFromTestables(testables: Seq[Testable]): TestRunner = JavaTest.testableRunner(testables.asJava)
+  def testableRunner(testables: Seq[Testable], observers: (TestResult => Unit)*): TestRunner = JavaTest.
+    testableRunner(testables.asJava, observers.map(f => (result => f(result)): TestCompletionObserver).asJava)
 
 }
