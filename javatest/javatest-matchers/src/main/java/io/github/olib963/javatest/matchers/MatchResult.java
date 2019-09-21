@@ -1,5 +1,6 @@
 package io.github.olib963.javatest.matchers;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -33,5 +34,27 @@ public final class MatchResult {
 
     public MatchResult mapMismatch(Function<String, String> mismatchFunction) {
         return new MatchResult(matches, mismatch.map(mismatchFunction));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MatchResult that = (MatchResult) o;
+        return matches == that.matches &&
+                Objects.equals(mismatch, that.mismatch);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(matches, mismatch);
+    }
+
+    @Override
+    public String toString() {
+        return "MatchResult{" +
+                "matches=" + matches +
+                ", mismatch=" + mismatch +
+                '}';
     }
 }

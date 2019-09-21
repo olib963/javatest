@@ -47,4 +47,9 @@ public class Failure<A> implements Try<A> {
     public int hashCode() {
         return Objects.hash(Failure.class, error);
     }
+
+    @Override
+    public String toString() {
+        return "Failure(" + error + ')';
+    }
 }

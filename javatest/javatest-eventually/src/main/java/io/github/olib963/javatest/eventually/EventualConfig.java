@@ -1,6 +1,7 @@
 package io.github.olib963.javatest.eventually;
 
 import java.time.Duration;
+import java.util.Objects;
 import java.util.Optional;
 
 public class EventualConfig {
@@ -37,5 +38,29 @@ public class EventualConfig {
 
     public EventualConfig withNoInitialDelay() {
         return new EventualConfig(attempts, waitInterval, Optional.empty());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EventualConfig that = (EventualConfig) o;
+        return attempts == that.attempts &&
+                waitInterval.equals(that.waitInterval) &&
+                initialDelay.equals(that.initialDelay);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(attempts, waitInterval, initialDelay);
+    }
+
+    @Override
+    public String toString() {
+        return "EventualConfig{" +
+                "attempts=" + attempts +
+                ", waitInterval=" + waitInterval +
+                ", initialDelay=" + initialDelay +
+                '}';
     }
 }

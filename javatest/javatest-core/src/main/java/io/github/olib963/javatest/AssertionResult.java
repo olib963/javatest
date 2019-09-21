@@ -4,6 +4,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 public final class AssertionResult {
@@ -58,6 +59,22 @@ public final class AssertionResult {
 
     public static AssertionResult success(String description) {
         return of(true, description);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AssertionResult that = (AssertionResult) o;
+        return holds == that.holds &&
+                pending == that.pending &&
+                description.equals(that.description) &&
+                logs.equals(that.logs);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(holds, pending, description, logs);
     }
 
     @Override
