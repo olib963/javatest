@@ -3,15 +3,15 @@ package io.github.olib963.javatest_scala
 import io.github.olib963.javatest._
 import io.github.olib963.javatest.matchers.Matcher
 
-import scala.collection.JavaConverters._
+import CollectionConverters._
 import scala.language.implicitConversions
 
 trait JavaTestSyntax {
 
-  def run(runners: TestRunner*): TestResults = JavaTest.run(runners.asJava)
+  def run(runners: TestRunner*): TestResults = JavaTest.run(toJava(runners))
 
   def suite(name: String, firstTest: Testable, tests: Testable*): Testable.TestSuite = suite(name, firstTest +: tests.toSeq)
-  def suite(name: String, tests: Seq[Testable]): Testable.TestSuite = JavaTest.suite(name, tests.asJava)
+  def suite(name: String, tests: Seq[Testable]): Testable.TestSuite = JavaTest.suite(name, toJava(tests))
 
   def test(name: String)(test: => Assertion): Testable.Test = JavaTest.test(name, () => test)
   def pending(): Assertion = JavaTest.pending()
@@ -23,8 +23,10 @@ trait JavaTestSyntax {
   def that[A](messagePrefix: String, value: A, matcher: Matcher[A]): Assertion = Matcher.that(messagePrefix, value, matcher)
 
   implicit def runnerFromTestable(testable: Testable): TestRunner = JavaTest.testableRunner(testable)
-  implicit def runnerFromTestables(testables: Seq[Testable]): TestRunner = JavaTest.testableRunner(testables.asJava)
-  def testableRunner(testables: Seq[Testable], observers: (TestResult => Unit)*): TestRunner = JavaTest.
-    testableRunner(testables.asJava, observers.map(f => (result => f(result)): TestCompletionObserver).asJava)
+  implicit def runnerFromTestables(testables: Seq[Testable]): TestRunner = JavaTest.testableRunner(toJava((testables)))
+  def testableRunner(testables: Seq[Testable], observers: (TestResult => Unit)*): TestRunner = {
+    val asJavaObservers = observers.map(f => (result => f(result)): TestCompletionObserver)
+    JavaTest.testableRunner(toJava(testables), toJava(asJavaObservers))
+  }
 
 }

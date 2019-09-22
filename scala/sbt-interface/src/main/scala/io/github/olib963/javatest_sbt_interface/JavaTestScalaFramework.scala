@@ -15,9 +15,8 @@ class JavaTestScalaFramework extends Framework {
     JavaTestScalaFramework.RunnerFingerprint,
   )
 
-  override def runner(args: Array[String], remoteArgs: Array[String], testClassLoader: ClassLoader): Runner = {
+  override def runner(args: Array[String], remoteArgs: Array[String], testClassLoader: ClassLoader): Runner =
     JTRunner(args, remoteArgs, testClassLoader)
-  }
 }
 
 object JavaTestScalaFramework {
@@ -51,9 +50,9 @@ case class JTRunner(args: Array[String], remoteArgs: Array[String], testClassLoa
     }}
 
     val singleTestRunner: TestRunner = testsCases.collect{ case Left(suite) => suite}.toSeq
-    val runners = singleTestRunner +: testsCases.collect{ case Right(runner) => runner}.flatMap(_.Runners()).toSeq
-    import scala.collection.JavaConverters._
-    val results = JavaTest.run(runners.asJava)
+    val runners = singleTestRunner +: testsCases.collect{ case Right(runner) => runner}.flatMap(_.Runners).toSeq
+    import io.github.olib963.javatest_scala.CollectionConverters.toJava
+    val results = JavaTest.run(toJava(runners))
     Array(JTTask(results))
   }
 

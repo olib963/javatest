@@ -6,7 +6,6 @@ import io.github.olib963.javatest.benchmark.Benchmark
 import io.github.olib963.javatest.{TestRunner, Testable}
 
 import scala.concurrent.duration.Duration
-import scala.collection.JavaConverters._
 
 trait BenchmarkSyntax {
 
@@ -22,7 +21,7 @@ trait BenchmarkSyntax {
   def benchmark(all: Seq[Testable])(implicit formatter: Duration => String): Seq[Testable] = all.map(benchmark)
 
   def benchmark(runners: TestRunner*)(implicit formatter: DurationFormat): TestRunner =
-    Benchmark.benchmark(runners.asJava.stream(), (j: JavaDuration) => formatter(toScala(j)))
+    Benchmark.benchmark(CollectionConverters.toJava(runners).stream(), (j: JavaDuration) => formatter(toScala(j)))
 
   def failIfLongerThan(duration: Duration)(test: Testable.Test)(implicit formatter: DurationFormat): Testable.Test =
     Benchmark.failIfLongerThan(toJava(duration), test, (j: JavaDuration) => formatter(toScala(j)))

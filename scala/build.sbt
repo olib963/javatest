@@ -1,10 +1,13 @@
 val javaTestVersion = "0.2.0-SNAPSHOT"
 val organisationName = "io.github.olib963"
 
+val scala13 = "2.13.1"
+val scala12 = "2.12.10"
+val scala11 = "2.11.12"
+
 val CommonSettings = Seq(
   organization := organisationName,
   version := javaTestVersion,
-  scalaVersion := "2.12.8",
   libraryDependencies ++= Seq(
     organisationName % "javatest-core" % javaTestVersion,
     organisationName % "javatest-benchmark" % javaTestVersion,
@@ -13,7 +16,8 @@ val CommonSettings = Seq(
     organisationName % "javatest-matchers" % javaTestVersion
   ),
   // Fail build on warnings
-  scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature", "-Xfatal-warnings")
+  scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature", "-Xfatal-warnings"),
+  crossScalaVersions := Seq(scala12, scala13)
 )
 
 val core = (project in file("core"))
@@ -41,5 +45,11 @@ val sbtPlugin = (project in file("sbt-plugin"))
     name := "javatest-sbt",
     // The build info plugin generates an object javatest_sbt.BuildInfo that contains the version defined in build.sbt
     buildInfoKeys := Seq[BuildInfoKey]("javaTestVersion" -> javaTestVersion),
-    buildInfoPackage := "javatest_sbt"
+    buildInfoPackage := "io.github.olib963.javatest_sbt",
+    // Sbt plugins cannot be built on multiple scala versions, sbt 1.3.x uses scala_12 and that's it. I have decided since the plugin is
+    // scala version agnostic to just not publish it as a versioned artifact. It automatically looks for the version of javatest-sbt-interface
+    // for the clients scala version
+    scalaVersion := scala12,
+    crossPaths := false,
+    crossScalaVersions := Seq.empty
   )

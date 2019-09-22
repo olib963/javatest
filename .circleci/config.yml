@@ -50,7 +50,7 @@ jobs:
           key: *scala-cache
       - run:
           name: Test Scala
-          command: cd scala && sbt ";core/test:run;publishLocal" && cd sbt-test && sbt test
+          command: cd scala && sbt ";+core/test:run;+publishLocal" && cd sbt-test && sbt +test
 
   docTest:
     docker:
