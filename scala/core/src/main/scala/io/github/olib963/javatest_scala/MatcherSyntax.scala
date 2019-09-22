@@ -2,9 +2,10 @@ package io.github.olib963.javatest_scala
 
 import io.github.olib963.javatest.matchers.{Matcher, StringMatchers}
 
-import scala.collection.{GenTraversableOnce, SeqLike}
 import scala.reflect.ClassTag
 import scala.util.Try
+
+import FunctionConverters._
 
 trait MatcherSyntax {
 
@@ -29,12 +30,12 @@ trait MatcherSyntax {
   // Scala matchers
   // TODO covariance issues. It would be great if we could just do "val isEmpty: Matcher[Option[Nothing]]"
   // TODO need nested matchers e.g. isSuccessThat(containsString("foo"))
-  def matcher[A](expected: String)(predicate: A => Boolean): Matcher[A] = Matcher.fromFunctions(a => predicate(a), expected)
+  def matcher[A](expected: String)(predicate: A => Boolean): Matcher[A] = Matcher.fromFunctions((a: A) => predicate(a), expected)
   def isDefined[A]: Matcher[Option[A]] = matcher("be defined")(_.isDefined)
   def isEmptyOption[A]: Matcher[Option[A]] = matcher("be empty")(_.isEmpty)
   def optionContains[A](element: A): Matcher[Option[A]] = matcher(s"contain {$element}")(_.contains(element))
-  def isEmpty[A]: Matcher[GenTraversableOnce[A]] = matcher("be empty")(_.isEmpty)
-  def contains[A](element: A): Matcher[SeqLike[A, _]] = matcher(s"contain {$element}")(_.contains(element))
+  def isEmpty[A]: Matcher[Seq[A]] = matcher("be empty")(_.isEmpty)
+  def contains[A](element: A): Matcher[Seq[A]] = matcher(s"contain {$element}")(_.contains(element))
   def hasSize[A](size: Int): Matcher[Iterable[A]] = matcher(s"have size {$size}")(_.size == size)
   def isSuccess[A]: Matcher[Try[A]] = matcher("be a success")(_.isSuccess)
   def isFailure[A]: Matcher[Try[A]] = matcher("be a failure")(_.isFailure)

@@ -5,6 +5,10 @@ JavaTest is an opinionated, functional test framework written in pure Java, this
 java framework that provides a more idiomatic Scala interface. Syntax can be selectively imported by mixing the appropriate
 trait e.g. `FixtureSyntax`, however, if you want all functions to be in scope simply `import io.github.olib963.javatest_scala._`.
 
+The general idea is to apply functional programming principles to test code as well as source code. Tests, Suites, Fixtures
+etc. are all defined as data that you can operate on rather than Object Oriented classes for which you must implement behaviours
+and inheritance trees.
+
 == Core functionality
 
 A `Test` in JavaTest is defined by a string name and a function of type `() => Assertion`. You can create
@@ -150,25 +154,25 @@ object ScalaSpecificMatcherTests extends Suite with JavaTestSyntax with MatcherS
       ),
       suite("empty tests",
         test("isEmpty")(that(None, isEmptyOption)),
-        test("isEmpty (not empty)")(that(Some(1), not(isEmptyOption[Int]))),
+        test("isEmpty (not empty)")(that(Some(1), not(isEmptyOption[Int])))
       ),
       suite("contains tests",
         test("Contains")(that(Some(2), optionContains(2))),
-        test("Contains (missing element)")(that(None, not(optionContains(4)))),
+        test("Contains (missing element)")(that(None, not(optionContains(4))))
       )
     ),
     suite("Collection tests",
       suite("empty tests",
         test("isEmpty")(that(Seq(), isEmpty)),
-        test("isEmpty (not empty)")(that(Seq(1, 2, 3), not(isEmpty[Int]))),
+        test("isEmpty (not empty)")(that(Seq(1, 2, 3), not(isEmpty[Int])))
       ),
       suite("contains tests",
         test("contains")(that(Seq(1, 2, 3), contains(2))),
-        test("contains (missing element)")(that(Seq(1, 2, 3), not(contains(4)))),
+        test("contains (missing element)")(that(Seq(1, 2, 3), not(contains(4))))
       ),
       suite("hasSize tests",
         test("has size")(that(Seq(1, 2, 3), hasSize[Int](3))),
-        test("has size (wrong size)")(that(Seq(1, 2, 3), not(hasSize[Int](4)))),
+        test("has size (wrong size)")(that(Seq(1, 2, 3), not(hasSize[Int](4))))
       )
     ),
     suite("Try tests",
@@ -281,13 +285,94 @@ in your test source directory that extends the `Suite` trait and any ``object``s
 .plugins.sbt
 [source, sbt]
 ----
-addSbtPlugin("io.github.olib963" %% "javatest-sbt" % javaTestVersion)
+addSbtPlugin("io.github.olib963" % "javatest-sbt" % javaTestVersion)
 ----
 
-=== Limitations
+If instead you prefer to not use the SBT plugin and take over the execution of your tests yourself you can add the
+library dependency:
+
+.build.sbt
+[source, sbt]
+----
+libraryDependencies += "io.github.olib963" %% "javatest-scala" % javaTestVersion % Test
+----
+
+You can then run your tests from any point in your code by invoking the `run` function on a `Seq[TestRunner]`. For example
+this is how the test entrypoint is defined in the core project:
+
+[source, scala]
+----
+package io.github.olib963.javatest_scala
+
+import java.util.concurrent.Executors
+
+import io.github.olib963.javatest.TestRunner
+import io.github.olib963.javatest_scala.documentation._
+
+import scala.util.Try
+
+object MyTests {
+
+  // The following line would be needed to inherit all syntax if we weren't already in that package
+  // import io.github.olib963.javatest_scala._
+
+  private val executorServiceFixture = destructibleFixture(Try(Executors.newFixedThreadPool(2)))(e => Try(e.shutdown()))
+
+  def main(args: Array[String]): Unit = {
+    val testRunner = fixtureRunner("executor", executorServiceFixture)(
+      executor => Seq(SimpleTests, MatcherTests, ScalaSpecificMatcherTests, EventualTests(executor)))
+
+    val results = run(benchmark(testRunner))
+
+    if (!results.succeeded) {
+      sys.error("Scala tests failed")
+    }
+
+    val documentationResults = run(
+      Seq[TestRunner](
+        FixtureDocumentation.runnerUsingSimpleFixture,
+        FixtureDocumentation.runner1,
+        FixtureDocumentation.runner2,
+        BenchmarkDocumentation,
+        SuiteDocs
+      ) ++ MyRunners.Runners
+    )
+
+    if (!documentationResults.succeeded) {
+      sys.error("Documentation tests failed")
+    }
+  }
+
+}
+----
+
+=== Limitations of SBT Test Framework
 
 - The command `sbt test` will run everything
-- You can run `sbt testOnly` as normal for ``Suite``s, however for instances of `Runners` the `testOnly` filtering will
-only apply to the `Runners` object not any tests generated from them.
 - `sbt testQuick` will currently rerun every test not just the ones that have failed. Hopefully I will revisit the interface
 implementation to handle this better in the future.
+- You can run `sbt testOnly` as normal for ``Suite``s, however for instances of `Runners` the `testOnly` filtering will
+only apply to the `Runners` object not any tests generated from them.
+
+For example, if your source code was:
+[source, scala]
+----
+object MyRunners extends Runners {
+  override def Runners: Seq[TestRunner] = {
+
+    val simpleRunner: TestRunner =
+      Seq(
+        suite("Suite1", test("test")(pending())),
+        suite("Suite2", test("test")(pending()))
+      )
+
+    Seq(
+      simpleRunner
+      // Other runner definitions ...
+    )
+  }
+}
+----
+
+Running `sbt testOnly *MyRunners` would run both "Suite1" and "Suite2" but no other ``object``s in your test code.
+You cannot currently filter this further to say `sbt testOnly *MyRunners.Suite1`.

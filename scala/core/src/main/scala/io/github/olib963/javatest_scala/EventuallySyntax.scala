@@ -7,6 +7,7 @@ import io.github.olib963.javatest.eventually.{EventualConfig, Eventually}
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.duration._
+import FunctionConverters._
 
 trait EventuallySyntax {
 

@@ -12,12 +12,11 @@ class JavaTestScalaFramework extends Framework {
 
   override def fingerprints(): Array[Fingerprint] = Array(
     JavaTestScalaFramework.SuiteFingerprint,
-    JavaTestScalaFramework.RunnerFingerprint,
+    JavaTestScalaFramework.RunnerFingerprint
   )
 
-  override def runner(args: Array[String], remoteArgs: Array[String], testClassLoader: ClassLoader): Runner = {
+  override def runner(args: Array[String], remoteArgs: Array[String], testClassLoader: ClassLoader): Runner =
     JTRunner(args, remoteArgs, testClassLoader)
-  }
 }
 
 object JavaTestScalaFramework {
@@ -45,23 +44,20 @@ case class JTRunner(args: Array[String], remoteArgs: Array[String], testClassLoa
   // TODO error handling etc.
   override def tasks(taskDefs: Array[TaskDef]): Array[Task] = {
     val testsCases = taskDefs.flatMap { t => t.fingerprint() match {
-      case JavaTestScalaFramework.SuiteFingerprint => Some(Left(moduleOrInstance[Suite](t.fullyQualifiedName())))
-      case JavaTestScalaFramework.RunnerFingerprint => Some(Right(moduleOrInstance[Runners](t.fullyQualifiedName())))
+      case JavaTestScalaFramework.SuiteFingerprint => Some(Left(moduleOf[Suite](t.fullyQualifiedName())))
+      case JavaTestScalaFramework.RunnerFingerprint => Some(Right(moduleOf[Runners](t.fullyQualifiedName())))
       case other => None
     }}
 
     val singleTestRunner: TestRunner = testsCases.collect{ case Left(suite) => suite}.toSeq
-    val runners = singleTestRunner +: testsCases.collect{ case Right(runner) => runner}.flatMap(_.Runners()).toSeq
-    import scala.collection.JavaConverters._
-    val results = JavaTest.run(runners.asJava)
+    val runners = singleTestRunner +: testsCases.collect{ case Right(runner) => runner}.flatMap(_.Runners).toSeq
+    import io.github.olib963.javatest_scala.CollectionConverters.toJava
+    val results = JavaTest.run(toJava(runners))
     Array(JTTask(results))
   }
 
-  private def moduleOrInstance[A](classToLoad: String): A =
-    Try(testClassLoader.loadClass(s"$classToLoad$$")).fold(
-      _ => testClassLoader.loadClass(classToLoad).getConstructor(null).newInstance().asInstanceOf[A],
-      moduleClass => moduleClass.getDeclaredField("MODULE$").get(null).asInstanceOf[A]
-    )
+  private def moduleOf[A](classToLoad: String): A =
+    testClassLoader.loadClass(s"$classToLoad$$").getDeclaredField("MODULE$").get(null).asInstanceOf[A]
 }
 
 // This task does not actually seem to be invoked by SBT. TODO Fix the fingerprints and try to return the results for each test?

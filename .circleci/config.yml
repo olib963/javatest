@@ -41,7 +41,7 @@ jobs:
             echo "resolvers += Resolver.mavenLocal" >> ~/.sbt/1.0/global.sbt
       - run:
           name: Compile Scala
-          command: cd scala && sbt compile
+          command: cd scala && sbt +compile
       - save_cache:
           paths:
             - ~/.m2
@@ -50,7 +50,7 @@ jobs:
           key: *scala-cache
       - run:
           name: Test Scala
-          command: cd scala && sbt ";core/test:run;publishLocal" && cd sbt-test && sbt test
+          command: cd scala && sbt +core/test:run && sbt +publishLocal && cd sbt-test && sbt +test
 
   docTest:
     docker:

@@ -4,6 +4,7 @@ import io.github.olib963.javatest.TestRunner
 import io.github.olib963.javatest.fixtures.{FixtureDefinition, Fixtures, Try => JTry}
 
 import scala.util.{Failure, Success, Try}
+import FunctionConverters._
 
 trait FixtureSyntax {
 
@@ -13,7 +14,7 @@ trait FixtureSyntax {
     Fixtures.definitionFromFunctions(() => toInternalTry(create), (f: Fixture) => toInternalTry[Void](destroy(f).map(_ => null)))
 
   def fixtureRunner[Fixture](name: String, fixtureDefinition: FixtureDefinition[Fixture])(runnerFn: Fixture => TestRunner): TestRunner =
-    Fixtures.fixtureRunner(name, fixtureDefinition, f => runnerFn(f))
+    Fixtures.fixtureRunner(name, fixtureDefinition, (f: Fixture) => runnerFn(f))
 
   private def toInternalTry[A](scala: Try[A]): JTry[A] = scala match {
     case Success(a) => JTry.Success(a)

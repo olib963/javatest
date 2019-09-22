@@ -4,6 +4,7 @@ import io.github.olib963.javatest.Testable
 import io.github.olib963.javatest_scala.{BenchmarkSyntax, DurationFormat, JavaTestSyntax, Suite}
 
 import scala.concurrent.duration._
+import io.github.olib963.javatest_scala.FunctionConverters._
 
 object BenchmarkDocumentation extends Suite with JavaTestSyntax with BenchmarkSyntax {
 

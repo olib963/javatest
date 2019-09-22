@@ -1,4 +1,4 @@
-package javatest_sbt
+package io.github.olib963.javatest_sbt
 
 import io.github.olib963.javatest_sbt_interface.JavaTestScalaFramework
 import sbt.Keys.{libraryDependencies, testFrameworks}
