@@ -6,6 +6,7 @@ import io.github.olib963.javatest.benchmark.Benchmark
 import io.github.olib963.javatest.{TestRunner, Testable}
 
 import scala.concurrent.duration.Duration
+import FunctionConverters._
 
 trait BenchmarkSyntax {
 
@@ -34,5 +35,6 @@ trait BenchmarkSyntax {
 trait DurationFormat extends (Duration => String)
 
 object DurationFormat {
+
   implicit val formatter: DurationFormat = d => s"${d.toSeconds}s ${d.toMillis % 1000}ms"
 }

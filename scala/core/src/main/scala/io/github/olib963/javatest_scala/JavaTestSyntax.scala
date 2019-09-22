@@ -4,6 +4,7 @@ import io.github.olib963.javatest._
 import io.github.olib963.javatest.matchers.Matcher
 
 import CollectionConverters._
+import FunctionConverters._
 import scala.language.implicitConversions
 
 trait JavaTestSyntax {
@@ -25,7 +26,7 @@ trait JavaTestSyntax {
   implicit def runnerFromTestable(testable: Testable): TestRunner = JavaTest.testableRunner(testable)
   implicit def runnerFromTestables(testables: Seq[Testable]): TestRunner = JavaTest.testableRunner(toJava((testables)))
   def testableRunner(testables: Seq[Testable], observers: (TestResult => Unit)*): TestRunner = {
-    val asJavaObservers = observers.map(f => (result => f(result)): TestCompletionObserver)
+    val asJavaObservers = observers.map(f => ((result: TestResult) => f(result)): TestCompletionObserver)
     JavaTest.testableRunner(toJava(testables), toJava(asJavaObservers))
   }
 

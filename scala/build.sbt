@@ -15,10 +15,20 @@ val CommonSettings = Seq(
     organisationName % "javatest-fixtures" % javaTestVersion,
     organisationName % "javatest-matchers" % javaTestVersion
   ),
-  // Fail build on warnings
-  scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature", "-Xfatal-warnings"),
-  crossScalaVersions := Seq(scala12, scala13)
+  scalacOptions ++= Seq(
+    // Fail build on warnings
+    "-unchecked", "-deprecation", "-feature", "-Xfatal-warnings"
+  ),
+  crossScalaVersions := Seq(scala11, scala12, scala13)
 )
+
+def scalaVersionSpecificOptions(version: String): Option[String] =
+  CrossVersion.partialVersion(version) match {
+    case Some((2, scalaMajor)) if scalaMajor == 11 =>
+      // Scala 11 has trouble with static functions on interfaces. Not sure why we need to set this option but the compiler tells us to.
+      Some("-target:jvm-1.8")
+    case _ => None
+  }
 
 val core = (project in file("core"))
   .settings(CommonSettings: _*)
@@ -26,6 +36,7 @@ val core = (project in file("core"))
     name := "javatest-scala",
     // sbt test:run
     mainClass in Test := Some("io.github.olib963.javatest_scala.MyTests"),
+    scalacOptions ++= scalaVersionSpecificOptions(scalaVersion.value)
   )
 
 val sbtInterface = (project in file("sbt-interface"))

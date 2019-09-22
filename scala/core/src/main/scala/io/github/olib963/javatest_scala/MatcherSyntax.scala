@@ -5,6 +5,8 @@ import io.github.olib963.javatest.matchers.{Matcher, StringMatchers}
 import scala.reflect.ClassTag
 import scala.util.Try
 
+import FunctionConverters._
+
 trait MatcherSyntax {
 
   // The "that" function _has_ to be defined in JavaTestSyntax so we require both traits
@@ -28,7 +30,7 @@ trait MatcherSyntax {
   // Scala matchers
   // TODO covariance issues. It would be great if we could just do "val isEmpty: Matcher[Option[Nothing]]"
   // TODO need nested matchers e.g. isSuccessThat(containsString("foo"))
-  def matcher[A](expected: String)(predicate: A => Boolean): Matcher[A] = Matcher.fromFunctions(a => predicate(a), expected)
+  def matcher[A](expected: String)(predicate: A => Boolean): Matcher[A] = Matcher.fromFunctions((a: A) => predicate(a), expected)
   def isDefined[A]: Matcher[Option[A]] = matcher("be defined")(_.isDefined)
   def isEmptyOption[A]: Matcher[Option[A]] = matcher("be empty")(_.isEmpty)
   def optionContains[A](element: A): Matcher[Option[A]] = matcher(s"contain {$element}")(_.contains(element))

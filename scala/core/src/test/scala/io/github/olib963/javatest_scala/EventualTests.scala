@@ -6,6 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger
 import io.github.olib963.javatest.Testable
 
 import scala.concurrent.duration._
+import FunctionConverters._
 
 case class EventualTests(executorService: ExecutorService) extends Suite with JavaTestSyntax with EventuallySyntax {
 

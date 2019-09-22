@@ -14,6 +14,7 @@ object MyTests {
   private val executorServiceFixture = destructibleFixture(Try(Executors.newFixedThreadPool(2)))(e => Try(e.shutdown()))
 
   def main(args: Array[String]): Unit = {
+    println("Starting")
     val results = run(benchmark(
       fixtureRunner("executor", executorServiceFixture)(
         executor => Seq(SimpleTests, MatcherTests, ScalaSpecificMatcherTests, EventualTests(executor)))))
