@@ -59,7 +59,7 @@ val sbtPlugin = (project in file("sbt-plugin"))
     buildInfoPackage := "io.github.olib963.javatest_sbt",
     // Sbt plugins cannot be built on multiple scala versions, sbt 1.3.x uses scala_12 and that's it. I have decided since the plugin is
     // scala version agnostic to just not publish it as a versioned artifact. It automatically looks for the version of javatest-sbt-interface
-    // for the clients scala version
+    // for the clients scala version.
     crossPaths := false,
     crossScalaVersions := Seq(scala12)
   )

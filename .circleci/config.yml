@@ -41,7 +41,7 @@ jobs:
             echo "resolvers += Resolver.mavenLocal" >> ~/.sbt/1.0/global.sbt
       - run:
           name: Compile Scala
-          command: cd scala && sbt compile
+          command: cd scala && sbt +compile
       - save_cache:
           paths:
             - ~/.m2

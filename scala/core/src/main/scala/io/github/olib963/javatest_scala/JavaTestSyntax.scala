@@ -9,7 +9,8 @@ import scala.language.implicitConversions
 
 trait JavaTestSyntax {
 
-  def run(runners: TestRunner*): TestResults = JavaTest.run(toJava(runners))
+  def run(firstRunner: TestRunner, runners: TestRunner*): TestResults = run(firstRunner :: runners.toList)
+  def run(runners: Seq[TestRunner]): TestResults = JavaTest.run(toJava(runners))
 
   def suite(name: String, firstTest: Testable, tests: Testable*): Testable.TestSuite = suite(name, firstTest +: tests.toSeq)
   def suite(name: String, tests: Seq[Testable]): Testable.TestSuite = JavaTest.suite(name, toJava(tests))
