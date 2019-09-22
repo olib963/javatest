@@ -150,25 +150,25 @@ object ScalaSpecificMatcherTests extends Suite with JavaTestSyntax with MatcherS
       ),
       suite("empty tests",
         test("isEmpty")(that(None, isEmptyOption)),
-        test("isEmpty (not empty)")(that(Some(1), not(isEmptyOption[Int]))),
+        test("isEmpty (not empty)")(that(Some(1), not(isEmptyOption[Int])))
       ),
       suite("contains tests",
         test("Contains")(that(Some(2), optionContains(2))),
-        test("Contains (missing element)")(that(None, not(optionContains(4)))),
+        test("Contains (missing element)")(that(None, not(optionContains(4))))
       )
     ),
     suite("Collection tests",
       suite("empty tests",
         test("isEmpty")(that(Seq(), isEmpty)),
-        test("isEmpty (not empty)")(that(Seq(1, 2, 3), not(isEmpty[Int]))),
+        test("isEmpty (not empty)")(that(Seq(1, 2, 3), not(isEmpty[Int])))
       ),
       suite("contains tests",
         test("contains")(that(Seq(1, 2, 3), contains(2))),
-        test("contains (missing element)")(that(Seq(1, 2, 3), not(contains(4)))),
+        test("contains (missing element)")(that(Seq(1, 2, 3), not(contains(4))))
       ),
       suite("hasSize tests",
         test("has size")(that(Seq(1, 2, 3), hasSize[Int](3))),
-        test("has size (wrong size)")(that(Seq(1, 2, 3), not(hasSize[Int](4)))),
+        test("has size (wrong size)")(that(Seq(1, 2, 3), not(hasSize[Int](4))))
       )
     ),
     suite("Try tests",
@@ -281,7 +281,7 @@ in your test source directory that extends the `Suite` trait and any ``object``s
 .plugins.sbt
 [source, sbt]
 ----
-addSbtPlugin("io.github.olib963" %% "javatest-sbt" % javaTestVersion)
+addSbtPlugin("io.github.olib963" % "javatest-sbt" % javaTestVersion)
 ----
 
 === Limitations

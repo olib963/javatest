@@ -60,7 +60,17 @@ val sbtPlugin = (project in file("sbt-plugin"))
     // Sbt plugins cannot be built on multiple scala versions, sbt 1.3.x uses scala_12 and that's it. I have decided since the plugin is
     // scala version agnostic to just not publish it as a versioned artifact. It automatically looks for the version of javatest-sbt-interface
     // for the clients scala version
-    scalaVersion := scala12,
     crossPaths := false,
-    crossScalaVersions := Seq.empty
+    crossScalaVersions := Seq(scala12)
+  )
+
+// It seems in order to create a cross compiled SBT project you need to aggregate sub projects into a root. This seems to
+// stop the default scala 2.12.8 publishing of every project that otherwise occurs
+lazy val root = (project in file("."))
+  .aggregate(core, sbtInterface, sbtPlugin)
+  .settings(
+    // crossScalaVersions must be set to Nil on the aggregating project.
+    crossScalaVersions := Nil,
+    // We do not want to publish this project
+    skip in publish := true
   )
