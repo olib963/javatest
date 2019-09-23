@@ -1,4 +1,4 @@
-val javaTestVersion = "0.2.0-SNAPSHOT"
+val javaTestVersion = "0.2.0"
 val organisationName = "io.github.olib963"
 
 val scala13 = "2.13.1"

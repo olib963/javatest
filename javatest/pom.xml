@@ -7,12 +7,12 @@
     <parent>
         <artifactId>javatest-parent</artifactId>
         <groupId>io.github.olib963</groupId>
-        <version>0.2.0-SNAPSHOT</version>
+        <version>0.2.0</version>
     </parent>
     <artifactId>javatest</artifactId>
     <name>JavaTest</name>
     <packaging>pom</packaging>
-    <version>0.2.0-SNAPSHOT</version>
+    <version>0.2.0</version>
     <modules>
         <module>javatest-core</module>
         <module>javatest-benchmark</module>
