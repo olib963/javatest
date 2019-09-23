@@ -11,6 +11,7 @@
     </parent>
     <artifactId>javatest</artifactId>
     <name>JavaTest</name>
+    <description>Parent POM for all JavaTest modules</description>
     <packaging>pom</packaging>
     <version>0.2.0</version>
     <modules>

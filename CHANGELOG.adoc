@@ -3,9 +3,11 @@ All notable changes to this project will be documented in this file.
 
 == [Unreleased]
 
+== [0.2.0] - 2019-09-23
+
 === Added
 
-* Added the benchmarking module to
+* Benchmarking module to
 ** log the times of tests
 ** Allow failing a test if it takes too long
 * Test suites as a data object
