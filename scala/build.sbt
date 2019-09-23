@@ -1,26 +1,39 @@
-val javaTestVersion = "0.2.0-SNAPSHOT"
+val javaTestVersion = "0.2.0"
 val organisationName = "io.github.olib963"
 
 val scala13 = "2.13.1"
 val scala12 = "2.12.10"
 val scala11 = "2.11.12"
 
-val CommonSettings = Seq(
+val SettingsForAllProjects = Seq(
   organization := organisationName,
   version := javaTestVersion,
-  libraryDependencies ++= Seq(
-    organisationName % "javatest-core" % javaTestVersion,
-    organisationName % "javatest-benchmark" % javaTestVersion,
-    organisationName % "javatest-eventually" % javaTestVersion,
-    organisationName % "javatest-fixtures" % javaTestVersion,
-    organisationName % "javatest-matchers" % javaTestVersion
-  ),
+)
+
+val CommonSettings = Seq(
   scalacOptions ++= Seq(
     // Fail build on warnings
     "-unchecked", "-deprecation", "-feature", "-Xfatal-warnings"
   ),
-  crossScalaVersions := Seq(scala11, scala12, scala13)
-)
+  crossScalaVersions := Seq(scala11, scala12, scala13),
+  scmInfo := Some(
+    ScmInfo(
+      url("https://github.com/olib963/javatest/scala"),
+      "scm:git@github.com:olib963/javatest.git"
+    )
+  ),
+  developers := List(
+    Developer(
+      id    = "olib963",
+      name  = "olib963",
+      email = "",
+      url   = url("https://github.com/olib963")
+    )
+  ),
+  licenses := List("Apache 2" -> new URL("http://www.apache.org/licenses/LICENSE-2.0.txt")),
+  homepage := Some(url("https://github.com/olib963/javatest/scala")),
+  publishTo := sonatypePublishToBundle.value
+) ++ SettingsForAllProjects
 
 def scalaVersionSpecificOptions(version: String): Option[String] =
   CrossVersion.partialVersion(version) match {
@@ -36,7 +49,15 @@ val core = (project in file("core"))
     name := "javatest-scala",
     // sbt test:run
     mainClass in Test := Some("io.github.olib963.javatest_scala.MyTests"),
-    scalacOptions ++= scalaVersionSpecificOptions(scalaVersion.value)
+    libraryDependencies ++= Seq(
+      organisationName % "javatest-core" % javaTestVersion,
+      organisationName % "javatest-benchmark" % javaTestVersion,
+      organisationName % "javatest-eventually" % javaTestVersion,
+      organisationName % "javatest-fixtures" % javaTestVersion,
+      organisationName % "javatest-matchers" % javaTestVersion
+    ),
+    scalacOptions ++= scalaVersionSpecificOptions(scalaVersion.value),
+    description := "Scala wrapper around JavaTest framework"
   )
 
 val sbtInterface = (project in file("sbt-interface"))
@@ -44,7 +65,10 @@ val sbtInterface = (project in file("sbt-interface"))
   .settings(CommonSettings: _*)
   .settings(
     name := "javatest-sbt-interface",
-    libraryDependencies += "org.scala-sbt" % "test-interface" % "1.0"
+    libraryDependencies ++= Seq(
+      "org.scala-sbt" % "test-interface" % "1.0"
+    ),
+    description := "Implementation of SBTs test interface for JavaTest"
   )
 
 val sbtPlugin = (project in file("sbt-plugin"))
@@ -57,18 +81,18 @@ val sbtPlugin = (project in file("sbt-plugin"))
     // The build info plugin generates an object javatest_sbt.BuildInfo that contains the version defined in build.sbt
     buildInfoKeys := Seq[BuildInfoKey]("javaTestVersion" -> javaTestVersion),
     buildInfoPackage := "io.github.olib963.javatest_sbt",
-    // Sbt plugins cannot be built on multiple scala versions, sbt 1.3.x uses scala_12 and that's it. I have decided since the plugin is
-    // scala version agnostic to just not publish it as a versioned artifact. It automatically looks for the version of javatest-sbt-interface
-    // for the clients scala version.
-    crossPaths := false,
-    crossScalaVersions := Seq(scala12)
+    // Sbt plugins cannot be built on multiple scala versions, sbt 1.3.x uses scala 2_12
+    crossScalaVersions := Seq(scala12),
+    description := "SBT plugin to automate setup of JavaTest with SBT"
   )
 
 // It seems in order to create a cross compiled SBT project you need to aggregate sub projects into a root. This seems to
 // stop the default scala 2.12.8 publishing of every project that otherwise occurs
 lazy val root = (project in file("."))
   .aggregate(core, sbtInterface, sbtPlugin)
+  .settings(SettingsForAllProjects: _*)
   .settings(
+    name := "javatest-scala-aggregate",
     // crossScalaVersions must be set to Nil on the aggregating project.
     crossScalaVersions := Nil,
     // We do not want to publish this project

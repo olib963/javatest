@@ -1,5 +1,5 @@
 // TODO how do we ensure this test uses the correct version? The scripted plugin just does not work.
-val javaTestVersion = "0.2.0-SNAPSHOT"
+val javaTestVersion = "0.2.0"
 // tag::include[]
 addSbtPlugin("io.github.olib963" % "javatest-sbt" % javaTestVersion)
 // end::include[]
