@@ -1,2 +1,4 @@
 **/target
 javatest/integration-test
+javatest/javatest-core/docs/jshell/startup-script.jsh
+javatest/javatest-core/docs/jshell/output
