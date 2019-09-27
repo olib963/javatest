@@ -85,7 +85,7 @@ You can provide an `Assertion` that won't hold straight away to the `eventually`
 
 [source, scala]
 ----
-include::../core/src/test/scala/io/github/olib963/javatest_scala/EventualTests.scala[tags=assertion, indent=-]
+include::../core/src/test/scala/io/github/olib963/javatest_scala/EventualTests.scala[tags=test, indent=-]
 ----
 
 == Fixtures
