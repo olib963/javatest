@@ -16,8 +16,8 @@ case class EventualTests(executorService: ExecutorService) extends Suite with Ja
         eventually(that(true, "always passes")))),
 
       failIfLongerThan(2.seconds)(
+        // tag::test[]
         test("custom config") {
-          // tag::assertion[]
           import scala.concurrent.duration._
           implicit val config: EventuallyConfig = EventuallyConfig(attempts = 5, waitInterval = 500.millis)
           val atomicInt = new AtomicInteger(0)
@@ -26,7 +26,7 @@ case class EventualTests(executorService: ExecutorService) extends Suite with Ja
             atomicInt.getAndIncrement()
           })
           eventually(that(atomicInt.get(), isEqualTo(1)))
-          // end::assertion[]
         })
+      // end::test[]
     )
 }
