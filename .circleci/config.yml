@@ -6,7 +6,7 @@ version: 2
 jobs:
   test:
     docker:
-      - image: circleci/openjdk:11-jdk
+      - image: circleci/openjdk:11.0.2-jdk
     working_directory: ~/javatest
     environment:
       SBT_VERSION: 1.3.0

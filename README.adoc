@@ -584,9 +584,11 @@ You can override the `testRunners` class being used by setting the maven propert
 
 Since JavaTest is built on pure Java it plays quite nicely with the REPL. This startup script may be useful to you:
 
+.javatest-startup-script.jsh
 [source, jshelllanguage]
 ----
-/env -class-path /absolute/path/to/javatest/jar
+/env -class-path ${ABSOLUTE_PATH_TO_JAVATEST_JAR}
+
 import io.github.olib963.javatest.*;
 import static io.github.olib963.javatest.JavaTest.*;
 
@@ -599,8 +601,8 @@ Then you can run:
 
 [source, bash]
 ----
-~$ jshell --startup DEFAULT --startup /path/to/startup/script
-|  Welcome to JShell -- Version 11.0.1
+~$ jshell --startup DEFAULT --startup javatest-startup-script.jsh
+|  Welcome to JShell -- Version 11.0.2
 |  For an introduction type: /help intro
 
 jshell> var results = runTest(() -> that(true, "JavaTest works in the shell!"))
@@ -625,13 +627,16 @@ jshell> var allResults = results.combine(results2)
 allResults ==> TestResults{succeeded=false, successCount=1, fail ...  logs=[]'}, testLogs=[]}]}
 
 jshell> allResults.succeeded
-$4 ==> false
+$7 ==> false
 
 jshell> allResults.failureCount
-$5 ==> 1
+$8 ==> 1
 
 jshell> allResults.allResults().collect(java.util.stream.Collectors.toList())
-$6 ==> [SingleTestResult{name='JShell test', result=AssertionResult{holds=true, pending=false, description='JavaTest works in the shell!, logs=[]'}, testLogs=[]}, SingleTestResult{name='JShell test', result=AssertionResult{holds=false, pending=false, description='One add One is Three, logs=[]'}, testLogs=[]}]
+$9 ==> [SingleTestResult{name='JShell test', result=AssertionResult{holds=true, pending=false, description='JavaTest works in the shell!, logs=[]'}, testLogs=[]}, SingleTestResult{name='JShell test', result=AssertionResult{holds=false, pending=false, description='One add One is Three, logs=[]'}, testLogs=[]}]
+
+jshell> /exit
+|  Goodbye
 ----
 
 == Maven Integration
