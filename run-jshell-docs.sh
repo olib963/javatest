@@ -13,7 +13,10 @@ JAVATEST_BUILD_NAME=$(mvn -pl :javatest-core help:evaluate -Dexpression=project.
 export ABSOLUTE_PATH_TO_JAVATEST_JAR="${JAVATEST_BUILD_DIR}/${JAVATEST_BUILD_NAME}.jar"
 
 echo "Creating startup script"
-envsubst '$ABSOLUTE_PATH_TO_JAVATEST_JAR' < javatest/javatest-core/docs/jshell/startup-script-template.jsh > javatest/javatest-core/docs/jshell/startup-script.jsh
+# Copy the contents of the template, replacing " with \"
+FILE_CONTENTS=$(cat javatest/javatest-core/docs/jshell/startup-script-template.jsh | sed -r "s/\"/\\\\\"/g")
+# Echo the contents into the startup script substituting the above ABSOLUTE_PATH_TO_JAVATEST_JAR variable
+eval "echo \"${FILE_CONTENTS}\"" > javatest/javatest-core/docs/jshell/startup-script.jsh
 
 mkdir -p javatest/javatest-core/docs/jshell/output
 

@@ -52,6 +52,23 @@ jobs:
           name: Test Scala
           command: cd scala && sbt +core/test:run && sbt +publishLocal && cd sbt-test && sbt +test
 
+  jshellDocs:
+    docker:
+      - image: circleci/openjdk:11-jdk
+    working_directory: ~/javatest
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - *dependency-cache
+      - run:
+          name: Generate JShell Documentation
+          command: ./run-jshell-docs.sh
+      - persist_to_workspace:
+          root: javatest/javatest-core/docs/jshell/output
+          paths:
+            - jshell-output
+
   docTest:
     docker:
       - image: circleci/ruby:2.6.0
@@ -63,6 +80,8 @@ jobs:
       - restore_cache:
           keys:
           - *ruby-cache
+      - attach_workspace:
+          at: javatest/javatest-core/docs/jshell/output
       - run:
           name: Install AsciiDoctor
           command: sudo gem install asciidoctor --conservative
@@ -78,6 +97,7 @@ jobs:
               echo "No changes to documentation"
             else
               echo "Documentation has changed, please rerun 'ruby gendocs.rb' and commit the changes"
+              git --no-pager diff
               exit 1
             fi
 
@@ -86,4 +106,7 @@ workflows:
   test:
     jobs:
       - test
-      - docTest
+      - jshellDocs
+      - docTest:
+          requires:
+            - jshellDocs
