@@ -93,7 +93,11 @@ public class JavaTest {
         List<Assertion> list = new ArrayList<>();
         list.add(firstAssertion);
         list.addAll(Arrays.asList(moreAssertions));
-        return new AllAssertion(list);
+        return all(list);
+    }
+
+    public static Assertion all(Collection<Assertion> assertions) {
+        return new AllAssertion(assertions);
     }
 
     public static Assertion pending(String reason) {
