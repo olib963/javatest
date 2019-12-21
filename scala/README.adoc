@@ -287,7 +287,7 @@ in your test source directory that extends the `Suite` trait and any ``object``s
 .plugins.sbt
 [source, sbt]
 ----
-addSbtPlugin("io.github.olib963" % "javatest-sbt" % javaTestVersion)
+addSbtPlugin("io.github.olib963" % "sbt-javatest" % javaTestVersion)
 ----
 
 If instead you prefer to not use the SBT plugin and take over the execution of your tests yourself you can add the

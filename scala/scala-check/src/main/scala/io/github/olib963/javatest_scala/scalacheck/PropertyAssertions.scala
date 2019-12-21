@@ -55,6 +55,7 @@ trait PropertyAssertions {
 
 private [scalacheck] class GeneratorAssertion[A](gen: Gen[A], f: A => Assertion) extends Assertion {
   override def run(): AssertionResult = {
-    AssertionResult.pending("Not yet implemented")
+    // TODO look into how to run Properties in scalacheck
+    f(gen.sample.get).run()
   }
 }

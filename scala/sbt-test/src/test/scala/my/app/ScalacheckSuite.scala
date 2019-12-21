@@ -7,6 +7,7 @@ import io.github.olib963.javatest_scala.scalacheck._
 import org.scalacheck.Gen
 
 object ScalacheckSuite extends Suite {
+  // TODO should it be propertyTest("description", gens)(test) ?
   override def tests: Seq[Testable] = Seq(
     test("Sqrt")(forAll(Gen.posNum[Int]) { n =>
       val m = math.sqrt(n.toDouble)
@@ -17,7 +18,7 @@ object ScalacheckSuite extends Suite {
         that("Tail of a list with a prepended element is the original list", (n :: l).tail, isEqualTo(l))
       }),
       test("List reverse")(forAll { l: List[String] => that(l.reverse.reverse, isEqualTo(l)) }),
-      test("List head")(forAll { (l: List[Int]) =>
+      test("List head")(forAll { l: List[Int] =>
         if (l.isEmpty) {
           that("Head of an empty list is empty", l.headOption, isEmptyOption[Int])
         } else {
