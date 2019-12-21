@@ -24,6 +24,8 @@ trait JavaTestSyntax {
   def that[A](value: A, matcher: Matcher[A]): Assertion = Matcher.that(value, matcher)
   def that[A](messagePrefix: String, value: A, matcher: Matcher[A]): Assertion = Matcher.that(messagePrefix, value, matcher)
 
+  def all(assertions: Seq[Assertion]): Assertion = JavaTest.all(toJava(assertions))
+
   implicit def runnerFromTestable(testable: Testable): TestRunner = JavaTest.testableRunner(testable)
   implicit def runnerFromTestables(testables: Seq[Testable]): TestRunner = JavaTest.testableRunner(toJava((testables)))
   def testableRunner(testables: Seq[Testable], observers: (TestResult => Unit)*): TestRunner = {
