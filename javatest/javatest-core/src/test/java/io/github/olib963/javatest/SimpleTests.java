@@ -33,7 +33,19 @@ public class SimpleTests {
                     test("Xor test 1", () -> that(false, "Expected false").xor(that(true, "Expected true"))),
                     test("Xor test 2", () -> that(true, "Expected true").xor(that(false, "Expected false"))),
                     test("Pending test xor 1", () -> that(true, "Expected true").xor(pending())),
-                    test("Pending test xor 2", () -> pending().xor(that(true, "Expected true")))
+                    test("Pending test xor 2", () -> pending().xor(that(true, "Expected true"))),
+                    test("All assertions", () -> all(
+                            that(true, "Expected true to be true"),
+                            that(true, "passing")
+                    )),
+                    test("All assertions with pending", () -> all(
+                            that(true, "Expected true to be true"),
+                            pending()
+                    )),
+                    test("All assertions with pending and failure", () -> all(
+                            pending(),
+                            that(false, "failure")
+                    ))
             );
         }
     }
@@ -48,6 +60,14 @@ public class SimpleTests {
             test("Xor test 2 (FAIL)", () -> that(false, "Expected false").xor(that(false, "Expected false"))),
             test("SimpleTest throwing exception (FAIL)", () -> { throw new RuntimeException("This is an error"); }),
             test("SimpleTest throwing checked exception (FAIL)", () -> { throw new Exception("This is an error"); }),
-            test("SimpleTest throwing assertion error (FAIL)", () -> { throw new AssertionError("This is an 'assertion'"); })
+            test("SimpleTest throwing assertion error (FAIL)", () -> { throw new AssertionError("This is an 'assertion'"); }),
+            test("All assertions (FAIL First)", () -> all(
+                    that(false, "failure"),
+                    that(true, "Expected true to be true")
+            )),
+            test("All assertions (FAIL Last)", () -> all(
+                    that(true, "Expected true to be true"),
+                    that(false, "failure")
+            ))
     );
 }

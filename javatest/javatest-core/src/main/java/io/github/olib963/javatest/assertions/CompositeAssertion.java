@@ -30,7 +30,7 @@ public class CompositeAssertion implements Assertion {
         return AssertionResult.of(combiner.apply(leftResult.holds, rightResult.holds), description);
     }
 
-    private String holdString(AssertionResult result) {
+    static String holdString(AssertionResult result) {
         if(result.pending) {
             return "[pending]";
         }

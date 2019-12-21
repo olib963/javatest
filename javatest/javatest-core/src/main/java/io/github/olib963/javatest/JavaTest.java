@@ -1,5 +1,6 @@
 package io.github.olib963.javatest;
 
+import io.github.olib963.javatest.assertions.AllAssertion;
 import io.github.olib963.javatest.assertions.BooleanAssertion;
 import io.github.olib963.javatest.assertions.PendingAssertion;
 import io.github.olib963.javatest.runners.CollectionRunner;
@@ -86,6 +87,13 @@ public class JavaTest {
 
     public static Assertion pending() {
         return pending("Test has not yet been written");
+    }
+
+    public static Assertion all(Assertion firstAssertion, Assertion... moreAssertions) {
+        List<Assertion> list = new ArrayList<>();
+        list.add(firstAssertion);
+        list.addAll(Arrays.asList(moreAssertions));
+        return new AllAssertion(list);
     }
 
     public static Assertion pending(String reason) {
