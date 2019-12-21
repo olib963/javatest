@@ -45,9 +45,15 @@ public class PredicateMatcher<A> implements Matcher<A> {
         return expected;
     }
 
+    private static <A> boolean nullSafeEquals(A value, A expected) {
+        if(expected == null) {
+            return value == null;
+        }
+        return expected.equals(value);
+    }
 
     public static <A> Matcher<A> isEqualTo(A expected) {
-        return of(expected::equals, "be equal to {" + expected + "}");
+        return of(value -> nullSafeEquals(value, expected), "be equal to {" + expected + "}");
     }
 
     public static <A, T> Matcher<A> hasType(Class<T> expectedClass) {

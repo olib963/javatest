@@ -13,6 +13,7 @@ public class SimpleMatcherTests {
         return Utils.matcherSuite("Simple Matcher Tests",
                 Stream.of(
                         test("One add One is Two!", () -> that(1 + 1, isEqualTo(2))),
+                        test("Null is Null!", () -> that(null, isEqualTo(null))),
                         test("Object is the correct type", () -> that("Hello", hasType(String.class))),
                         test("Object is the same instance", () -> {
                             var object = new Object();
@@ -25,6 +26,8 @@ public class SimpleMatcherTests {
                 ),
                 Stream.of(
                         test("One add One is Three! (FAIL)", () ->  that(1 + 1, isEqualTo(3))),
+                        test("Null is not null! (FAIL)", () ->  that(null, isEqualTo(1))),
+                        test("Not null is null! (FAIL)", () ->  that(1, isEqualTo(null))),
                         test("Object is the incorrect type (FAIL)", () -> that("Hello", hasType(int.class))),
                         test("Object is the same instance (FAIL)", () -> that(new Object(), isTheSameInstanceAs(new Object()))),
                         test("One add One is the long two (FAIL)", () -> that(1 + 1, isEqualTo(2).and(hasType(Long.class)))),
