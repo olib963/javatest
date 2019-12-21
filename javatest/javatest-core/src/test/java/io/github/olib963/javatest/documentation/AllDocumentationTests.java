@@ -18,7 +18,8 @@ public class AllDocumentationTests implements TestSuiteClass {
                 new MyTests().myFirstTest,
                 test("Composed or assertion holds", () -> composed.orAssertion),
                 test("Composed and assertion holds", () -> composed.andAssertion),
-                test("Composed xor assertion holds", () -> composed.xorAssertion)
+                test("Composed xor assertion holds", () -> composed.xorAssertion),
+                test("All assertion holds", () -> new MyAllAssertions().allAssertion)
         );
     }
 }

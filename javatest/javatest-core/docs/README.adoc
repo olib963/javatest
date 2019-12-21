@@ -159,6 +159,14 @@ that hold (i.e. will pass tests):
 include::../src/test/java/io/github/olib963/javatest/documentation/MyComposedAssertions.java[tags=include]
 ----
 
+In the case where you have _many_ assertions (perhaps a large list) I would suggest using the `all` assertion
+functionality for a more better output:
+
+[source, java]
+----
+include::../src/test/java/io/github/olib963/javatest/documentation/MyAllAssertions.java[tags=include]
+----
+
 === Test Definitions
 
 A JavaTest `Test` is defined by:
