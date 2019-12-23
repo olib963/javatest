@@ -11,7 +11,7 @@ object ScalacheckSuite extends Suite {
   override def tests: Seq[Testable] = Seq(
     test("Sqrt")(forAll(Gen.posNum[Int]) { n =>
       val m = math.sqrt(n.toDouble)
-      that(s"Square root of $n squared is $n:", math.round(m * m), isEqualTo[Long](n))
+      that(s"Square root of $n squared is $n", math.round(m * m), isEqualTo[Long](n))
     }),
     suite("List Properties",
       test("List tail")(forAll { (n: Int, l: List[Int]) =>
@@ -22,7 +22,7 @@ object ScalacheckSuite extends Suite {
         if (l.isEmpty) {
           that("Head of an empty list is empty", l.headOption, isEmptyOption[Int])
         } else {
-          that("Head of non empty list is the first element:", l.head, isEqualTo(l(0)))
+          that("Head of non empty list is the first element", l.head, isEqualTo(l(0)))
         }
       }))
   )

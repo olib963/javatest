@@ -6,7 +6,7 @@ import scala.concurrent.duration.Duration
 import scala.language.implicitConversions
 import java.util.function._
 
-object FunctionConverters {
+private [javatest_scala] object FunctionConverters {
   // Scala 11 does not handle functional interfaces well so we need to implement them directly
 
   implicit def scalaToJavaPredicate[A](p: A => Boolean): Predicate[A] = new Predicate[A] {
