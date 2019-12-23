@@ -2,12 +2,15 @@ package my.app
 
 import io.github.olib963.javatest.matchers.internal.PredicateMatcher
 import io.github.olib963.javatest.{JavaTest, TestResults, Testable}
+// tag::imports[]
 import io.github.olib963.javatest_scala._
 import io.github.olib963.javatest_scala.scalacheck._
 import org.scalacheck.Gen
-
+// end::imports[]
+// TODO should it be propertyTest("description", gens)(test) ?
+// tag::include[]
 object ScalacheckSuite extends Suite {
-  // TODO should it be propertyTest("description", gens)(test) ?
+
   override def tests: Seq[Testable] = Seq(
     test("Pending scalacheck test")(
       forAll { s: String => pending("Not yet written") }
@@ -20,14 +23,19 @@ object ScalacheckSuite extends Suite {
       test("List tail")(forAll { (n: Int, l: List[Int]) =>
         that("Tail of a list with a prepended element is the original list", (n :: l).tail, isEqualTo(l))
       }),
-      test("List reverse")(forAll { l: List[String] => that(l.reverse.reverse, isEqualTo(l)) }),
+      test("List reverse")(forAll { l: List[String] =>
+        val reversed = that(l.reverse.reverse, isEqualTo(l))
+        if(l.size <= 1) reversed else reversed.and(that(l.reverse, not(isEqualTo(l))))
+      }),
       test("List head")(forAll { l: List[Int] =>
         if (l.isEmpty) {
           that("Head of an empty list is empty", l.headOption, isEmptyOption[Int])
         } else {
           that("Head of non empty list is the first element", l.head, isEqualTo(l(0)))
         }
-      })),
+      })
+    ),
+    // end::include[]
     suite("Failing Tests",
       test("Failing sqrt") {
         val failingTest = test("Test")(forAll(Gen.posNum[Int])(n =>
