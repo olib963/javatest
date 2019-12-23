@@ -5,7 +5,6 @@ import io.github.olib963.javatest_scala.{Runners, Suite}
 import sbt.testing.{Event, EventHandler, Fingerprint, Framework, Logger, OptionalThrowable, Runner, Selector, Status, SubclassFingerprint, Task, TaskDef}
 
 import scala.reflect.ClassTag
-import scala.util.Try
 
 class JavaTestScalaFramework extends Framework {
   override def name(): String = "JavaTest-Scala"
@@ -51,7 +50,7 @@ case class JTRunner(args: Array[String], remoteArgs: Array[String], testClassLoa
 
     val singleTestRunner: TestRunner = testsCases.collect{ case Left(suite) => suite}.toSeq
     val runners = singleTestRunner +: testsCases.collect{ case Right(runner) => runner}.flatMap(_.Runners).toSeq
-    import io.github.olib963.javatest_scala.CollectionConverters.toJava
+    import CollectionConverters.toJava
     val results = JavaTest.run(toJava(runners))
     Array(JTTask(results))
   }

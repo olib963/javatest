@@ -3,9 +3,14 @@ All notable changes to this project will be documented in this file.
 
 == [Unreleased]
 
-== Added
+=== Added
 
 * `all` assertion as an alternative to chaining many `and`s together.
+* Basic scalacheck support
+
+=== Fixed
+
+* Fix SBT plugin name
 
 == [0.2.0] - 2019-09-23
 

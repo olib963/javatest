@@ -60,6 +60,17 @@ val core = (project in file("core"))
     description := "Scala wrapper around JavaTest framework"
   )
 
+val scalaCheck = (project in file("scala-check"))
+  .dependsOn(core)
+  .settings(CommonSettings: _*)
+  .settings(
+    name := "javatest-scalacheck",
+    libraryDependencies ++= Seq(
+      "org.scalacheck" %% "scalacheck" % "1.14.0",
+    ),
+    description := "Module to create assertions from scalacheck generators"
+  )
+
 val sbtInterface = (project in file("sbt-interface"))
   .dependsOn(core)
   .settings(CommonSettings: _*)
@@ -77,7 +88,7 @@ val sbtPlugin = (project in file("sbt-plugin"))
   .enablePlugins(SbtPlugin)
   .enablePlugins(BuildInfoPlugin)
   .settings(
-    name := "javatest-sbt",
+    name := "sbt-javatest",
     // The build info plugin generates an object javatest_sbt.BuildInfo that contains the version defined in build.sbt
     buildInfoKeys := Seq[BuildInfoKey]("javaTestVersion" -> javaTestVersion),
     buildInfoPackage := "io.github.olib963.javatest_sbt",
@@ -89,7 +100,7 @@ val sbtPlugin = (project in file("sbt-plugin"))
 // It seems in order to create a cross compiled SBT project you need to aggregate sub projects into a root. This seems to
 // stop the default scala 2.12.8 publishing of every project that otherwise occurs
 lazy val root = (project in file("."))
-  .aggregate(core, sbtInterface, sbtPlugin)
+  .aggregate(core, scalaCheck, sbtInterface, sbtPlugin)
   .settings(SettingsForAllProjects: _*)
   .settings(
     name := "javatest-scala-aggregate",

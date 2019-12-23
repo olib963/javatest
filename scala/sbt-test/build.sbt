@@ -6,3 +6,5 @@ val scala12 = "2.12.10"
 val scala11 = "2.11.12"
 
 crossScalaVersions := Seq(scala11, scala12, scala13)
+
+javatestScalacheckVersion := Some("1.14.2") // TODO how do we want to configure this? Perhaps an ADT of NoScalaCheck | Defaults | Provided?

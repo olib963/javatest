@@ -117,6 +117,19 @@ You can also set a time limit on a `Test` by using the `failIfLongerThan` functi
 include::../core/src/test/scala/io/github/olib963/javatest_scala/documentation/BenchmarkDocumentation.scala[tags=include, indent=-]
 ----
 
+== Scalacheck
+
+Scalacheck integration is still in its very early stages, but you are able to use the scalacheck module to create property tests.
+
+[source, scala]
+----
+include::../sbt-test/src/test/scala/my/app/ScalacheckSuite.scala[tags=imports, indent=-]
+
+include::../sbt-test/src/test/scala/my/app/ScalacheckSuite.scala[tags=include, indent=-]
+  )
+}
+----
+
 == SBT Integration
 
 If you are using SBT you can add the following line to `plugins.sbt`. This will automatically run any ``object``s
