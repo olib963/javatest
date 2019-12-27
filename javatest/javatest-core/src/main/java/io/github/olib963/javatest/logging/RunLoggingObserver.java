@@ -22,7 +22,11 @@ public class RunLoggingObserver implements TestRunCompletionObserver {
         stream.println("Ran a total of " + results.testCount() + " tests.");
         stream.println(results.successCount + " succeeded");
         stream.println(results.failureCount + " failed");
-        stream.println(results.pendingCount + " were pending");
+        if (results.pendingCount == 1) {
+            stream.println("1 was pending");
+        } else {
+            stream.println(results.pendingCount + " were pending");
+        }
         if (results.allLogs().count() != 0) {
             stream.println();
         }
