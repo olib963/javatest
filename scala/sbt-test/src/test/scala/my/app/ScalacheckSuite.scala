@@ -1,7 +1,8 @@
 package my.app
 
+import io.github.olib963.javatest.Testable.Test
 import io.github.olib963.javatest.matchers.internal.PredicateMatcher
-import io.github.olib963.javatest.{JavaTest, TestResults, Testable}
+import io.github.olib963.javatest.{JavaTest, TestResults, TestRunCompletionObserver, TestRunner, Testable}
 // tag::imports[]
 import io.github.olib963.javatest_scala._
 import io.github.olib963.javatest_scala.scalacheck._
@@ -24,8 +25,7 @@ object ScalacheckSuite extends Suite {
         that("Tail of a list with a prepended element is the original list", (n :: l).tail, isEqualTo(l))
       }),
       test("List reverse")(forAll { l: List[String] =>
-        val reversed = that(l.reverse.reverse, isEqualTo(l))
-        if(l.size <= 1) reversed else reversed.and(that(l.reverse, not(isEqualTo(l))))
+        that(l.reverse.reverse, isEqualTo(l))
       }),
       test("List head")(forAll { l: List[Int] =>
         if (l.isEmpty) {
@@ -41,26 +41,30 @@ object ScalacheckSuite extends Suite {
         val failingTest = test("Test")(forAll(Gen.posNum[Int])(n =>
           that(s"Square root of $n squared is $n", (n: Long) * (n: Long), isEqualTo[Long](n))
         ))
-        val result = JavaTest.run(failingTest)
+        val result = runTestNoLogging(failingTest)
         that("Because the square root check is wrong", result, failed)
       },
       test("Exhausted sqrt") {
         val failingTest = test("Test")(forAll(Gen.fail[Int])(_ => that(true, "always passing")))
-        val result = JavaTest.run(failingTest)
+        val result = runTestNoLogging(failingTest)
         that("Because the generator never returns anything", result, failed)
       },
       test("Assertion error") {
         val failingTest = test("Test")(forAll(Gen.posNum[Int]) { _ => assert(false, "Whoops"); pending() })
-        val result = JavaTest.run(failingTest)
+        val result = runTestNoLogging(failingTest)
         that("Because the we threw an assertion error", result, failed)
       },
       test("Exception") {
         val failingTest = test("Test")(forAll(Gen.posNum[Int]) { _ => sys.error("Whoops") })
-        val result = JavaTest.run(failingTest)
+        val result = runTestNoLogging(failingTest)
         that("Because the we threw an exception", result, failed)
       }
     )
   )
+
+  // Hide the logging from failed tests
+  private def runTestNoLogging(test: Test) =
+    JavaTest.run(java.util.List.of[TestRunner](testableRunner(Seq(test))), java.util.Collections.emptyList[TestRunCompletionObserver])
 
   // Scala 11 is bad with functional interfaces
   private val failed = PredicateMatcher.of(new java.util.function.Predicate[TestResults]{

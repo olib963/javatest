@@ -6,16 +6,15 @@ import sbt.librarymanagement.LibraryManagementSyntax
 import sbt._
 
 object EnableJavaTestPlugin extends AutoPlugin with LibraryManagementSyntax {
+  override def trigger = allRequirements
 
   object autoImport {
     // configure the version of scalacheck to include on the test classpath
     val javatestScalacheckVersion = settingKey[Option[String]]("The version of scalacheck to use if scalacheck integration is required. Muse be 1.14.x")
-    lazy val baseOSettings: Seq[Def.Setting[_]] = Seq(javatestScalacheckVersion := None)
   }
 
   import autoImport._
-
-  override def trigger = allRequirements
+  override def globalSettings = Seq(javatestScalacheckVersion := None)
 
   override def projectSettings: Seq[Setting[_]] = {
     Seq(
