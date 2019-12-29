@@ -39,7 +39,7 @@ object JavaTestScalaFramework {
 }
 
 case class JavaTestRunner(args: Array[String], remoteArgs: Array[String], testClassLoader: ClassLoader) extends Runner {
-  override def done(): String = ""
+  override def done(): String = "Complete"
 
   override def tasks(taskDefs: Array[TaskDef]): Array[Task] =
     taskDefs.collect {
@@ -78,7 +78,8 @@ case class JavaTestTask(toRun: () => Seq[TestRunner], taskDef: TaskDef) extends 
     Array()
   }
 
-  private def createEvent(eventStatus: Status, error: Option[Throwable] = None): Event  = new Event{
+  // TODO do we need an event per test???? Or per suite :/
+  private def createEvent(eventStatus: Status, error: Option[Throwable] = None): Event  = new Event {
     override def fullyQualifiedName(): String = taskDef.fullyQualifiedName()
     override def fingerprint(): Fingerprint = taskDef.fingerprint()
     override def selector(): Selector = taskDef.selectors().head // TODO what if the number of selectors != 1?
