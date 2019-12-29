@@ -7,7 +7,7 @@ import io.github.olib963.javatest_scala.{Runners, Suite}
 import sbt.testing.{Event, EventHandler, Fingerprint, Framework, Logger, OptionalThrowable, Runner, Selector, Status, SubclassFingerprint, Task, TaskDef}
 
 import scala.reflect.ClassTag
-import scala.util.Try
+import scala.util.{Failure, Success, Try}
 
 class JavaTestScalaFramework extends Framework {
   override def name(): String = "JavaTest-Scala"
@@ -59,20 +59,20 @@ case class JavaTestTask(toRun: () => Seq[TestRunner], taskDef: TaskDef) extends 
   override def tags(): Array[String] = Array()
 
   // TODO better error handling.
-  // TODO more events
   // TODO how do we use the loggers? are they needed? We could hook them in as observers?
   override def execute(eventHandler: EventHandler, loggers: Array[Logger]): Array[Task] = {
-    val result = Try(toRun()).map(r => JavaTest.run(CollectionConverters.toJava(r), Collections.emptyList[TestRunCompletionObserver]()))
-
-    result.foreach {
-      results =>
-        if(!results.succeeded){
-          eventHandler.handle(createEvent(Status.Failure))
-        }
-    }
-
-    result.failed.foreach {
-      error =>
+    // TODO we need the completion observer to be the "done" message
+    Try(toRun()).map(r => JavaTest.run(CollectionConverters.toJava(r), Collections.emptyList[TestRunCompletionObserver]())) match {
+      case Success(results) =>
+        val status =
+        if(!results.succeeded)
+          Status.Failure
+        else if(results.pendingCount > 0)
+          Status.Pending
+        else
+          Status.Success
+        eventHandler.handle(createEvent(status))
+      case Failure(error) =>
         eventHandler.handle(createEvent(Status.Error, error = Some(error)))
     }
     Array()

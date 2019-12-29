@@ -1,6 +1,5 @@
 package my.app
 
-import io.github.olib963.javatest.TestRunner
 import io.github.olib963.javatest_scala.Runners
 import io.github.olib963.javatest_scala.Suite
 import io.github.olib963.javatest_scala.AllJavaTestSyntax
