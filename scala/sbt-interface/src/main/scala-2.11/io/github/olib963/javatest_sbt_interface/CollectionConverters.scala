@@ -5,5 +5,6 @@ import scala.collection.JavaConverters._
 private [javatest_sbt_interface] object CollectionConverters {
 
   def toJava[A](seq: Seq[A]): java.util.List[A] = seq.asJava
+  def toScala[A](list: java.util.List[A]): Seq[A] = list.asScala
 
 }

@@ -1,8 +1,9 @@
 package io.github.olib963.javatest_sbt_interface
 
-import java.util.Collections
+import java.util.concurrent.atomic.AtomicReference
+import java.util.stream.Collectors
 
-import io.github.olib963.javatest.{JavaTest, TestRunCompletionObserver, TestRunner}
+import io.github.olib963.javatest.{JavaTest, TestResults, TestRunCompletionObserver, TestRunner}
 import io.github.olib963.javatest_scala.{Runners, Suite}
 import sbt.testing.{Event, EventHandler, Fingerprint, Framework, Logger, OptionalThrowable, Runner, Selector, Status, SubclassFingerprint, Task, TaskDef}
 
@@ -25,61 +26,87 @@ object JavaTestScalaFramework {
 
   class ScalaFingerPrint[A](implicit classTag: ClassTag[A]) extends SubclassFingerprint {
     override def isModule: Boolean = true
+
     override def requireNoArgConstructor(): Boolean = true
+
     override def superclassName(): String = classTag.runtimeClass.getName
+
     override def equals(obj: Any): Boolean = obj match {
       case classBased: SubclassFingerprint =>
         classBased.isModule && classBased.requireNoArgConstructor() && classBased.superclassName() == this.superclassName()
       case _ => false
     }
+
     override def toString: String = s"Fingerprint for ${superclassName()}"
   }
+
   val SuiteFingerprint = new ScalaFingerPrint[Suite]
   val RunnerFingerprint = new ScalaFingerPrint[Runners]
 }
 
 case class JavaTestRunner(args: Array[String], remoteArgs: Array[String], testClassLoader: ClassLoader) extends Runner {
-  override def done(): String = "Complete"
+  val allResults = new AtomicReference(TestResults.empty())
+
+  override def done(): String = {
+    val results = allResults.get()
+    val logs = CollectionConverters.toScala(results.allLogs().collect(Collectors.toList[String]))
+    val totals =
+      s"""Ran a total of ${results.testCount()} tests.
+         |${results.successCount} succeeded
+         |${results.failureCount} failed
+         |${results.pendingCount} pending
+         |""".stripMargin
+    if (logs.isEmpty) totals else totals + "\n" + logs.mkString("\n")
+  }
 
   override def tasks(taskDefs: Array[TaskDef]): Array[Task] =
     taskDefs.collect {
       case t if t.fingerprint() == JavaTestScalaFramework.SuiteFingerprint =>
-        val toRun: () => Seq[TestRunner] = () => List(moduleOf[Suite](t.fullyQualifiedName()))
-        JavaTestTask(toRun, t)
+        JavaTestTask(moduleOf[Suite](t).map(List(_)), t, allResults)
       case t if t.fingerprint() == JavaTestScalaFramework.RunnerFingerprint =>
-        val toRun = () => moduleOf[Runners](t.fullyQualifiedName()).Runners
-        JavaTestTask(toRun, t)
+        JavaTestTask(moduleOf[Runners](t).map(_.Runners), t, allResults)
     }
 
-  private def moduleOf[A](classToLoad: String): A =
-    testClassLoader.loadClass(s"$classToLoad$$").getDeclaredField("MODULE$").get(null).asInstanceOf[A]
+  private def moduleOf[A](task: TaskDef): Try[A] = Try {
+    testClassLoader.loadClass(s"${task.fullyQualifiedName()}$$").getDeclaredField("MODULE$").get(null).asInstanceOf[A]
+  }
 }
 
-case class JavaTestTask(toRun: () => Seq[TestRunner], taskDef: TaskDef) extends Task {
+case class JavaTestTask(toRun: Try[Seq[TestRunner]], taskDef: TaskDef, totalResults: AtomicReference[TestResults]) extends Task {
   override def tags(): Array[String] = Array()
+  import FunctionConverters._
 
-  // TODO better error handling.
   // TODO how do we use the loggers? are they needed? We could hook them in as observers?
   override def execute(eventHandler: EventHandler, loggers: Array[Logger]): Array[Task] = {
-    // TODO we need the completion observer to be the "done" message
-    Try(toRun()).map(r => JavaTest.run(CollectionConverters.toJava(r), Collections.emptyList[TestRunCompletionObserver]())) match {
-      case Success(results) =>
-        val status =
-        if(!results.succeeded)
-          Status.Failure
-        else if(results.pendingCount > 0)
-          Status.Pending
-        else
-          Status.Success
-        eventHandler.handle(createEvent(status))
+    toRun match {
+      case Success(runners) =>
+        JavaTest.run(CollectionConverters.toJava(runners), CollectionConverters.toJava(List(addToTotal, triggerEvent(eventHandler))))
       case Failure(error) =>
         eventHandler.handle(createEvent(Status.Error, error = Some(error)))
     }
     Array()
   }
 
+  // The results of each run are added on to the total so that the "done()" message contains the total
+  private def addToTotal: TestRunCompletionObserver = (results: TestResults) => {
+    totalResults.getAndAccumulate(results, (r1: TestResults, r2: TestResults) => r1 combine r2)
+    ()
+  }
+
+  // An event is triggered by each test result to inform sbt of failures & successes
+  def triggerEvent(eventHandler: EventHandler): TestRunCompletionObserver = (results: TestResults) => {
+    val status =
+      if (!results.succeeded)
+        Status.Failure
+      else if (results.pendingCount > 0)
+        Status.Pending
+      else
+        Status.Success
+    eventHandler.handle(createEvent(status))
+  }
+
   // TODO do we need an event per test???? Or per suite :/
-  private def createEvent(eventStatus: Status, error: Option[Throwable] = None): Event  = new Event {
+  private def createEvent(eventStatus: Status, error: Option[Throwable] = None): Event = new Event {
     override def fullyQualifiedName(): String = taskDef.fullyQualifiedName()
     override def fingerprint(): Fingerprint = taskDef.fingerprint()
     override def selector(): Selector = taskDef.selectors().head // TODO what if the number of selectors != 1?

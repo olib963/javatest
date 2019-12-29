@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 
 public class RunLoggingObserver implements TestRunCompletionObserver {
 
-
     public static final TestRunCompletionObserver INSTANCE = new RunLoggingObserver(System.out);
 
     private final PrintStream stream;
