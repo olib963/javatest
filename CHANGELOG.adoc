@@ -10,7 +10,8 @@ All notable changes to this project will be documented in this file.
 
 === Fixed
 
-* Fix SBT plugin name
+* SBT plugin name & Conventions
+* SBT test interface now fails the build and works with `testQuick`
 
 == [0.2.0] - 2019-09-23
 
