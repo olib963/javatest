@@ -14,7 +14,6 @@
     <description>Runs JUnit tests using the programmatic launcher, integrating the results with JavaTest results</description>
 
     <properties>
-        <javatest.testClass>io.github.olib963.javatest.junit.Tests</javatest.testClass>
         <junit.version>1.4.1</junit.version>
         <junit.jupiter.version>5.4.1</junit.jupiter.version>
     </properties>
@@ -31,22 +30,19 @@
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
+            <artifactId>junit-jupiter-engine</artifactId>
             <version>${junit.jupiter.version}</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
-            <!-- TODO JavaFire currently throwing exception since a "TestEngine is not on the classpath" yet it works in exec :/ -->
-<!--            <plugin>-->
-<!--                <groupId>io.github.olib963</groupId>-->
-<!--                <artifactId>javafire-maven-plugin</artifactId>-->
-<!--            </plugin>-->
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
+                <groupId>io.github.olib963</groupId>
+                <artifactId>javafire-maven-plugin</artifactId>
+                <configuration>
+                    <testRunners>io.github.olib963.javatest.junit.Tests</testRunners>
+                </configuration>
             </plugin>
         </plugins>
     </build>

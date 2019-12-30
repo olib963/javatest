@@ -267,7 +267,7 @@ public class MyComposedAssertions {
 ----
 
 In the case where you have _many_ assertions (perhaps a large list) I would suggest using the `all` assertion
-functionality for a more better output:
+functionality for a better output:
 
 [source, java]
 ----
