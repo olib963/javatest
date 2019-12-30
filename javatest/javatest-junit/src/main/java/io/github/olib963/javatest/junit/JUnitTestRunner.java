@@ -9,8 +9,8 @@ import org.junit.platform.launcher.listeners.SummaryGeneratingListener;
 
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectPackage;
 
-public final class JUnitTestRunner implements TestRunner {
 
+public final class JUnitTestRunner implements TestRunner {
     private final LauncherDiscoveryRequest request;
 
     private JUnitTestRunner(LauncherDiscoveryRequest request) {
