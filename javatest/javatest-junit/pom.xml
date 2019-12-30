@@ -11,11 +11,12 @@
 
     <artifactId>javatest-junit</artifactId>
     <name>JavaTest JUnit Module</name>
-    <description>Runs JUnit tests using the programmatic launcher, integrating the results with JavaTest results</description>
+    <description>Runs JUnit tests using the programmatic launcher, integrating the results with JavaTest results
+    </description>
 
     <properties>
-        <junit.version>1.4.1</junit.version>
-        <junit.jupiter.version>5.4.1</junit.jupiter.version>
+        <junit.version>1.5.2</junit.version>
+        <junit.jupiter.version>5.5.2</junit.jupiter.version>
     </properties>
 
     <dependencies>
@@ -25,13 +26,19 @@
         </dependency>
         <dependency>
             <groupId>org.junit.platform</groupId>
-            <artifactId>junit-platform-console</artifactId>
+            <artifactId>junit-platform-engine</artifactId>
+            <version>${junit.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
             <version>${junit.version}</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
+            <artifactId>junit-jupiter</artifactId>
             <version>${junit.jupiter.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
