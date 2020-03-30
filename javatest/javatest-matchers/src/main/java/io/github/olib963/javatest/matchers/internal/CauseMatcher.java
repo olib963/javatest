@@ -14,7 +14,7 @@ public class CauseMatcher implements Matcher<Throwable> {
     public MatchResult matches(Throwable value) {
         var cause = value.getCause();
         return causeMatcher.matches(cause)
-                .mapMismatch(mismatch -> "cause {" + cause + "} " + mismatch);
+                .mapMismatch(mismatch -> "cause {" + Matcher.stringify(cause) + "} " + mismatch);
     }
 
     @Override

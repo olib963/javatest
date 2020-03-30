@@ -20,18 +20,9 @@ public class MatcherAssertion<A> implements Assertion {
     @Override
     public AssertionResult run() {
         var matchResult = matcher.matches(value);
-        var expectedMessage = "Expected {" + toString(value) + "} to " + matcher.describeExpected();
+        var expectedMessage = "Expected {" + Matcher.stringify(value) + "} to " + matcher.describeExpected();
         var withPrefix = messagePrefix.map(p -> p + ": " + expectedMessage).orElse(expectedMessage);
         var description = matchResult.mismatch.map(mismatch -> withPrefix + " but " + mismatch).orElse(withPrefix);
         return AssertionResult.of(matchResult.matches, description);
-    }
-
-    private String toString(Object value) {
-        if (value == null) {
-            return "null";
-        } else if(value instanceof CheckedRunnable) {
-            return "runnable";
-        }
-        return value.toString();
     }
 }

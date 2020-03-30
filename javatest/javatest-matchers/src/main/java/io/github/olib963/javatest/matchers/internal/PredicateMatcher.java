@@ -53,7 +53,7 @@ public class PredicateMatcher<A> implements Matcher<A> {
     }
 
     public static <A> Matcher<A> isEqualTo(A expected) {
-        return of(value -> nullSafeEquals(value, expected), "be equal to {" + expected + "}");
+        return of(value -> nullSafeEquals(value, expected), "be equal to {" + Matcher.stringify(expected) + "}");
     }
 
     public static <A, T> Matcher<A> hasType(Class<T> expectedClass) {
@@ -65,6 +65,6 @@ public class PredicateMatcher<A> implements Matcher<A> {
     }
 
     public static <A> Matcher<A> isTheSameInstanceAs(A instance) {
-        return of(o -> instance == o, "be the same in memory reference as {" + instance + "}");
+        return of(o -> instance == o, "be the same in memory reference as {" + Matcher.stringify(instance) + "}");
     }
 }

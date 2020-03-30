@@ -19,7 +19,7 @@ public class MapMatchers {
     }
 
     public static <K, V> Matcher<Map<K, V>> hasKey(K key) {
-        return PredicateMatcher.of(m -> m.containsKey(key), "contain the key {" + key + "}");
+        return PredicateMatcher.of(m -> m.containsKey(key), "contain the key {" + Matcher.stringify(key) + "}");
     }
 
     public static <K, V> Matcher<Map<K, V>> hasKeyThat(Matcher<K> keyMatcher) {
@@ -27,7 +27,7 @@ public class MapMatchers {
     }
 
     public static <K, V> Matcher<Map<K, V>> hasValue(V value) {
-        return PredicateMatcher.of(m -> m.containsValue(value), "contain the value {" + value + "}");
+        return PredicateMatcher.of(m -> m.containsValue(value), "contain the value {" + Matcher.stringify(value) + "}");
     }
 
     public static <K, V> Matcher<Map<K, V>> hasValueThat(Matcher<V> valueMatcher) {
@@ -38,7 +38,7 @@ public class MapMatchers {
         var entry = Map.entry(key, value);
         return PredicateMatcher.of(
                 m -> m.entrySet().contains(entry),
-                "contain an entry with key {" + key + "} and value {" + value + "}"
+                "contain an entry with key {" + Matcher.stringify(key) + "} and value {" + Matcher.stringify(value) + "}"
         );
     }
 

@@ -19,11 +19,11 @@ public class EntryMatcher<K, V> implements Matcher<Map.Entry<K, V>> {
     public MatchResult matches(Map.Entry<K, V> entry) {
         var key = entry.getKey();
         var keyResult = keyMatcher.matches(key);
-        var keyMismatch = keyResult.mismatch.map(m -> "Key " + key + " " + m);
+        var keyMismatch = keyResult.mismatch.map(m -> "Key " + Matcher.stringify(key) + " " + m);
 
         var value = entry.getValue();
         var valueResult = valueMatcher.matches(value);
-        var valueMismatch = valueResult.mismatch.map(m -> "value " + key + " " + m);
+        var valueMismatch = valueResult.mismatch.map(m -> "value " + Matcher.stringify(value) + " " + m);
         boolean matches = keyResult.matches && valueResult.matches;
         return MatchResult.of(matches, combine(keyMismatch, valueMismatch));
     }

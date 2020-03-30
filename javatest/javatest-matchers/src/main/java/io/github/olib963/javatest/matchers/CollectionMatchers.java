@@ -19,7 +19,7 @@ public class CollectionMatchers {
     }
 
     public static <T> Matcher<Collection<T>> contains(final T element) {
-        return PredicateMatcher.of(c -> c.contains(element), "contain {" + element + "}");
+        return PredicateMatcher.of(c -> c.contains(element), "contain {" + Matcher.stringify(element) + "}");
     }
 
     @SafeVarargs
@@ -27,7 +27,7 @@ public class CollectionMatchers {
         var elements = new ArrayList<>(remaining.length + 1);
         elements.add(first);
         elements.addAll(Arrays.asList(remaining));
-        return PredicateMatcher.of(c -> c.containsAll(elements), "contain all of {" + elements + "}");
+        return PredicateMatcher.of(c -> c.containsAll(elements), "contain all of {" +  Matcher.stringify(elements) + "}");
     }
 
     public static <T> Matcher<Collection<T>> containsElementThat(Matcher<T> matcher) {

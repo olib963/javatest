@@ -1,10 +1,7 @@
 package io.github.olib963.javatest.matchers;
 
 import io.github.olib963.javatest.Assertion;
-import io.github.olib963.javatest.matchers.internal.CompositeMatcher;
-import io.github.olib963.javatest.matchers.internal.MatcherAssertion;
-import io.github.olib963.javatest.matchers.internal.NegatedMatcher;
-import io.github.olib963.javatest.matchers.internal.PredicateMatcher;
+import io.github.olib963.javatest.matchers.internal.*;
 
 import java.util.Optional;
 import java.util.function.Function;
@@ -48,5 +45,12 @@ public interface Matcher<A> {
 
     static <A> Matcher<A> isTheSameInstanceAs(A instance) {
         return PredicateMatcher.isTheSameInstanceAs(instance);
+    }
+
+    /**
+     * Utility function to create a better formatted string for types such as arrays. By default uses .toString()
+     */
+    static String stringify(Object object) {
+        return Stringify.stringify(object);
     }
 }
