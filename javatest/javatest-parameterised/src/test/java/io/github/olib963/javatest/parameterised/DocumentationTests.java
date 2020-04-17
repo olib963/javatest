@@ -5,8 +5,10 @@ import io.github.olib963.javatest.Testable;
 import io.github.olib963.javatest.Testable.Test;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,9 +30,9 @@ public class DocumentationTests implements TestSuiteClass {
             ).collect(Collectors.toList()));
             var fibonacci = suite("Finonacci Tests", DocumentationTests.fibonacci().fibonacciTests());
             return List.of(palindromes, fibonacci);
-        } catch (IOException e) {
+        } catch (IOException | URISyntaxException e) {
             // TODO this should probably be a fixture instead.
-            throw  new RuntimeException(e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -54,9 +56,9 @@ public class DocumentationTests implements TestSuiteClass {
         }
 
         // Stream larger data set from a file instead
-        public Stream<Test> palindromeTestsFromFile() throws IOException {
-            String path = getClass().getClassLoader().getResource("palindromes.txt").getPath();
-            Stream<String> lines = Files.lines(Path.of(path));
+        public Stream<Test> palindromeTestsFromFile() throws IOException, URISyntaxException {
+            var uri = getClass().getClassLoader().getResource("palindromes.txt").toURI();
+            Stream<String> lines = Files.lines(Paths.get(uri));
             return parameterised(lines, this::palindromeTest);
         }
     }

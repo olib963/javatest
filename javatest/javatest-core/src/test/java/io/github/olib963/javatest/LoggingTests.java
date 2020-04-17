@@ -16,7 +16,8 @@ import static io.github.olib963.javatest.JavaTest.that;
 
 public class LoggingTests implements TestSuiteClass {
 
-    private final TestResult PENDING_TEST_RESULT = new TestResult.SingleTestResult("Pending", AssertionResult.pending(""), Collections.emptyList());
+    private static final TestResult PENDING_TEST_RESULT = new TestResult.SingleTestResult("Pending", AssertionResult.pending(""), Collections.emptyList());
+    private static final String NEW_LINE = System.lineSeparator();
 
     @Override
     public Collection<Testable> testables() {
@@ -96,7 +97,7 @@ public class LoggingTests implements TestSuiteClass {
                 .replace(Colour.RESET_CODE, ESCAPED_RESET_CODE)
                 .replace(Colour.GREEN.getCode(), ESCAPED_GREEN_CODE)
                 .replace("\t", "\\t")
-                .replace("\n", "\\n");
+                .replace(NEW_LINE, "\\n");
     }
 
 }
