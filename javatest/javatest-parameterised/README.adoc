@@ -28,9 +28,9 @@ public class PalindromeTests {
     }
 
     // Stream larger data set from a file instead
-    public Stream<Test> palindromeTestsFromFile() throws IOException {
-        String path = getClass().getClassLoader().getResource("palindromes.txt").getPath();
-        Stream<String> lines = Files.lines(Path.of(path));
+    public Stream<Test> palindromeTestsFromFile() throws IOException, URISyntaxException {
+        var uri = getClass().getClassLoader().getResource("palindromes.txt").toURI();
+        Stream<String> lines = Files.lines(Paths.get(uri));
         return parameterised(lines, this::palindromeTest);
     }
 }
