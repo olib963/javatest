@@ -33,7 +33,8 @@ val CommonSettings = Seq(
   licenses := List("Apache 2" -> new URL("http://www.apache.org/licenses/LICENSE-2.0.txt")),
   homepage := Some(url("https://github.com/olib963/javatest/scala")),
   publishTo := sonatypePublishToBundle.value,
-  resolvers += Resolver.sonatypeRepo("snapshots")
+  resolvers += Resolver.sonatypeRepo("snapshots"),
+  scalacOptions ++= scalaVersionSpecificOptions(scalaVersion.value),
 ) ++ SettingsForAllProjects
 
 def scalaVersionSpecificOptions(version: String): Option[String] =
@@ -57,7 +58,6 @@ val core = (project in file("core"))
       organisationName % "javatest-fixtures" % javaTestVersion,
       organisationName % "javatest-matchers" % javaTestVersion
     ),
-    scalacOptions ++= scalaVersionSpecificOptions(scalaVersion.value),
     description := "Scala wrapper around JavaTest framework"
   )
 
