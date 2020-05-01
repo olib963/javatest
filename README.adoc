@@ -21,8 +21,8 @@ therefore JavaTest only introduces a few new functions and types to the language
 * Instead of being *Annotation* and *Exception* driven, JavaTest is *Function* and *Value* driven,
 lending itself to composability of tests and assertions.
 
-* JavaTests contains no reflection magic. A more declarative approach to testing is taken where setting up and customising tests is left
-to the writer.
+* JavaTests contains no reflection magic by default. A more declarative approach to testing is taken where setting up and
+customising tests is up to the writer.
 
 * A test should ideally only test one thing and should certainly test _at least_ one thing. Since
 all tests must return an assertion value the compiler will enforce that all tests only test one result.
@@ -356,7 +356,7 @@ public class ClassAsSuite implements TestSuiteClass {
 
 ==== Suite Nesting
 
-``TestSuite``s contain ``Testable``s not ``Test``s and thus can even be contain other ``TestSuite``s.
+``TestSuite``s contain ``Testable``s not ``Test``s and thus can contain other ``TestSuite``s.
 
 [source, java]
 ----
@@ -415,7 +415,7 @@ public class MyPendingTests implements TestSuiteClass {
 The main `TestRunner` included in the core is created from a `Collection<Testable>`. You can optionally add a collection of
 ``TestCompletionObserver``s to the runner, by default a logging observer is passed that logs each test result with a colour
 corresponding to the state of the test (green for passing, red for failing and yellow for pending). If you want to turn off
-logging just pass an empty collection, a `TestCompletionObserver.plainLogger` also exists that uses no colours.
+logging just pass an empty collection. A `TestCompletionObserver.plainLogger` also exists that uses no colours.
 
 [source, java]
 ----
