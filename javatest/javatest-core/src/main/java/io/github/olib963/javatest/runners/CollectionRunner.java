@@ -1,5 +1,6 @@
 package io.github.olib963.javatest.runners;
 
+import io.github.olib963.javatest.RunConfiguration;
 import io.github.olib963.javatest.TestResults;
 import io.github.olib963.javatest.TestRunner;
 import io.github.olib963.javatest.Testable;
@@ -14,7 +15,7 @@ public class CollectionRunner implements TestRunner {
     }
 
     @Override
-    public TestResults run() {
-        return new StreamRunner(testables.stream()).run();
+    public TestResults run(RunConfiguration configuration) {
+        return new StreamRunner(testables.stream()).run(configuration);
     }
 }

@@ -18,7 +18,7 @@ public class JavaTest {
     }
 
     public static TestResults run(Collection<TestRunner> runners, RunConfiguration config) {
-        var results = runners.stream().map(TestRunner::run).reduce(TestResults.empty(), TestResults::combine);
+        var results = runners.stream().map(r -> r.run(config)).reduce(TestResults.empty(), TestResults::combine);
         config.runObservers().forEach(o -> o.onRunCompletion(results));
         return results;
     }

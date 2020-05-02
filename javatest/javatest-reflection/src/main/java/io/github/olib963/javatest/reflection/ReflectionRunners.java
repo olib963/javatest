@@ -56,7 +56,7 @@ public class ReflectionRunners implements TestRunners {
         var suiteRunner = testableRunner(aggregated.suites);
 
         // If there were any failures loading/creating the classes create a failed result.
-        TestRunner failingRunner = () -> aggregated.classFailures.stream()
+        TestRunner failingRunner = config -> aggregated.classFailures.stream()
                 .reduce(TestResults.empty(), TestResults::failBecause, TestResults::combine);
 
         return Stream.concat(

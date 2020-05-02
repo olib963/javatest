@@ -47,9 +47,9 @@ public class BenchmarkingTests implements TestSuiteClass {
                     return that(result.holds, "Assertion should pass when test runs within limit");
                 }),
                 test("Runner adds log", () -> {
-                    TestRunner mockRunner = TestResults::empty;
+                    TestRunner mockRunner = c -> TestResults.empty();
                     var benchmarked = new BenchmarkRunner(Stream.of(mockRunner), Benchmark.DEFAULT_FORMAT, () -> 0L, t -> Duration.ofMillis(987654321));
-                    var results = benchmarked.run();
+                    var results = benchmarked.run(RunConfiguration.empty());
                     return that(results.allLogs().collect(Collectors.toList()), contains("Test run took 987654s 321ms"));
                 })
         );

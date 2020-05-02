@@ -15,23 +15,22 @@ public class StreamRunner implements TestRunner {
     }
 
     @Override
-    public TestResults run() {
+    public TestResults run(RunConfiguration configuration) {
         return tests
-                .map(this::runTestable)
+                .map(t -> runTestable(t, configuration))
                 .reduce(TestResults.empty(), TestResults::addResult, TestResults::combine);
     }
 
-    private TestResult runTestable(Testable testable) {
+    private TestResult runTestable(Testable testable, RunConfiguration configuration) {
         return testable.match(
                 suite -> {
                     var result = runSuite(suite);
-                    // TODO observers from config
-//                    observers.forEach(o -> o.onTestCompletion(result));
+                    configuration.testObservers().forEach(o -> o.onTestCompletion(result));
                     return result;
                 },
                 test -> {
                     var result = runTest(test);
-//                    observers.forEach(o -> o.onTestCompletion(result));
+                    configuration.testObservers().forEach(o -> o.onTestCompletion(result));
                     return result;
                 }
         );
