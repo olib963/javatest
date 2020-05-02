@@ -4,16 +4,13 @@ import io.github.olib963.javatest.reflection.ReflectionRunners;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.project.MavenProject;
 import io.github.olib963.javatest.JavaTest;
-import io.github.olib963.javatest.TestRunners;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 class JavaTestRunner {
     private final Optional<String> testRunners;

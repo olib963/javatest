@@ -2,7 +2,7 @@ package io.github.olib963.javatest.reflection;
 
 import io.github.olib963.javatest.TestResults;
 import io.github.olib963.javatest.TestRunner;
-import io.github.olib963.javatest.TestRunners;
+import io.github.olib963.javatest.javafire.TestRunners;
 import io.github.olib963.javatest.TestSuiteClass;
 import io.github.olib963.javatest.reflection.internal.Aggregate;
 import io.github.olib963.javatest.reflection.internal.Utils;

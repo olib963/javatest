@@ -1,6 +1,6 @@
 package io.github.olib963.javatest.reflection.internal;
 
-import io.github.olib963.javatest.TestRunners;
+import io.github.olib963.javatest.javafire.TestRunners;
 import io.github.olib963.javatest.TestSuiteClass;
 
 import java.util.ArrayList;

@@ -3,6 +3,7 @@ package io.github.olib963.javatest.fixtures.documentation;
 // tag::include[]
 import io.github.olib963.javatest.*;
 import io.github.olib963.javatest.fixtures.Fixtures;
+import io.github.olib963.javatest.javafire.TestRunners;
 
 import java.util.Collection;
 import java.util.List;

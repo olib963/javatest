@@ -2,7 +2,7 @@ package io.github.olib963.javatest.junit;
 
 import io.github.olib963.javatest.JavaTest;
 import io.github.olib963.javatest.TestRunner;
-import io.github.olib963.javatest.TestRunners;
+import io.github.olib963.javatest.javafire.TestRunners;
 import io.github.olib963.javatest.junit.documentation.JUnitRunners;
 
 import java.util.ArrayList;
