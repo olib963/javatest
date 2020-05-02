@@ -3,6 +3,7 @@ package io.github.olib963.javatest_sbt_interface
 import java.io.{OutputStream, PrintStream}
 import java.util.concurrent.atomic.AtomicReference
 
+import io.github.olib963.javatest.TestResult.{SingleTestResult, SuiteResult}
 import io.github.olib963.javatest._
 import io.github.olib963.javatest_scala.run
 import sbt.testing._
@@ -17,7 +18,6 @@ class JavaTestTask(val toRun: Try[Seq[TestRunner]], val taskDef: TaskDef, val to
   import FunctionConverters._
 
   override def execute(eventHandler: EventHandler, loggers: Array[Logger]): Array[Task] = {
-    // TODO pass run config in
     val runConfig = RunConfiguration.empty()
       .addTestObservers(CollectionConverters.toJava(logResults(loggers)))
       .addRunObserver(addToTotal)
@@ -35,23 +35,33 @@ class JavaTestTask(val toRun: Try[Seq[TestRunner]], val taskDef: TaskDef, val to
     ()
   }
 
-  // TODO log failures as error
-  private def logResults(loggers: Array[Logger]): Seq[TestCompletionObserver] = loggers.map(logger =>
-    TestCompletionObserver.logTo(logger.ansiCodesSupported(), new LogInfoStream(logger))
-  ).toList
+  // TODO clean up the logging abstraction
+  private def logResults(loggers: Array[Logger]): Seq[TestCompletionObserver] = loggers.map { logger =>
+    val passingLogger = TestCompletionObserver.logTo(logger.ansiCodesSupported(), new LogInfoStream(logger))
+    val failingLogger = TestCompletionObserver.logTo(logger.ansiCodesSupported(), new LogErrorStream(logger))
+    ((result: TestResult) => if(passed(result)) passingLogger.onTestCompletion(result) else failingLogger.onTestCompletion(result)): TestCompletionObserver
+  }.toList
+
+  private def passed(result: TestResult): Boolean = result.`match`(
+    (suite: SuiteResult) => suite.results().allMatch((r: TestResult) => passed(r)),
+    (test: SingleTestResult) => test.result.holds
+  )
 
   // TODO what is the better abstraction? Should we create a JavaTest Logger?
-  private class LogInfoStream(logger: Logger) extends PrintStream(OutputStream.nullOutputStream(), true) {
+  private abstract class LogWrapper(val logFn: String => Unit) extends PrintStream(OutputStream.nullOutputStream(), true) {
     private var internalBuffer: String = ""
     override def print(s: String): Unit = {
       internalBuffer = internalBuffer + s
     }
 
     override def println(x: String): Unit = {
-      logger.info(internalBuffer + x)
+      logFn(internalBuffer + x)
       internalBuffer = ""
     }
   }
+
+  private class LogInfoStream(logger: Logger) extends LogWrapper(logger.info)
+  private class LogErrorStream(logger: Logger) extends LogWrapper(logger.error)
 
   // An event is triggered by each test result to inform sbt of failures & successes
   def triggerEvent(eventHandler: EventHandler): TestRunCompletionObserver = (results: TestResults) => {
