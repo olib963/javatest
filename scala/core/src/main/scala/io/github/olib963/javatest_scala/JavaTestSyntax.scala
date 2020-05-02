@@ -11,6 +11,7 @@ trait JavaTestSyntax {
 
   def run(firstRunner: TestRunner, runners: TestRunner*): TestResults = run(firstRunner :: runners.toList)
   def run(runners: Seq[TestRunner]): TestResults = JavaTest.run(toJava(runners))
+  def run(runners: Seq[TestRunner], runConfiguration: RunConfiguration): TestResults = JavaTest.run(toJava(runners), runConfiguration)
 
   def suite(name: String, firstTest: Testable, tests: Testable*): Testable.TestSuite = suite(name, firstTest +: tests.toSeq)
   def suite(name: String, tests: Seq[Testable]): Testable.TestSuite = JavaTest.suite(name, toJava(tests))
@@ -27,10 +28,6 @@ trait JavaTestSyntax {
   def all(assertions: Seq[Assertion]): Assertion = JavaTest.all(toJava(assertions))
 
   implicit def runnerFromTestable(testable: Testable): TestRunner = JavaTest.testableRunner(testable)
-  implicit def runnerFromTestables(testables: Seq[Testable]): TestRunner = JavaTest.testableRunner(toJava((testables)))
-  def testableRunner(testables: Seq[Testable], observers: (TestResult => Unit)*): TestRunner = {
-    val asJavaObservers = observers.map(f => ((result: TestResult) => f(result)): TestCompletionObserver)
-    JavaTest.testableRunner(toJava(testables), toJava(asJavaObservers))
-  }
+  implicit def runnerFromTestables(testables: Seq[Testable]): TestRunner = JavaTest.testableRunner(toJava(testables))
 
 }

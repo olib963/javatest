@@ -107,8 +107,7 @@ public class JavaTestRunnerTest implements TestSuiteClass {
         @Override
         public Collection<TestRunner> runners() {
             return List.of(JavaTest.testableRunner(
-                    List.of(test("Failure", () -> that(false, "Expected false"))),
-                    Collections.emptyList()
+                    List.of(test("Failure", () -> that(false, "Expected false")))
             ));
         }
     }
@@ -116,8 +115,7 @@ public class JavaTestRunnerTest implements TestSuiteClass {
         @Override
         public Collection<TestRunner> runners() {
             return List.of(JavaTest.testableRunner(
-                    List.of(test("Success", () -> that(true, "Expected true"))),
-                    Collections.emptyList()
+                    List.of(test("Success", () -> that(true, "Expected true")))
             ));
         }
     }

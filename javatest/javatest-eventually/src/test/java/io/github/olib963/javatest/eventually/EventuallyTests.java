@@ -23,7 +23,7 @@ public class EventuallyTests implements TestSuiteClass {
                 new PassingTests(),
                 suite("Failing Tests",  EventuallyTests.FAILING.map(t ->
                         test(t.name, () -> {
-                            var results = run(List.of(testableRunner(t)), Collections.emptyList());
+                            var results = run(List.of(testableRunner(t)), RunConfiguration.empty());
                             return that(!results.succeeded, t.name + " should fail");
                         })
                 ).collect(Collectors.toList()))

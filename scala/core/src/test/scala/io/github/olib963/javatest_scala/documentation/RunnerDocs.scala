@@ -28,16 +28,17 @@ object RunnerDocs extends JavaTestSyntax {
   }
 
   // tag::customDefinition[]
-  val customRunner = testableRunner(
-    Seq(
-      suite("My Suite",
-        test("test1")(that(true, "passes")),
-        test("test2")(that(true, "passes"))
-      )
-    ),
-    // Observer function: (TestResult => Unit)
-    result => println(result)
-  )
+  // TODO separate documentation for run configuration
+//  val customRunner = testableRunner(
+//    Seq(
+//      suite("My Suite",
+//        test("test1")(that(true, "passes")),
+//        test("test2")(that(true, "passes"))
+//      )
+//    ),
+//    // Observer function: (TestResult => Unit)
+//    result => println(result)
+//  )
   // end::customDefinition[]
 
 }

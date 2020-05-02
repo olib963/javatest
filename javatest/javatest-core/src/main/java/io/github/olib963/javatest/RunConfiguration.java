@@ -7,6 +7,8 @@ import java.util.stream.Stream;
 
 public class RunConfiguration {
 
+    private static final RunConfiguration EMPTY_CONFIG = new RunConfiguration(Collections.emptyList(), Collections.emptyList());
+
     private final Collection<TestCompletionObserver> testObservers;
     private final Collection<TestRunCompletionObserver> runObservers;
 
@@ -23,7 +25,7 @@ public class RunConfiguration {
     }
 
     public static RunConfiguration empty() {
-        return new RunConfiguration(Collections.emptyList(), Collections.emptyList());
+        return EMPTY_CONFIG;
     }
 
     public Stream<TestCompletionObserver> testObservers() {
@@ -35,7 +37,7 @@ public class RunConfiguration {
     }
 
     public RunConfiguration addTestObserver(TestCompletionObserver observer) {
-                return addTestObservers(Collections.singletonList(observer));
+        return addTestObservers(Collections.singletonList(observer));
     }
 
     public RunConfiguration addTestObservers(Collection<TestCompletionObserver> observers) {

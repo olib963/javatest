@@ -1,5 +1,6 @@
 package io.github.olib963.javatest.matchers;
 
+import io.github.olib963.javatest.RunConfiguration;
 import io.github.olib963.javatest.Testable.*;
 
 import java.util.Collections;
@@ -16,7 +17,7 @@ public class Utils {
                 suite("Passing Tests", passingTests.collect(Collectors.toList())),
                 suite("Failing Tests", failingTests.map(t ->
                     test(t.name, () -> {
-                        var results = run(List.of(testableRunner(t)), Collections.emptyList());
+                        var results = run(List.of(testableRunner(t)), RunConfiguration.empty());
                         return that(!results.succeeded, t.name + " should fail");
                     })).collect(Collectors.toList()))
         ));

@@ -4,6 +4,7 @@ import java.io.{OutputStream, PrintStream}
 import java.util.concurrent.atomic.AtomicReference
 
 import io.github.olib963.javatest._
+import io.github.olib963.javatest_scala.run
 import sbt.testing._
 
 import scala.util.{Failure, Success, Try}
@@ -22,10 +23,8 @@ class JavaTestTask(val toRun: Try[Seq[TestRunner]], val taskDef: TaskDef, val to
       .addRunObserver(addToTotal)
       .addRunObserver(triggerEvent(eventHandler))
     toRun match {
-      case Success(runners) =>
-        JavaTest.run(CollectionConverters.toJava(runners), CollectionConverters.toJava(List(addToTotal, triggerEvent(eventHandler))))
-      case Failure(error) =>
-        eventHandler.handle(TestEvent(taskDef, Status.Error, error))
+      case Success(runners) => run(runners, runConfig)
+      case Failure(error) => eventHandler.handle(TestEvent(taskDef, Status.Error, error))
     }
     Array()
   }
@@ -36,6 +35,7 @@ class JavaTestTask(val toRun: Try[Seq[TestRunner]], val taskDef: TaskDef, val to
     ()
   }
 
+  // TODO log failures as error
   private def logResults(loggers: Array[Logger]): Seq[TestCompletionObserver] = loggers.map(logger =>
     TestCompletionObserver.logTo(logger.ansiCodesSupported(), new LogInfoStream(logger))
   ).toList

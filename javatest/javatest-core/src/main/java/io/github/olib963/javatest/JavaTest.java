@@ -13,16 +13,13 @@ public class JavaTest {
     private JavaTest() {}
 
     // Main entry point of the library
-    private static final Collection<TestRunCompletionObserver> DEFAULT_RUN_OBSERVER =
-            Collections.singletonList(TestRunCompletionObserver.logger());
-
     public static TestResults run(Collection<TestRunner> runners) {
-        return run(runners, DEFAULT_RUN_OBSERVER);
+        return run(runners, RunConfiguration.defaultConfig());
     }
 
-    public static TestResults run(Collection<TestRunner> runners, Collection<TestRunCompletionObserver> observers) {
+    public static TestResults run(Collection<TestRunner> runners, RunConfiguration config) {
         var results = runners.stream().map(TestRunner::run).reduce(TestResults.empty(), TestResults::combine);
-        observers.forEach(o -> o.onRunCompletion(results));
+        config.runObservers().forEach(o -> o.onRunCompletion(results));
         return results;
     }
 
@@ -49,27 +46,16 @@ public class JavaTest {
     }
 
     // Stream Runner factory methods
-    private static final Collection<TestCompletionObserver> DEFAULT_OBSERVER =
-            Collections.singletonList(TestCompletionObserver.colourLogger());
-
     public static TestRunner testableRunner(Testable testable) {
         return testableRunner(List.of(testable));
     }
 
     public static TestRunner testableRunner(Collection<? extends Testable> tests) {
-        return testableRunner(tests, DEFAULT_OBSERVER);
-    }
-
-    public static TestRunner testableRunner(Collection<? extends Testable> tests, Collection<TestCompletionObserver> observers) {
-        return new CollectionRunner(tests, observers);
+        return new CollectionRunner(tests);
     }
 
     public static TestRunner lazyTestableRunner(Stream<? extends Testable> tests) {
-        return lazyTestableRunner(tests, DEFAULT_OBSERVER);
-    }
-
-    public static TestRunner lazyTestableRunner(Stream<? extends Testable> tests, Collection<TestCompletionObserver> observers) {
-        return new StreamRunner(tests, observers);
+        return new StreamRunner(tests);
     }
 
     // Test factory methods

@@ -9,11 +9,9 @@ import java.util.stream.Stream;
 
 public class StreamRunner implements TestRunner {
     private final Stream<? extends Testable> tests;
-    private final Collection<TestCompletionObserver> observers;
 
-    public StreamRunner(Stream<? extends Testable> tests, Collection<TestCompletionObserver> observers) {
+    public StreamRunner(Stream<? extends Testable> tests) {
         this.tests = tests;
-        this.observers = observers;
     }
 
     @Override
@@ -27,12 +25,13 @@ public class StreamRunner implements TestRunner {
         return testable.match(
                 suite -> {
                     var result = runSuite(suite);
-                    observers.forEach(o -> o.onTestCompletion(result));
+                    // TODO observers from config
+//                    observers.forEach(o -> o.onTestCompletion(result));
                     return result;
                 },
                 test -> {
                     var result = runTest(test);
-                    observers.forEach(o -> o.onTestCompletion(result));
+//                    observers.forEach(o -> o.onTestCompletion(result));
                     return result;
                 }
         );
