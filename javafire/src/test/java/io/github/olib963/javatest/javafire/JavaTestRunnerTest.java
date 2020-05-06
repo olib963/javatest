@@ -33,19 +33,26 @@ public class JavaTestRunnerTest implements TestSuiteClass {
         when(provider.classLoaderFor(ALL_ELEMENTS)).thenReturn(classLoader);
         return provider;
     }
-    private ClassLoaderProvider providerFor(Class<?> classToLoad) throws ClassLoaderProvider.ClassLoadingException, ClassNotFoundException {
+    private ClassLoaderProvider providerFor(Class<?>... classesToLoad) throws ClassLoaderProvider.ClassLoadingException, ClassNotFoundException {
         var provider = mock(ClassLoaderProvider.class);
         var classLoader = mock(ClassLoader.class);
-        doReturn(classToLoad).when(classLoader).loadClass(eq(classToLoad.getName()));
+        for(var classToLoad : classesToLoad) {
+            doReturn(classToLoad).when(classLoader).loadClass(eq(classToLoad.getName()));
+        }
         when(provider.classLoaderFor(ALL_ELEMENTS)).thenReturn(classLoader);
         return provider;
     }
 
     private JavaTestRunner.Result runWithRunners(Class<?> testClass) throws ClassNotFoundException, ClassLoaderProvider.ClassLoadingException, DependencyResolutionRequiredException {
         var mavenProject = projectWithExpectedClasspathDependencies();
-        var testRunners = testClass.getName();
         var classLoaderProvider = providerFor(testClass);
-        return new JavaTestRunner(Optional.of(testRunners), Optional.empty(), classLoaderProvider, mavenProject).run();
+        return new JavaTestRunner(Optional.of(testClass.getName()), Optional.empty(), classLoaderProvider, mavenProject).run();
+    }
+
+    private JavaTestRunner.Result runWithRunnersAndConfig(Class<?> testClass, Class<?> configClass) throws ClassNotFoundException, ClassLoaderProvider.ClassLoadingException, DependencyResolutionRequiredException {
+        var mavenProject = projectWithExpectedClasspathDependencies();
+        var classLoaderProvider = providerFor(testClass, configClass);
+        return new JavaTestRunner(Optional.of(testClass.getName()), Optional.of(configClass.getName()), classLoaderProvider, mavenProject).run();
     }
 
     @Override
@@ -101,10 +108,13 @@ public class JavaTestRunnerTest implements TestSuiteClass {
                     return that(result.status == JavaTestRunner.Status.EXECUTION_FAILURE, "Should return an execution failure");
                 }),
                 test("Test when configuration class does not extend RunConfigurationProvider", () -> {
-                    return JavaTest.pending();
+                    var result = runWithRunnersAndConfig(RunnersWithPassingTests.class, IncorrectTypeClass.class);
+                    return that(result.status == JavaTestRunner.Status.FAILURE, "Should return a failure");
                 }),
                 test("Test that configuration class is used", () -> {
-                    return JavaTest.pending();
+                    var result = runWithRunnersAndConfig(RunnersWithPassingTests.class, CustomRunConfiguration.class);
+                    return that(result.status == JavaTestRunner.Status.SUCCESS, "Should return a success")
+                            .and(that(CustomRunConfiguration.wasUsed, "Should have used the custom configuration"));
                 })
         );
     }
@@ -134,6 +144,16 @@ public class JavaTestRunnerTest implements TestSuiteClass {
             return List.of(JavaTest.testableRunner(
                     List.of(test("Success", () -> that(true, "Expected true")))
             ));
+        }
+    }
+
+    public static class CustomRunConfiguration implements RunConfigurationProvider {
+
+        public static boolean wasUsed = false;
+
+        @Override
+        public RunConfiguration config() {
+            return RunConfiguration.empty().addRunObserver(result -> wasUsed = true);
         }
     }
 

@@ -1,5 +1,6 @@
 package io.github.olib963.javatest.javafire;
 
+import io.github.olib963.javatest.RunConfiguration;
 import io.github.olib963.javatest.reflection.ReflectionRunners;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.project.MavenProject;
@@ -29,9 +30,13 @@ class JavaTestRunner {
         try {
             var classPathElements = resolveAllClassPathElements(project);
             var classLoader = lookupClassLoader(classPathElements);
-            var r = testRunners.map(c -> instantiateTestRunners(loadClass(classLoader, c))).orElse(defaultRunners(classLoader));
-            var configuration = configurationClass.map(c -> loadClass(classLoader, c));
-            var results = JavaTest.run(r.runners());
+            var runnerProvider = testRunners
+                    .map(c -> instantiateAs(loadClass(classLoader, c), TestRunners.class))
+                    .orElse(defaultRunners(classLoader));
+            var configurationProvider = configurationClass
+                    .map(c -> instantiateAs(loadClass(classLoader, c), RunConfigurationProvider.class))
+                    .orElse(RunConfiguration::defaultConfig);
+            var results = JavaTest.run(runnerProvider.runners(), configurationProvider.config());
 
             if (results.succeeded) {
                 return new Result(Status.SUCCESS, "All tests passed");
@@ -69,14 +74,13 @@ class JavaTestRunner {
         }
     }
 
-
-    private TestRunners instantiateTestRunners(Class<?> runnersClass) {
+    private <T> T instantiateAs(Class<?> runnersClass, Class<T> toInstantiateAs) {
         try {
-            if (!TestRunners.class.isAssignableFrom(runnersClass)) {
+            if (!toInstantiateAs.isAssignableFrom(runnersClass)) {
                 throw new InternalTestException(Status.FAILURE,
                         "Given class (" + runnersClass.getName() + ") does not implement TestRunners");
             }
-            return (TestRunners) runnersClass.getConstructor(null).newInstance();
+            return toInstantiateAs.cast(runnersClass.getConstructor(null).newInstance());
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException
                 | NoSuchMethodException e) {
             throw new InternalTestException(Status.FAILURE,
