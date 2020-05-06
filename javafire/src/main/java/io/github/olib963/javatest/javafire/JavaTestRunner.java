@@ -14,11 +14,13 @@ import java.util.stream.Collectors;
 
 class JavaTestRunner {
     private final Optional<String> testRunners;
+    private final Optional<String> configurationClass;
     private final ClassLoaderProvider classLoaderProvider;
     private final MavenProject project;
 
-    JavaTestRunner(Optional<String> testRunners, ClassLoaderProvider classLoaderProvider, MavenProject project) {
+    JavaTestRunner(Optional<String> testRunners, Optional<String> configurationClass, ClassLoaderProvider classLoaderProvider, MavenProject project) {
         this.testRunners = testRunners;
+        this.configurationClass = configurationClass;
         this.classLoaderProvider = classLoaderProvider;
         this.project = project;
     }
@@ -27,7 +29,8 @@ class JavaTestRunner {
         try {
             var classPathElements = resolveAllClassPathElements(project);
             var classLoader = lookupClassLoader(classPathElements);
-            TestRunners r = testRunners.map(c -> instantiateTestRunners(loadRunnersClass(classLoader, c))).orElse(defaultRunners(classLoader));
+            var r = testRunners.map(c -> instantiateTestRunners(loadClass(classLoader, c))).orElse(defaultRunners(classLoader));
+            var configuration = configurationClass.map(c -> loadClass(classLoader, c));
             var results = JavaTest.run(r.runners());
 
             if (results.succeeded) {
@@ -57,25 +60,22 @@ class JavaTestRunner {
         }
     }
 
-    private Class<?> loadRunnersClass(ClassLoader loader, String testRunners) {
+    private Class<?> loadClass(ClassLoader loader, String testRunners) {
         try {
-            Class<?> runnersClass = loader.loadClass(testRunners);
-
-            if (!TestRunners.class.isAssignableFrom(runnersClass)) {
-                throw new InternalTestException(Status.FAILURE,
-                        "Given class (" + runnersClass.getName() + ") does not implement TestRunners");
-            }
-
-            return runnersClass;
-
+            return loader.loadClass(testRunners);
         } catch (ClassNotFoundException e) {
             throw new InternalTestException(Status.EXECUTION_FAILURE,
                     "Could not load the  given class (" + testRunners + ")", e);
         }
     }
 
+
     private TestRunners instantiateTestRunners(Class<?> runnersClass) {
         try {
+            if (!TestRunners.class.isAssignableFrom(runnersClass)) {
+                throw new InternalTestException(Status.FAILURE,
+                        "Given class (" + runnersClass.getName() + ") does not implement TestRunners");
+            }
             return (TestRunners) runnersClass.getConstructor(null).newInstance();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException
                 | NoSuchMethodException e) {
@@ -98,10 +98,6 @@ class JavaTestRunner {
             this(status, description, Optional.empty());
         }
 
-        Result(Status status, String description, Throwable cause) {
-            this(status, description, Optional.of(cause));
-        }
-
         private Result(Status status, String description, Optional<Throwable> cause) {
             this.status = status;
             this.description = description;
@@ -118,12 +114,12 @@ class JavaTestRunner {
 
         final Result result;
 
-        InternalTestException(Status status, String message, Throwable t) {
-            this.result = new Result(status, message, t);
+        private InternalTestException(Status status, String message, Throwable t) {
+            this.result = new Result(status, message, Optional.of(t));
         }
 
-        InternalTestException(Status status, String message) {
-            this.result = new Result(status, message);
+        private InternalTestException(Status status, String message) {
+            this.result = new Result(status, message, Optional.empty());
         }
     }
 

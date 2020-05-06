@@ -26,7 +26,7 @@ public class JavaTestMojo extends AbstractMojo {
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
-		var testRunner = new JavaTestRunner(Optional.ofNullable(testRunners), new ThreadLocalClassLoaderProvider(), lookupProject());
+		var testRunner = new JavaTestRunner(Optional.ofNullable(testRunners), Optional.empty(), new ThreadLocalClassLoaderProvider(), lookupProject());
 		validateResult(testRunner.run());
 	}
 
