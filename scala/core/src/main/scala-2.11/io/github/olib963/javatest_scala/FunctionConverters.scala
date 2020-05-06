@@ -1,6 +1,6 @@
 package io.github.olib963.javatest_scala
 
-import io.github.olib963.javatest.{CheckedSupplier, TestCompletionObserver, TestResult}
+import io.github.olib963.javatest.{CheckedSupplier, TestCompletionObserver, TestResult, TestResults, TestRunCompletionObserver}
 
 import scala.concurrent.duration.Duration
 import scala.language.implicitConversions
@@ -27,6 +27,10 @@ private [javatest_scala] object FunctionConverters {
 
   implicit def scalaFunctionToTestCompletionObserver(f: TestResult => Unit): TestCompletionObserver = new TestCompletionObserver {
     override def onTestCompletion(result: TestResult): Unit = f(result)
+  }
+
+  implicit def scalaFunctionToRunCompletionObserver(f: TestResults => Unit): TestRunCompletionObserver = new TestRunCompletionObserver {
+    override def onRunCompletion(result: TestResults): Unit = f(result)
   }
 
   implicit def scalaFunctionToCheckedSupplier[A](s: () => A): CheckedSupplier[A] = new CheckedSupplier[A] {

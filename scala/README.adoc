@@ -77,8 +77,7 @@ object MySuite extends Suite with JavaTestSyntax {
 
 === Test Runners
 
-An implicit transformation exists to turn a `Seq[Testable]` into a `TestRunner`. Alternatively you can customise the test
-runner by overriding the default test observer.
+An implicit transformation exists to turn a `Seq[Testable]` into a `TestRunner`.
 
 [source, scala]
 ----
@@ -98,19 +97,18 @@ run(
     )
   )
 )
+----
 
-// Custom Runner
-  // TODO separate documentation for run configuration
-//  val customRunner = testableRunner(
-//    Seq(
-//      suite("My Suite",
-//        test("test1")(that(true, "passes")),
-//        test("test2")(that(true, "passes"))
-//      )
-//    ),
-//    // Observer function: (TestResult => Unit)
-//    result => println(result)
-//  )
+==== Run Configuration
+
+You can provide your own `RunConfiguration` if you want to provide your own side-effecting observers to run as tests are completed
+
+[source, scala]
+----
+run(
+  Seq(test("test1")(that(true, "passes")): TestRunner),
+  RunConfiguration.empty().addRunObserver((results: TestResults) => if(results.pendingCount > 0) println("Tests still need to be written"))
+)
 ----
 
 == Matchers
@@ -376,9 +374,10 @@ object MyTests {
         FixtureDocumentation.runner1,
         FixtureDocumentation.runner2,
         BenchmarkDocumentation,
-        SuiteDocs
+        SuiteDocs,
+        RunnerDocs.runner
       ) ++ MyRunners.Runners
-    )
+    ).combine(RunnerDocs.runDirectly()).combine(RunnerDocs.runWithCustomConfig())
 
     if (!documentationResults.succeeded) {
       sys.error("Documentation tests failed")
