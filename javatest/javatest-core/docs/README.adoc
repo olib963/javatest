@@ -344,6 +344,27 @@ In `pom.xml`:
 
 You can override the `testRunners` class being used by setting the maven property e.g. `mvn -Djavafire.testRunners=com.my.app.OtherTests test`.
 
+==== Run Configuration
+
+You can provide your own `RunConfiguration` class within the plugin configuration. If you create a class with a *public zero argument constructor*
+that implements `RunConfigurationProvider` such as:
+
+[source, java]
+----
+include::../src/test/java/my/awesome/app/MyConfigProvider.java[]
+----
+
+then you can set the configuration option in the plugin:
+
+[source, xml]
+----
+ <configuration>
+    <runConfigurationProvider>my.awesome.app.MyConfigProvider</runConfigurationProvider>
+</configuration>
+----
+
+You can also override the provider class on the commandline by setting the maven property e.g. `mvn -Djavafire.runConfigurationProvider=com.my.app.ConfigProvider test`.
+
 === JShell
 
 Since JavaTest is built on pure Java it plays quite nicely with the REPL. This startup script may be useful to you:

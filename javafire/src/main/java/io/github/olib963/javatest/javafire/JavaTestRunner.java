@@ -65,26 +65,26 @@ class JavaTestRunner {
         }
     }
 
-    private Class<?> loadClass(ClassLoader loader, String testRunners) {
+    private Class<?> loadClass(ClassLoader loader, String classToLoad) {
         try {
-            return loader.loadClass(testRunners);
+            return loader.loadClass(classToLoad);
         } catch (ClassNotFoundException e) {
             throw new InternalTestException(Status.EXECUTION_FAILURE,
-                    "Could not load the  given class (" + testRunners + ")", e);
+                    "Could not load the  given class (" + classToLoad + ")", e);
         }
     }
 
-    private <T> T instantiateAs(Class<?> runnersClass, Class<T> toInstantiateAs) {
+    private <T> T instantiateAs(Class<?> classToInstantiate, Class<T> toInstantiateAs) {
         try {
-            if (!toInstantiateAs.isAssignableFrom(runnersClass)) {
+            if (!toInstantiateAs.isAssignableFrom(classToInstantiate)) {
                 throw new InternalTestException(Status.FAILURE,
-                        "Given class (" + runnersClass.getName() + ") does not implement TestRunners");
+                        "Given class (" + classToInstantiate.getName() + ") does not implement " + toInstantiateAs.getName());
             }
-            return toInstantiateAs.cast(runnersClass.getConstructor(null).newInstance());
+            return toInstantiateAs.cast(classToInstantiate.getConstructor(null).newInstance());
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException
                 | NoSuchMethodException e) {
             throw new InternalTestException(Status.FAILURE,
-                    "Given class (" + runnersClass.getName() + ") could not be instantiated", e);
+                    "Given class (" + classToInstantiate.getName() + ") could not be instantiated", e);
         }
     }
 
