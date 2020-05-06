@@ -138,6 +138,8 @@ toc::[]
 ** `TestSuite`: a named logical collection of ``Testable``s
 * `Assertion`: represents the expected state at the end of a test
 * `TestResults`: represents the combined result of your tests
+* `RunConfiguration`: An object that contains configuration for a specific run of JavaTest. Currently this just contains
+side-effecting observers.
 
 === Creating Assertions
 
@@ -223,10 +225,7 @@ include::../src/test/java/io/github/olib963/javatest/documentation/MyPendingTest
 
 === Test Runners
 
-The main `TestRunner` included in the core is created from a `Collection<Testable>`. You can optionally add a collection of
-``TestCompletionObserver``s to the runner, by default a logging observer is passed that logs each test result with a colour
-corresponding to the state of the test (green for passing, red for failing and yellow for pending). If you want to turn off
-logging just pass an empty collection. A `TestCompletionObserver.plainLogger` also exists that uses no colours.
+The main `TestRunner` included in the core is created from a `Collection<Testable>`.
 
 [source, java]
 ----
@@ -236,13 +235,11 @@ include::../src/test/java/io/github/olib963/javatest/documentation/RunnerDocumen
 include::../src/test/java/io/github/olib963/javatest/documentation/RunnerDocumentation.java[tags=normal, indent=-]
 ----
 
-Other `TestRunner` implementations are available in the other modules.
-
 ==== Laziness
 
-It is possible to create a lazy test runner from a `Stream<Testable>` also with optional collection of ``TestCompletionObserver``s.
-This runner however is not referentially transparent or reusable so must be used with care. This might be useful if you have
-a very large collection of tests and you want to lazily instantiate the different suites.
+It is possible to create a lazy test runner from a `Stream<Testable>`. This runner however is not referentially transparent
+or reusable so must be used with care. This might be useful if you have a very large collection of tests and you want
+to lazily instantiate the different suites.
 
 [source, java]
 ----
@@ -250,6 +247,20 @@ include::../src/test/java/io/github/olib963/javatest/documentation/RunnerDocumen
 include::../src/test/java/io/github/olib963/javatest/documentation/RunnerDocumentation.java[tags=imports]
 
 include::../src/test/java/io/github/olib963/javatest/documentation/RunnerDocumentation.java[tags=lazy, indent=-]
+----
+
+Other `TestRunner` implementations are available in the other modules.
+
+=== Run Configuration
+
+You can optionally add a collection of ``TestCompletionObserver``s and ``TestRunCompletionObserver``s to the run of JavaTest.
+By default a logging observer is passed that logs each test result with a colour corresponding to the state of the test
+(green for passing, red for failing and yellow for pending) and a logging observer for the completion of the run that logs
+the total failed, passing and pending results.
+
+[source, java]
+----
+include::../src/test/java/io/github/olib963/javatest/documentation/RunConfigurations.java[tags=include]
 ----
 
 === Core library maven dependency
@@ -268,19 +279,13 @@ include::../src/test/java/io/github/olib963/javatest/documentation/RunnerDocumen
 
 === In Java
 
-To run JavaTest simply pass your `TestRunner` instances to the `JavaTest.run()` function and handle the
-result how you see fit. There is a convenience function `runTests` defined to just run a `Collection<Testable>` using the default `CollectionRunner`:
+To run JavaTest simply pass your `TestRunner` instances to the `JavaTest.run()` function and handle the result how you see fit.
+There is a convenience function `runTests` defined to just run a `Collection<Testable>` using the default `CollectionRunner`:
 
 [source, java]
 ----
 include::../src/test/java/io/github/olib963/javatest/documentation/MyEntrypoint.java[tags=include]
 ----
-
-==== Observer
-
-There is an interface `TestRunCompletionObserver` that exists to allow side effects to be invoked after the run has completed.
-By default the total counts of tests run will be logged to `System.out`. If you want to turn off logging simply pass an empty
-collection of observers to the `run` function i.e. `JavaTest.run(runners, Collections.emptyList())`.
 
 === With JavaFire Maven plugin
 
