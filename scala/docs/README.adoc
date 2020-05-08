@@ -48,8 +48,7 @@ include::../core/src/test/scala/io/github/olib963/javatest_scala/documentation/S
 
 === Test Runners
 
-An implicit transformation exists to turn a `Seq[Testable]` into a `TestRunner`. Alternatively you can customise the test
-runner by overriding the default test observer.
+An implicit transformation exists to turn a `Seq[Testable]` into a `TestRunner`.
 
 [source, scala]
 ----
@@ -57,9 +56,15 @@ include::../core/src/test/scala/io/github/olib963/javatest_scala/documentation/R
 
 // Or to run directly
 include::../core/src/test/scala/io/github/olib963/javatest_scala/documentation/RunnerDocs.scala[tags=running, indent=-]
+----
 
-// Custom Runner
-include::../core/src/test/scala/io/github/olib963/javatest_scala/documentation/RunnerDocs.scala[tags=customDefinition, indent=-]
+==== Run Configuration
+
+You can provide your own `RunConfiguration` if you want to provide your own side-effecting observers to run as tests are completed
+
+[source, scala]
+----
+include::../core/src/test/scala/io/github/olib963/javatest_scala/documentation/RunnerDocs.scala[tags=customConfig, indent=-]
 ----
 
 == Matchers

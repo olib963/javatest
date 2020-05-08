@@ -21,8 +21,8 @@ therefore JavaTest only introduces a few new functions and types to the language
 * Instead of being *Annotation* and *Exception* driven, JavaTest is *Function* and *Value* driven,
 lending itself to composability of tests and assertions.
 
-* JavaTests contains no reflection magic. A more declarative approach to testing is taken where setting up and customising tests is left
-to the writer.
+* JavaTests contains no reflection magic by default. A more declarative approach to testing is taken where setting up and
+customising tests is up to the writer.
 
 * A test should ideally only test one thing and should certainly test _at least_ one thing. Since
 all tests must return an assertion value the compiler will enforce that all tests only test one result.
@@ -135,6 +135,7 @@ An example of a test entry point:
 ----
 import io.github.olib963.javatest.*;
 import io.github.olib963.javatest.fixtures.Fixtures;
+import io.github.olib963.javatest.javafire.TestRunners;
 
 import java.util.Collection;
 import java.util.List;
@@ -222,6 +223,8 @@ toc::[]
 ** `TestSuite`: a named logical collection of ``Testable``s
 * `Assertion`: represents the expected state at the end of a test
 * `TestResults`: represents the combined result of your tests
+* `RunConfiguration`: An object that contains configuration for a specific run of JavaTest. Currently this just contains
+side-effecting observers.
 
 === Creating Assertions
 
@@ -356,7 +359,7 @@ public class ClassAsSuite implements TestSuiteClass {
 
 ==== Suite Nesting
 
-``TestSuite``s contain ``Testable``s not ``Test``s and thus can even be contain other ``TestSuite``s.
+``TestSuite``s contain ``Testable``s not ``Test``s and thus can contain other ``TestSuite``s.
 
 [source, java]
 ----
@@ -412,10 +415,7 @@ public class MyPendingTests implements TestSuiteClass {
 
 === Test Runners
 
-The main `TestRunner` included in the core is created from a `Collection<Testable>`. You can optionally add a collection of
-``TestCompletionObserver``s to the runner, by default a logging observer is passed that logs each test result with a colour
-corresponding to the state of the test (green for passing, red for failing and yellow for pending). If you want to turn off
-logging just pass an empty collection, a `TestCompletionObserver.plainLogger` also exists that uses no colours.
+The main `TestRunner` included in the core is created from a `Collection<Testable>`.
 
 [source, java]
 ----
@@ -430,20 +430,17 @@ public class MyRunners {
     public TestRunner singleTestRunner = testableRunner(List.of(
             test("Simple test", () -> pending())));
 
-    public TestRunner suiteTestsNoLogging = testableRunner(
-            List.of(MyFirstTestSuite.mySuite(), new ClassAsSuite()),
-            Collections.emptyList() // No observers so no logging
+    public TestRunner suiteTests = testableRunner(
+            List.of(MyFirstTestSuite.mySuite(), new ClassAsSuite())
     );
 }
 ----
 
-Other `TestRunner` implementations are available in the other modules.
-
 ==== Laziness
 
-It is possible to create a lazy test runner from a `Stream<Testable>` also with optional collection of ``TestCompletionObserver``s.
-This runner however is not referentially transparent or reusable so must be used with care. This might be useful if you have
-a very large collection of tests and you want to lazily instantiate the different suites.
+It is possible to create a lazy test runner from a `Stream<Testable>`. This runner however is not referentially transparent
+or reusable so must be used with care. This might be useful if you have a very large collection of tests and you want
+to lazily instantiate the different suites.
 
 [source, java]
 ----
@@ -459,6 +456,37 @@ public class LazyRunners {
 
     public TestRunner lazyRunner = lazyTestableRunner(oneHundredLazyTests);
 
+}
+----
+
+Other `TestRunner` implementations are available in the other modules.
+
+=== Run Configuration
+
+You can optionally add a collection of ``TestCompletionObserver``s and ``TestRunCompletionObserver``s to the run of JavaTest.
+By default a logging observer is passed that logs each test result with a colour corresponding to the state of the test
+(green for passing, red for failing and yellow for pending) and a logging observer for the completion of the run that logs
+the total failed, passing and pending results.
+
+[source, java]
+----
+import io.github.olib963.javatest.RunConfiguration;
+import io.github.olib963.javatest.TestCompletionObserver;
+
+public class RunConfigurations {
+
+    // Configuration that logs individual tests in colour and the full results of the run
+    public RunConfiguration defaultConfig = RunConfiguration.defaultConfig();
+
+    // Configuration that logs individual tests with no colour and logs a warning
+    // if there are any pending tests at all in the run.
+    public RunConfiguration customConfig = RunConfiguration.empty()
+            .addTestObserver(TestCompletionObserver.plainLogger())
+            .addRunObserver(results -> {
+                if (results.pendingCount != 0) {
+                    System.err.println("!!You still have unwritten tests!!");
+                }
+            });
 }
 ----
 
@@ -478,8 +506,8 @@ public class LazyRunners {
 
 === In Java
 
-To run JavaTest simply pass your `TestRunner` instances to the `JavaTest.run()` function and handle the
-result how you see fit. There is a convenience function `runTests` defined to just run a `Collection<Testable>` using the default `CollectionRunner`:
+To run JavaTest simply pass your `TestRunner` instances to the `JavaTest.run()` function and handle the result how you see fit.
+There is a convenience function `runTests` defined to just run a `Collection<Testable>` using the default `CollectionRunner`:
 
 [source, java]
 ----
@@ -506,12 +534,6 @@ public class MyEntrypoint {
     }
 }
 ----
-
-==== Observer
-
-There is an interface `TestRunCompletionObserver` that exists to allow side effects to be invoked after the run has completed.
-By default the total counts of tests run will be logged to `System.out`. If you want to turn off logging simply pass an empty
-collection of observers to the `run` function i.e. `JavaTest.run(runners, Collections.emptyList())`.
 
 === With JavaFire Maven plugin
 
@@ -545,6 +567,7 @@ package my.awesome.app;
 
 import io.github.olib963.javatest.*;
 import io.github.olib963.javatest.fixtures.Fixtures;
+import io.github.olib963.javatest.javafire.TestRunners;
 
 import java.util.Collection;
 import java.util.List;
@@ -598,6 +621,59 @@ In `pom.xml`:
 ----
 
 You can override the `testRunners` class being used by setting the maven property e.g. `mvn -Djavafire.testRunners=com.my.app.OtherTests test`.
+
+==== Run Configuration
+
+You can provide your own `RunConfiguration` class within the plugin configuration. If you create a class with a *public zero argument constructor*
+that implements `RunConfigurationProvider` such as:
+
+[source, java]
+----
+package my.awesome.app;
+
+import io.github.olib963.javatest.RunConfiguration;
+import io.github.olib963.javatest.TestCompletionObserver;
+import io.github.olib963.javatest.TestResult;
+import io.github.olib963.javatest.TestRunCompletionObserver;
+import io.github.olib963.javatest.javafire.RunConfigurationProvider;
+
+/**
+ * My config provider only logs failed tests and the full run results
+ */
+public class MyConfigProvider implements RunConfigurationProvider {
+
+    @Override
+    public RunConfiguration config() {
+        var loggingObserver = TestCompletionObserver.colourLogger();
+        TestCompletionObserver onlyLogFailures = result -> {
+            if(testFailed(result)) {
+                loggingObserver.onTestCompletion(result);
+            }
+        };
+        return RunConfiguration.empty()
+                .addRunObserver(TestRunCompletionObserver.logger())
+                .addTestObserver(onlyLogFailures);
+    }
+
+    private boolean testFailed(TestResult result) {
+        return result.match(
+                suiteResult -> suiteResult.results().anyMatch(this::testFailed),
+                singleTestResult -> !singleTestResult.result.holds
+        );
+    }
+}
+----
+
+then you can set the configuration option in the plugin:
+
+[source, xml]
+----
+ <configuration>
+    <runConfigurationProvider>my.awesome.app.MyConfigProvider</runConfigurationProvider>
+</configuration>
+----
+
+You can also override the provider class on the commandline by setting the maven property e.g. `mvn -Djavafire.runConfigurationProvider=com.my.app.ConfigProvider test`.
 
 === JShell
 
@@ -746,7 +822,7 @@ import java.util.Set;
 
 public class FunctionalRunners {
     // The simplest test runner: runs nothing and returns no results
-    public static final TestRunner EMPTY_RUNNER = TestResults::empty;
+    public static final TestRunner EMPTY_RUNNER = config -> TestResults.empty();
 
     private static final Set<DayOfWeek> WEEKEND =
             Set.of(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
@@ -754,8 +830,8 @@ public class FunctionalRunners {
     // Wrap another test runner such that it will not run anything on the weekend
     public TestRunner onlyRunOnWeekDays(TestRunner runner) {
         var today = LocalDate.now();
-        return () -> WEEKEND.contains(today.getDayOfWeek()) ?
-                EMPTY_RUNNER.run() : runner.run();
+        return config -> WEEKEND.contains(today.getDayOfWeek()) ?
+                EMPTY_RUNNER.run(config) : runner.run(config);
     }
 }
 ----

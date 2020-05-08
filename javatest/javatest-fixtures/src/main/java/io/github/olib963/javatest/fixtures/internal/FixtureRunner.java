@@ -1,5 +1,6 @@
 package io.github.olib963.javatest.fixtures.internal;
 
+import io.github.olib963.javatest.RunConfiguration;
 import io.github.olib963.javatest.TestResults;
 import io.github.olib963.javatest.TestRunner;
 import io.github.olib963.javatest.fixtures.FixtureDefinition;
@@ -20,16 +21,16 @@ public class FixtureRunner<Fixture> implements TestRunner {
     }
 
     @Override
-    public TestResults run() {
+    public TestResults run(RunConfiguration configuration) {
         return fixtureDefinition.create()
                 .mapError(e -> new Exception("Could not create fixture \"" + fixtureName + '"', e))
-                .map(this::runWithFixture)
+                .map(f -> runWithFixture(f, configuration))
                 .recoverWith(e -> TestResults.empty().failBecause(flattenMessages(e)));
 
     }
 
-    private TestResults runWithFixture(Fixture fixture) {
-        var results = testFunction.apply(fixture).run();
+    private TestResults runWithFixture(Fixture fixture, RunConfiguration configuration) {
+        var results = testFunction.apply(fixture).run(configuration);
         return fixtureDefinition.destroy(fixture)
                 .map(unit -> results)
                 .recoverWith(e -> results.failBecause(

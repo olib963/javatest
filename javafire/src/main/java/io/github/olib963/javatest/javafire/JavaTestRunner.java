@@ -1,27 +1,27 @@
 package io.github.olib963.javatest.javafire;
 
+import io.github.olib963.javatest.RunConfiguration;
 import io.github.olib963.javatest.reflection.ReflectionRunners;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.project.MavenProject;
 import io.github.olib963.javatest.JavaTest;
-import io.github.olib963.javatest.TestRunners;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 class JavaTestRunner {
     private final Optional<String> testRunners;
+    private final Optional<String> configurationClass;
     private final ClassLoaderProvider classLoaderProvider;
     private final MavenProject project;
 
-    JavaTestRunner(Optional<String> testRunners, ClassLoaderProvider classLoaderProvider, MavenProject project) {
+    JavaTestRunner(Optional<String> testRunners, Optional<String> configurationClass, ClassLoaderProvider classLoaderProvider, MavenProject project) {
         this.testRunners = testRunners;
+        this.configurationClass = configurationClass;
         this.classLoaderProvider = classLoaderProvider;
         this.project = project;
     }
@@ -30,8 +30,13 @@ class JavaTestRunner {
         try {
             var classPathElements = resolveAllClassPathElements(project);
             var classLoader = lookupClassLoader(classPathElements);
-            TestRunners r = testRunners.map(c -> instantiateTestRunners(loadRunnersClass(classLoader, c))).orElse(defaultRunners(classLoader));
-            var results = JavaTest.run(r.runners());
+            var runnerProvider = testRunners
+                    .map(c -> instantiateAs(loadClass(classLoader, c), TestRunners.class))
+                    .orElse(defaultRunners(classLoader));
+            var configurationProvider = configurationClass
+                    .map(c -> instantiateAs(loadClass(classLoader, c), RunConfigurationProvider.class))
+                    .orElse(RunConfiguration::defaultConfig);
+            var results = JavaTest.run(runnerProvider.runners(), configurationProvider.config());
 
             if (results.succeeded) {
                 return new Result(Status.SUCCESS, "All tests passed");
@@ -60,30 +65,26 @@ class JavaTestRunner {
         }
     }
 
-    private Class<?> loadRunnersClass(ClassLoader loader, String testRunners) {
+    private Class<?> loadClass(ClassLoader loader, String classToLoad) {
         try {
-            Class<?> runnersClass = loader.loadClass(testRunners);
-
-            if (!TestRunners.class.isAssignableFrom(runnersClass)) {
-                throw new InternalTestException(Status.FAILURE,
-                        "Given class (" + runnersClass.getName() + ") does not implement TestRunners");
-            }
-
-            return runnersClass;
-
+            return loader.loadClass(classToLoad);
         } catch (ClassNotFoundException e) {
             throw new InternalTestException(Status.EXECUTION_FAILURE,
-                    "Could not load the  given class (" + testRunners + ")", e);
+                    "Could not load the  given class (" + classToLoad + ")", e);
         }
     }
 
-    private TestRunners instantiateTestRunners(Class<?> runnersClass) {
+    private <T> T instantiateAs(Class<?> classToInstantiate, Class<T> toInstantiateAs) {
         try {
-            return (TestRunners) runnersClass.getConstructor(null).newInstance();
+            if (!toInstantiateAs.isAssignableFrom(classToInstantiate)) {
+                throw new InternalTestException(Status.FAILURE,
+                        "Given class (" + classToInstantiate.getName() + ") does not implement " + toInstantiateAs.getName());
+            }
+            return toInstantiateAs.cast(classToInstantiate.getConstructor(null).newInstance());
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException
                 | NoSuchMethodException e) {
             throw new InternalTestException(Status.FAILURE,
-                    "Given class (" + runnersClass.getName() + ") could not be instantiated", e);
+                    "Given class (" + classToInstantiate.getName() + ") could not be instantiated", e);
         }
     }
 
@@ -99,10 +100,6 @@ class JavaTestRunner {
 
         Result(Status status, String description) {
             this(status, description, Optional.empty());
-        }
-
-        Result(Status status, String description, Throwable cause) {
-            this(status, description, Optional.of(cause));
         }
 
         private Result(Status status, String description, Optional<Throwable> cause) {
@@ -121,12 +118,12 @@ class JavaTestRunner {
 
         final Result result;
 
-        InternalTestException(Status status, String message, Throwable t) {
-            this.result = new Result(status, message, t);
+        private InternalTestException(Status status, String message, Throwable t) {
+            this.result = new Result(status, message, Optional.of(t));
         }
 
-        InternalTestException(Status status, String message) {
-            this.result = new Result(status, message);
+        private InternalTestException(Status status, String message) {
+            this.result = new Result(status, message, Optional.empty());
         }
     }
 

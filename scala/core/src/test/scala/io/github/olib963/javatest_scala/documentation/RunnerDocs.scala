@@ -1,7 +1,9 @@
 package io.github.olib963.javatest_scala.documentation
 
-import io.github.olib963.javatest.TestRunner
+import io.github.olib963.javatest.{RunConfiguration, TestResults, TestRunner}
 import io.github.olib963.javatest_scala.JavaTestSyntax
+
+import io.github.olib963.javatest_scala.FunctionConverters._
 
 object RunnerDocs extends JavaTestSyntax {
 
@@ -14,7 +16,7 @@ object RunnerDocs extends JavaTestSyntax {
   )
   // end::definition[]
 
-  def runThem(): Unit = {
+  def runDirectly() =
     // tag::running[]
     run(
       Seq(
@@ -25,19 +27,13 @@ object RunnerDocs extends JavaTestSyntax {
       )
     )
     // end::running[]
-  }
 
-  // tag::customDefinition[]
-  val customRunner = testableRunner(
-    Seq(
-      suite("My Suite",
-        test("test1")(that(true, "passes")),
-        test("test2")(that(true, "passes"))
-      )
-    ),
-    // Observer function: (TestResult => Unit)
-    result => println(result)
-  )
-  // end::customDefinition[]
+  def runWithCustomConfig() =
+  // tag::customConfig[]
+    run(
+      Seq(test("test1")(that(true, "passes")): TestRunner),
+      RunConfiguration.empty().addRunObserver((results: TestResults) => if(results.pendingCount > 0) println("Tests still need to be written"))
+    )
+  // end::customConfig[]
 
 }

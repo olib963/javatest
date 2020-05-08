@@ -1,5 +1,6 @@
 package io.github.olib963.javatest.junit;
 
+import io.github.olib963.javatest.RunConfiguration;
 import io.github.olib963.javatest.TestResults;
 import io.github.olib963.javatest.TestRunner;
 import org.junit.platform.launcher.LauncherDiscoveryRequest;
@@ -18,7 +19,7 @@ public final class JUnitTestRunner implements TestRunner {
     }
 
     @Override
-    public TestResults run() {
+    public TestResults run(RunConfiguration configuration) {
         var launcher = LauncherFactory.create();
         var listener = new SummaryGeneratingListener();
         launcher.registerTestExecutionListeners(listener);

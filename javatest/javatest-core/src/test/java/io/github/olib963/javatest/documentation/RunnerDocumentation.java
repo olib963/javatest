@@ -22,9 +22,8 @@ public class RunnerDocumentation {
         public TestRunner singleTestRunner = testableRunner(List.of(
                 test("Simple test", () -> pending())));
 
-        public TestRunner suiteTestsNoLogging = testableRunner(
-                List.of(MyFirstTestSuite.mySuite(), new ClassAsSuite()),
-                Collections.emptyList() // No observers so no logging
+        public TestRunner suiteTests = testableRunner(
+                List.of(MyFirstTestSuite.mySuite(), new ClassAsSuite())
         );
     }
     // end::normal[]

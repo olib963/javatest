@@ -2,7 +2,7 @@ package io.github.olib963.javatest.reflection;
 
 import io.github.olib963.javatest.TestResults;
 import io.github.olib963.javatest.TestRunner;
-import io.github.olib963.javatest.TestRunners;
+import io.github.olib963.javatest.javafire.TestRunners;
 import io.github.olib963.javatest.TestSuiteClass;
 import io.github.olib963.javatest.reflection.internal.Aggregate;
 import io.github.olib963.javatest.reflection.internal.Utils;
@@ -56,7 +56,7 @@ public class ReflectionRunners implements TestRunners {
         var suiteRunner = testableRunner(aggregated.suites);
 
         // If there were any failures loading/creating the classes create a failed result.
-        TestRunner failingRunner = () -> aggregated.classFailures.stream()
+        TestRunner failingRunner = config -> aggregated.classFailures.stream()
                 .reduce(TestResults.empty(), TestResults::failBecause, TestResults::combine);
 
         return Stream.concat(

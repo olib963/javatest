@@ -24,9 +24,19 @@ public class JavaTestMojo extends AbstractMojo {
 	@Parameter(property = "javafire.testRunners")
 	private String testRunners;
 
+	/**
+	 * The name of the class that implements RunConfigurationProvider, providing the configuration for the test run
+	 */
+	@Parameter(property = "javafire.runConfigurationProvider")
+	private String runConfigurationProvider;
+
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
-		var testRunner = new JavaTestRunner(Optional.ofNullable(testRunners), new ThreadLocalClassLoaderProvider(), lookupProject());
+		var testRunner = new JavaTestRunner(
+				Optional.ofNullable(testRunners),
+				Optional.ofNullable(runConfigurationProvider),
+				new ThreadLocalClassLoaderProvider(),
+				lookupProject());
 		validateResult(testRunner.run());
 	}
 

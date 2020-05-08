@@ -30,9 +30,10 @@ object MyTests {
         FixtureDocumentation.runner1,
         FixtureDocumentation.runner2,
         BenchmarkDocumentation,
-        SuiteDocs
+        SuiteDocs,
+        RunnerDocs.runner
       ) ++ MyRunners.Runners
-    )
+    ).combine(RunnerDocs.runDirectly()).combine(RunnerDocs.runWithCustomConfig())
 
     if (!documentationResults.succeeded) {
       sys.error("Documentation tests failed")

@@ -28,7 +28,7 @@ public class MyEntrypoint {
 class MyCustomRunner implements TestRunner {
 
     @Override
-    public TestResults run() {
+    public TestResults run(RunConfiguration configuration) {
         return TestResults.empty();
     }
 }

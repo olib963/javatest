@@ -1,7 +1,7 @@
 package io.github.olib963.javatest.eventually.documentation;
 
 import io.github.olib963.javatest.TestRunner;
-import io.github.olib963.javatest.TestRunners;
+import io.github.olib963.javatest.javafire.TestRunners;
 import io.github.olib963.javatest.eventually.InitialDelayTests;
 import io.github.olib963.javatest.fixtures.FixtureDefinition;
 import io.github.olib963.javatest.fixtures.Fixtures;

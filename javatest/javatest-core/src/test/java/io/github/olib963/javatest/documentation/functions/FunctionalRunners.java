@@ -11,7 +11,7 @@ import java.util.Set;
 
 public class FunctionalRunners {
     // The simplest test runner: runs nothing and returns no results
-    public static final TestRunner EMPTY_RUNNER = TestResults::empty;
+    public static final TestRunner EMPTY_RUNNER = config -> TestResults.empty();
 
     private static final Set<DayOfWeek> WEEKEND =
             Set.of(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY);
@@ -19,8 +19,8 @@ public class FunctionalRunners {
     // Wrap another test runner such that it will not run anything on the weekend
     public TestRunner onlyRunOnWeekDays(TestRunner runner) {
         var today = LocalDate.now();
-        return () -> WEEKEND.contains(today.getDayOfWeek()) ?
-                EMPTY_RUNNER.run() : runner.run();
+        return config -> WEEKEND.contains(today.getDayOfWeek()) ?
+                EMPTY_RUNNER.run(config) : runner.run(config);
     }
 }
 // end::include[]

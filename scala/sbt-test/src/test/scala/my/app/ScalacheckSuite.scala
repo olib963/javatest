@@ -2,7 +2,7 @@ package my.app
 
 import io.github.olib963.javatest.Testable.Test
 import io.github.olib963.javatest.matchers.internal.PredicateMatcher
-import io.github.olib963.javatest.{JavaTest, TestResults, TestRunCompletionObserver, TestRunner, Testable}
+import io.github.olib963.javatest.{JavaTest, RunConfiguration, TestResults, TestRunCompletionObserver, TestRunner, Testable}
 // tag::imports[]
 import io.github.olib963.javatest_scala._
 import io.github.olib963.javatest_scala.scalacheck._
@@ -63,8 +63,7 @@ object ScalacheckSuite extends Suite {
   )
 
   // Hide the logging from failed tests
-  private def runTestNoLogging(test: Test) =
-    JavaTest.run(java.util.List.of[TestRunner](testableRunner(Seq(test))), java.util.Collections.emptyList[TestRunCompletionObserver])
+  private def runTestNoLogging(test: Test) = run(Seq(runnerFromTestable(test)), RunConfiguration.empty())
 
   // Scala 11 is bad with functional interfaces
   private val failed = PredicateMatcher.of(new java.util.function.Predicate[TestResults]{

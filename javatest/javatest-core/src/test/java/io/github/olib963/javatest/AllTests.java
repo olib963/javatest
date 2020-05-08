@@ -14,7 +14,7 @@ public class AllTests {
         var simpleTests = SimpleTests.passing();
         var failingTests = suite("Failing Tests", SimpleTests.FAILING.map(t ->
                 test(t.name, () -> {
-                    var results = run(List.of(testableRunner(t)), Collections.emptyList());
+                    var results = run(List.of(testableRunner(t)), RunConfiguration.empty());
                     return that(!results.succeeded, t.name + " should fail");
                 })).collect(Collectors.toList()));
         var loggingTests = new LoggingTests();
@@ -32,7 +32,7 @@ public class AllTests {
                 SuiteOfSuites.compositeSuite(),
                 new MyPendingTests()
         ));
-        var docResult = run(List.of(simpleDocRunner, extraDocRunners.singleTestRunner, extraDocRunners.suiteTestsNoLogging, lazyDocRunners.lazyRunner));
+        var docResult = run(List.of(simpleDocRunner, extraDocRunners.singleTestRunner, extraDocRunners.suiteTests, lazyDocRunners.lazyRunner));
         if (!docResult.succeeded) {
             throw new RuntimeException("Documentation tests failed!");
         }
